@@ -18,7 +18,8 @@ repositories {
 
 dependencies {
     paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
-    implementation("io.github.revxrsal:lamp.paper:4.0.0-beta.17")
+    implementation("io.github.revxrsal:lamp.common:4.0.0-beta.17")
+    implementation("io.github.revxrsal:lamp.bukkit:4.0.0-beta.17")
 }
 
 tasks {
@@ -56,7 +57,7 @@ tasks {
 
 kotlin {
     compilerOptions {
-        javaParameters = true
+        javaParameters = true // Lamp CMD Framework
     }
 }
 
