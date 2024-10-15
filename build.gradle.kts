@@ -14,10 +14,12 @@ version = "1.0"
 repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://repo.flyte.gg/releases")
 }
 
 dependencies {
     paperweight.paperDevBundle("1.20.1-R0.1-SNAPSHOT")
+    implementation("gg.flyte:twilight:1.1.15")
 }
 
 tasks {
@@ -52,5 +54,5 @@ tasks.withType<KotlinCompile> {
 }
 
 application {
-    mainClass.set("TestPluginKt")
+    mainClass.set("EventKt")
 }
