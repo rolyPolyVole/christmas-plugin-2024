@@ -1,8 +1,7 @@
-name: TestPlugin
+name: ChristmasEventPlugin
 version: 1.0
-main: com.example.test.TestPlugin
-api-version: 1.20
-description: Super cool test plugin!
-author: Stephen
-contributors: [Brandon, Josh]
-website: https://mcworkshop.org
+main: host.carbon.event.ChristmasEventPlugin
+api-version: '1.21'
+description: Flyte x Carbon Christmas Event Plugin!
+authors: [Shreyas, Stephen, Josh, Dawson, Atom, Brandon, Dan]
+website: https://carbon.christmas
