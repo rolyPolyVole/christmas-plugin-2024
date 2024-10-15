@@ -54,6 +54,12 @@ tasks {
     }
 }
 
+kotlin {
+    compilerOptions {
+        javaParameters = true
+    }
+}
+
 application {
     mainClass.set("ChristmasEventPluginKt")
 }
