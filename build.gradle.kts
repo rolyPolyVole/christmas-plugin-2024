@@ -18,6 +18,7 @@ repositories {
 
 dependencies {
     paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
+    implementation("io.github.revxrsal:lamp.paper:4.0.0-beta.17")
 }
 
 tasks {
