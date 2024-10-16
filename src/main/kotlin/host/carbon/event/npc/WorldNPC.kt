@@ -58,7 +58,7 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
             // use the live player's texture properties
             val user = PacketEvents.getAPI().playerManager.getUser(player)
             val textureProperties = user.profile.textureProperties
-            worldNPCs.add(return WorldNPC(player.name, textureProperties, location))
+            return WorldNPC(player.name, textureProperties, location).also { worldNPCs += it }
         }
 
         fun createFromName(playerName: String, location: Location): WorldNPC {
@@ -67,7 +67,7 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
             if (textureData == null) throw RuntimeException("COULD NOT GET TEXTURE DATA FOR NPC WITH NAME: $playerName")
 
             val textureProperty = TextureProperty("textures", textureData[0]!!, textureData[1]!!)
-            worldNPCs.add(return WorldNPC(playerName, listOf(textureProperty), location))
+            return WorldNPC(playerName, listOf(textureProperty), location).also { worldNPCs += it }
         }
 
         private fun getDataFromName(name: String?): Array<String?>? {
