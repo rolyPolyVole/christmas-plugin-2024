@@ -20,6 +20,7 @@ dependencies {
     paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
     implementation("io.github.revxrsal:lamp.common:4.0.0-beta.17")
     implementation("io.github.revxrsal:lamp.bukkit:4.0.0-beta.17")
+    implementation("net.kyori:adventure-text-minimessage:4.17.0")
 }
 
 tasks {
