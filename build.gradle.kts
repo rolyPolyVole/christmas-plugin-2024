@@ -14,13 +14,20 @@ version = "1.0"
 repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://repo.codemc.io/repository/maven-releases/")
+    maven("https://jitpack.io")
+    maven("https://repo.flyte.gg/releases")
 }
 
 dependencies {
     paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
+    implementation("net.kyori:adventure-text-minimessage:4.17.0")
+
+    implementation("gg.flyte:twilight:1.1.15")
     implementation("io.github.revxrsal:lamp.common:4.0.0-beta.17")
     implementation("io.github.revxrsal:lamp.bukkit:4.0.0-beta.17")
-    implementation("net.kyori:adventure-text-minimessage:4.17.0")
+    compileOnly("com.github.koca2000:NoteBlockAPI:1.6.2")
+    compileOnly("com.github.retrooper:packetevents-spigot:2.5.0")
 }
 
 tasks {
