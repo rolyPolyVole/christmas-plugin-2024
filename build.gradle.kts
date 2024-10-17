@@ -20,6 +20,8 @@ repositories {
 }
 
 dependencies {
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.3.61")
+
     paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
     implementation("net.kyori:adventure-text-minimessage:4.17.0")
 
