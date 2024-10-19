@@ -8,7 +8,6 @@ import java.util.stream.Stream
 class ChristmasEventPlugin : JavaPlugin() {
 
     override fun onEnable() {
-        println("test commit")
         Bukkit.getLogger().info("Christmas Event Plugin has been enabled!")
 
         registerCommands();
