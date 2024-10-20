@@ -19,6 +19,7 @@ import java.io.InputStreamReader
 import java.net.URL
 import java.util.UUID
 
+// TODO add functionality for TextDisplay to show further text (contribution, points, etc)
 class WorldNPC private constructor(displayName: String, textureProperties: List<TextureProperty?>?, private val location: Location) {
 
     private val userProfile: UserProfile = UserProfile(UUID.randomUUID(), displayName, textureProperties)
