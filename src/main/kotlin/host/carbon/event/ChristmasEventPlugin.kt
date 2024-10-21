@@ -4,10 +4,12 @@ import com.github.retrooper.packetevents.PacketEvents
 import gg.flyte.twilight.twilight
 import host.carbon.event.listeners.HousekeepingEventListener
 import host.carbon.event.minigame.engine.EventController
+import host.carbon.event.minigame.world.MapSinglePoint
 import host.carbon.event.npc.WorldNPC
 import host.carbon.event.util.Util
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder
 import org.bukkit.Bukkit
+import org.bukkit.GameRule
 import org.bukkit.Location
 import org.bukkit.World
 import org.bukkit.plugin.java.JavaPlugin
@@ -74,6 +76,16 @@ class ChristmasEventPlugin : JavaPlugin() {
 
     private fun fixData() {
         serverWorld = Bukkit.getWorld("world")!!
-        lobbySpawn = Util.getLobbySpawnLocation()
+        serverWorld.apply {
+            setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false)
+            setGameRule(GameRule.DO_MOB_SPAWNING, false)
+            setGameRule(GameRule.DO_WEATHER_CYCLE, false)
+            time = 6000
+            setStorm(false)
+        }
+
+        // TODO tree world?
+
+        lobbySpawn = MapSinglePoint(559.5, 105, 554.5, 180, 0)
     }
 }
