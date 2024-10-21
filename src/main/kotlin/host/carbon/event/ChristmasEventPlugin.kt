@@ -2,6 +2,7 @@ package host.carbon.event
 
 import com.github.retrooper.packetevents.PacketEvents
 import gg.flyte.twilight.twilight
+import host.carbon.event.commands.EventCommand
 import host.carbon.event.listeners.HousekeepingEventListener
 import host.carbon.event.minigame.engine.EventController
 import host.carbon.event.minigame.world.MapSinglePoint
@@ -53,6 +54,7 @@ class ChristmasEventPlugin : JavaPlugin() {
 
     private fun registerCommands() {
         val lamp = BukkitLamp.builder(this).build()
+        lamp.register(EventCommand())
     }
 
     private fun registerEvents() {
