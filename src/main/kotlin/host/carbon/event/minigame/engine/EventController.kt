@@ -128,7 +128,7 @@ class EventController() {
     }
 
     fun startPlaylist() {
-        songPlayer = RadioSongPlayer(Playlist(*SongReference.entries.map { it.song }.toTypedArray()), SoundCategory.BLOCKS)
+        songPlayer = RadioSongPlayer(Playlist(*SongReference.entries.map { it.song }.toTypedArray()), SoundCategory.RECORDS)
         songPlayer.isRandom = true
         songPlayer.isPlaying = true
     }
