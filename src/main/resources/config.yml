@@ -6,7 +6,7 @@
 #    ╚═╝  ╚═╝     ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝        ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝     ╚═╝ ╚═════╝
 
 maximum-players: 100
-www
+
 contributors:
   # Format: <Minecraft IGN><Contribution><X, Y, Z> # Yes, with the "<" and ">"
   # Example: <Notch><Creator of Minecraft><150, 64, 150>
