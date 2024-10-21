@@ -1,11 +1,15 @@
 package host.carbon.event.minigame.engine
 
+import com.xxmicloxx.NoteBlockAPI.model.Playlist
+import com.xxmicloxx.NoteBlockAPI.model.SoundCategory
+import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.extension.toComponent
 import gg.flyte.twilight.scheduler.TwilightRunnable
 import gg.flyte.twilight.scheduler.repeatingTask
 import gg.flyte.twilight.time.TimeUnit
 import host.carbon.event.ChristmasEventPlugin
+import host.carbon.event.util.SongReference
 import host.carbon.event.util.Util
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
@@ -121,6 +125,12 @@ class EventController() {
 
             else -> return
         }
+    }
+
+    fun startPlaylist() {
+        songPlayer = RadioSongPlayer(Playlist(*SongReference.entries.map { it.song }.toTypedArray()), SoundCategory.BLOCKS)
+        songPlayer.isRandom = true
+        songPlayer.isPlaying = true
     }
 }
 // TODO make sure currentGame is set to null when the game ends

@@ -6,6 +6,7 @@ import gg.flyte.twilight.twilight
 import host.carbon.event.commands.EventCommand
 import host.carbon.event.listeners.HousekeepingEventListener
 import host.carbon.event.minigame.engine.EventController
+import host.carbon.event.minigame.engine.GameConfig
 import host.carbon.event.minigame.world.MapSinglePoint
 import host.carbon.event.npc.WorldNPC
 import host.carbon.event.util.Util
