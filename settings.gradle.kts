@@ -1,1 +1,1 @@
-rootProject.name = "carbon-christmas-plugin"
+rootProject.name = "christmas-plugin"
