@@ -33,15 +33,14 @@ class ChristmasEventPlugin : JavaPlugin() {
 
     override fun onEnable() {
         Bukkit.getLogger().info("Christmas Event Plugin has been enabled!")
+        twilight(this)
 
         createConfig();
+        fixData()
         registerCommands();
         registerEvents();
         registerPacketAPI()
         loadContributorNPCs();
-        fixData()
-
-        twilight(this)
     }
 
     override fun onDisable() {
