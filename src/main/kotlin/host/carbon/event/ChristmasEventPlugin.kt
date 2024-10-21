@@ -1,6 +1,7 @@
 package host.carbon.event
 
 import com.github.retrooper.packetevents.PacketEvents
+import dev.shreyasayyengar.menuapi.menu.MenuManager
 import gg.flyte.twilight.twilight
 import host.carbon.event.commands.EventCommand
 import host.carbon.event.listeners.HousekeepingEventListener
@@ -34,8 +35,8 @@ class ChristmasEventPlugin : JavaPlugin() {
 
     override fun onEnable() {
         Bukkit.getLogger().info("Christmas Event Plugin has been enabled!")
-        twilight(this)
 
+        initDependencies()
         createConfig();
         fixData()
         registerCommands();
@@ -45,6 +46,11 @@ class ChristmasEventPlugin : JavaPlugin() {
     }
 
     override fun onDisable() {
+    }
+
+    private fun initDependencies() {
+        twilight(this)
+        MenuManager(this)
     }
 
     private fun createConfig() {
