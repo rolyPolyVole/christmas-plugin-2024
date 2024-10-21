@@ -30,7 +30,7 @@ dependencies {
     implementation("io.github.revxrsal:lamp.bukkit:4.0.0-beta.17")
     compileOnly("com.github.koca2000:NoteBlockAPI:1.6.2")
     compileOnly("com.github.retrooper:packetevents-spigot:2.5.0")
-    compileOnly("com.github.ShreyasAyyengar:MenuAPI:2.2")
+    implementation("com.github.ShreyasAyyengar:MenuAPI:2.2")
 }
 
 tasks {
