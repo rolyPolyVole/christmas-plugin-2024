@@ -17,7 +17,7 @@ import org.bukkit.entity.Player
 import revxrsal.commands.annotation.Command
 import revxrsal.commands.bukkit.annotation.CommandPermission
 
-class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".colourise(), 18)) {
+class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".colourise(), 54)) {
     private val availableGames = GameConfig.entries
     private var selectedIndex = 0
 
@@ -91,26 +91,28 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
 
     @Command("event")
     @CommandPermission("event.op")
+    @Suppress("unused") // power of lamp!
     fun handleCommand(sender: Player) {
         menu.open(false, sender)
     }
 
     private fun createGameSwitcher(gameType: GameConfig): MenuItem {
-        val menuItem = MenuItem(gameType.menuMaterial)
-        menuItem.setName(PlainTextComponentSerializer.plainText().serialize(gameType.menuName))
-        updateRotatingItem(menuItem) // initial lore setup
+        val menuItem = MenuItem(gameType.menuMaterial).apply {
+            setName(PlainTextComponentSerializer.plainText().serialize(gameType.menuName))
+            updateRotatingItem(this) // initial lore setup
+            onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
+                selectedIndex = (selectedIndex + 1) % availableGames.size // cycle around
 
-        menuItem.onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
-            selectedIndex = (selectedIndex + 1) % availableGames.size // cycle around
+                updateRotatingItem(this)
+                @Suppress("DEPRECATION") this.itemStack.type = availableGames[selectedIndex].menuMaterial
 
-            updateRotatingItem(menuItem)
-            @Suppress("DEPRECATION") menuItem.itemStack.type = availableGames[selectedIndex].menuMaterial
+                menu.setItem(13, this)
+                whoClicked.playSound(Sound.UI_BUTTON_CLICK)
 
-            menu.setItem(13, menuItem)
-            whoClicked.playSound(Sound.UI_BUTTON_CLICK)
-
-            ChristmasEventPlugin.getInstance().eventController.setMiniGame(availableGames[selectedIndex])
+                ChristmasEventPlugin.getInstance().eventController.setMiniGame(availableGames[selectedIndex])
+            }
         }
+
 
         return menuItem
     }
