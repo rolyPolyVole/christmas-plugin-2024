@@ -8,8 +8,6 @@ import org.bukkit.entity.Player
 object Util {
     fun getMaxPlayers(): Int = ChristmasEventPlugin.getInstance().config.getInt("maximum-players")
 
-    fun getLobbySpawnLocation(): Location = ChristmasEventPlugin.getInstance().config.getLocation("spawn-location")!!
-
     fun getEventContributors(): Map<String, Pair<String, Location>> {
         val contributors = mutableMapOf<String, Pair<String, Location>>()
         ChristmasEventPlugin.getInstance().config.getStringList("contributors").forEach { contributor ->
@@ -20,7 +18,7 @@ object Util {
             val x = location[0].toDouble()
             val y = location[1].toDouble()
             val z = location[2].toDouble()
-            contributors[ign] = Pair(contribution, Location(getLobbySpawnLocation().world, x, y, z, 0f, 0F))
+            contributors[ign] = Pair(contribution, Location(ChristmasEventPlugin.getInstance().serverWorld, x, y, z, 0f, 0F))
         }
         return contributors
     }
