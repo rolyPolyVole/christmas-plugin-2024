@@ -1,26 +1,21 @@
 package host.carbon.event.util
 
 import host.carbon.event.ChristmasEventPlugin
+import host.carbon.event.minigame.world.MapSinglePoint
 import org.bukkit.Bukkit
-import org.bukkit.Location
 import org.bukkit.entity.Player
+import org.spigotmc.SpigotConfig.config
 
 object Util {
+    data class Contributor(val ign: String, val contribution: String, val location: MapSinglePoint)
+
     fun getMaxPlayers(): Int = ChristmasEventPlugin.getInstance().config.getInt("maximum-players")
 
-    fun getEventContributors(): Map<String, Pair<String, Location>> {
-        val contributors = mutableMapOf<String, Pair<String, Location>>()
-        ChristmasEventPlugin.getInstance().config.getStringList("contributors").forEach { contributor ->
-            val split = contributor.split("><")
-            val ign = split[0].removePrefix("<")
-            val contribution = split[1]
-            val location = split[2].removeSuffix(">").split(", ")
-            val x = location[0].toDouble()
-            val y = location[1].toDouble()
-            val z = location[2].toDouble()
-            contributors[ign] = Pair(contribution, Location(ChristmasEventPlugin.getInstance().serverWorld, x, y, z, 0f, 0F))
-        }
-        return contributors
+    fun getEventContributors(): List<Contributor> = config.getStringList("contributors").map { contributor ->
+        val (ign, contribution, coords) = contributor.subSequence(1, contributor.length - 1).split("><")
+        val (x, y, z) = coords.split(", ").map(String::toDouble)
+
+        Contributor(ign, contribution, MapSinglePoint(x, y, z))
     }
 
     /**
