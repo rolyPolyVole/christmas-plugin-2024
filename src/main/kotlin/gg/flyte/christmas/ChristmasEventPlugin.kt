@@ -101,19 +101,16 @@ class ChristmasEventPlugin : JavaPlugin() {
     }
 
     private fun fixData() {
-        serverWorld = Bukkit.getWorld("world")!!
-        serverWorld.apply {
+        serverWorld = Bukkit.getWorld("world")!!.apply {
             setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false)
             setGameRule(GameRule.DO_MOB_SPAWNING, false)
             setGameRule(GameRule.DO_WEATHER_CYCLE, false)
             time = 6000
             setStorm(false)
         }
-
         // TODO tree world?
 
         lobbySpawn = MapSinglePoint(559.5, 105, 554.5, 180, 0)
-
 
         GameConfig.entries.forEach { it.gameClass.primaryConstructor } // pre-load classes for reflection
         eventController.startPlaylist()
