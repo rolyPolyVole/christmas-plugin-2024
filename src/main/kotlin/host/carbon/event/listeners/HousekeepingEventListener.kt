@@ -54,7 +54,7 @@ class HousekeepingEventListener : Listener {
                 }
 
                 ChristmasEventPlugin.getInstance().eventController.onPlayerJoin(this)
-                ChristmasEventPlugin.getInstance().eventController.songPlayer.addPlayer(this)
+                ChristmasEventPlugin.getInstance().eventController.songPlayer?.addPlayer(this)
             }
 
         }
