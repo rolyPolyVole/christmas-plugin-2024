@@ -1,6 +1,12 @@
 package host.carbon.event.minigame.engine
 
 import gg.flyte.twilight.event.TwilightListener
+import gg.flyte.twilight.extension.playSound
+import gg.flyte.twilight.scheduler.TwilightRunnable
+import gg.flyte.twilight.scheduler.repeatingTask
+import gg.flyte.twilight.time.TimeUnit
+import host.carbon.event.ChristmasEventPlugin
+import host.carbon.event.util.CameraSequence
 import host.carbon.event.util.Util
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitTask
@@ -12,6 +18,8 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
     protected val listeners = mutableListOf<TwilightListener>()
     protected val tasks = mutableListOf<BukkitTask>()
     lateinit var state: GameState
+
+    val eventController get() = ChristmasEventPlugin.getInstance().eventController
 
     init {
         allPlayers.addAll(Util.handlePlayers().map { it.uniqueId })
@@ -120,7 +128,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
                     val times = Title.Times.times(Duration.ofMillis(0), Duration.ofMillis(1250), Duration.ofMillis(0))
 
                     Util.handlePlayers(eventPlayerAction = {
-                        getController().countdownMap[seconds]?.let { titleText ->
+                        eventController.countdownMap[seconds]?.let { titleText ->
                             it.showTitle(Title.title(titleText, Component.text(""), times))
                             it.playSound(Sound.UI_BUTTON_CLICK)
                         }
@@ -133,10 +141,6 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
 
     fun remainingPlayers(): List<Player> {
         return Util.handlePlayers().filter { !(eliminatedPlayers.contains(it.uniqueId)) }
-    }
-
-    fun getController(): EventController {
-        return ChristmasEventPlugin.getInstance().eventController
     }
 
     /**
