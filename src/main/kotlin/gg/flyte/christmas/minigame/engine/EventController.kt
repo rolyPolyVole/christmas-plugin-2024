@@ -130,7 +130,7 @@ class EventController() {
         }
     }
 
-    fun startPlaylist(song: SongReference? = null) {
+    fun startPlaylist(avoid: SongReference? = null) {
         if (songPlayer != null) songPlayer!!.destroy()
 
         songPlayer = RadioSongPlayer(Playlist(*SongReference.entries.map { it.song }.toTypedArray()), SoundCategory.RECORDS)
@@ -138,9 +138,9 @@ class EventController() {
         songPlayer!!.isPlaying = true
 
         fun checkAndSkip() {
-            if (song == null) return
+            if (avoid == null) return
 
-            if (songPlayer!!.song.path.path == song.name + ".nbs") {
+            if (songPlayer!!.song.path.path == avoid.name + ".nbs") {
                 songPlayer!!.playNextSong()
                 delay(1) { checkAndSkip() }
             }
