@@ -17,33 +17,47 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
         allPlayers.addAll(Util.handlePlayers().map { it.uniqueId })
     }
 
-    // TODO fix doc link.
     /**
      * Starts the game's map overview. This is done through smoothened camera
-     * interpolation from [Util.SmoothCamera]. As well as sending instructions ([GameConfig.instructions]),
+     * interpolation from [CameraSequence]. As well as sending instructions ([GameConfig.instructions]),
      * and preparing the player for the game.
      */
-    fun startGameOverview() {
-        Util.handlePlayers(eventPlayerAction = {
-            it.sendMessage(gameConfig.instructions)
-        })
+    open fun startGameOverview() {
+        handleGameEvents()
 
-        // TODO camera interpolation through gameConfig.overviewLocations. Once done
-        // REDO COUNTDOWN and run below
-
-        Util.handlePlayers(
-            cameraEntityAction = {
-                // TODO move cam
-            },
-            optedOutAction = {
-                it.teleport(gameConfig.spectatorSpawnLocations.random())
-            },
-            eventPlayerAction = {
-                preparePlayer(it)
-            }
+        // send BEFORE textDisplay has rendered in.
+        val title = Title.title(
+            gameConfig.displayName,
+            Component.text("Instructions:", gameConfig.colour),
+            Title.Times.times(Duration.ofMillis(1250), Duration.ofMillis(3500), Duration.ofMillis(750))
         )
 
-        startGame()
+        Util.handlePlayers(eventPlayerAction = { it.showTitle(title) })
+
+        CameraSequence(
+            Bukkit.getOnlinePlayers(),
+            Component.text("\n" + gameConfig.instructions + "\n", gameConfig.colour),
+            gameConfig.overviewLocations,
+            600
+        ) {
+            // when sequence finished:
+            Util.handlePlayers(
+                eventPlayerAction = {
+                    preparePlayer(it)
+
+                    it.sendMessage(
+                        Component.text("\n------------------[INSTRUCTIONS]------------------\n", gameConfig.colour)
+                            .append(Component.text(gameConfig.instructions, NamedTextColor.WHITE))
+                            .append(Component.text("\n-------------------------------------------------\n", gameConfig.colour))
+                    )
+                },
+                optedOutAction = {
+                    it.teleport(gameConfig.spectatorSpawnLocations.random())
+                }
+            )
+
+            startGame()
+        }
     }
 
     /**
@@ -88,6 +102,33 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
 
     fun onPlayerQuit(player: Player) {
         eliminate(player, EliminationReason.LEFT_GAME)
+    }
+
+    /**
+     * TODO
+     */
+    fun simpleCountdown(onCountdownEnd: () -> Unit) {
+        var seconds = 5
+        repeatingTask(1, TimeUnit.SECONDS) {
+            when (seconds) {
+                0 -> {
+                    cancel()
+                    onCountdownEnd()
+                }
+
+                else -> {
+                    val times = Title.Times.times(Duration.ofMillis(0), Duration.ofMillis(1250), Duration.ofMillis(0))
+
+                    Util.handlePlayers(eventPlayerAction = {
+                        getController().countdownMap[seconds]?.let { titleText ->
+                            it.showTitle(Title.title(titleText, Component.text(""), times))
+                            it.playSound(Sound.UI_BUTTON_CLICK)
+                        }
+                    })
+                    seconds--
+                }
+            }
+        }
     }
 
     fun remainingPlayers(): List<Player> {
