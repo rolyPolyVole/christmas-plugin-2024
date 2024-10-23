@@ -36,7 +36,7 @@ class ChristmasEventPlugin : JavaPlugin() {
     }
 
     override fun onEnable() {
-        Bukkit.getLogger().info("Christmas Event Plugin has been enabled!")
+        logger.info("ChristmasEventPlugin has been enabled!")
 
         initDependencies()
         createConfig();
@@ -75,11 +75,13 @@ class ChristmasEventPlugin : JavaPlugin() {
 
     private fun loadContributorNPCs() {
         for (contributor in Util.getEventContributors()) {
-            val name = contributor.key
-            val contribution = contributor.value.first
-            val location = contributor.value.second
+            val ign = contributor.ign
+            val contribution = contributor.contribution
+            val location = contributor.location
 
-            WorldNPC.createFromName(name, location)
+            WorldNPC.createFromName(ign, location)
+
+            // TODO impl contribution text
         }
     }
 
