@@ -7,6 +7,7 @@ import host.carbon.event.ChristmasEventPlugin
 import host.carbon.event.minigame.engine.GameConfig
 import host.carbon.event.util.Util
 import host.carbon.event.util.colourise
+import host.carbon.event.util.toLegacyString
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
@@ -50,17 +51,26 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
         )
         menu.setItem(
             38, MenuItem(Material.GREEN_CONCRETE)
-                .setName("&aStart " + availableGames[selectedIndex].menuName)
+                .setName(availableGames[selectedIndex].displayName.toLegacyString().colourise())
                 .setLore(
-                    "&aThis will begin the countdown".colourise(),
+                    "",
+                    "&cThis will begin the countdown".colourise(),
                     "&cimmediately, &aand prepare the players".colourise(),
+                    "",
                     "&eIf you do not want to start yet, simply".colourise(),
                     "&eexit this menu. The game has already been set.".colourise()
                 )
                 .setEnchantmentGlint(true)
                 .closeWhenClicked(true)
                 .onClick({ whoClicked, itemStack, clickType, inventoryClickEvent ->
+                    if (ChristmasEventPlugin.getInstance().eventController.currentGame == null) {
+                        whoClicked.playSound(Sound.ENTITY_VILLAGER_NO)
+                        whoClicked.sendMessage(Component.text("No game is currently selected!", NamedTextColor.RED))
+                        return@onClick
+                    }
+
                     whoClicked.playSound(Sound.ENTITY_PLAYER_LEVELUP)
+                    whoClicked.sendMessage(Component.text("Game starting! Please wait...", NamedTextColor.GREEN))
                     ChristmasEventPlugin.getInstance().eventController.prepareStart()
                 })
         )
@@ -68,9 +78,10 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
         menu.setItem(
             42, MenuItem(Material.RED_CONCRETE)
                 .setName(
-                    "&cTerminate Current Game: " + (ChristmasEventPlugin.getInstance().eventController.currentGame?.gameConfig?.menuName ?: "None")
+                    "&cTerminate Current Game: " + (ChristmasEventPlugin.getInstance().eventController.currentGame?.gameConfig?.displayName?: "None".colourise())
                 )
                 .setLore(
+                    "",
                     "&cThis will end the current game".colourise(),
                     "&cand teleport all players back to the lobby.".colourise(),
                 )
@@ -86,7 +97,6 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
                     whoClicked.playSound(Sound.ENTITY_GENERIC_EXPLODE)
                 })
         )
-
     }
 
     @Command("event")
@@ -98,11 +108,11 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
 
     private fun createGameSwitcher(gameType: GameConfig): MenuItem {
         val menuItem = MenuItem(gameType.menuMaterial).apply {
-            setName(PlainTextComponentSerializer.plainText().serialize(gameType.menuName))
+            setName(PlainTextComponentSerializer.plainText().serialize(gameType.displayName))
             updateRotatingItem(this) // initial lore setup
             onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
+                inventoryClickEvent.isCancelled = true
                 selectedIndex = (selectedIndex + 1) % availableGames.size // cycle around
-
                 updateRotatingItem(this)
                 @Suppress("DEPRECATION") this.itemStack.type = availableGames[selectedIndex].menuMaterial
 
@@ -110,9 +120,13 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
                 whoClicked.playSound(Sound.UI_BUTTON_CLICK)
 
                 ChristmasEventPlugin.getInstance().eventController.setMiniGame(availableGames[selectedIndex])
+                whoClicked.sendMessage(
+                    Component.text("Selected game: ", NamedTextColor.GRAY).append(
+                        availableGames[selectedIndex].displayName.color(availableGames[selectedIndex].colour)
+                    )
+                )
             }
         }
-
 
         return menuItem
     }
@@ -120,10 +134,10 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
     private fun updateRotatingItem(menuItem: MenuItem) {
         val lore = availableGames.mapIndexed { index, game ->
             if (index == selectedIndex) {
-                val component = Component.text("> ").decorate(TextDecoration.BOLD).color(game.colour).append(game.menuName)
+                val component = Component.text("> ").decorate(TextDecoration.BOLD).color(game.colour).append(game.displayName)
                 PlainTextComponentSerializer.plainText().serialize(component)
             } else {
-                PlainTextComponentSerializer.plainText().serialize(game.menuName)
+                PlainTextComponentSerializer.plainText().serialize(game.displayName)
             }
         }
 
