@@ -18,6 +18,7 @@ import org.bukkit.World
 import org.bukkit.plugin.java.JavaPlugin
 import revxrsal.commands.bukkit.BukkitLamp
 import java.util.UUID
+import kotlin.reflect.full.primaryConstructor
 
 class ChristmasEventPlugin : JavaPlugin() {
     lateinit var serverWorld: World;
@@ -95,5 +96,9 @@ class ChristmasEventPlugin : JavaPlugin() {
         // TODO tree world?
 
         lobbySpawn = MapSinglePoint(559.5, 105, 554.5, 180, 0)
+
+
+        GameConfig.entries.forEach { it.gameClass.primaryConstructor } // pre-load classes for reflection
+        eventController.startPlaylist()
     }
 }

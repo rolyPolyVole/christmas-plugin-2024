@@ -5,6 +5,10 @@ import host.carbon.event.minigame.world.MapSinglePoint
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.spigotmc.SpigotConfig.config
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
 
 object Util {
     data class Contributor(val ign: String, val contribution: String, val location: MapSinglePoint)
@@ -53,6 +57,18 @@ object Util {
                     eventPlayerAction?.invoke(player)
                     true
                 }
+            }
+        }
+    }
+
+    @Throws(IOException::class)
+    fun copyInputStreamToFile(inputStream: InputStream, file: File) {
+        // append = false
+        FileOutputStream(file, false).use { outputStream ->
+            val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+            var bytesRead: Int
+            while (inputStream.read(buffer).also { bytesRead = it } != -1) {
+                outputStream.write(buffer, 0, bytesRead)
             }
         }
     }

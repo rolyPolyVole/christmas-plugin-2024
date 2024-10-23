@@ -3,17 +3,20 @@ package host.carbon.event.util
 import com.xxmicloxx.NoteBlockAPI.model.Song
 import com.xxmicloxx.NoteBlockAPI.utils.NBSDecoder
 import host.carbon.event.ChristmasEventPlugin
+import java.io.File
 
-private fun parse(fileName: String): Song = NBSDecoder.parse(ChristmasEventPlugin.getInstance().getResource("music/$fileName"))
+private fun parse(fileName: String): Song {
+    var file = File(fileName)
+    Util.copyInputStreamToFile(ChristmasEventPlugin.getInstance().getResource("music/$fileName")!!, file)
+
+    return NBSDecoder.parse(file)
+}
 
 enum class SongReference(val title: String, val song: Song) {
     ALL_I_WANT_FOR_CHRISTMAS_IS_YOU("All I Want For Christmas Is You", parse("ALL_I_WANT_FOR_CHRISTMAS_IS_YOU.nbs")),
     CAROL_OF_THE_BELLS("Carol Of The Bells", parse("CAROL_OF_THE_BELLS.nbs")),
     FROSTY_THE_SNOWMAN("Frosty The Snowman", parse("FROSTY_THE_SNOWMAN.nbs")),
-    ITS_BEGINNING_TO_LOOK_A_LOT_LIKE_CHRISTMAS(
-        "It's Beginning To Look A Lot Like Christmas",
-        parse("ITS_BEGINNING_TO_LOOK_A_LOT_LIKE_CHRISTMAS.nbs")
-    ),
+    ITS_BEGINNING_TO_LOOK_A_LOT_LIKE_CHRISTMAS("It's Beginning To Look A Lot Like Christmas", parse("ITS_BEGINNING_TO_LOOK_A_LOT_LIKE_CHRISTMAS.nbs")),
     JINGLE_BELLS("Jingle Bells", parse("JINGLE_BELLS.nbs")),
     JOY_TO_THE_WORLD("Joy To The World", parse("JOY_TO_THE_WORLD.nbs")),
     LAST_CHRISTMAS("Last Christmas", parse("LAST_CHRISTMAS.nbs")),

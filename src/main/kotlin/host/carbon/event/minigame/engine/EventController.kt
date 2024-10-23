@@ -127,10 +127,24 @@ class EventController() {
         }
     }
 
-    fun startPlaylist() {
+    fun startPlaylist(song: SongReference? = null) {
+        if (songPlayer != null) songPlayer!!.destroy()
+
         songPlayer = RadioSongPlayer(Playlist(*SongReference.entries.map { it.song }.toTypedArray()), SoundCategory.RECORDS)
-        songPlayer.isRandom = true
-        songPlayer.isPlaying = true
+        songPlayer!!.isRandom = true
+        songPlayer!!.isPlaying = true
+
+        fun checkAndSkip() {
+            if (song == null) return
+
+            if (songPlayer!!.song.path.path == song.name + ".nbs") {
+                songPlayer!!.playNextSong()
+                delay(1) { checkAndSkip() }
+            }
+        }
+
+        checkAndSkip()
+        Bukkit.getOnlinePlayers().forEach(songPlayer!!::addPlayer)
     }
 }
 // TODO make sure currentGame is set to null when the game ends
