@@ -33,7 +33,7 @@ data class MapRegion(val minPoint: MapSinglePoint, val maxPoint: MapSinglePoint)
         return Location(minPoint.world, randomX, randomY, randomZ)
     }
 
-    fun toSinglePoints(): List<MapSinglePoint> {
+    fun toSingleBlockLocations(): List<MapSinglePoint> {
         val points = mutableListOf<MapSinglePoint>()
         for (x in minPoint.x.toInt()..maxPoint.x.toInt()) {
             for (y in minPoint.y.toInt()..maxPoint.y.toInt()) {
