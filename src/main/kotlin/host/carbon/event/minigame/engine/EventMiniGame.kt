@@ -135,6 +135,10 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
         return Util.handlePlayers().filter { !(eliminatedPlayers.contains(it.uniqueId)) }
     }
 
+    fun getController(): EventController {
+        return ChristmasEventPlugin.getInstance().eventController
+    }
+
     /**
      * Used to distinguish between different reasons for elimination.
      *
