@@ -28,8 +28,6 @@ import org.bukkit.inventory.PlayerInventory
 
 class HousekeepingEventListener : Listener {
     init {
-        Bukkit.getAllowFlight();
-
         event<ServerListPingEvent> {
             motd("TODO!".asComponent()) // TODO add motd
         }
