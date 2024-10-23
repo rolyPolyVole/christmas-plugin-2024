@@ -16,7 +16,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
     protected val allPlayers = mutableListOf<UUID>()
     protected val eliminatedPlayers = mutableListOf<UUID>()
     protected val listeners = mutableListOf<TwilightListener>()
-    protected val tasks = mutableListOf<BukkitTask>()
+    protected val tasks = mutableListOf<TwilightRunnable?>()
     lateinit var state: GameState
 
     val eventController get() = ChristmasEventPlugin.getInstance().eventController
@@ -83,6 +83,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
      * Called when the game is over, or when a winner has been declared.
      */
     open fun endGame() {
+        tasks.forEach { it?.cancel() }
         listeners.forEach { it.unregister() }
     }
 
