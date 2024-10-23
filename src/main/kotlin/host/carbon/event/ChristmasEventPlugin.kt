@@ -11,10 +11,15 @@ import host.carbon.event.minigame.world.MapSinglePoint
 import host.carbon.event.npc.WorldNPC
 import host.carbon.event.util.Util
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.TextColor
 import org.bukkit.Bukkit
+import org.bukkit.Color
 import org.bukkit.GameRule
 import org.bukkit.Location
 import org.bukkit.World
+import org.bukkit.entity.Display
+import org.bukkit.entity.TextDisplay
 import org.bukkit.plugin.java.JavaPlugin
 import revxrsal.commands.bukkit.BukkitLamp
 import java.util.UUID
@@ -25,6 +30,7 @@ class ChristmasEventPlugin : JavaPlugin() {
     lateinit var lobbySpawn: Location
     var cameraPlayer: UUID = UUID.fromString("a008c892-e7e1-48e1-8235-8aa389318b7a") // "devous" | Josh
     var eventController: EventController = EventController()
+    var worldNPCs: MutableSet<WorldNPC> = HashSet()
 
     companion object {
         fun getInstance(): ChristmasEventPlugin = getPlugin(ChristmasEventPlugin::class.java)
@@ -48,6 +54,9 @@ class ChristmasEventPlugin : JavaPlugin() {
     }
 
     override fun onDisable() {
+        for (npc in worldNPCs) {
+            npc.location.getNearbyEntitiesByType(TextDisplay::class.java, 5.0).forEach { it.remove() }
+        }
     }
 
     private fun initDependencies() {
@@ -77,11 +86,17 @@ class ChristmasEventPlugin : JavaPlugin() {
         for (contributor in Util.getEventContributors()) {
             val ign = contributor.ign
             val contribution = contributor.contribution
-            val location = contributor.location
+            val location = contributor.location // TODO configure pitch and yaw
 
-            WorldNPC.createFromName(ign, location)
+            var createFromName = WorldNPC.createFromName(ign, location).also { worldNPCs += it }
+            Bukkit.getOnlinePlayers().forEach { createFromName.spawnFor(it) }
 
-            // TODO impl contribution text
+            location.world.spawn(location.clone().add(0.0, 2.5, 0.0), TextDisplay::class.java).apply {
+                text(Component.text(contribution, TextColor.color(255, 196, 255)))
+                backgroundColor = Color.fromRGB(84, 72, 84)
+                billboard = Display.Billboard.CENTER
+                isSeeThrough = false
+            }
         }
     }
 

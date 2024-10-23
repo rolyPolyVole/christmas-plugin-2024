@@ -4,7 +4,6 @@ import host.carbon.event.ChristmasEventPlugin
 import host.carbon.event.minigame.world.MapSinglePoint
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import org.spigotmc.SpigotConfig.config
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -15,11 +14,14 @@ object Util {
 
     fun getMaxPlayers(): Int = ChristmasEventPlugin.getInstance().config.getInt("maximum-players")
 
-    fun getEventContributors(): List<Contributor> = config.getStringList("contributors").map { contributor ->
-        val (ign, contribution, coords) = contributor.subSequence(1, contributor.length - 1).split("><")
-        val (x, y, z) = coords.split(", ").map(String::toDouble)
+    fun getEventContributors(): List<Contributor> {
+        val config = ChristmasEventPlugin.getInstance().config
 
-        Contributor(ign, contribution, MapSinglePoint(x, y, z))
+        return config.getStringList("contributors").map { contributor ->
+            val (ign, contribution, coords) = contributor.substring(1, contributor.length - 1).split("><")
+            val (x, y, z) = coords.split(",").map { it.trim().toDouble() }
+            Contributor(ign, contribution, MapSinglePoint(x, y, z))
+        }
     }
 
     /**

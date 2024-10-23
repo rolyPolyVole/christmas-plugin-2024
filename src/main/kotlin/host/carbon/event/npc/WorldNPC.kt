@@ -20,10 +20,10 @@ import java.net.URL
 import java.util.UUID
 
 // TODO add functionality for TextDisplay to show further text (contribution, points, etc)
-class WorldNPC private constructor(displayName: String, textureProperties: List<TextureProperty?>?, private val location: Location) {
+class WorldNPC private constructor(displayName: String, textureProperties: List<TextureProperty?>?, val location: Location) {
 
     private val userProfile: UserProfile = UserProfile(UUID.randomUUID(), displayName, textureProperties)
-    private var id: Int = SpigotReflectionUtil.generateEntityId();
+    var id: Int = SpigotReflectionUtil.generateEntityId();
     private val tablistName = Component.text("NPC-$id")
     private val npc: NPC = NPC(userProfile, id, tablistName)
 
@@ -59,16 +59,20 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
             // use the live player's texture properties
             val user = PacketEvents.getAPI().playerManager.getUser(player)
             val textureProperties = user.profile.textureProperties
-            return WorldNPC(player.name, textureProperties, location).also { worldNPCs += it }
+            var randomColour: String = listOf("4", "c", "6", "2", "a", "9").random()
+
+            return WorldNPC("§$randomColour ${player.name}", textureProperties, location).also { worldNPCs += it }
         }
 
         fun createFromName(playerName: String, location: Location): WorldNPC {
             // fetch texture properties from Mojang using player name
             val textureData = getDataFromName(playerName)
             if (textureData == null) throw RuntimeException("COULD NOT GET TEXTURE DATA FOR NPC WITH NAME: $playerName")
-
             val textureProperty = TextureProperty("textures", textureData[0]!!, textureData[1]!!)
-            return WorldNPC(playerName, listOf(textureProperty), location).also { worldNPCs += it }
+
+            var randomColour: String = listOf("4", "c", "6", "2", "a", "9").random()
+
+            return WorldNPC("§$randomColour$playerName", listOf(textureProperty), location).also { worldNPCs += it }
         }
 
         private fun getDataFromName(name: String?): Array<String?>? {

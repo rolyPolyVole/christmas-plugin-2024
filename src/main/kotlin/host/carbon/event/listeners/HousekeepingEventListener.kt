@@ -56,13 +56,13 @@ class HousekeepingEventListener : Listener {
 
                 ChristmasEventPlugin.getInstance().eventController.onPlayerJoin(this)
                 ChristmasEventPlugin.getInstance().eventController.songPlayer?.addPlayer(this)
+                ChristmasEventPlugin.getInstance().worldNPCs.forEach { it.spawnFor(this) }
             }
         }
 
         event<PlayerQuitEvent> {
             quitMessage(null)
             ChristmasEventPlugin.getInstance().eventController.onPlayerQuit(player)
-            ChristmasEventPlugin.getInstance().worldNPCs.forEach { it.despawnFor(player) } // lol
             // TODO
         }
 
