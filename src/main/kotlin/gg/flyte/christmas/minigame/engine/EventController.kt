@@ -3,14 +3,14 @@ package gg.flyte.christmas.minigame.engine
 import com.xxmicloxx.NoteBlockAPI.model.Playlist
 import com.xxmicloxx.NoteBlockAPI.model.SoundCategory
 import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer
+import gg.flyte.christmas.ChristmasEventPlugin
+import gg.flyte.christmas.util.SongReference
+import gg.flyte.christmas.util.Util
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.scheduler.TwilightRunnable
 import gg.flyte.twilight.scheduler.delay
 import gg.flyte.twilight.scheduler.repeatingTask
 import gg.flyte.twilight.time.TimeUnit
-import gg.flyte.christmas.ChristmasEventPlugin
-import gg.flyte.christmas.util.SongReference
-import gg.flyte.christmas.util.Util
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.title.Title
@@ -26,7 +26,7 @@ import kotlin.reflect.full.primaryConstructor
  */
 class EventController() {
     var currentGame: EventMiniGame? = null
-    var currentCountdown: TwilightRunnable? = null
+    var countdownTask: TwilightRunnable? = null
     val countdownMap = mapOf(
         5 to Component.text("➎", NamedTextColor.GREEN),
         4 to Component.text("➍", NamedTextColor.GOLD),
@@ -56,7 +56,7 @@ class EventController() {
 
     private fun countdown() {
         var seconds = 0 // TODO CHANGE BACK TO 10 WHEN TESTING IS DONE
-        currentCountdown = repeatingTask(1, TimeUnit.SECONDS) {
+        countdownTask = repeatingTask(1, TimeUnit.SECONDS) {
             when (seconds) {
                 0 -> {
                     currentGame!!.startGameOverview()
@@ -106,7 +106,7 @@ class EventController() {
 
             GameState.COUNTDOWN -> {
                 if (!enoughPlayers()) {
-                    currentCountdown?.cancel()
+                    countdownTask?.cancel()
                     currentGame!!.state = GameState.WAITING_FOR_PLAYERS
 
                     for (player in Util.handlePlayers()) {
