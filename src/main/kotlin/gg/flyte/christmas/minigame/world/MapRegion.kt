@@ -1,6 +1,6 @@
-package host.carbon.event.minigame.world
+package gg.flyte.christmas.minigame.world
 
-import host.carbon.event.ChristmasEventPlugin
+import gg.flyte.christmas.ChristmasEventPlugin
 import org.bukkit.Location
 
 // (represents a single point)

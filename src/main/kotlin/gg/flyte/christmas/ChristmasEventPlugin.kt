@@ -1,15 +1,15 @@
-package host.carbon.event
+package gg.flyte.christmas
 
 import com.github.retrooper.packetevents.PacketEvents
 import dev.shreyasayyengar.menuapi.menu.MenuManager
 import gg.flyte.twilight.twilight
-import host.carbon.event.commands.EventCommand
-import host.carbon.event.listeners.HousekeepingEventListener
-import host.carbon.event.minigame.engine.EventController
-import host.carbon.event.minigame.engine.GameConfig
-import host.carbon.event.minigame.world.MapSinglePoint
-import host.carbon.event.npc.WorldNPC
-import host.carbon.event.util.Util
+import gg.flyte.christmas.commands.EventCommand
+import gg.flyte.christmas.listeners.HousekeepingEventListener
+import gg.flyte.christmas.minigame.engine.EventController
+import gg.flyte.christmas.minigame.engine.GameConfig
+import gg.flyte.christmas.minigame.world.MapSinglePoint
+import gg.flyte.christmas.npc.WorldNPC
+import gg.flyte.christmas.util.Util
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor

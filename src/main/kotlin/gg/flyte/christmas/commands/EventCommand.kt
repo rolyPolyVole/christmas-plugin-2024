@@ -1,13 +1,13 @@
-package host.carbon.event.commands
+package gg.flyte.christmas.commands
 
 import dev.shreyasayyengar.menuapi.menu.MenuItem
 import dev.shreyasayyengar.menuapi.menu.StandardMenu
+import gg.flyte.christmas.ChristmasEventPlugin
+import gg.flyte.christmas.minigame.engine.GameConfig
+import gg.flyte.christmas.util.Util
+import gg.flyte.christmas.util.colourise
+import gg.flyte.christmas.util.toLegacyString
 import gg.flyte.twilight.extension.playSound
-import host.carbon.event.ChristmasEventPlugin
-import host.carbon.event.minigame.engine.GameConfig
-import host.carbon.event.util.Util
-import host.carbon.event.util.colourise
-import host.carbon.event.util.toLegacyString
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration

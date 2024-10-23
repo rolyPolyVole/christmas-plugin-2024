@@ -1,11 +1,11 @@
-package host.carbon.event.listeners
+package gg.flyte.christmas.listeners
 
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.RemoteFile
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.scheduler.async
-import host.carbon.event.ChristmasEventPlugin
-import host.carbon.event.util.asComponent
+import gg.flyte.christmas.ChristmasEventPlugin
+import gg.flyte.christmas.util.asComponent
 import net.kyori.adventure.text.Component.text
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Material
@@ -40,12 +40,14 @@ class HousekeepingEventListener : Listener {
         event<PlayerJoinEvent>(priority = EventPriority.LOWEST) {
             joinMessage(null)
             player.apply {
-                RemoteFile("https://github.com/flytegg/ls-christmas-rp/releases/latest/download/RP.zip").apply { // TODO change URL/configure pack
-                    println("RP Hash = $hash")
-                    setResourcePack(url, hash, true)
+                async {
+                    RemoteFile("https://github.com/flytegg/ls-christmas-rp/releases/latest/download/RP.zip").apply { // TODO change URL/configure pack
+//                    println("RP Hash = $hash")
+//                    setResourcePack(url, hash, true)
+                    }
                 }
 
-                playSound(Sound.ENTITY_EXPERIENCE_ORB_PICKUP)
+                playSound(Sound.ENTITY_PLAYER_LEVELUP)
 
                 inventory.clear()
                 inventory.helmet = when ((1..3).random()) {
@@ -72,7 +74,7 @@ class HousekeepingEventListener : Listener {
 
         event<PlayerResourcePackStatusEvent> {
             if (status == PlayerResourcePackStatusEvent.Status.ACCEPTED || status == PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED) return@event
-            player.kick("&cYou &f&nmust &caccept the resource pack to play on this server!".asComponent())
+//            player.kick("&cYou &f&nmust&c accept the resource pack to play on this server!".asComponent()) // TODO uncomment when pack works
         }
 
         event<EntityDamageEvent> { isCancelled = true /* TODO examine later*/ }

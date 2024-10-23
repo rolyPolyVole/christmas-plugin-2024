@@ -1,6 +1,6 @@
 name: ChristmasEventPlugin
 version: 1.0
-main: host.carbon.event.ChristmasEventPlugin
+main: gg.flyte.christmas.ChristmasEventPlugin
 api-version: '1.21'
 description: Flyte x Carbon Christmas Event Plugin!
 authors: [Shreyas, Stephen, Josh, Dawson, Atom, Brandon, Dan]

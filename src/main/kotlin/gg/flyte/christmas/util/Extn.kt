@@ -1,4 +1,4 @@
-package host.carbon.event.util
+package gg.flyte.christmas.util
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer

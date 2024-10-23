@@ -1,10 +1,10 @@
-package host.carbon.event.minigame.engine
+package gg.flyte.christmas.minigame.engine
 
-import host.carbon.event.ChristmasEventPlugin
-import host.carbon.event.minigame.games.BlockParty
-import host.carbon.event.minigame.world.GameRegion
-import host.carbon.event.minigame.world.MapRegion
-import host.carbon.event.minigame.world.MapSinglePoint
+import gg.flyte.christmas.ChristmasEventPlugin
+import gg.flyte.christmas.minigame.games.BlockParty
+import gg.flyte.christmas.minigame.world.GameRegion
+import gg.flyte.christmas.minigame.world.MapRegion
+import gg.flyte.christmas.minigame.world.MapSinglePoint
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
 import org.bukkit.Location

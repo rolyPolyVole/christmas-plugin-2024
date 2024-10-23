@@ -1,8 +1,8 @@
-package host.carbon.event.util
+package gg.flyte.christmas.util
 
 import com.github.retrooper.packetevents.util.Quaternion4f
 import gg.flyte.twilight.scheduler.delay
-import host.carbon.event.ChristmasEventPlugin
+import gg.flyte.christmas.ChristmasEventPlugin
 import net.kyori.adventure.text.Component
 import org.bukkit.ChatColor
 import org.bukkit.Color

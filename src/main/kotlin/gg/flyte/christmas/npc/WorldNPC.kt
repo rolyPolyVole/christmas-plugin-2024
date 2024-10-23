@@ -1,4 +1,4 @@
-package host.carbon.event.npc
+package gg.flyte.christmas.npc
 
 import com.github.retrooper.packetevents.PacketEvents
 import com.github.retrooper.packetevents.protocol.entity.data.EntityData

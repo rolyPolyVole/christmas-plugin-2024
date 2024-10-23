@@ -1,7 +1,7 @@
-package host.carbon.event.util
+package gg.flyte.christmas.util
 
-import host.carbon.event.ChristmasEventPlugin
-import host.carbon.event.minigame.world.MapSinglePoint
+import gg.flyte.christmas.ChristmasEventPlugin
+import gg.flyte.christmas.minigame.world.MapSinglePoint
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.io.File

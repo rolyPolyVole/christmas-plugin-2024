@@ -1,6 +1,12 @@
-package host.carbon.event.minigame.games
+package gg.flyte.christmas.minigame.games
 
 import dev.shreyasayyengar.menuapi.menu.MenuItem
+import gg.flyte.christmas.minigame.engine.EventMiniGame
+import gg.flyte.christmas.minigame.engine.GameConfig
+import gg.flyte.christmas.minigame.world.MapRegion
+import gg.flyte.christmas.minigame.world.MapSinglePoint
+import gg.flyte.christmas.util.SongReference
+import gg.flyte.christmas.util.Util
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.extension.removeActivePotionEffects
@@ -8,12 +14,6 @@ import gg.flyte.twilight.scheduler.TwilightRunnable
 import gg.flyte.twilight.scheduler.delay
 import gg.flyte.twilight.scheduler.repeatingTask
 import gg.flyte.twilight.time.TimeUnit
-import host.carbon.event.minigame.engine.EventMiniGame
-import host.carbon.event.minigame.engine.GameConfig
-import host.carbon.event.minigame.world.MapRegion
-import host.carbon.event.minigame.world.MapSinglePoint
-import host.carbon.event.util.SongReference
-import host.carbon.event.util.Util
 import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor

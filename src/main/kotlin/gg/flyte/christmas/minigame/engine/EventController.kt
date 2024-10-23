@@ -1,4 +1,4 @@
-package host.carbon.event.minigame.engine
+package gg.flyte.christmas.minigame.engine
 
 import com.xxmicloxx.NoteBlockAPI.model.Playlist
 import com.xxmicloxx.NoteBlockAPI.model.SoundCategory
@@ -8,9 +8,9 @@ import gg.flyte.twilight.scheduler.TwilightRunnable
 import gg.flyte.twilight.scheduler.delay
 import gg.flyte.twilight.scheduler.repeatingTask
 import gg.flyte.twilight.time.TimeUnit
-import host.carbon.event.ChristmasEventPlugin
-import host.carbon.event.util.SongReference
-import host.carbon.event.util.Util
+import gg.flyte.christmas.ChristmasEventPlugin
+import gg.flyte.christmas.util.SongReference
+import gg.flyte.christmas.util.Util
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.title.Title
@@ -55,7 +55,7 @@ class EventController() {
     }
 
     private fun countdown() {
-        var seconds = 10;
+        var seconds = 0 // TODO CHANGE BACK TO 10 WHEN TESTING IS DONE
         currentCountdown = repeatingTask(1, TimeUnit.SECONDS) {
             when (seconds) {
                 0 -> {

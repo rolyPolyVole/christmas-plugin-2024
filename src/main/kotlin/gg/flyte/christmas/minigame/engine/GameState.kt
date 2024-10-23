@@ -1,4 +1,4 @@
-package host.carbon.event.minigame.engine
+package gg.flyte.christmas.minigame.engine
 
 enum class GameState {
     IDLE,

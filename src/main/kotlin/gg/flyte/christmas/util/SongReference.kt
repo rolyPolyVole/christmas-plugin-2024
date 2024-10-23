@@ -1,8 +1,8 @@
-package host.carbon.event.util
+package gg.flyte.christmas.util
 
 import com.xxmicloxx.NoteBlockAPI.model.Song
 import com.xxmicloxx.NoteBlockAPI.utils.NBSDecoder
-import host.carbon.event.ChristmasEventPlugin
+import gg.flyte.christmas.ChristmasEventPlugin
 import java.io.File
 
 private fun parse(fileName: String): Song {
