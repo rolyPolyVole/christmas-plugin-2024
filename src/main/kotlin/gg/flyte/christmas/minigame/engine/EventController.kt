@@ -36,6 +36,7 @@ class EventController() {
     )
     val optOut = mutableSetOf<UUID>()
     var songPlayer: RadioSongPlayer? = null
+    val points = mutableMapOf<UUID, Int>()
 
     fun setMiniGame(gameConfig: GameConfig) {
         currentGame = gameConfig.gameClass.primaryConstructor?.call()

@@ -56,6 +56,7 @@ class HousekeepingEventListener : Listener {
                 ChristmasEventPlugin.getInstance().eventController.songPlayer?.addPlayer(this)
                 ChristmasEventPlugin.getInstance().worldNPCs.forEach { it.spawnFor(this) }
             }
+            ChristmasEventPlugin.getInstance().eventController.points.putIfAbsent(player.uniqueId, 0)
         }
 
         event<PlayerQuitEvent> {

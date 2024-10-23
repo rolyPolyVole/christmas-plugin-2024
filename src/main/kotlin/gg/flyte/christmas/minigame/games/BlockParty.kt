@@ -152,7 +152,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
             }
         }
 
-        // TODO increment score system here
+        remainingPlayers().forEach { eventController.points.put(it.uniqueId, eventController.points[it.uniqueId]!! + 10) }
     }
 
     private fun newFloor(clearBombs: Boolean = true) {
