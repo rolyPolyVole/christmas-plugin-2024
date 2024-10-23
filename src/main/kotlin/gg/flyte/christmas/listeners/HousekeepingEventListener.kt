@@ -51,7 +51,7 @@ class HousekeepingEventListener : Listener {
                 playSound(Sound.ENTITY_PLAYER_LEVELUP)
 
                 inventory.clear()
-                inventory.helmet = applyChristmasHat(NamedTextColor.RED, (1..3).random())
+                inventory.helmet = applyChristmasHat((1..3).random())
 
                 ChristmasEventPlugin.getInstance().eventController.onPlayerJoin(this)
                 ChristmasEventPlugin.getInstance().eventController.songPlayer?.addPlayer(this)
@@ -84,10 +84,16 @@ class HousekeepingEventListener : Listener {
         }
     }
 
-    private fun applyChristmasHat(color: NamedTextColor, modelData: Int): ItemStack {
+    private fun applyChristmasHat(modelData: Int): ItemStack {
+        val map = mapOf(
+            1 to NamedTextColor.RED,
+            2 to NamedTextColor.GREEN,
+            3 to NamedTextColor.BLUE
+        )
+
         return ItemStack(Material.LEATHER).apply {
             itemMeta = itemMeta.apply {
-                displayName(text("Christmas Hat", color))
+                displayName(text("Christmas Hat", map[modelData]))
                 setCustomModelData(modelData)
             }
         }
