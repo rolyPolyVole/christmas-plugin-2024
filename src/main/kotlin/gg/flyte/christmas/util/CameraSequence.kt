@@ -16,6 +16,8 @@ import org.bukkit.entity.TextDisplay
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.util.Vector
+import java.util.UUID
+import kotlin.collections.mutableSetOf
 import kotlin.math.*
 import kotlin.math.withSign
 
@@ -26,6 +28,10 @@ class CameraSequence(
     private val totalDuration: Int,
     private val onComplete: (() -> Unit)? = null
 ) {
+    companion object {
+        val ACTIVE_CAMERA = mutableSetOf<UUID>()
+    }
+
     init {
         teleportPlayersThroughLocations()
     }
@@ -280,6 +286,9 @@ class CameraSequence(
         override fun run() {
             if (currentIndex >= path.size) {
                 this.cancel()
+
+                ACTIVE_CAMERA.remove(itemDisplay?.uniqueId)
+
                 itemDisplay?.remove()
                 textDisplay?.remove()
                 onComplete?.invoke()
@@ -323,6 +332,8 @@ class CameraSequence(
                             player.spectatorTarget = itemDisplay;
                         }
                     }
+
+                    ACTIVE_CAMERA.add(itemDisplay!!.uniqueId)
                 }
 
             } else {

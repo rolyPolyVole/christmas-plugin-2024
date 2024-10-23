@@ -1,13 +1,18 @@
 package gg.flyte.christmas.listeners
 
+import com.destroystokyo.paper.event.player.PlayerStopSpectatingEntityEvent
+import dev.shreyasayyengar.menuapi.menu.MenuItem
+import dev.shreyasayyengar.menuapi.menu.StandardMenu
 import gg.flyte.christmas.ChristmasEventPlugin
 import gg.flyte.christmas.util.asComponent
+import gg.flyte.christmas.util.CameraSequence
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.RemoteFile
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.scheduler.async
 import net.kyori.adventure.text.Component.text
 import net.kyori.adventure.text.format.NamedTextColor
+import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Player
@@ -19,6 +24,7 @@ import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryType
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent
+import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerResourcePackStatusEvent
@@ -26,6 +32,7 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent
 import org.bukkit.event.server.ServerListPingEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.PlayerInventory
+import kotlin.math.ceil
 
 class HousekeepingEventListener : Listener {
     init {
@@ -47,6 +54,8 @@ class HousekeepingEventListener : Listener {
 //                    setResourcePack(url, hash, true)
                     }
                 }
+
+                gameMode = GameMode.ADVENTURE
 
                 playSound(Sound.ENTITY_PLAYER_LEVELUP)
 
@@ -81,6 +90,30 @@ class HousekeepingEventListener : Listener {
         event<InventoryClickEvent> {
             if (clickedInventory !is PlayerInventory) return@event
             isCancelled = slotType == InventoryType.SlotType.ARMOR
+
+            if (currentItem?.type == Material.COMPASS) {
+                openSpectateMenu(whoClicked as Player)
+            }
+        }
+
+        event<PlayerInteractEvent> {
+            if (item?.type == Material.COMPASS) {
+                openSpectateMenu(player)
+            }
+        }
+
+        event<PlayerStopSpectatingEntityEvent> {
+            if (CameraSequence.ACTIVE_CAMERA.contains(spectatorTarget.uniqueId)) {
+                isCancelled = true
+                return@event
+            }
+
+            val currentGame = ChristmasEventPlugin.getInstance().eventController.currentGame
+            if (currentGame?.spectateEntities?.values?.map { it.uniqueId }?.contains(spectatorTarget.uniqueId) == true) {
+                player.teleport(currentGame.gameConfig.spectatorSpawnLocations.random())
+                player.gameMode = GameMode.ADVENTURE
+                println("called")
+            }
         }
     }
 
@@ -98,6 +131,32 @@ class HousekeepingEventListener : Listener {
             }
         }
     }
-}
 
-// TODO prevent players from exiting spectator mode when preview.
+    private fun openSpectateMenu(player: Player) {
+        var locationSize = ChristmasEventPlugin.getInstance().eventController.currentGame?.gameConfig!!.spectatorCameraLocations.size
+
+        var standardMenu = StandardMenu(
+            "Spectate Map:",
+            ceil(
+                locationSize.div(9.0)
+            ).toInt() * 9
+        )
+
+        for (i in 0 until locationSize) {
+
+            val menuItem = MenuItem(Material.PLAYER_HEAD)
+                .setName("Spectate Point $i")
+                .setSkullTexture("66f88107041ff1ad84b0a4ae97298bd3d6b59d0402cbc679bd2f77356d454bc4")
+                .onClick({ whoClicked, itemStack, clickType, inventoryClickEvent ->
+                    val requestedCameraEntity = ChristmasEventPlugin.getInstance().eventController.currentGame!!.spectateEntities[i]
+                    whoClicked.gameMode = GameMode.SPECTATOR
+                    whoClicked.spectatorTarget = requestedCameraEntity
+                    whoClicked.closeInventory()
+                })
+
+            standardMenu.setItem(i, menuItem)
+        }
+
+        standardMenu.open(false, player)
+    }
+}

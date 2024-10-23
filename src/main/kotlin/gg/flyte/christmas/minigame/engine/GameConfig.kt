@@ -1,13 +1,11 @@
 package gg.flyte.christmas.minigame.engine
 
-import gg.flyte.christmas.ChristmasEventPlugin
 import gg.flyte.christmas.minigame.games.BlockParty
 import gg.flyte.christmas.minigame.world.GameRegion
 import gg.flyte.christmas.minigame.world.MapRegion
 import gg.flyte.christmas.minigame.world.MapSinglePoint
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
-import org.bukkit.Location
 import org.bukkit.Material
 import kotlin.reflect.KClass
 
@@ -17,7 +15,7 @@ enum class GameConfig(
     val colour: TextColor,
     val spawnPoints: List<MapRegion>,
     val spectatorSpawnLocations: List<MapSinglePoint>,
-    val spectatorCameraLocations: List<Location>,
+    val spectatorCameraLocations: List<MapSinglePoint>,
     val overviewLocations: List<MapSinglePoint>,
     val instructions: String,
     val menuMaterial: Material,
@@ -47,7 +45,10 @@ enum class GameConfig(
             MapSinglePoint(636.5, 113, 780.5, 45, 0)
         ),
         listOf(
-            Location(ChristmasEventPlugin.getInstance().serverWorld, 0.0, 0.0, 0.0),
+            MapSinglePoint(616.5, 118, 819.5, 180, 35),
+            MapSinglePoint(597.5, 118, 800.5, -90, 35),
+            MapSinglePoint(616.5, 118, 781.5, 0, 35),
+            MapSinglePoint(635.5, 118, 800.5, 90, 35)
         ),
         listOf(
             MapSinglePoint(677, 148, 755, 48.056213F, 85.83555F),

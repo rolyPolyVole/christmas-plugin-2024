@@ -12,8 +12,12 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
+import org.bukkit.Material
 import org.bukkit.Sound
+import org.bukkit.entity.Entity
+import org.bukkit.entity.ItemDisplay
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import java.time.Duration
 import java.util.UUID
 
@@ -22,12 +26,18 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
     protected val eliminatedPlayers = mutableListOf<UUID>()
     protected val listeners = mutableListOf<TwilightListener>()
     protected val tasks = mutableListOf<TwilightRunnable?>()
+    val spectateEntities = mutableMapOf<Int, Entity>()
     lateinit var state: GameState
 
     val eventController get() = ChristmasEventPlugin.getInstance().eventController
 
     init {
         allPlayers.addAll(Util.handlePlayers().map { it.uniqueId })
+        for ((index, point) in gameConfig.spectatorCameraLocations.withIndex()) {
+            spectateEntities[index] = Bukkit.getWorld("world")!!.spawn(point, ItemDisplay::class.java) {
+                it.setItemStack(ItemStack(Material.BARRIER))
+            }
+        }
     }
 
     /**
@@ -90,6 +100,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
     open fun endGame() {
         tasks.forEach { it?.cancel() }
         listeners.forEach { it.unregister() }
+        spectateEntities.values.forEach { it.remove() }
     }
 
     abstract fun handleGameEvents()
@@ -101,7 +112,19 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
     open fun eliminate(player: Player, reason: EliminationReason) {
         eliminatedPlayers.add(player.uniqueId)
 
-        if (reason == EliminationReason.LEFT_GAME) player.teleport(gameConfig.spectatorSpawnLocations.random())
+        if (reason == EliminationReason.LEFT_GAME) {
+            player.teleport(gameConfig.spectatorSpawnLocations.random())
+        } else {
+            // spectate item
+            ItemStack(Material.COMPASS).apply {
+                itemMeta = itemMeta.apply {
+                    displayName(Component.text("Spectate", NamedTextColor.WHITE))
+                    editMeta {
+                        lore(listOf(Component.text("Click to Spectate!", NamedTextColor.GRAY)))
+                    }
+                }
+            }.let { player.inventory.setItem(8, it) }
+        }
     }
 
     open fun onPlayerJoin(player: Player) {
