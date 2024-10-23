@@ -50,11 +50,7 @@ class HousekeepingEventListener : Listener {
                 playSound(Sound.ENTITY_PLAYER_LEVELUP)
 
                 inventory.clear()
-                inventory.helmet = when ((1..3).random()) {
-                    1 -> applyChristmasHat(NamedTextColor.RED, 1)
-                    2 -> applyChristmasHat(NamedTextColor.BLUE, 2)
-                    else -> applyChristmasHat(NamedTextColor.GREEN, 3)
-                }
+                inventory.helmet = applyChristmasHat(NamedTextColor.RED, (1..3).random())
 
                 ChristmasEventPlugin.getInstance().eventController.onPlayerJoin(this)
                 ChristmasEventPlugin.getInstance().eventController.songPlayer?.addPlayer(this)
