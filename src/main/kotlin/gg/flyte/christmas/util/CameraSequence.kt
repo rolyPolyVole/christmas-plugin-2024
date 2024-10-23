@@ -1,8 +1,8 @@
 package gg.flyte.christmas.util
 
 import com.github.retrooper.packetevents.util.Quaternion4f
-import gg.flyte.twilight.scheduler.delay
 import gg.flyte.christmas.ChristmasEventPlugin
+import gg.flyte.twilight.scheduler.delay
 import net.kyori.adventure.text.Component
 import org.bukkit.ChatColor
 import org.bukkit.Color
@@ -21,7 +21,7 @@ import kotlin.math.withSign
 
 class CameraSequence(
     private val players: Collection<Player>,
-    private val component: Component,
+    private val component: Component?,
     private val locations: List<Location>,
     private val totalDuration: Int,
     private val onComplete: (() -> Unit)? = null
@@ -295,22 +295,24 @@ class CameraSequence(
                     itemDisplay.setRotation(nextPosition.yaw, nextPosition.pitch)
                     itemDisplay.teleportDuration = this.teleportDuration
 
-                    textDisplay = nextPosition.world.spawn(nextPosition, TextDisplay::class.java) { textDisplay ->
-                        textDisplay.text(component)
-                        textDisplay.alignment = TextDisplay.TextAlignment.LEFT
-                        textDisplay.lineWidth = 300
-                        textDisplay.backgroundColor = Color.fromARGB(225, 38, 38, 38)
-                        textDisplay.billboard = Display.Billboard.CENTER
-                        textDisplay.isSeeThrough = true
-                        textDisplay.interpolationDuration = 50 // 50 ticks to move up
-                        textDisplay.interpolationDelay = 50 // 50 ticks to stay down
-                        textDisplay.transformation = textDisplay.transformation.apply {
-                            translation.add(0F, -10F, -3F)
-                        }
-
-                        delay(5) {
+                    if (component != null) {
+                        textDisplay = nextPosition.world.spawn(nextPosition, TextDisplay::class.java) { textDisplay ->
+                            textDisplay.text(component)
+                            textDisplay.alignment = TextDisplay.TextAlignment.LEFT
+                            textDisplay.lineWidth = 300
+                            textDisplay.backgroundColor = Color.fromARGB(225, 38, 38, 38)
+                            textDisplay.billboard = Display.Billboard.CENTER
+                            textDisplay.isSeeThrough = true
+                            textDisplay.interpolationDuration = 50 // 50 ticks to move up
+                            textDisplay.interpolationDelay = 50 // 50 ticks to stay down
                             textDisplay.transformation = textDisplay.transformation.apply {
-                                translation.add(0F, 8.5F, 0F)
+                                translation.add(0F, -10F, -3F)
+                            }
+
+                            delay(5) {
+                                textDisplay.transformation = textDisplay.transformation.apply {
+                                    translation.add(0F, 8.5F, 0F)
+                                }
                             }
                         }
                     }
@@ -327,7 +329,7 @@ class CameraSequence(
                 itemDisplay?.apply {
                     if (textDisplay != null) removePassenger(textDisplay!!)
                     teleport(nextPosition)
-                    addPassenger(textDisplay!!);
+                    if (textDisplay != null) addPassenger(textDisplay!!)
                 }
             }
 
