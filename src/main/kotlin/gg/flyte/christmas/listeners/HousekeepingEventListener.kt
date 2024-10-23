@@ -1,11 +1,11 @@
 package gg.flyte.christmas.listeners
 
+import gg.flyte.christmas.ChristmasEventPlugin
+import gg.flyte.christmas.util.asComponent
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.RemoteFile
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.scheduler.async
-import gg.flyte.christmas.ChristmasEventPlugin
-import gg.flyte.christmas.util.asComponent
 import net.kyori.adventure.text.Component.text
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Material
@@ -39,6 +39,7 @@ class HousekeepingEventListener : Listener {
 
         event<PlayerJoinEvent>(priority = EventPriority.LOWEST) {
             joinMessage(null)
+
             player.apply {
                 async {
                     RemoteFile("https://github.com/flytegg/ls-christmas-rp/releases/latest/download/RP.zip").apply { // TODO change URL/configure pack
@@ -62,7 +63,6 @@ class HousekeepingEventListener : Listener {
         event<PlayerQuitEvent> {
             quitMessage(null)
             ChristmasEventPlugin.getInstance().eventController.onPlayerQuit(player)
-            // TODO
         }
 
         event<EntityCombustEvent> { if (entity is Player) isCancelled = true }
