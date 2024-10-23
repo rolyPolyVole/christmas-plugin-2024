@@ -59,13 +59,14 @@ class HousekeepingEventListener : Listener {
             }
         }
 
-        event<EntityCombustEvent> { if (entity is Player) isCancelled = true }
-
         event<PlayerQuitEvent> {
             quitMessage(null)
             ChristmasEventPlugin.getInstance().eventController.onPlayerQuit(player)
+            ChristmasEventPlugin.getInstance().worldNPCs.forEach { it.despawnFor(player) } // lol
             // TODO
         }
+
+        event<EntityCombustEvent> { if (entity is Player) isCancelled = true }
 
         event<PlayerSwapHandItemsEvent> { isCancelled = true }
 
