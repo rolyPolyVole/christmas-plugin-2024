@@ -8,8 +8,13 @@ import gg.flyte.twilight.time.TimeUnit
 import host.carbon.event.ChristmasEventPlugin
 import host.carbon.event.util.CameraSequence
 import host.carbon.event.util.Util
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.title.Title
+import org.bukkit.Bukkit
+import org.bukkit.Sound
 import org.bukkit.entity.Player
-import org.bukkit.scheduler.BukkitTask
+import java.time.Duration
 import java.util.UUID
 
 abstract class EventMiniGame(val gameConfig: GameConfig) {
