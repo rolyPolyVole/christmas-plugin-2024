@@ -3,11 +3,11 @@ package host.carbon.event.listeners
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.RemoteFile
 import gg.flyte.twilight.extension.playSound
+import gg.flyte.twilight.scheduler.async
 import host.carbon.event.ChristmasEventPlugin
 import host.carbon.event.util.asComponent
 import net.kyori.adventure.text.Component.text
 import net.kyori.adventure.text.format.NamedTextColor
-import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Player
@@ -22,6 +22,7 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerResourcePackStatusEvent
+import org.bukkit.event.player.PlayerSwapHandItemsEvent
 import org.bukkit.event.server.ServerListPingEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.PlayerInventory
@@ -56,12 +57,9 @@ class HousekeepingEventListener : Listener {
                 ChristmasEventPlugin.getInstance().eventController.onPlayerJoin(this)
                 ChristmasEventPlugin.getInstance().eventController.songPlayer?.addPlayer(this)
             }
-
         }
 
-        event<EntityCombustEvent> {
-            if (entity is Player) isCancelled = true
-        }
+        event<EntityCombustEvent> { if (entity is Player) isCancelled = true }
 
         event<PlayerQuitEvent> {
             quitMessage(null)
@@ -69,18 +67,16 @@ class HousekeepingEventListener : Listener {
             // TODO
         }
 
+        event<PlayerSwapHandItemsEvent> { isCancelled = true }
+
         event<PlayerResourcePackStatusEvent> {
             if (status == PlayerResourcePackStatusEvent.Status.ACCEPTED || status == PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED) return@event
             player.kick("&cYou &f&nmust &caccept the resource pack to play on this server!".asComponent())
         }
 
-        event<EntityDamageEvent> {
-            isCancelled = true // TODO examine later
-        }
+        event<EntityDamageEvent> { isCancelled = true /* TODO examine later*/ }
 
-        event<FoodLevelChangeEvent> {
-            isCancelled = true
-        }
+        event<FoodLevelChangeEvent> { isCancelled = true }
 
         event<InventoryClickEvent> {
             if (clickedInventory !is PlayerInventory) return@event
