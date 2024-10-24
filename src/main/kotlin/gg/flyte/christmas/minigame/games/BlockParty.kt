@@ -64,8 +64,8 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
     private val groupedSquares = mutableListOf<MapRegion>()
     private val eliminateBelow = 104
     private var roundNumber = 0
-    private var harder = false;
-    private var powerUpLocation: Location? = null
+    private var harder = false
+    private var powerUpLocation: MapSinglePoint? = null
     private var secondsForRound = 10 // First round 9 seconds to find safe squares (see line 115)
     private var safeBlocks = mutableListOf<MapSinglePoint>()
     private var bombedSquares = mutableListOf<MapSinglePoint>()
@@ -189,8 +189,8 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
         if (reducedFrequency || regularPowerUp) {
 
-            val localLocation = groupedSquares.random()
-            powerUpLocation = localLocation.randomLocation().apply { add(0.0, 1.0, 0.0) }
+            val localLocation = groupedSquares.random().randomLocation()
+            powerUpLocation = MapSinglePoint(localLocation.blockX, localLocation.blockY + 1.0, localLocation.blockZ)
             powerUpLocation!!.block.type = Material.BEACON
             powerUpLocation!!.world.spawn(powerUpLocation!!, Firework::class.java) {
                 it.fireworkMeta = it.fireworkMeta.apply {
@@ -358,8 +358,15 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
     }
 
     override fun endGame() {
+        remainingPlayers().forEach { eventController.points.put(it.uniqueId, eventController.points[it.uniqueId]!! + 15) }
+        Util.handlePlayers(
+            eventPlayerAction = {
+            },
+            optedOutAction = {
+            },
+        )
+
         super.endGame()
-        Util.handlePlayers(eventPlayerAction = { it.gameMode = GameMode.SURVIVAL })
     }
 
     override fun onPlayerJoin(player: Player) {
