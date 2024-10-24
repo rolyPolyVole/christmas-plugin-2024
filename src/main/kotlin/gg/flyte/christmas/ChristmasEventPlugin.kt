@@ -115,7 +115,7 @@ class ChristmasEventPlugin : JavaPlugin() {
 
         lobbySpawn = MapSinglePoint(559.5, 105, 554.5, 180, 0)
 
-        GameConfig.entries.forEach { it.gameClass.primaryConstructor } // pre-load classes for reflection
+        GameConfig.entries.forEach { it.gameClass.primaryConstructor } // preload classes for reflection
         eventController.startPlaylist()
     }
 }
