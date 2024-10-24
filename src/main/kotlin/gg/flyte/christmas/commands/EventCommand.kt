@@ -63,7 +63,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
                 .setEnchantmentGlint(true)
                 .closeWhenClicked(true)
                 .onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
-                    if (ChristmasEventPlugin.getInstance().eventController.currentGame == null) {
+                    if (ChristmasEventPlugin.instance.eventController.currentGame == null) {
                         whoClicked.playSound(Sound.ENTITY_VILLAGER_NO)
                         whoClicked.sendMessage(Component.text("No game is currently selected!", NamedTextColor.RED))
                         return@onClick
@@ -71,14 +71,14 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
 
                     whoClicked.playSound(Sound.ENTITY_PLAYER_LEVELUP)
                     whoClicked.sendMessage(Component.text("Game starting! Please wait...", NamedTextColor.GREEN))
-                    ChristmasEventPlugin.getInstance().eventController.prepareStart()
+                    ChristmasEventPlugin.instance.eventController.prepareStart()
                 }
         )
 
         menu.setItem(
             42, MenuItem(Material.RED_CONCRETE)
                 .setName(
-                    "&cTerminate Current Game: " + (ChristmasEventPlugin.getInstance().eventController.currentGame?.gameConfig?.displayName
+                    "&cTerminate Current Game: " + (ChristmasEventPlugin.instance.eventController.currentGame?.gameConfig?.displayName
                         ?: "None".colourise())
                 )
                 .setLore(
@@ -87,13 +87,13 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
                     "&cand teleport all players back to the lobby.".colourise(),
                 )
                 .onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
-                    if (ChristmasEventPlugin.getInstance().eventController.currentGame == null) {
+                    if (ChristmasEventPlugin.instance.eventController.currentGame == null) {
                         whoClicked.playSound(Sound.ENTITY_VILLAGER_NO)
                         whoClicked.sendMessage(Component.text("No game is currently running!", NamedTextColor.RED))
                         return@onClick
                     }
 
-                    ChristmasEventPlugin.getInstance().eventController.currentGame!!.endGame()
+                    ChristmasEventPlugin.instance.eventController.currentGame!!.endGame()
                     whoClicked.sendMessage(Component.text("Game terminated!", NamedTextColor.RED))
                     whoClicked.playSound(Sound.ENTITY_GENERIC_EXPLODE)
                 }
@@ -120,7 +120,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
                 menu.setItem(13, this)
                 whoClicked.playSound(Sound.UI_BUTTON_CLICK)
 
-                ChristmasEventPlugin.getInstance().eventController.setMiniGame(availableGames[selectedIndex])
+                ChristmasEventPlugin.instance.eventController.setMiniGame(availableGames[selectedIndex])
                 whoClicked.sendMessage(
                     Component.text("Selected game: ", NamedTextColor.GRAY).append(
                         availableGames[selectedIndex].displayName.color(availableGames[selectedIndex].colour)

@@ -12,10 +12,10 @@ import java.io.InputStream
 object Util {
     data class Contributor(val ign: String, val contribution: String, val location: MapSinglePoint)
 
-    fun getMaxPlayers(): Int = ChristmasEventPlugin.getInstance().config.getInt("maximum-players")
+    fun getMaxPlayers(): Int = ChristmasEventPlugin.instance.config.getInt("maximum-players")
 
     fun getEventContributors(): List<Contributor> {
-        val config = ChristmasEventPlugin.getInstance().config
+        val config = ChristmasEventPlugin.instance.config
 
         return config.getStringList("contributors").map { contributor ->
             val (ign, contribution, coords) = contributor.substring(1, contributor.length - 1).split("><")
@@ -38,7 +38,7 @@ object Util {
         optedOutAction: ((Player) -> Unit)? = null,
         eventPlayerAction: ((Player) -> Unit)? = null
     ): Collection<Player> {
-        val instance = ChristmasEventPlugin.getInstance()
+        val instance = ChristmasEventPlugin.instance
 
         return Bukkit.getOnlinePlayers().filter { player ->
             val isCameraPlayer = player.uniqueId == instance.cameraPlayer

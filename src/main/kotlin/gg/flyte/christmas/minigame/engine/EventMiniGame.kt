@@ -35,14 +35,14 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
     protected val tasks = mutableListOf<TwilightRunnable?>()
     val spectateEntities = mutableMapOf<Int, Entity>()
     lateinit var state: GameState
-    val eventController get() = ChristmasEventPlugin.getInstance().eventController
+    val eventController get() = ChristmasEventPlugin.instance.eventController
 
     /**
      * Initialises the game's spectator entities, which are used to allow players to spectate the game.
      */
     init {
         for ((index, point) in gameConfig.spectatorCameraLocations.withIndex()) {
-            spectateEntities[index] = ChristmasEventPlugin.getInstance().serverWorld.spawn(point, ItemDisplay::class.java) {
+            spectateEntities[index] = ChristmasEventPlugin.instance.serverWorld.spawn(point, ItemDisplay::class.java) {
                 it.setItemStack(ItemStack(Material.AIR))
             }
         }

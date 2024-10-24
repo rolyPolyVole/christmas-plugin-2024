@@ -13,7 +13,7 @@ import java.io.File
  */
 private fun parse(fileName: String): Song {
     var file = File(fileName)
-    Util.copyInputStreamToFile(ChristmasEventPlugin.getInstance().getResource("music/$fileName")!!, file)
+    Util.copyInputStreamToFile(ChristmasEventPlugin.instance.getResource("music/$fileName")!!, file)
 
     return NBSDecoder.parse(file)
 }

@@ -109,7 +109,7 @@ class EventController() {
 
     fun onPlayerJoin(player: Player) {
         if (currentGame == null) {
-            player.teleport(ChristmasEventPlugin.getInstance().lobbySpawn)
+            player.teleport(ChristmasEventPlugin.instance.lobbySpawn)
         } else {
             currentGame!!.onPlayerJoin(player)
 

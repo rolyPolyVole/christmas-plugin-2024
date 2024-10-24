@@ -53,7 +53,7 @@ class CameraSequence(
 
         // Start moving the players along the smooth path
         SmoothPathTeleportTask(players, smoothPath, teleportDuration).runTaskTimer(
-            ChristmasEventPlugin.getInstance(),
+            ChristmasEventPlugin.instance,
             0L,
             teleportDuration.toLong()
         )

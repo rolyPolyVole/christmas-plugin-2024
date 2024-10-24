@@ -33,9 +33,7 @@ class ChristmasEventPlugin : JavaPlugin() {
     var worldNPCs: MutableSet<WorldNPC> = HashSet()
 
     companion object {
-        fun getInstance(): ChristmasEventPlugin = getPlugin(ChristmasEventPlugin::class.java)
-//        val instance: ChristmasEventPlugin by lazy { getPlugin(ChristmasEventPlugin::class.java) }
-        // TODO replace this with val get() = instance
+        val instance: ChristmasEventPlugin by lazy { getPlugin(ChristmasEventPlugin::class.java) }
     }
 
     override fun onLoad() {

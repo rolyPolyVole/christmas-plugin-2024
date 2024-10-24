@@ -63,16 +63,16 @@ class HousekeepingEventListener : Listener {
                 inventory.clear()
                 inventory.helmet = applyChristmasHat((1..3).random())
 
-                ChristmasEventPlugin.getInstance().eventController.onPlayerJoin(this)
-                ChristmasEventPlugin.getInstance().eventController.songPlayer?.addPlayer(this)
-                ChristmasEventPlugin.getInstance().worldNPCs.forEach { it.spawnFor(this) }
+                ChristmasEventPlugin.instance.eventController.onPlayerJoin(this)
+                ChristmasEventPlugin.instance.eventController.songPlayer?.addPlayer(this)
+                ChristmasEventPlugin.instance.worldNPCs.forEach { it.spawnFor(this) }
             }
-            ChristmasEventPlugin.getInstance().eventController.points.putIfAbsent(player.uniqueId, 0)
+            ChristmasEventPlugin.instance.eventController.points.putIfAbsent(player.uniqueId, 0)
         }
 
         event<PlayerQuitEvent> {
             quitMessage(null)
-            ChristmasEventPlugin.getInstance().eventController.onPlayerQuit(player)
+            ChristmasEventPlugin.instance.eventController.onPlayerQuit(player)
         }
 
         event<EntityCombustEvent> { if (entity is Player) isCancelled = true }
@@ -109,7 +109,7 @@ class HousekeepingEventListener : Listener {
                 return@event
             }
 
-            val currentGame = ChristmasEventPlugin.getInstance().eventController.currentGame
+            val currentGame = ChristmasEventPlugin.instance.eventController.currentGame
             if (currentGame?.spectateEntities?.values?.map { it.uniqueId }?.contains(spectatorTarget.uniqueId) == true) {
                 player.teleport(currentGame.gameConfig.spectatorSpawnLocations.random())
                 player.gameMode = GameMode.ADVENTURE
@@ -133,7 +133,7 @@ class HousekeepingEventListener : Listener {
     }
 
     private fun openSpectateMenu(player: Player) {
-        var locationSize = ChristmasEventPlugin.getInstance().eventController.currentGame?.gameConfig!!.spectatorCameraLocations.size
+        var locationSize = ChristmasEventPlugin.instance.eventController.currentGame?.gameConfig!!.spectatorCameraLocations.size
 
         var standardMenu = StandardMenu(
             "Spectate Map:",
@@ -148,7 +148,7 @@ class HousekeepingEventListener : Listener {
                 .setName("Spectate Point $i")
                 .setSkullTexture("66f88107041ff1ad84b0a4ae97298bd3d6b59d0402cbc679bd2f77356d454bc4")
                 .onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
-                    val requestedCameraEntity = ChristmasEventPlugin.getInstance().eventController.currentGame!!.spectateEntities[i]
+                    val requestedCameraEntity = ChristmasEventPlugin.instance.eventController.currentGame!!.spectateEntities[i]
                     whoClicked.gameMode = GameMode.SPECTATOR
                     whoClicked.spectatorTarget = requestedCameraEntity
                     whoClicked.closeInventory()
