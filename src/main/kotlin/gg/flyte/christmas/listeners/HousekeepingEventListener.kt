@@ -4,8 +4,8 @@ import com.destroystokyo.paper.event.player.PlayerStopSpectatingEntityEvent
 import dev.shreyasayyengar.menuapi.menu.MenuItem
 import dev.shreyasayyengar.menuapi.menu.StandardMenu
 import gg.flyte.christmas.ChristmasEventPlugin
-import gg.flyte.christmas.util.asComponent
 import gg.flyte.christmas.util.CameraSequence
+import gg.flyte.christmas.util.colourise
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.RemoteFile
 import gg.flyte.twilight.extension.playSound
@@ -37,7 +37,8 @@ import kotlin.math.ceil
 class HousekeepingEventListener : Listener {
     init {
         event<ServerListPingEvent> {
-            motd("TODO!".asComponent()) // TODO add motd
+            motd = "             &f&k|||||| &dFlyte #ff1515C#ff2a2ah#ff3f3fr#ff5454i#ff6969s#ff7e7et#ff9393m#ffa8a8a#ffbdbds #e6ca97E#ccd771v#b3e54ce#99f226n#80ff00t &f&k||||||".colourise()
+            // TODO Finish second line + maybe add X mas symbols special characters
         }
 
         event<AsyncPlayerPreLoginEvent> {
@@ -112,7 +113,6 @@ class HousekeepingEventListener : Listener {
             if (currentGame?.spectateEntities?.values?.map { it.uniqueId }?.contains(spectatorTarget.uniqueId) == true) {
                 player.teleport(currentGame.gameConfig.spectatorSpawnLocations.random())
                 player.gameMode = GameMode.ADVENTURE
-                println("called")
             }
         }
     }
