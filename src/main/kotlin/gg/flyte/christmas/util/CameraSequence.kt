@@ -199,8 +199,8 @@ class CameraSequence(
             dot = -dot
         }
 
-        val DOT_THRESHOLD = 0.9995
-        if (dot > DOT_THRESHOLD) {
+        val dotThreshold = 0.9995
+        if (dot > dotThreshold) {
             // The quaternions are very close, use linear interpolation
             val result = Quaternion4f(
                 q1.x + (t * (q2Var.x - q1.x)).toFloat(),
