@@ -26,7 +26,7 @@ import java.util.UUID
 import kotlin.reflect.full.primaryConstructor
 
 class ChristmasEventPlugin : JavaPlugin() {
-    lateinit var serverWorld: World;
+    lateinit var serverWorld: World
     lateinit var lobbySpawn: Location
     var cameraPlayer: UUID = UUID.fromString("a008c892-e7e1-48e1-8235-8aa389318b7a") // "devous" | Josh
     var eventController: EventController = EventController()
@@ -47,12 +47,12 @@ class ChristmasEventPlugin : JavaPlugin() {
         logger.info("ChristmasEventPlugin has been enabled!")
 
         initDependencies()
-        createConfig();
+        createConfig()
         fixData()
-        registerCommands();
-        registerEvents();
+        registerCommands()
+        registerEvents()
         registerPacketAPI()
-        loadContributorNPCs();
+        loadContributorNPCs()
     }
 
     override fun onDisable() {
@@ -67,7 +67,7 @@ class ChristmasEventPlugin : JavaPlugin() {
     }
 
     private fun createConfig() {
-        config.options().configuration();
+        config.options().configuration()
         saveDefaultConfig()
     }
 
@@ -81,7 +81,7 @@ class ChristmasEventPlugin : JavaPlugin() {
     }
 
     private fun registerPacketAPI() {
-        PacketEvents.getAPI().init();
+        PacketEvents.getAPI().init()
     }
 
     private fun loadContributorNPCs() {
