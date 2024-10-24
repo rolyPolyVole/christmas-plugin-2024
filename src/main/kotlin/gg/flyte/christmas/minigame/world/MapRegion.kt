@@ -82,4 +82,3 @@ data class MapRegion(val minPoint: MapSinglePoint, val maxPoint: MapSinglePoint)
         return points
     }
 }
-
