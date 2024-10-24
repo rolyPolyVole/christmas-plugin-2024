@@ -224,7 +224,8 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
     private fun prepareRemoveFloor() {
         isCountdownActive = true
 
-        if (harder) newFloor(false)
+        if (harder) newFloor(false) // hard mode changes floor right before countdown starts
+
         eventController.songPlayer?.isPlaying = false
         remainingPlayers().forEach { it.playSound(Sound.BLOCK_NOTE_BLOCK_BASEDRUM) }
 
@@ -235,8 +236,8 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         val timerBar: BossBar = BossBar.bossBar(
             Component.text("Time left: $secondsForRound", gameConfig.colour).decorate(TextDecoration.BOLD),
             1.0f,
-            BossBar.Color.GREEN, // TODO test/configure?
-            BossBar.Overlay.NOTCHED_20
+            BossBar.Color.RED,
+            BossBar.Overlay.PROGRESS
         )
 
         currentBossBar = timerBar
