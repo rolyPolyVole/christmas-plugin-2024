@@ -34,6 +34,8 @@ class ChristmasEventPlugin : JavaPlugin() {
 
     companion object {
         fun getInstance(): ChristmasEventPlugin = getPlugin(ChristmasEventPlugin::class.java)
+//        val instance: ChristmasEventPlugin by lazy { getPlugin(ChristmasEventPlugin::class.java) }
+        // TODO replace this with val get() = instance
     }
 
     override fun onLoad() {
@@ -106,8 +108,8 @@ class ChristmasEventPlugin : JavaPlugin() {
             setGameRule(GameRule.DO_MOB_SPAWNING, false)
             setGameRule(GameRule.DO_WEATHER_CYCLE, false)
             setGameRule(GameRule.DO_FIRE_TICK,false)
-            time = 6000
             setStorm(false)
+            time = 6000
         }
         // TODO tree world?
 
