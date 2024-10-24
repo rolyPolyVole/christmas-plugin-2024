@@ -22,7 +22,6 @@ import net.kyori.adventure.title.Title
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
 import org.bukkit.GameMode
-import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Firework
@@ -32,6 +31,7 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerMoveEvent
+import org.bukkit.event.player.PlayerToggleFlightEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
@@ -42,7 +42,7 @@ import kotlin.random.Random
 class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
     private lateinit var overviewTask: TwilightRunnable
 
-    private val materials = mapOf(
+    private val colourMap = mapOf(
         Material.WHITE_CONCRETE to NamedTextColor.WHITE,
         Material.ORANGE_CONCRETE to NamedTextColor.GOLD,
         Material.MAGENTA_CONCRETE to NamedTextColor.DARK_PURPLE,
@@ -60,7 +60,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         Material.RED_CONCRETE to NamedTextColor.RED,
         Material.BLACK_CONCRETE to NamedTextColor.BLACK
     )
-    private lateinit var selectedMaterial: Material
+    private var selectedMaterial: Material = colourMap.keys.random()
     private val groupedSquares = mutableListOf<MapRegion>()
     private val eliminateBelow = 104
     private var roundNumber = 0
@@ -80,13 +80,13 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         for (x in 600..632 step 3) {
             for (z in 784..816 step 3) {
                 val region = MapRegion(MapSinglePoint(x, 110, z), MapSinglePoint(x + 2, 110, z + 2))
-                groupedSquares.add(region)
+                groupedSquares.add(region) // add all 3x3s
             }
         }
 
         overviewTask = repeatingTask(10) {
             groupedSquares.forEach { region ->
-                val material = materials.keys.random()
+                val material = colourMap.keys.random()
                 region.toSingleBlockLocations().forEach { point ->
                     point.block.type = material
                 }
@@ -101,35 +101,30 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
     override fun startGame() {
         overviewTask.cancel()
-
-        simpleCountdown {
-            groupedSquares.forEach { region ->
-                val material = materials.keys.random()
-                region.toSingleBlockLocations().forEach { point ->
-                    point.block.type = material
-                }
-            }
-
-            newRound()
-        }
+        simpleCountdown { newRound() }
     }
 
     private fun newRound() {
         roundNumber++
         if (secondsForRound > 2) secondsForRound--
 
-        if (roundNumber == 12) {
-            if (!harder) {
+        when {
+            roundNumber == 12 && !harder -> {
                 harder = true
                 roundNumber = 8 // hard round needs more time to find safe squares first.
+
                 Util.handlePlayers(
-                    // TODO add info explaining what the actual change is
                     eventPlayerAction = {
                         it.showTitle(Title.title(Component.text("Hard Mode!", gameConfig.colour), Component.text("")))
+                        it.sendMessage(
+                            Component.text("The floor will now change right before the timer starts... stay quick!")
+                                .color(NamedTextColor.RED)
+                                .decorate(TextDecoration.BOLD)
+                        )
                         it.playSound(Sound.ENTITY_ENDER_DRAGON_GROWL)
                     },
                     optedOutAction = {
-                        it.sendMessage(Component.text("The game is getting harder!").color(NamedTextColor.RED).decorate(TextDecoration.BOLD))
+                        it.sendMessage(Component.text("The game is getting harder!", gameConfig.colour))
                         it.playSound(Sound.ENTITY_ENDER_DRAGON_GROWL)
                     }
                 )
@@ -142,12 +137,13 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         } else {
             eventController.songPlayer?.isPlaying = true
         }
+
         newFloor()
         powerUp()
 
         val delayBeforePrepareRemoveFloor = (6..10).random()
         delay(delayBeforePrepareRemoveFloor, TimeUnit.SECONDS) {
-            if (!isCountdownActive) {
+            if (!isCountdownActive) { // prevent double-prepare due to random condition
                 prepareRemoveFloor()
             }
         }
@@ -156,15 +152,15 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
     }
 
     private fun newFloor(clearBombs: Boolean = true) {
-        safeBlocks.clear()
         if (clearBombs) bombedSquares.clear()
+        safeBlocks.clear()
 
-        this.selectedMaterial = materials.keys.random()
+        this.selectedMaterial = colourMap.keys.random()
         val safeSquare1 = groupedSquares.indices.random()
         val safeSquare2 = groupedSquares.indices.random()
 
         groupedSquares.forEachIndexed { index, groupedSquareRegion ->
-            val mat: Material = if (index == safeSquare1 || index == safeSquare2) selectedMaterial else materials.keys.random()
+            val mat: Material = if (index == safeSquare1 || index == safeSquare2) selectedMaterial else colourMap.keys.random()
             var blockLocations = groupedSquareRegion.toSingleBlockLocations()
 
             if (mat == selectedMaterial) safeBlocks.addAll(blockLocations)
@@ -172,7 +168,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
             blockLocations.forEach { it.block.type = mat }
         }
 
-        bombedSquares.forEach { it.block.type = selectedMaterial }
+        bombedSquares.forEach { it.block.type = selectedMaterial } // if colour bombs used, change those squares to safe.
 
         Util.handlePlayers(
             eventPlayerAction = {
@@ -193,44 +189,32 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
         if (reducedFrequency || regularPowerUp) {
 
-            val announcePowerUp: (Player) -> Unit = { player ->
-                {
-                    player.sendMessage(
-                        Component.text("A power-up has spawned on the floor!").color(NamedTextColor.YELLOW).decorate(TextDecoration.BOLD)
-                    )
-                    player.sendMessage(Component.text("Find the beacon on the map to unlock it!", NamedTextColor.GRAY))
-                    player.playSound(Sound.BLOCK_NOTE_BLOCK_PLING)
-                }
-            }
-            Util.handlePlayers(eventPlayerAction = announcePowerUp, optedOutAction = announcePowerUp)
-
             val localLocation = groupedSquares.random()
             powerUpLocation = localLocation.randomLocation().apply { add(0.0, 1.0, 0.0) }
             powerUpLocation!!.block.type = Material.BEACON
-            powerUpLocation!!.world.spawn(powerUpLocation!!, Firework::class.java) { firework ->
-                {
-                    firework.fireworkMeta = firework.fireworkMeta.apply {
-                        addEffect(
-                            FireworkEffect.builder()
-                                .with(FireworkEffect.Type.BALL_LARGE)
-                                .withColor(Color.FUCHSIA, Color.PURPLE, Color.MAROON).withFade(Color.FUCHSIA, Color.PURPLE, Color.MAROON).build()
-                        )
-                    }
-                    firework.detonate()
+            powerUpLocation!!.world.spawn(powerUpLocation!!, Firework::class.java) {
+                it.fireworkMeta = it.fireworkMeta.apply {
+                    addEffect(
+                        FireworkEffect.builder()
+                            .with(FireworkEffect.Type.BALL_LARGE)
+                            .withColor(Color.FUCHSIA, Color.PURPLE, Color.MAROON).withFade(Color.FUCHSIA, Color.PURPLE, Color.MAROON).build()
+                    )
                 }
+                it.detonate()
             }
 
-            val notification =
-                Component.text(">> A mysterious power-up has spawned on the floor! <<").color(gameConfig.colour).decorate(TextDecoration.BOLD)
+
+            val notification = Component.text(">> A mysterious power-up has spawned on the floor! <<")
+                .color(gameConfig.colour)
+                .decorate(TextDecoration.BOLD)
 
             Util.handlePlayers(
                 eventPlayerAction = {
-                    it.sendMessage(Component.text())
                     it.sendMessage(notification)
                     it.sendMessage(Component.text("Find the beacon on the map to unlock it!", NamedTextColor.GRAY))
+                    it.playSound(Sound.BLOCK_NOTE_BLOCK_PLING)
                 },
                 optedOutAction = {
-                    it.sendMessage(Component.text())
                     it.sendMessage(notification)
                 }
             )
@@ -244,15 +228,14 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         eventController.songPlayer?.isPlaying = false
         remainingPlayers().forEach { it.playSound(Sound.BLOCK_NOTE_BLOCK_BASEDRUM) }
 
-        var itemStack = MenuItem(ItemStack(selectedMaterial)).itemStack
-        itemStack.itemMeta = itemStack.itemMeta.apply {
-            isHideTooltip = true
+        val itemStack = MenuItem(ItemStack(selectedMaterial)).itemStack.apply {
+            itemMeta = itemMeta.apply { isHideTooltip = true }
         }
 
         val timerBar: BossBar = BossBar.bossBar(
             Component.text("Time left: $secondsForRound", gameConfig.colour).decorate(TextDecoration.BOLD),
             1.0f,
-            BossBar.Color.GREEN,
+            BossBar.Color.GREEN, // TODO test/configure?
             BossBar.Overlay.NOTCHED_20
         )
 
@@ -282,7 +265,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
                 for (groupSquares in groupedSquares) {
                     for (loc in groupSquares.toSingleBlockLocations()) {
-                        if (!(safeBlocks.contains(loc))) {
+                        if (!(safeBlocks.contains(loc) || bombedSquares.contains(loc))) {
                             loc.block.type = Material.AIR
                         }
                     }
@@ -306,8 +289,9 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         bossBarTask = repeatingTask(1, 1) {
             if (remainingTicks <= 0) {
                 this.cancel()
-                bossBarTask = null
+
                 Util.handlePlayers(eventPlayerAction = { it.hideBossBar(timerBar) }, optedOutAction = { it.hideBossBar(timerBar) })
+                bossBarTask = null
                 currentBossBar = null
             } else {
                 val progress = remainingTicks.toDouble() / totalTicks
@@ -324,7 +308,6 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
     }
 
     override fun eliminate(player: Player, reason: EliminationReason) {
-        super.eliminate(player, reason)
         if (currentBossBar != null) player.hideBossBar(currentBossBar!!)
 
         Util.handlePlayers(
@@ -344,8 +327,8 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
             inventory.storageContents = arrayOf()
             inventory.setItemInOffHand(null)
             removeActivePotionEffects()
-
-            world.strikeLightning(location)
+            if (allowFlight) allowFlight = false // if had double-jump
+            if (gameMode != GameMode.SPECTATOR) world.strikeLightning(location) // don't strike if in camera sequence or spectating
 
             if (reason == EliminationReason.ELIMINATED) {
 
@@ -367,8 +350,9 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                         player.teleport(randomSpecLocation)
                     }
                 }
-            }
+            } // animate death
         }
+        super.eliminate(player, reason)
 
         if (remainingPlayers().size == 1) endGame()
     }
@@ -397,7 +381,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         listeners += event<PlayerInteractEvent> {
             if (clickedBlock?.type == Material.BEACON) {
                 clickedBlock?.type = Material.AIR
-                var randomPowerUp = PowerUp.COLOR_BOMB
+                var randomPowerUp = PowerUp.entries.random()
 
                 player.sendMessage(
                     Component.text("You've found a ${randomPowerUp.displayName} power-up!")
@@ -428,7 +412,6 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                     PowerUp.ENDER_PEARL -> player.inventory.setItem(0, ItemStack(Material.ENDER_PEARL, 1))
 
                     PowerUp.COLOR_BOMB -> {
-                        // TODO if newFloor is called, make sure these blocks have changed colour depending on the selectedMaterial
                         val x = clickedBlock!!.location.blockX
                         val y = clickedBlock!!.location.blockY
                         val z = clickedBlock!!.location.blockZ
@@ -437,7 +420,10 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                         for (i in (x - 3) until (x + 3)) {
                             for (k in (z - 3) until (z + 3)) {
                                 if (Random.nextBoolean()) {
-                                    if (!(i in 600..632 && k in 784..816)) return@event // bomb outside of map
+                                    if (!(i in 600..632 && k in 784..816)) {
+                                        println("bomb remenants wwas outside of map")
+                                        continue
+                                    } // bomb outside of map
 
                                     val block = clickedBlock!!.world.getBlockAt(i, y - 1, k)
                                     if (block.type != Material.AIR) {
@@ -445,6 +431,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                                         safeBlocks.add(MapSinglePoint(i, y - 1, k))
 
                                         bombedSquares.add(MapSinglePoint(i, y - 1, k))
+                                        println("successfully changed block and added to safe blocks")
                                     }
                                 }
                             }
@@ -453,7 +440,10 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                         // Second loop: central area
                         for (i in (x - 1) until (x + 1)) {
                             for (k in (z - 1) until (z + 1)) {
-                                if (!(i in 600..632 && k in 784..816)) return@event // bomb outside of map
+                                if (!(i in 600..632 && k in 784..816)) {
+                                    println("bomb remenants wwas outside of map")
+                                    continue
+                                } // bomb outside of map
 
                                 val block = clickedBlock!!.world.getBlockAt(i, y - 1, k)
                                 if (block.type != Material.AIR) {
@@ -461,6 +451,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                                     safeBlocks.add(MapSinglePoint(i, y - 1, k))
 
                                     bombedSquares.add(MapSinglePoint(i, y - 1, k))
+                                    println("successfully changed block and added to safe blocks")
                                 }
                             }
                         }
@@ -486,9 +477,22 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                             sendMessage(Component.text("You've been pushed by a power-up!").color(gameConfig.colour))
                         }
                     }
+
+                    PowerUp.DOUBLE_JUMP -> {
+                        player.allowFlight = true
+                    }
                 }
             }
         }
+
+        listeners += event<PlayerToggleFlightEvent> {
+            if (!(remainingPlayers().contains(player))) return@event // OP'd players need to be able to fly
+            isCancelled = true
+            player.allowFlight = false
+            player.isFlying = false
+
+            player.velocity = player.location.direction.multiply(0.5).add(Vector(0.0, 1.0, 0.0))
+        } // double-jump
     }
 
     private enum class PowerUp(
@@ -502,6 +506,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         BLINDNESS("Blindness"),
         RANDOM_TP("Random TP"),
         PUSH_SELF("Dangerous Self-Boost"),
-        PUSH_RANDOM("Dangerous Random-Boost")
+        PUSH_RANDOM("Dangerous Random-Boost"),
+        DOUBLE_JUMP("Double Jump")
     }
 }
