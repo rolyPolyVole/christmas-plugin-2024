@@ -35,7 +35,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
         allPlayers.addAll(Util.handlePlayers().map { it.uniqueId })
         for ((index, point) in gameConfig.spectatorCameraLocations.withIndex()) {
             spectateEntities[index] = Bukkit.getWorld("world")!!.spawn(point, ItemDisplay::class.java) {
-                it.setItemStack(ItemStack(Material.BARRIER))
+                it.setItemStack(ItemStack(Material.AIR))
             }
         }
     }
@@ -66,6 +66,10 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
             // when sequence finished:
             Util.handlePlayers(
                 eventPlayerAction = {
+
+                    // if player was eliminated during the sequence (left server), don't prepare them.
+                    if (!(remainingPlayers().map { it.uniqueId }.contains(it.uniqueId))) return@handlePlayers
+
                     preparePlayer(it)
 
                     it.sendMessage(
