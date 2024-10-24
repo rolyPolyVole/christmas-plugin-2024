@@ -117,3 +117,4 @@ class ChristmasEventPlugin : JavaPlugin() {
         eventController.startPlaylist()
     }
 }
+
