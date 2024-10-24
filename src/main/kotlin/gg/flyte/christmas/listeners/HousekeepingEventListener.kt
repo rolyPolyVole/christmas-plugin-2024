@@ -147,12 +147,12 @@ class HousekeepingEventListener : Listener {
             val menuItem = MenuItem(Material.PLAYER_HEAD)
                 .setName("Spectate Point $i")
                 .setSkullTexture("66f88107041ff1ad84b0a4ae97298bd3d6b59d0402cbc679bd2f77356d454bc4")
-                .onClick({ whoClicked, itemStack, clickType, inventoryClickEvent ->
+                .onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
                     val requestedCameraEntity = ChristmasEventPlugin.getInstance().eventController.currentGame!!.spectateEntities[i]
                     whoClicked.gameMode = GameMode.SPECTATOR
                     whoClicked.spectatorTarget = requestedCameraEntity
                     whoClicked.closeInventory()
-                })
+                }
 
             standardMenu.setItem(i, menuItem)
         }
