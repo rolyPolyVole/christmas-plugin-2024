@@ -42,7 +42,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
      */
     init {
         for ((index, point) in gameConfig.spectatorCameraLocations.withIndex()) {
-            spectateEntities[index] = Bukkit.getWorld("world")!!.spawn(point, ItemDisplay::class.java) {
+            spectateEntities[index] = ChristmasEventPlugin.getInstance().serverWorld.spawn(point, ItemDisplay::class.java) {
                 it.setItemStack(ItemStack(Material.AIR))
             }
         }
