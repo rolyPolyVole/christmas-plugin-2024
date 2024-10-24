@@ -31,7 +31,7 @@ object Util {
      * @param optedOutAction The action to perform on players who have opted out.
      * @param eventPlayerAction The action to perform on players who are participating in the event.
      *
-     * @return A collection of players who are participating in the event. (excludes camera player and opted out players))
+     * @return A collection of players who are **participating** in the event. (excludes camera player and opted out players)
      */
     fun handlePlayers(
         cameraEntityAction: ((Player) -> Unit)? = null,
