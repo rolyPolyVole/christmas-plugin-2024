@@ -5,6 +5,12 @@ import com.xxmicloxx.NoteBlockAPI.utils.NBSDecoder
 import gg.flyte.christmas.ChristmasEventPlugin
 import java.io.File
 
+/**
+ * Converts a file path to a NoteblockAPI [Song] object.
+ *
+ * @param fileName The name of the file to parse.
+ * @return The mapped [Song] object.
+ */
 private fun parse(fileName: String): Song {
     var file = File(fileName)
     Util.copyInputStreamToFile(ChristmasEventPlugin.getInstance().getResource("music/$fileName")!!, file)

@@ -21,18 +21,26 @@ import org.bukkit.inventory.ItemStack
 import java.time.Duration
 import java.util.UUID
 
+/**
+ * Abstract class representing a base for mini-games in the event.
+ * This class provides the core game logic and management of players,
+ * such as handling elimination, preparing players, and tracking game state.
+ *
+ * @param gameConfig Configuration for the mini-game, which includes settings like spawn points,
+ * game name, spectator camera locations, and instructions for players.
+ */
 abstract class EventMiniGame(val gameConfig: GameConfig) {
-    protected val allPlayers = mutableListOf<UUID>()
     protected val eliminatedPlayers = mutableListOf<UUID>()
     protected val listeners = mutableListOf<TwilightListener>()
     protected val tasks = mutableListOf<TwilightRunnable?>()
     val spectateEntities = mutableMapOf<Int, Entity>()
     lateinit var state: GameState
-
     val eventController get() = ChristmasEventPlugin.getInstance().eventController
 
+    /**
+     * Initialises the game's spectator entities, which are used to allow players to spectate the game.
+     */
     init {
-        allPlayers.addAll(Util.handlePlayers().map { it.uniqueId })
         for ((index, point) in gameConfig.spectatorCameraLocations.withIndex()) {
             spectateEntities[index] = Bukkit.getWorld("world")!!.spawn(point, ItemDisplay::class.java) {
                 it.setItemStack(ItemStack(Material.AIR))
@@ -44,6 +52,9 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
      * Starts the game's map overview. This is done through smoothened camera
      * interpolation from [CameraSequence]. As well as sending instructions ([GameConfig.instructions]),
      * and preparing the player for the game.
+     *
+     * **Note:** Implementing classes may override (but **must** call super) to add additional cosmetic
+     * functionality as the CameraSequence is running.
      */
     open fun startGameOverview() {
         handleGameEvents()
@@ -71,7 +82,6 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
                     if (!(remainingPlayers().map { it.uniqueId }.contains(it.uniqueId))) return@handlePlayers
 
                     preparePlayer(it)
-
                     it.sendMessage(
                         Component.text("\n------------------[INSTRUCTIONS]------------------\n", gameConfig.colour)
                             .append(Component.text(gameConfig.instructions, NamedTextColor.WHITE))
@@ -88,7 +98,9 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
     }
 
     /**
-     * Prepare the player to play the game. This includes setting their inventory, location, etc.
+     * Prepares the player for the game; state, inventory, location, and other relevant configurations.
+     *
+     * @param player The player to be prepared for the game.
      */
     abstract fun preparePlayer(player: Player)
 
@@ -99,19 +111,37 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
     abstract fun startGame()
 
     /**
-     * Called when the game is over, or when a winner has been declared.
+     * Ends the game, performing cleanup operations such as cancelling tasks,
+     * unregistering listeners, and removing spectator entities. Can be
+     * overridden by subclasses for custom end-game behavior.
      */
     open fun endGame() {
         tasks.forEach { it?.cancel() }
         listeners.forEach { it.unregister() }
         spectateEntities.values.forEach { it.remove() }
+
+        // TODO implement for all games / figure out win animation
     }
 
+    /**
+     * Handles game events
+     *
+     * **Note**: Registered events in subclasses (preferably through Twilight) should be added to [listeners]
+     *
+     * ```
+     *  override fun handleGameEvents() {
+     *    listeners += event<BlockPlaceEvent> {...}
+     *  }
+     *  ```
+     */
     abstract fun handleGameEvents()
 
     /**
+     * As the super-class, this only handles game logic for player elimination.
      * Subclasses should override for cosmetic functionality
      * and call `super.eliminate()` to ensure engine logic is maintained.
+     * @param player The player to eliminate.
+     * @param reason The reason for elimination.
      */
     open fun eliminate(player: Player, reason: EliminationReason) {
         eliminatedPlayers.add(player.uniqueId)
@@ -131,22 +161,29 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
         }
     }
 
+    /**
+     * Handles player joining the game.
+     */
     open fun onPlayerJoin(player: Player) {
         if (eliminatedPlayers.contains(player.uniqueId)) return // game logic has already handled their elim
-
-        allPlayers.add(player.uniqueId)
 
         if (state == GameState.LIVE) {
             eliminate(player, EliminationReason.LEFT_GAME)
         }
     }
 
+    /**
+     * Eliminates the player from the game upon quitting.
+     */
     fun onPlayerQuit(player: Player) {
         eliminate(player, EliminationReason.LEFT_GAME)
     }
 
     /**
-     * TODO
+     * Starts a simple countdown before the game begins.
+     * Displays countdown messages to all players and triggers [onCountdownEnd] when the countdown finishes.
+     *
+     * @param onCountdownEnd The action to perform when the countdown ends.
      */
     fun simpleCountdown(onCountdownEnd: () -> Unit) {
         var seconds = 5
@@ -172,6 +209,9 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
         }
     }
 
+    /**
+     * @return A list of players who have not been eliminated from the game.
+     */
     fun remainingPlayers(): List<Player> {
         return Util.handlePlayers().filter { !(eliminatedPlayers.contains(it.uniqueId)) }
     }
@@ -182,6 +222,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
      * Cosmetic effects can only be applied if the eliminated player is still on the server.
      */
     enum class EliminationReason {
+        // TODO change to boolean?
         /**
          * Player left the game (left the server) OR player joined after the game started. (and canPlayAfterStart is false)
          */
@@ -193,3 +234,6 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
         ELIMINATED,
     }
 }
+
+// TODO make sure currentGame is set to null when the game ends
+// TODO clear inventory contents after each game (because shit/compass might be in it)

@@ -19,7 +19,9 @@ import java.io.InputStreamReader
 import java.net.URL
 import java.util.UUID
 
-// TODO add functionality for TextDisplay to show further text (contribution, points, etc)
+/**
+ * Wrapper for a Packet-based ServerPlayer (NPC) through PacketEvent's [NPC] implementation.
+ */
 class WorldNPC private constructor(displayName: String, textureProperties: List<TextureProperty?>?, val location: Location) {
 
     private val userProfile: UserProfile = UserProfile(UUID.randomUUID(), displayName, textureProperties)
@@ -27,6 +29,9 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
     private val tablistName = Component.text("NPC-$id")
     private val npc: NPC = NPC(userProfile, id, tablistName)
 
+    /**
+     * Spawns this NPC for the given player via packets
+     */
     fun spawnFor(player: Player) {
         val user = PacketEvents.getAPI().playerManager.getUser(player)
 
@@ -35,6 +40,9 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
         user.sendPacket(WrapperPlayServerEntityMetadata(id, listOf(EntityData(17, EntityDataTypes.BYTE, 127.toByte()))))
     }
 
+    /**
+     * Despawns this NPC for the given player via packets
+     */
     fun despawnFor(player: Player) {
         this.npc.despawn(PacketEvents.getAPI().playerManager.getUser(player).channel)
     }
@@ -46,6 +54,9 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
             // TODO mark 1st, 2nd, 3rd, etc. lb positions to corresponding locations on the map.
         }
 
+        /**
+         * TODO
+         */
         fun setLeaderBoardNPC(position: Int, player: Player) {
             // remove existing leader, if any, and spawn new leader
             for (player in Bukkit.getOnlinePlayers()) leaderBoardNPCs[position]?.despawnFor(player)
@@ -55,6 +66,9 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
             for (player in Bukkit.getOnlinePlayers()) leaderBoardNPCs[position]?.spawnFor(player)
         }
 
+        /**
+         * Creates a new [WorldNPC] from an existing [Player] reference.
+         */
         fun createFromLive(player: Player, location: Location): WorldNPC {
             // use the live player's texture properties
             val user = PacketEvents.getAPI().playerManager.getUser(player)
@@ -64,6 +78,11 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
             return WorldNPC("§$randomColour ${player.name}", textureProperties, location).also { worldNPCs += it }
         }
 
+        /**
+         * Creates a new [WorldNPC] from a player name.
+         *
+         * @see getDataFromName
+         */
         fun createFromName(playerName: String, location: Location): WorldNPC {
             // fetch texture properties from Mojang using player name
             val textureData = getDataFromName(playerName)
@@ -75,6 +94,9 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
             return WorldNPC("§$randomColour$playerName", listOf(textureProperty), location).also { worldNPCs += it }
         }
 
+        /**
+         * Fetches texture data from Mojang's API using a player name.
+         */
         private fun getDataFromName(name: String?): Array<String?>? {
             try {
                 val mojangProfileAPIUrl = URL("https://api.mojang.com/users/profiles/minecraft/$name")

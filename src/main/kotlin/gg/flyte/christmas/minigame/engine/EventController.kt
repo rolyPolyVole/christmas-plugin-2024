@@ -22,7 +22,8 @@ import java.util.UUID
 import kotlin.reflect.full.primaryConstructor
 
 /**
- * The controller for the event, handling the current game (and its state), countdown, and player management.
+ * The controller for the event, handling the current game (and its state), countdown, player management,
+ * and other UI and event-related elements.
  */
 class EventController() {
     var currentGame: EventMiniGame? = null
@@ -38,12 +39,21 @@ class EventController() {
     var songPlayer: RadioSongPlayer? = null
     val points = mutableMapOf<UUID, Int>()
 
+    /**
+     * Sets the current game to the provided game configuration.
+     * **Note:** This does not start the game, only sets the game to be played.
+     *
+     * @see prepareStart
+     */
     fun setMiniGame(gameConfig: GameConfig) {
         currentGame = gameConfig.gameClass.primaryConstructor?.call()
         currentGame!!.state = GameState.IDLE
         // TODO update action bar: "Next game is !!!!! {..}
     }
 
+    /**
+     * Prepares the game to start by setting the state to `WAITING_FOR_PLAYERS` and checking if there are enough players.
+     */
     fun prepareStart() {
         // Note: currentGame asserted to not-null due to previous checks.
         currentGame!!.state = GameState.WAITING_FOR_PLAYERS
@@ -55,8 +65,15 @@ class EventController() {
         }
     }
 
+    /**
+     * Starts the countdown for the game to begin. If there are enough players to start the game
+     * by the end of the countdown, [EventMiniGame.startGameOverview] is invoked.
+     *
+     * Players leaving during the countdown is handled through [onPlayerQuit]. That cancels the
+     * countdown task if there are not enough players to start the game.
+     */
     private fun countdown() {
-        var seconds = 0 // TODO CHANGE BACK TO 10 WHEN TESTING IS DONE
+        var seconds = 10
         countdownTask = repeatingTask(1, TimeUnit.SECONDS) {
             when (seconds) {
                 0 -> {
@@ -82,6 +99,10 @@ class EventController() {
         }
     }
 
+    /**
+     * @return `true` if there are enough players to start the game, dictated by the minimum player count
+     * through [GameConfig.minPlayers].
+     */
     private fun enoughPlayers(): Boolean {
         return Util.handlePlayers().size >= currentGame!!.gameConfig.minPlayers
     }
@@ -131,6 +152,11 @@ class EventController() {
         }
     }
 
+    /**
+     * Starts the playlist of songs for the event.
+     *
+     * @param avoid The song to avoid playing, if any.
+     */
     fun startPlaylist(avoid: SongReference? = null) {
         if (songPlayer != null) songPlayer!!.destroy()
 
@@ -151,4 +177,3 @@ class EventController() {
         Bukkit.getOnlinePlayers().forEach(songPlayer!!::addPlayer)
     }
 }
-// TODO make sure currentGame is set to null when the game ends
