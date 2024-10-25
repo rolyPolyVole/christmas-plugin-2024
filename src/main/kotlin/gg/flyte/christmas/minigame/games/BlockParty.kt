@@ -1,12 +1,22 @@
 package gg.flyte.christmas.minigame.games
 
+import com.github.retrooper.packetevents.PacketEvents
+import com.github.retrooper.packetevents.protocol.entity.data.EntityData
+import com.github.retrooper.packetevents.protocol.entity.data.EntityDataTypes
+import com.github.retrooper.packetevents.protocol.entity.pose.EntityPose
+import com.github.retrooper.packetevents.wrapper.PacketWrapper
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityAnimation
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityMetadata
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityRelativeMove
 import dev.shreyasayyengar.menuapi.menu.MenuItem
 import gg.flyte.christmas.minigame.engine.EventMiniGame
 import gg.flyte.christmas.minigame.engine.GameConfig
 import gg.flyte.christmas.minigame.world.MapRegion
 import gg.flyte.christmas.minigame.world.MapSinglePoint
+import gg.flyte.christmas.npc.WorldNPC
 import gg.flyte.christmas.util.SongReference
 import gg.flyte.christmas.util.Util
+import gg.flyte.christmas.util.colourise
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.extension.removeActivePotionEffects
@@ -19,6 +29,7 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.title.Title
+import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
 import org.bukkit.GameMode
@@ -371,6 +382,79 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         doWinAnimation(winner)
 
         super.endGame()
+    }
+
+    private fun doWinAnimation(player: Player) {
+        newFloor(true) // platform for NPC's to stand on.
+        val worldNPCs = mutableListOf<WorldNPC>()
+        val runnables = mutableListOf<TwilightRunnable>()
+
+        repeat(25) {
+            var location = groupedSquares.random().randomLocation()
+            location.yaw = (0..360).random().toFloat()
+            location.pitch = (-25..0).random().toFloat()
+            location.y += 1
+
+            var randomColour: String = listOf("4", "c", "6", "2", "a", "9").random()
+            val displayName: String = "§$randomColour${player.name}".colourise()
+
+            val npc = WorldNPC.createFromLive(displayName, player, location).also { worldNPCs.add(it) }
+
+            Bukkit.getOnlinePlayers().forEach { player ->
+                npc.spawnFor(player)
+                runnables += repeatingTask((3..5).random(), (1..4).random()) {
+                    val packet: PacketWrapper<*>
+                    if (Random.nextBoolean()) {
+                        packet = WrapperPlayServerEntityAnimation(
+                            npc.id,
+                            if (Random.nextBoolean()) WrapperPlayServerEntityAnimation.EntityAnimationType.SWING_MAIN_ARM else WrapperPlayServerEntityAnimation.EntityAnimationType.SWING_OFF_HAND
+                        )
+                    } else {
+                        val pose = if (Random.nextBoolean()) EntityPose.STANDING else EntityPose.CROUCHING
+                        packet = WrapperPlayServerEntityMetadata(npc.id, listOf(EntityData(6, EntityDataTypes.ENTITY_POSE, pose)))
+                    }
+
+                    if (player != null) PacketEvents.getAPI().playerManager.getUser(player).sendPacket(packet)
+                } // NPC Crouching & Swinging
+
+                var index = 0;
+                runnables += repeatingTask(((1..5)).random(), 1) {
+                    val yUpdates = listOf(
+                        0.2083333333,
+                        0.2083333333,
+                        0.2083333333,
+                        0.2083333333,
+                        0.2083333333,
+                        0.2083333333,
+                        -0.2083333333,
+                        -0.2083333333,
+                        -0.2083333333,
+                        -0.2083333333,
+                        -0.2083333333,
+                        -0.2083333333,
+                    )
+                    if (index == yUpdates.size) {
+                        index = 0
+                    }
+
+                    val packet = WrapperPlayServerEntityRelativeMove(
+                        npc.id,
+                        0.0,
+                        (yUpdates[index]),
+                        0.0,
+                        true
+                    )
+                    if (player != null) PacketEvents.getAPI().playerManager.getUser(player).sendPacket(packet)
+
+                    index++
+                } // NPC Jumping
+
+                delay(15, TimeUnit.SECONDS) {
+                    runnables.forEach { it.cancel() }
+                    worldNPCs.forEach { it.despawnFor(player) }
+                }
+            }
+        }
     }
 
     override fun onPlayerJoin(player: Player) {
