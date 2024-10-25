@@ -10,6 +10,7 @@ import gg.flyte.twilight.scheduler.repeatingTask
 import gg.flyte.twilight.time.TimeUnit
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -68,11 +69,20 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
 
         Util.handlePlayers(eventPlayerAction = { it.showTitle(title) })
 
+        var displayComponent = Component.text("")
+            .append(Component.text("\n   ", null, TextDecoration.STRIKETHROUGH))
+            .append(Component.text("> "))
+            .append(gameConfig.displayName.decorate(TextDecoration.BOLD))
+            .append(Component.text("\n\n"))
+            .append(Component.text(gameConfig.instructions, gameConfig.colour))
+            .append(Component.text("\n"))
+            .color(gameConfig.colour)
+
         CameraSequence(
             Bukkit.getOnlinePlayers(),
-            Component.text("\n" + gameConfig.instructions + "\n", gameConfig.colour),
+            displayComponent,
             gameConfig.overviewLocations,
-            600
+            700
         ) {
             // when sequence finished:
             Util.handlePlayers(
@@ -121,7 +131,6 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
         spectateEntities.values.forEach { it.remove() }
 
         eventController.currentGame = null
-        // TODO implement for all games / figure out win animation
     }
 
     /**
