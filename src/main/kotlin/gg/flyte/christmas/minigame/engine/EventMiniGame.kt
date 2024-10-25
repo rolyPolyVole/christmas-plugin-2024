@@ -120,6 +120,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
         listeners.forEach { it.unregister() }
         spectateEntities.values.forEach { it.remove() }
 
+        eventController.currentGame = null
         // TODO implement for all games / figure out win animation
     }
 
