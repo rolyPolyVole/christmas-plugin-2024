@@ -7,7 +7,6 @@ import gg.flyte.christmas.ChristmasEventPlugin
 import gg.flyte.christmas.util.CameraSequence
 import gg.flyte.christmas.util.colourise
 import gg.flyte.twilight.event.event
-import gg.flyte.twilight.extension.RemoteFile
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.scheduler.async
 import net.kyori.adventure.text.Component.text
@@ -115,6 +114,8 @@ class HousekeepingEventListener : Listener {
                 player.gameMode = GameMode.ADVENTURE
             }
         }
+
+        event<FoodLevelChangeEvent> { isCancelled = true }
     }
 
     private fun applyChristmasHat(modelData: Int): ItemStack {
