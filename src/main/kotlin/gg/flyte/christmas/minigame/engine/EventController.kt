@@ -83,7 +83,7 @@ class EventController() {
                 }
 
                 else -> {
-                    val times = Title.Times.times(Duration.ofMillis(0), Duration.ofMillis(1250), Duration.ofMillis(0))
+                    val times = Title.Times.times(Duration.ofMillis(0), Duration.ofMillis(1100), Duration.ofMillis(0))
 
                     // TODO check for any usages of getOnlinePlayers and replace with Util
 
