@@ -36,6 +36,9 @@ dependencies {
 }
 
 tasks {
+    shadowJar {
+        relocate("fr.mrmicky.fastboard", "gg.flyte.christmas.fastboard")
+    }
     build {
         dependsOn(shadowJar)
     }
