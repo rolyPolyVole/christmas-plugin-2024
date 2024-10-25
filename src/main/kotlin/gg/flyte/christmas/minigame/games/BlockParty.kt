@@ -359,13 +359,16 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
     }
 
     override fun endGame() {
-        remainingPlayers().forEach { eventController.points.put(it.uniqueId, eventController.points[it.uniqueId]!! + 15) }
+        val winner = remainingPlayers().first()
+        eventController.points.put(winner.uniqueId, eventController.points[winner.uniqueId]!! + 15)
+
         Util.handlePlayers(
             eventPlayerAction = {
             },
             optedOutAction = {
             },
         )
+        doWinAnimation(winner)
 
         super.endGame()
     }
