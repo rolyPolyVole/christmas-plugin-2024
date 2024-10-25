@@ -10,7 +10,7 @@ import java.io.IOException
 import java.io.InputStream
 
 object Util {
-    data class Contributor(val ign: String, val contribution: String, val location: MapSinglePoint)
+    data class Contributor(val playerName: String, val contribution: String, val location: MapSinglePoint)
 
     fun getMaxPlayers(): Int = ChristmasEventPlugin.instance.config.getInt("maximum-players")
 

@@ -58,7 +58,7 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
             // remove existing leader, if any, and spawn new leader
             for (player in Bukkit.getOnlinePlayers()) leaderBoardNPCs[position]?.despawnFor(player)
 
-            leaderBoardNPCs[position] = createFromLive(player, leaderboardPositionToLocation[position]!!)
+            leaderBoardNPCs[position] = createFromLive("lol", player, leaderboardPositionToLocation[position]!!)
 
             for (player in Bukkit.getOnlinePlayers()) leaderBoardNPCs[position]?.spawnFor(player)
         }
@@ -66,24 +66,19 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
         /**
          * Creates a new [WorldNPC] from an existing [Player] reference.
          */
-        fun createFromLive(player: Player, location: Location): WorldNPC {
+        fun createFromLive(displayName: String, modelAfter: Player, location: Location): WorldNPC {
             // use the live player's texture properties
-            val user = PacketEvents.getAPI().playerManager.getUser(player)
-            val textureProperties = user.profile.textureProperties
-            var randomColour: String = listOf("4", "c", "6", "2", "a", "9").random()
-
-            return WorldNPC("§$randomColour ${player.name}", textureProperties, location).also { worldNPCs += it }
+            val textureProperties = PacketEvents.getAPI().playerManager.getUser(modelAfter).profile.textureProperties
+            return WorldNPC(displayName, textureProperties, location).also { worldNPCs += it }
         }
 
         /**
          * Creates a new [WorldNPC] from a player name.
          */
-        fun createFromName(playerName: String, location: Location): WorldNPC {
+        fun createFromName(displayName: String, modelAfter: String, location: Location): WorldNPC {
             // fetch texture properties from Mojang using player name
-            val textureProperty = MojangAPIUtil.requestPlayerTextureProperties(Bukkit.getOfflinePlayer(playerName).uniqueId)
-            var randomColour: String = listOf("4", "c", "6", "2", "a", "9").random()
-
-            return WorldNPC("§$randomColour$playerName", textureProperty, location).also { worldNPCs += it }
+            val textureProperty = MojangAPIUtil.requestPlayerTextureProperties(Bukkit.getOfflinePlayer(modelAfter).uniqueId)
+            return WorldNPC(displayName, textureProperty, location).also { worldNPCs += it }
         }
     }
 }

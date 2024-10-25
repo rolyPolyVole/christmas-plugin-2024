@@ -9,6 +9,7 @@ import gg.flyte.christmas.minigame.engine.GameConfig
 import gg.flyte.christmas.minigame.world.MapSinglePoint
 import gg.flyte.christmas.npc.WorldNPC
 import gg.flyte.christmas.util.Util
+import gg.flyte.christmas.util.colourise
 import gg.flyte.twilight.twilight
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder
 import net.kyori.adventure.text.Component
@@ -84,11 +85,17 @@ class ChristmasEventPlugin : JavaPlugin() {
 
     private fun loadContributorNPCs() {
         for (contributor in Util.getEventContributors()) {
-            val ign = contributor.ign
+            val playerName = contributor.playerName
             val contribution = contributor.contribution
             val location = contributor.location // TODO configure pitch and yaw
 
-            var createFromName = WorldNPC.createFromName(ign, location).also { worldNPCs += it }
+            var randomColour: String = listOf("4", "c", "6", "2", "a", "9").random()
+            val displayName: String = "§$randomColour$playerName".colourise()
+
+            var createFromName = WorldNPC.createFromName(displayName, playerName, location).also { worldNPCs += it }
+            createFromName.npc.prefixName = Component.text("§$randomColour§kW ")
+            createFromName.npc.suffixName = Component.text(" §$randomColour§kW")
+
             Bukkit.getOnlinePlayers().forEach { createFromName.spawnFor(it) }
 
             location.world.spawn(location.clone().add(0.0, 2.5, 0.0), TextDisplay::class.java).apply {
