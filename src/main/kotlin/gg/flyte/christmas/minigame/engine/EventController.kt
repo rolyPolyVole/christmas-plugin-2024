@@ -33,7 +33,7 @@ class EventController() {
         4 to Component.text("➍", NamedTextColor.GOLD),
         3 to Component.text("➌", NamedTextColor.GOLD),
         2 to Component.text("➋", NamedTextColor.RED),
-        1 to Component.text("➊", NamedTextColor.RED)
+        1 to Component.text("➊", NamedTextColor.DARK_RED)
     )
     val optOut = mutableSetOf<UUID>()
     var songPlayer: RadioSongPlayer? = null
