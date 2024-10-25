@@ -142,7 +142,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         powerUp()
 
         val delayBeforePrepareRemoveFloor = (6..10).random()
-        delay(delayBeforePrepareRemoveFloor, TimeUnit.SECONDS) {
+        tasks += delay(delayBeforePrepareRemoveFloor, TimeUnit.SECONDS) {
             if (!isCountdownActive) { // prevent double-prepare due to random condition
                 prepareRemoveFloor()
             }
