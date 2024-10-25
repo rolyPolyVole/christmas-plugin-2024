@@ -6,6 +6,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("io.papermc.paperweight.userdev") version "1.7.3"
     id("xyz.jpenilla.run-paper") version "2.3.1"
+    id("com.gradleup.shadow") version ("8.3.3")
 }
 
 group = "host.carbon"
@@ -23,14 +24,15 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.3.61")
 
     paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
-    implementation("net.kyori:adventure-text-minimessage:4.17.0") // TODO remove if unused
 
     implementation("gg.flyte:twilight:1.1.15")
     implementation("io.github.revxrsal:lamp.common:4.0.0-beta.17")
     implementation("io.github.revxrsal:lamp.bukkit:4.0.0-beta.17")
+    implementation("com.github.ShreyasAyyengar:MenuAPI:2.2")
+    implementation("fr.mrmicky:fastboard:2.1.3")
+
     compileOnly("com.github.koca2000:NoteBlockAPI:1.6.2")
     compileOnly("com.github.retrooper:packetevents-spigot:2.5.0")
-    implementation("com.github.ShreyasAyyengar:MenuAPI:2.2")
 }
 
 tasks {
