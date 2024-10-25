@@ -44,12 +44,12 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
 
         menu.setItem(42, MenuItem(Material.RED_CONCRETE)
             .setName(
-                "&cTerminate Current Game: " + (ChristmasEventPlugin.instance.eventController.currentGame?.gameConfig?.displayName
+                "&cKill Current Game: " + (ChristmasEventPlugin.instance.eventController.currentGame?.gameConfig?.displayName
                     ?: "None".colourise())
             )
             .setLore(
                 "",
-                "&cThis will end the current game".colourise(),
+                "&cThis will force quit the current game".colourise(),
                 "&cand teleport all players back to the lobby.".colourise(),
             )
             .onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
