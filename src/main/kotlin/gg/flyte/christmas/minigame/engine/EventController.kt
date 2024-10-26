@@ -4,6 +4,7 @@ import com.xxmicloxx.NoteBlockAPI.model.Playlist
 import com.xxmicloxx.NoteBlockAPI.model.SoundCategory
 import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer
 import gg.flyte.christmas.ChristmasEventPlugin
+import gg.flyte.christmas.util.LobbySidebarManager
 import gg.flyte.christmas.util.SongReference
 import gg.flyte.christmas.util.Util
 import gg.flyte.twilight.extension.playSound
@@ -38,6 +39,7 @@ class EventController() {
     val optOut = mutableSetOf<UUID>()
     var songPlayer: RadioSongPlayer? = null
     val points = mutableMapOf<UUID, Int>()
+    val lobbyLobbySidebarManager = LobbySidebarManager()
 
     /**
      * Sets the current game to the provided game configuration.
@@ -175,5 +177,17 @@ class EventController() {
 
         checkAndSkip()
         Bukkit.getOnlinePlayers().forEach(songPlayer!!::addPlayer)
+    }
+
+    // get the player at the position of the input
+    fun getScorePosition(index: Int): UUID? {
+        // if the index is out of bounds, return an empty string
+        if (index >= points.size) return null
+        return points.entries.sortedByDescending { it.value }[index].key
+    }
+
+    fun getPlace(uuid: UUID): Int {
+        val sorted = points.entries.sortedByDescending { it.value }
+        return sorted.indexOfFirst { it.key == uuid } + 1
     }
 }
