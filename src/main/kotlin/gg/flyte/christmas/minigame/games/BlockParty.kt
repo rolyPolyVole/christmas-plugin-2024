@@ -516,7 +516,6 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                             for (k in (z - 3) until (z + 3)) {
                                 if (Random.nextBoolean()) {
                                     if (!(i in 600..632 && k in 784..816)) {
-                                        println("bomb remenants wwas outside of map")
                                         continue
                                     } // bomb outside of map
 
@@ -526,7 +525,6 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                                         safeBlocks.add(MapSinglePoint(i, y - 1, k))
 
                                         bombedSquares.add(MapSinglePoint(i, y - 1, k))
-                                        println("successfully changed block and added to safe blocks")
                                     }
                                 }
                             }
@@ -536,7 +534,6 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                         for (i in (x - 1) until (x + 1)) {
                             for (k in (z - 1) until (z + 1)) {
                                 if (!(i in 600..632 && k in 784..816)) {
-                                    println("bomb remenants wwas outside of map")
                                     continue
                                 } // bomb outside of map
 
@@ -546,7 +543,6 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                                     safeBlocks.add(MapSinglePoint(i, y - 1, k))
 
                                     bombedSquares.add(MapSinglePoint(i, y - 1, k))
-                                    println("successfully changed block and added to safe blocks")
                                 }
                             }
                         }
