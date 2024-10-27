@@ -62,7 +62,7 @@ data class MapRegion(val minPoint: MapSinglePoint, val maxPoint: MapSinglePoint)
         val randomX = minPoint.x.toDouble() + Math.random() * (maxPoint.x.toDouble() - minPoint.x.toDouble())
         val randomY = minPoint.y.toDouble() + Math.random() * (maxPoint.y.toDouble() - minPoint.y.toDouble())
         val randomZ = minPoint.z.toDouble() + Math.random() * (maxPoint.z.toDouble() - minPoint.z.toDouble())
-        return Location(minPoint.world, randomX, randomY, randomZ)
+        return Location(minPoint.world, randomX, randomY, randomZ, minPoint.yaw.toFloat(), minPoint.pitch.toFloat())
     }
 
     /**
@@ -75,7 +75,7 @@ data class MapRegion(val minPoint: MapSinglePoint, val maxPoint: MapSinglePoint)
         for (x in minPoint.x.toInt()..maxPoint.x.toInt()) {
             for (y in minPoint.y.toInt()..maxPoint.y.toInt()) {
                 for (z in minPoint.z.toInt()..maxPoint.z.toInt()) {
-                    points.add(MapSinglePoint(x, y, z))
+                    points.add(MapSinglePoint(x, y, z, minPoint.yaw, minPoint.pitch))
                 }
             }
         }
