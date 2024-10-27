@@ -86,8 +86,6 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
     private var isCountdownActive = false
 
     override fun startGameOverview() {
-        super.startGameOverview()
-
         for (x in 600..632 step 3) {
             for (z in 784..816 step 3) {
                 val region = MapRegion(MapSinglePoint(x, 110, z), MapSinglePoint(x + 2, 110, z + 2))
@@ -103,6 +101,8 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                 }
             }
         }
+
+        super.startGameOverview()
     }
 
     override fun preparePlayer(player: Player) {
