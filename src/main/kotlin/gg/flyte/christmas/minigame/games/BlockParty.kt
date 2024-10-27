@@ -461,10 +461,6 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         }
     }
 
-    override fun onPlayerJoin(player: Player) {
-        super.onPlayerJoin(player)
-    }
-
     override fun handleGameEvents() {
         listeners += event<PlayerDropItemEvent> { isCancelled = true }
 
