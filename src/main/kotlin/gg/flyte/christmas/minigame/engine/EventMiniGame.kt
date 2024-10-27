@@ -131,6 +131,15 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
         spectateEntities.values.forEach { it.remove() }
         eliminatedPlayers.clear()
         eventController.currentGame = null
+        eventController.sidebarManager.dataSupplier = eventController.points
+
+        Bukkit.getOnlinePlayers().forEach {
+            it.gameMode = GameMode.ADVENTURE // could be spectating camera
+            it.inventory.clear()
+            it.teleport(ChristmasEventPlugin.instance.lobbySpawn)
+            eventController.sidebarManager.update(it)
+        }
+
     }
 
     /**
