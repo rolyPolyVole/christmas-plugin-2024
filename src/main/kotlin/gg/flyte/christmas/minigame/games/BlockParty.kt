@@ -403,9 +403,9 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
             val npc = WorldNPC.createFromLive(displayName, player, location).also { worldNPCs.add(it) }
 
-            Bukkit.getOnlinePlayers().forEach { player ->
-                npc.spawnFor(player)
-                runnables += repeatingTask((3..5).random(), (1..4).random()) {
+            Bukkit.getOnlinePlayers().forEach { loopedPlayer ->
+                npc.spawnFor(loopedPlayer)
+                animationTasks += repeatingTask((3..5).random(), (1..4).random()) {
                     val packet: PacketWrapper<*>
                     if (Random.nextBoolean()) {
                         packet = WrapperPlayServerEntityAnimation(
@@ -417,11 +417,11 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                         packet = WrapperPlayServerEntityMetadata(npc.id, listOf(EntityData(6, EntityDataTypes.ENTITY_POSE, pose)))
                     }
 
-                    if (player != null) PacketEvents.getAPI().playerManager.getUser(player).sendPacket(packet)
+                    if (loopedPlayer != null) PacketEvents.getAPI().playerManager.getUser(loopedPlayer).sendPacket(packet)
                 } // NPC Crouching & Swinging
 
                 var index = 0;
-                runnables += repeatingTask(((1..5)).random(), 1) {
+                animationTasks += repeatingTask(((1..5)).random(), 1) {
                     val yUpdates = listOf(
                         0.2083333333,
                         0.2083333333,
@@ -447,7 +447,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                         0.0,
                         true
                     )
-                    if (player != null) PacketEvents.getAPI().playerManager.getUser(player).sendPacket(packet)
+                    if (loopedPlayer != null) PacketEvents.getAPI().playerManager.getUser(loopedPlayer).sendPacket(packet)
 
                     index++
                 } // NPC Jumping
