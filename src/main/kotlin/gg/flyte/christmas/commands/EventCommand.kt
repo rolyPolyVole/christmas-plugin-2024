@@ -116,7 +116,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
 
         if (selectedIndex == -1) return
 
-        menu.setItem(38, MenuItem(Material.GREEN_CONCRETE)
+        menu.setItem(38, MenuItem(Material.LIME_CONCRETE)
             .setName(availableGames[selectedIndex].displayName.toLegacyString().colourise())
             .setLore(
                 "",
