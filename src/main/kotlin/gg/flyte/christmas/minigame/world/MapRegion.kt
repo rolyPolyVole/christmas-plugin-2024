@@ -38,8 +38,11 @@ data class MapRegion(val minPoint: MapSinglePoint, val maxPoint: MapSinglePoint)
     /**
      * Checks if a location is within the region
      */
-    fun contains(location: Location): Boolean =
-        location.x in minPoint.x.toDouble()..maxPoint.x.toDouble() && location.y in minPoint.y.toDouble()..maxPoint.y.toDouble() && location.z in minPoint.z.toDouble()..maxPoint.z.toDouble()
+    fun contains(location: Location): Boolean {
+        return location.x in minOf(minPoint.x.toDouble(), maxPoint.x.toDouble())..maxOf(minPoint.x.toDouble(), maxPoint.x.toDouble()) &&
+                location.y in minOf(minPoint.y.toDouble(), maxPoint.y.toDouble())..maxOf(minPoint.y.toDouble(), maxPoint.y.toDouble()) &&
+                location.z in minOf(minPoint.z.toDouble(), maxPoint.z.toDouble())..maxOf(minPoint.z.toDouble(), maxPoint.z.toDouble())
+    }
 
     /**
      * Gets the center of the region
