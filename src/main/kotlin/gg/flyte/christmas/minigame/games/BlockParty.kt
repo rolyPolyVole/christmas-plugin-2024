@@ -390,7 +390,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
     private fun doWinAnimation(player: Player) {
         newFloor(true) // platform for NPC's to stand on.
         val worldNPCs = mutableListOf<WorldNPC>()
-        val runnables = mutableListOf<TwilightRunnable>()
+        val animationTasks = mutableListOf<TwilightRunnable>()
 
         repeat(25) {
             var location = groupedSquares.random().randomLocation()
