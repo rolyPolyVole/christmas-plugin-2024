@@ -11,8 +11,9 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.UUID
 
-class LobbySidebarManager {
+class SidebarManager {
     private val boardRegistry = mutableMapOf<UUID, FastBoard>()
+    var dataSupplier = mutableMapOf<UUID, Int>()
 
     private val placeDefaultComponent = mapOf(
         0 to createPlaceComponent("➊", TextColor.color(255, 203, 26)),
@@ -58,7 +59,7 @@ class LobbySidebarManager {
                 Component.text()
                     .append(
                         Component.text(
-                            "${ChristmasEventPlugin.instance.eventController.getPlacementByUUID(player.uniqueId)}.",
+                            "${getPlacementByUUID(player.uniqueId)}.",
                             NamedTextColor.GRAY
                         )
                     )
@@ -95,18 +96,30 @@ class LobbySidebarManager {
 
         return when (uniqueIdAtPosition) {
             null -> base.append(Component.text("ɴᴏɴᴇ", NamedTextColor.WHITE)).build()
-            player.uniqueId -> base.append(Component.text("ʏᴏᴜ", TextColor.color(235, 173, 255), TextDecoration.BOLD)).build()
+
+            player.uniqueId ->
+                base.append(Component.text("ʏᴏᴜ", TextColor.color(235, 173, 255), TextDecoration.BOLD))
+                    .append(Component.text(" (${dataSupplier[player.uniqueId]})", TextColor.color(252, 179, 179)))
+                    .build()
+
             else -> {
                 val playerName = Bukkit.getOfflinePlayer(uniqueIdAtPosition).name ?: "Unknown"
                 base.append(Component.text(playerName, TextColor.color(245, 214, 255)))
-                    .append(Component.text(" (${eventController.points[uniqueIdAtPosition]})", TextColor.color(252, 179, 179)))
+                    .append(Component.text(" (${dataSupplier[uniqueIdAtPosition]})", TextColor.color(252, 179, 179)))
                     .build()
             }
         }
     }
 
-    private fun isTop3(player: Player): Boolean {
-        val eventController = ChristmasEventPlugin.instance.eventController
-        return (0..2).any { eventController.getUUIDByPlacement(it) == player.uniqueId }
+    private fun isTop3(player: Player): Boolean = (0..2).any { getUUIDByPlacement(it) == player.uniqueId }
+
+    private fun getUUIDByPlacement(position: Int): UUID? {
+        if (position >= dataSupplier.size) return null
+        return dataSupplier.entries.sortedByDescending { it.value }[position].key
+    }
+
+    private fun getPlacementByUUID(uuid: UUID): Int {
+        val sorted = dataSupplier.entries.sortedByDescending { it.value }
+        return sorted.indexOfFirst { it.key == uuid } + 1
     }
 }
