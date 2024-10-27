@@ -22,8 +22,7 @@ enum class GameConfig(
     val gameRegion: GameRegion,
     val minPlayers: Int,
 ) {
-//    BAUBLE_TAG
-
+    //region BLOCK_PARTY
     BLOCK_PARTY(
         BlockParty::class,
         Component.text("Block Party").color(TextColor.color(224, 92, 111)),
@@ -79,9 +78,111 @@ enum class GameConfig(
         GameRegion(),
         1,
     ),
+    //endregion
+
+    //region KING_OF_THE_HILL
+    KING_OF_THE_HILL(
+        KingHill::class,
+        Component.text("King of the Hill").color(TextColor.color(247, 1, 35)),
+        TextColor.color(247, 1, 35),
+
+        listOf(
+            MapRegion(
+                MapSinglePoint(826.5, 88, 680.5, 180, 0),
+                MapSinglePoint(836.5, 88, 675.5, 180, 0)
+            ),
+
+            MapRegion(
+                MapSinglePoint(861.5, 85, 656.5, 135, 0),
+                MapSinglePoint(855.5, 85, 660.5, 135, 0)
+            ),
+
+            MapRegion(
+                MapSinglePoint(798.5, 86, 662.5, -135, 0),
+                MapSinglePoint(798.5, 86, 662.5, -135, 0)
+            ),
+
+            MapRegion(
+                MapSinglePoint(787.5, 86, 630.5, -90, 0),
+                MapSinglePoint(787.5, 86, 630.5, -90, 0)
+            ),
+
+            MapRegion(
+                MapSinglePoint(792.5, 85, 601.5, -45, 0),
+                MapSinglePoint(797.5, 85, 604.5, -45, 0)
+            ),
+
+            MapRegion(
+                MapSinglePoint(820.5, 85, 587.5, 0, 0),
+                MapSinglePoint(825.5, 85, 588.5, 0, 0)
+            ),
+
+            MapRegion(
+                MapSinglePoint(857.5, 85, 597.5, 45, 0),
+                MapSinglePoint(853.5, 85, 601.5, 45, 0)
+            ),
+
+            MapRegion(
+                MapSinglePoint(867.5, 86, 627.5, 90, 0),
+                MapSinglePoint(866.5, 86, 626.5, 90, 0)
+            ),
+
+            MapRegion(
+                MapSinglePoint(861.5, 85, 660.5, 135, 0),
+                MapSinglePoint(857.5, 85, 656.5, 135, 0)
+            )
+        ),
+
+        listOf(), // TODO still fill in, cuz we have opted out players.
+
+        listOf(
+            MapSinglePoint(827, 90, 630, 90, 90),
+            MapSinglePoint(847, 93, 664, 150, 25),
+            MapSinglePoint(814, 93, 667, -160, 25),
+            MapSinglePoint(840, 93, 595, 22, 25),
+            MapSinglePoint(809, 93, 596, -27, 25)
+        ),
+
+        listOf(
+//            MapSinglePoint(827, 88, 583, 179.23477F, 78.12712F),
+//            MapSinglePoint(827, 88, 587, 179.57143F, 74.42298F),
+            MapSinglePoint(827, 88, 594, 179.85931F, 67.05221F),
+            MapSinglePoint(827, 88, 602, 179.89876F, 56.5931F),
+            MapSinglePoint(827, 88, 610, 179.67241F, 46.63012F),
+            MapSinglePoint(827, 88, 618, 179.56989F, 35.635384F),
+            MapSinglePoint(827, 88, 626, -179.87363F, 24.453075F),
+            MapSinglePoint(827, 88, 634, -179.41673F, 15.988203F),
+            MapSinglePoint(826, 88, 642, -176.94571F, 9.467426F),
+            MapSinglePoint(821, 88, 648, -164.89076F, 6.4826865F),
+            MapSinglePoint(814, 88, 650, -149.47144F, 6.4154325F),
+            MapSinglePoint(808, 88, 646, -131.84286F, 7.456919F),
+            MapSinglePoint(802, 88, 641, -114.1622F, 7.854647F),
+            MapSinglePoint(799, 88, 634, -97.394775F, 7.868369F),
+            MapSinglePoint(798, 88, 626, -78.14661F, 8.061364F),
+            MapSinglePoint(799, 88, 618, -62.56653F, 7.6483693F),
+            MapSinglePoint(803, 88, 611, -48.001343F, 7.379387F),
+            MapSinglePoint(808, 88, 605, -33.123077F, 7.502257F),
+            MapSinglePoint(815, 88, 600, -17.081573F, 8.007061F),
+            MapSinglePoint(823, 88, 598, -4.5716248F, 8.615353F),
+            MapSinglePoint(833, 90, 605, 13.289856F, 13.035935F),
+            MapSinglePoint(841, 96, 611, 44.075134F, 23.785404F),
+            MapSinglePoint(847, 101, 617, 70.41861F, 34.081383F),
+            MapSinglePoint(850, 107, 625, 90.50464F, 43.07204F),
+            MapSinglePoint(850, 113, 633, 105.48248F, 49.530624F),
+            MapSinglePoint(849, 118, 640, 119.14905F, 54.422348F),
+            MapSinglePoint(845, 124, 648, 131.03406F, 57.888565F),
+            MapSinglePoint(842, 125, 652, 139.14163F, 60.207817F),
+        ),
+        " • Be the King of The Hill! Stand in the centre of the map to gain points every second.\n\n" +
+                " • Knock other players off the map with your knockback stick. Avoid falling off yourself!\n\n" +
+                " • The player stood in the centre of the map for the longest timem, wins!",
+        Material.STICK,
+        GameRegion(),
+        1
+    ),
+    //endregion
 
 
-//    KING_OF_THE_HILL, // 247, 1, 35
 //    MUSICAL_MINECARTS, // 142, 0, 3
 //    SLED_RACING, // 24, 48, 15
 //    SPLEEF, // 64, 86, 40
