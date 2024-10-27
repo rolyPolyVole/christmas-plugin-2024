@@ -41,7 +41,7 @@ class SidebarManager {
             .build()
     }
 
-    private fun updateLines(player: Player) {
+    fun updateLines(player: Player, addExtra: List<Component>? = null) {
         val board = boardRegistry[player.uniqueId] ?: return
 
         val lines = mutableListOf<Component>(
@@ -68,11 +68,14 @@ class SidebarManager {
             )
         }
 
+        if (addExtra != null) lines += addExtra
+
         lines += listOf(
             Component.empty(),
             Component.text("ꜰʟʏᴛᴇ.ɢɢ/ᴅᴏɴᴀᴛᴇ", NamedTextColor.LIGHT_PURPLE)
         )
 
+        board.lines.clear()
         board.updateLines(lines)
     }
 
@@ -90,8 +93,7 @@ class SidebarManager {
     private fun getComponentForPositionAt(position: Int, player: Player): Component {
         Preconditions.checkArgument(position in 0..2, "Position must be between 0 and 2")
 
-        val eventController = ChristmasEventPlugin.instance.eventController
-        val uniqueIdAtPosition = eventController.getUUIDByPlacement(position)
+        val uniqueIdAtPosition = getUUIDByPlacement(position)
         val base = Component.text().append(placeDefaultComponent[position]!!)
 
         return when (uniqueIdAtPosition) {
