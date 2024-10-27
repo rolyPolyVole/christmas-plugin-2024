@@ -125,7 +125,7 @@ class EventController() {
     }
 
     fun onPlayerQuit(player: Player) {
-        lobbyLobbySidebarManager.remove(player)
+        sidebarManager.remove(player)
 
         if (currentGame == null) return
         when (currentGame!!.state) {
