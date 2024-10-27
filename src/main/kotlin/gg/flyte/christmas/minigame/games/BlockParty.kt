@@ -453,8 +453,9 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                 } // NPC Jumping
 
                 delay(15, TimeUnit.SECONDS) {
-                    runnables.forEach { it.cancel() }
-                    worldNPCs.forEach { it.despawnFor(player) }
+                    worldNPCs.forEach { it.despawnFor(loopedPlayer) }
+                    animationTasks.forEach { it.cancel() }
+                    super.endGame()
                 }
             }
         }
