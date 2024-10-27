@@ -343,6 +343,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
             if (gameMode != GameMode.SPECTATOR) world.strikeLightning(location) // don't strike if in camera sequence or spectating
 
             if (reason == EliminationReason.ELIMINATED) {
+                if (gameMode != GameMode.SPECTATOR) world.strikeLightning(location) // don't strike if in camera sequence or spectating
 
                 val itemDisplay = world.spawn(location, ItemDisplay::class.java) {
                     it.setItemStack(ItemStack(Material.AIR))
