@@ -76,10 +76,6 @@ class HousekeepingEventListener : Listener {
             ChristmasEventPlugin.instance.eventController.onPlayerQuit(player)
         }
 
-        event<EntityCombustEvent> { if (entity is Player) isCancelled = true }
-
-        event<PlayerSwapHandItemsEvent> { isCancelled = true }
-
         event<PlayerResourcePackStatusEvent> {
             if (status == PlayerResourcePackStatusEvent.Status.ACCEPTED || status == PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED) return@event
 //            player.kick("&cYou &f&nmust&c accept the resource pack to play on this server!".asComponent()) // TODO uncomment when pack works
