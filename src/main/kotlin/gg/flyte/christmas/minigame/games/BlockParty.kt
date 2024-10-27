@@ -340,7 +340,6 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
             inventory.setItemInOffHand(null)
             removeActivePotionEffects()
             if (allowFlight) allowFlight = false // if had double-jump
-            if (gameMode != GameMode.SPECTATOR) world.strikeLightning(location) // don't strike if in camera sequence or spectating
 
             if (reason == EliminationReason.ELIMINATED) {
                 if (gameMode != GameMode.SPECTATOR) world.strikeLightning(location) // don't strike if in camera sequence or spectating
