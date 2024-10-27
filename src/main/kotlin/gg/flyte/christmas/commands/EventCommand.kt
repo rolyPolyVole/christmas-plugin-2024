@@ -73,6 +73,19 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
         menu.open(true, sender)
     }
 
+    @Command("optout")
+    @CommandPermission("event.optout")
+    @Suppress("unused") // power of lamp!
+    fun optOut(sender: Player) {
+        var remove = ChristmasEventPlugin.instance.eventController.optOut.remove(sender.uniqueId)
+        if (remove) {
+            sender.sendMessage(Component.text("You have opted back into the event!", NamedTextColor.GREEN))
+        } else {
+            ChristmasEventPlugin.instance.eventController.optOut.add(sender.uniqueId)
+            sender.sendMessage(Component.text("You have opted out of the event!", NamedTextColor.RED))
+        }
+    }
+
     private fun setGameSwitcher(): MenuItem {
         val menuItem = MenuItem(Material.STRUCTURE_VOID).apply {
             setName("&2&lSelect Game:".colourise())
