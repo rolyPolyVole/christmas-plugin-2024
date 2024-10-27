@@ -89,12 +89,20 @@ class EventController() {
 
                     // TODO check for any usages of getOnlinePlayers and replace with Util
 
-                    Util.handlePlayers(eventPlayerAction = {
-                        countdownMap[seconds]?.let { titleText ->
-                            it.showTitle(Title.title(titleText, Component.text(""), times))
-                            it.playSound(Sound.UI_BUTTON_CLICK)
+                    Util.handlePlayers(
+                        eventPlayerAction = {
+                            countdownMap[seconds]?.let { titleText ->
+                                it.showTitle(Title.title(titleText, Component.empty(), times))
+                                it.playSound(Sound.UI_BUTTON_CLICK)
+                            }
+                        },
+                        optedOutAction = {
+                            countdownMap[seconds]?.let { titleText ->
+                                it.showTitle(Title.title(titleText, Component.empty(), times))
+                                it.playSound(Sound.UI_BUTTON_CLICK)
+                            }
                         }
-                    })
+                    )
                     seconds--
                 }
             }
@@ -135,16 +143,29 @@ class EventController() {
                     countdownTask?.cancel()
                     currentGame!!.state = GameState.WAITING_FOR_PLAYERS
 
-                    for (player in Util.handlePlayers()) {
-                        player.showTitle(
-                            Title.title(
-                                Component.text("⦅x⦆", NamedTextColor.GRAY),
-                                Component.text("Waiting for more players...", NamedTextColor.DARK_PURPLE)
+                    Util.handlePlayers(
+                        eventPlayerAction = {
+                            it.showTitle(
+                                Title.title(
+                                    Component.text("⦅x⦆", NamedTextColor.DARK_RED),
+                                    Component.text("Waiting for more players...", NamedTextColor.RED),
+                                    Title.Times.times(Duration.ofMillis(0), Duration.ofSeconds(5), Duration.ofSeconds(1))
+                                )
                             )
-                        )
 
-                        player.playSound(Sound.BLOCK_NOTE_BLOCK_BASS)
-                    }
+                            it.playSound(Sound.BLOCK_NOTE_BLOCK_BASS)
+                        },
+                        optedOutAction = {
+                            it.showTitle(
+                                Title.title(
+                                    Component.text("⦅x⦆", NamedTextColor.DARK_RED),
+                                    Component.text("Waiting for more players...", NamedTextColor.RED),
+                                    Title.Times.times(Duration.ofMillis(0), Duration.ofSeconds(5), Duration.ofSeconds(1))
+                                )
+                            )
+                            it.playSound(Sound.BLOCK_NOTE_BLOCK_BASS)
+                        }
+                    )
                 }
             }
 
