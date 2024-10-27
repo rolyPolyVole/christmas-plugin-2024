@@ -23,6 +23,7 @@ import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryType
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent
+import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
@@ -84,18 +85,9 @@ class HousekeepingEventListener : Listener {
 //            player.kick("&cYou &f&nmust&c accept the resource pack to play on this server!".asComponent()) // TODO uncomment when pack works
         }
 
-        event<EntityDamageEvent> { isCancelled = true /* TODO examine later*/ }
+        event<PlayerDropItemEvent> { isCancelled = true }
 
-        event<FoodLevelChangeEvent> { isCancelled = true }
-
-        event<InventoryClickEvent> {
-            if (clickedInventory !is PlayerInventory) return@event
-            isCancelled = slotType == InventoryType.SlotType.ARMOR
-
-            if (currentItem?.type == Material.COMPASS) {
-                openSpectateMenu(whoClicked as Player)
-            }
-        }
+        event<PlayerSwapHandItemsEvent> { isCancelled = true }
 
         event<PlayerInteractEvent> {
             if (item?.type == Material.COMPASS) {
@@ -117,6 +109,18 @@ class HousekeepingEventListener : Listener {
         }
 
         event<FoodLevelChangeEvent> { isCancelled = true }
+
+        event<InventoryClickEvent> {
+            if (clickedInventory !is PlayerInventory) return@event
+            isCancelled = slotType == InventoryType.SlotType.ARMOR
+            if (currentItem?.type == Material.COMPASS) {
+                openSpectateMenu(whoClicked as Player)
+            }
+        }
+
+        event<EntityCombustEvent> { if (entity is Player) isCancelled = true }
+
+        event<EntityDamageEvent> { isCancelled = true /* TODO examine later*/ }
     }
 
     private fun applyChristmasHat(modelData: Int): ItemStack {
