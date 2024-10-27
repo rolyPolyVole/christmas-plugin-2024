@@ -67,7 +67,7 @@ class HousekeepingEventListener : Listener {
                 ChristmasEventPlugin.instance.worldNPCs.forEach { it.spawnFor(this) }
             }
             ChristmasEventPlugin.instance.eventController.points.putIfAbsent(player.uniqueId, 0)
-            ChristmasEventPlugin.instance.eventController.lobbyLobbySidebarManager.update()
+            ChristmasEventPlugin.instance.eventController.sidebarManager.update()
         }
 
         event<PlayerQuitEvent> {
