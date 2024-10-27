@@ -73,7 +73,7 @@ class HousekeepingEventListener : Listener {
 
         event<PlayerQuitEvent> {
             quitMessage(null)
-            ChristmasEventPlugin.instance.eventController.onPlayerQuit(player)
+            delay(1) { ChristmasEventPlugin.instance.eventController.onPlayerQuit(player) } // getOnlinePlayers does not update until the next tick
         }
 
         event<PlayerResourcePackStatusEvent> {
