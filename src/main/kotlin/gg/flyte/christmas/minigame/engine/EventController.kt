@@ -4,7 +4,7 @@ import com.xxmicloxx.NoteBlockAPI.model.Playlist
 import com.xxmicloxx.NoteBlockAPI.model.SoundCategory
 import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer
 import gg.flyte.christmas.ChristmasEventPlugin
-import gg.flyte.christmas.util.LobbySidebarManager
+import gg.flyte.christmas.util.SidebarManager
 import gg.flyte.christmas.util.SongReference
 import gg.flyte.christmas.util.Util
 import gg.flyte.twilight.extension.playSound
@@ -39,7 +39,7 @@ class EventController() {
     val optOut = mutableSetOf<UUID>()
     var songPlayer: RadioSongPlayer? = null
     val points = mutableMapOf<UUID, Int>()
-    val lobbyLobbySidebarManager = LobbySidebarManager()
+    val sidebarManager = SidebarManager().also { it.dataSupplier = points }
 
     /**
      * Sets the current game to the provided game configuration.
