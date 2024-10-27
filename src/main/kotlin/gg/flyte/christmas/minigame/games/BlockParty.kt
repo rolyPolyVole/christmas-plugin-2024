@@ -383,8 +383,6 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         )
         tasks.forEach { it?.cancel() } // this will cancel all game tasks. (bossbar, floor changing etc)
         doWinAnimation(winner)
-
-        super.endGame()
     }
 
     private fun doWinAnimation(player: Player) {
