@@ -129,6 +129,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
         tasks.forEach { it?.cancel() }
         listeners.forEach { it.unregister() }
         spectateEntities.values.forEach { it.remove() }
+        Bukkit.getOnlinePlayers().forEach { ChristmasEventPlugin.instance.eventController.lobbyLobbySidebarManager.update(it) }
 
         eventController.currentGame = null
     }

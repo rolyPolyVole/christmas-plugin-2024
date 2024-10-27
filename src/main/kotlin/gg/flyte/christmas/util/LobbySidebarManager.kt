@@ -11,34 +11,33 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.UUID
 
-class LobbySidebarManager() {
+class LobbySidebarManager {
     private val boardRegistry = mutableMapOf<UUID, FastBoard>()
 
-    val placeDefaultComponent = mapOf<Int, Component>(
-        0 to Component.text()
-            .color(TextColor.color(255, 203, 26))
-            .append(Component.text("➊"))
-            .append(Component.text(": ", NamedTextColor.GRAY))
-            .build(),
-        1 to Component.text()
-            .color(TextColor.color(208, 208, 208))
-            .append(Component.text("➋"))
-            .append(Component.text(": ", NamedTextColor.GRAY))
-            .build(),
-        2 to Component.text()
-            .color(TextColor.color(177, 143, 87))
-            .append(Component.text("➌"))
-            .append(Component.text(": ", NamedTextColor.GRAY))
-            .build()
+    private val placeDefaultComponent = mapOf(
+        0 to createPlaceComponent("➊", TextColor.color(255, 203, 26)),
+        1 to createPlaceComponent("➋", TextColor.color(208, 208, 208)),
+        2 to createPlaceComponent("➌", TextColor.color(163, 147, 65))
     )
 
-    fun update(player: Player) {
-        if (!boardRegistry.containsKey(player.uniqueId)) {
-            boardRegistry[player.uniqueId] = FastBoard(player)
-        }
+    fun update() = Bukkit.getOnlinePlayers().forEach { update(it) }
 
-        boardRegistry[player.uniqueId]!!.updateTitle(Component.text("ᴄʜʀɪsᴛᴍᴀs ᴇᴠᴇɴᴛ", NamedTextColor.RED, TextDecoration.BOLD))
+    fun update(player: Player) {
+        val board = boardRegistry.getOrPut(player.uniqueId) { FastBoard(player) }
+        board.updateTitle(Component.text("ᴄʜʀɪsᴛᴍᴀs ᴇᴠᴇɴᴛ", NamedTextColor.RED, TextDecoration.BOLD))
         updateLines(player)
+    }
+
+    fun remove(player: Player) {
+        boardRegistry.remove(player.uniqueId)?.delete()
+    }
+
+    private fun createPlaceComponent(symbol: String, color: TextColor): Component {
+        return Component.text()
+            .color(color)
+            .append(Component.text(symbol))
+            .append(Component.text(": ", NamedTextColor.GRAY))
+            .build()
     }
 
     private fun updateLines(player: Player) {
@@ -47,73 +46,67 @@ class LobbySidebarManager() {
         val lines = mutableListOf<Component>(
             currentGameLine(),
             Component.empty(),
-            getPlace(0, player),
-            getPlace(1, player),
-            getPlace(2, player),
+            getComponentForPositionAt(0, player),
+            getComponentForPositionAt(1, player),
+            getComponentForPositionAt(2, player)
         )
 
-        if (isTop3(player)) {
-            lines.add(
-                Component.text("ʏᴏᴜʀ sᴄᴏʀᴇ", NamedTextColor.YELLOW).append(Component.text(": ", NamedTextColor.GRAY))
-            )
-
-            lines.addAll(
-                listOf(
-                    Component.empty()
-                        .append(Component.text("${ChristmasEventPlugin.instance.eventController.getPlace(player.uniqueId)}.", NamedTextColor.GRAY))
-                        .append(Component.text(" ʏᴏᴜ", NamedTextColor.RED, TextDecoration.BOLD))
-                )
+        if (!isTop3(player)) {
+            lines += listOf(
+                Component.empty(),
+                Component.text("ʏᴏᴜʀ sᴄᴏʀᴇ", TextColor.color(178, 255, 171)).append(Component.text(": ", NamedTextColor.GRAY)),
+                Component.text()
+                    .append(
+                        Component.text(
+                            "${ChristmasEventPlugin.instance.eventController.getPlacementByUUID(player.uniqueId)}.",
+                            NamedTextColor.GRAY
+                        )
+                    )
+                    .append(Component.text(" ʏᴏᴜ", TextColor.color(235, 173, 255), TextDecoration.BOLD))
+                    .build()
             )
         }
 
-        lines.addAll(
-            listOf(
-                Component.empty(),
-                Component.text("ꜰʟʏᴛᴇ.ɢɢ/ᴅᴏɴᴀᴛᴇ", NamedTextColor.LIGHT_PURPLE)
-            )
+        lines += listOf(
+            Component.empty(),
+            Component.text("ꜰʟʏᴛᴇ.ɢɢ/ᴅᴏɴᴀᴛᴇ", NamedTextColor.LIGHT_PURPLE)
         )
 
         board.updateLines(lines)
     }
 
     private fun currentGameLine(): Component {
-        val titleBase = Component.text()
+        val eventController = ChristmasEventPlugin.instance.eventController
+        val gameName = eventController.currentGame?.gameConfig?.displayName ?: Component.text("ɴᴏɴᴇ", NamedTextColor.WHITE)
+
+        return Component.text()
             .append(Component.text("ɢᴀᴍᴇ", NamedTextColor.AQUA))
             .append(Component.text(": ", NamedTextColor.GRAY))
-            .append(
-                ChristmasEventPlugin.instance.eventController.currentGame?.gameConfig?.displayName ?: Component.text(
-                    "ɴᴏɴᴇ",
-                    NamedTextColor.WHITE
-                )
-            ).build()
-
-        return titleBase
+            .append(gameName)
+            .build()
     }
 
-    private fun getPlace(position: Int, player: Player): Component {
+    private fun getComponentForPositionAt(position: Int, player: Player): Component {
         Preconditions.checkArgument(position in 0..2, "Position must be between 0 and 2")
 
-        var uniqueId = ChristmasEventPlugin.instance.eventController.getScorePosition(position)
-        val base = placeDefaultComponent[position]!!
+        val eventController = ChristmasEventPlugin.instance.eventController
+        val uniqueIdAtPosition = eventController.getUUIDByPlacement(position)
+        val base = Component.text().append(placeDefaultComponent[position]!!)
 
-        if (uniqueId == null) {
-            base.append(Component.text("ɴᴏɴᴇ", NamedTextColor.WHITE))
-        } else if (uniqueId == player.uniqueId) {
-            base.append(Component.text("ʏᴏᴜ", NamedTextColor.RED, TextDecoration.BOLD))
-        } else {
-            var content = Bukkit.getOfflinePlayer(uniqueId).name!!
-            base.append(Component.text(content, NamedTextColor.WHITE))
+        return when (uniqueIdAtPosition) {
+            null -> base.append(Component.text("ɴᴏɴᴇ", NamedTextColor.WHITE)).build()
+            player.uniqueId -> base.append(Component.text("ʏᴏᴜ", TextColor.color(235, 173, 255), TextDecoration.BOLD)).build()
+            else -> {
+                val playerName = Bukkit.getOfflinePlayer(uniqueIdAtPosition).name ?: "Unknown"
+                base.append(Component.text(playerName, TextColor.color(245, 214, 255)))
+                    .append(Component.text(" (${eventController.points[uniqueIdAtPosition]})", TextColor.color(252, 179, 179)))
+                    .build()
+            }
         }
-
-        println(uniqueId)
-
-        return base
     }
 
     private fun isTop3(player: Player): Boolean {
-        var eventController = ChristmasEventPlugin.instance.eventController
-        return eventController.getScorePosition(0) == player.uniqueId ||
-                eventController.getScorePosition(1) == player.uniqueId ||
-                eventController.getScorePosition(2) == player.uniqueId
+        val eventController = ChristmasEventPlugin.instance.eventController
+        return (0..2).any { eventController.getUUIDByPlacement(it) == player.uniqueId }
     }
 }

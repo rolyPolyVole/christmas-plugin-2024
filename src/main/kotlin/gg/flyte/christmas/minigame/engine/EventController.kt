@@ -179,14 +179,15 @@ class EventController() {
         Bukkit.getOnlinePlayers().forEach(songPlayer!!::addPlayer)
     }
 
-    // get the player at the position of the input
-    fun getScorePosition(index: Int): UUID? {
+    // get the player at the position of the input (1st, 2nd, 3rd)
+    fun getUUIDByPlacement(index: Int): UUID? {
         // if the index is out of bounds, return an empty string
         if (index >= points.size) return null
         return points.entries.sortedByDescending { it.value }[index].key
     }
 
-    fun getPlace(uuid: UUID): Int {
+    // get the place of the player
+    fun getPlacementByUUID(uuid: UUID): Int {
         val sorted = points.entries.sortedByDescending { it.value }
         return sorted.indexOfFirst { it.key == uuid } + 1
     }
