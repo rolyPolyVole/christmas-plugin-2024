@@ -375,8 +375,10 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
         Util.handlePlayers(
             eventPlayerAction = {
+                it.hideBossBar(if (currentBossBar != null) currentBossBar!! else return@handlePlayers)
             },
             optedOutAction = {
+                it.hideBossBar(if (currentBossBar != null) currentBossBar!! else return@handlePlayers)
             },
         )
         doWinAnimation(winner)
