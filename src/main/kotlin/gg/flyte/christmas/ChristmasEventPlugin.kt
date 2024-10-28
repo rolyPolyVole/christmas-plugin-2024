@@ -13,7 +13,9 @@ import gg.flyte.christmas.util.colourise
 import gg.flyte.twilight.twilight
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor
+import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.GameRule
@@ -22,6 +24,9 @@ import org.bukkit.World
 import org.bukkit.entity.Display
 import org.bukkit.entity.TextDisplay
 import org.bukkit.plugin.java.JavaPlugin
+import org.bukkit.scoreboard.Scoreboard
+import org.bukkit.scoreboard.Team
+import org.bukkit.scoreboard.Team.Option
 import revxrsal.commands.bukkit.BukkitLamp
 import java.util.UUID
 import kotlin.reflect.full.primaryConstructor
@@ -29,6 +34,7 @@ import kotlin.reflect.full.primaryConstructor
 class ChristmasEventPlugin : JavaPlugin() {
     lateinit var serverWorld: World
     lateinit var lobbySpawn: Location
+    lateinit var scoreBoardTab: Scoreboard
     var cameraPlayer: UUID = UUID.fromString("a008c892-e7e1-48e1-8235-8aa389318b7a") // "devous" | Josh
     var eventController: EventController = EventController()
     var worldNPCs: MutableSet<WorldNPC> = HashSet()
@@ -115,6 +121,20 @@ class ChristmasEventPlugin : JavaPlugin() {
             setGameRule(GameRule.DO_FIRE_TICK, false)
             setStorm(false)
             time = 6000
+        }
+
+        // player list displays entries by alphabetical order of the team they have entries with
+        scoreBoardTab = Bukkit.getScoreboardManager().newScoreboard.apply {
+            registerNewTeam("a. staff").apply {
+                setOption(Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER)
+                color(NamedTextColor.GRAY)
+                prefix(Component.text("ѕᴛᴀꜰꜰ ", NamedTextColor.RED, TextDecoration.BOLD))
+            }
+
+            registerNewTeam("b. player").apply {
+                color(NamedTextColor.GRAY)
+                setOption(Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER)
+            }
         }
 
         lobbySpawn = MapSinglePoint(559.5, 105, 554.5, 180, 0)
