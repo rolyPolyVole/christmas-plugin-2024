@@ -103,6 +103,23 @@ class HousekeepingEventListener : Listener {
 
                 applyTag(this)
             }
+
+            val header = text()
+                .append(text("❆ ", TextColor.color(255, 161, 161)))
+                .append(text("ᴄʜʀɪsᴛᴍᴀs ᴄʜᴀʀɪᴛʏ ᴇᴠᴇɴᴛ", TextColor.color(170, 230, 135)))
+                .append(text(" ❆", TextColor.color(255, 161, 161)))
+                .append(text("\n"))
+                .append(text("\n(${Bukkit.getOnlinePlayers().size} ᴘʟᴀʏᴇʀꜱ)", NamedTextColor.GRAY))
+
+            val footer = Component.text("\nꜰʟʏᴛᴇ.ɢɢ/ᴅᴏɴᴀᴛᴇ\n\n", NamedTextColor.LIGHT_PURPLE)
+                .append(MiniMessage.miniMessage().deserialize(" <gradient:#ff80e8:#ffffff>ꜰʟʏᴛᴇ.ɢɢ</gradient>"))
+                .append(text(" • ", NamedTextColor.WHITE))
+                .append(MiniMessage.miniMessage().deserialize("<gradient:#fffdb8:#ffffff>ᴄᴀʀʙᴏɴ.ʜᴏꜱᴛ</gradient>"))
+                .append(text(" • ", NamedTextColor.WHITE))
+                .append(text("ʙᴜɪʟᴛʙʏʙɪᴛ.ᴄᴏᴍ ", TextColor.color(72, 133, 190)))
+                .append(text("\n"))
+            Bukkit.getOnlinePlayers().forEach { it.sendPlayerListHeaderAndFooter(header, footer) }
+
             ChristmasEventPlugin.instance.eventController.points.putIfAbsent(player.uniqueId, 0)
             ChristmasEventPlugin.instance.eventController.sidebarManager.update()
         }
