@@ -9,8 +9,13 @@ import gg.flyte.christmas.util.colourise
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.scheduler.async
+import gg.flyte.twilight.scheduler.delay
+import io.papermc.paper.chat.ChatRenderer
+import io.papermc.paper.event.player.AsyncChatEvent
 import net.kyori.adventure.text.Component.text
 import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.TextColor
+import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -46,9 +51,28 @@ class HousekeepingEventListener : Listener {
         }
 
         event<PlayerJoinEvent>(priority = EventPriority.LOWEST) {
+            fun applyChristmasHat(modelData: Int): ItemStack {
+                val map = mapOf(
+                    1 to NamedTextColor.RED,
+                    2 to NamedTextColor.GREEN,
+                    3 to NamedTextColor.BLUE
+                )
+
+                return ItemStack(Material.LEATHER).apply {
+                    itemMeta = itemMeta.apply {
+                        displayName(text("Christmas Hat", map[modelData]))
+                        setCustomModelData(modelData)
+                    }
+                }
+            }
+
             joinMessage(null)
 
             player.apply {
+                fun applyTag(player: Player) {
+                    player.scoreboard = ChristmasEventPlugin.instance.scoreBoardTab
+                    ChristmasEventPlugin.instance.scoreBoardTab.getTeam(if (player.isOp) "a. staff" else "b. player")?.addEntry(player.name)
+                }
                 async {
                     RemoteFile("https://github.com/flytegg/ls-christmas-rp/releases/latest/download/RP.zip").apply { // TODO change URL/configure pack
 //                    println("RP Hash = $hash")
@@ -66,6 +90,8 @@ class HousekeepingEventListener : Listener {
                 ChristmasEventPlugin.instance.eventController.onPlayerJoin(this)
                 ChristmasEventPlugin.instance.eventController.songPlayer?.addPlayer(this)
                 ChristmasEventPlugin.instance.worldNPCs.forEach { it.spawnFor(this) }
+
+                applyTag(this)
             }
             ChristmasEventPlugin.instance.eventController.points.putIfAbsent(player.uniqueId, 0)
             ChristmasEventPlugin.instance.eventController.sidebarManager.update()
@@ -117,21 +143,6 @@ class HousekeepingEventListener : Listener {
         event<EntityCombustEvent> { if (entity is Player) isCancelled = true }
 
         event<EntityDamageEvent> { isCancelled = true /* TODO examine later*/ }
-    }
-
-    private fun applyChristmasHat(modelData: Int): ItemStack {
-        val map = mapOf(
-            1 to NamedTextColor.RED,
-            2 to NamedTextColor.GREEN,
-            3 to NamedTextColor.BLUE
-        )
-
-        return ItemStack(Material.LEATHER).apply {
-            itemMeta = itemMeta.apply {
-                displayName(text("Christmas Hat", map[modelData]))
-                setCustomModelData(modelData)
-            }
-        }
     }
 
     private fun openSpectateMenu(player: Player) {
