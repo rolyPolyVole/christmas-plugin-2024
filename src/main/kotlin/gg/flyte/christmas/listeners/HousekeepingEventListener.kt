@@ -46,10 +46,6 @@ class HousekeepingEventListener : Listener {
             // TODO Finish second line + maybe add X mas symbols special characters
         }
 
-        event<AsyncPlayerPreLoginEvent> {
-            // TODO remove if no player limit \o/
-        }
-
         event<AsyncChatEvent> {
             renderer(ChatRenderer.viewerUnaware { player, displayName, message ->
                 val finalRender = text()
