@@ -50,6 +50,19 @@ class HousekeepingEventListener : Listener {
             // TODO remove if no player limit \o/
         }
 
+        event<AsyncChatEvent> {
+            renderer(ChatRenderer.viewerUnaware { player, displayName, message ->
+                val finalRender = text()
+
+                if (player.isOp) finalRender.append(text("ѕᴛᴀꜰꜰ ", NamedTextColor.RED, TextDecoration.BOLD))
+
+                finalRender.append(text(player.name, TextColor.color(209, 209, 209)))
+                    .append(text(" » ", NamedTextColor.GRAY))
+                    .append(text(signedMessage().message(), NamedTextColor.WHITE))
+                    .build()
+            })
+        }
+
         event<PlayerJoinEvent>(priority = EventPriority.LOWEST) {
             fun applyChristmasHat(modelData: Int): ItemStack {
                 val map = mapOf(
