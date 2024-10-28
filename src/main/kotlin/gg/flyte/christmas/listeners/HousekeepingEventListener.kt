@@ -83,10 +83,6 @@ class HousekeepingEventListener : Listener {
             joinMessage(null)
 
             player.apply {
-                fun applyTag(player: Player) {
-                    player.scoreboard = ChristmasEventPlugin.instance.scoreBoardTab
-                    ChristmasEventPlugin.instance.scoreBoardTab.getTeam(if (player.isOp) "a. staff" else "b. player")?.addEntry(player.name)
-                }
                 async {
                     RemoteFile("https://github.com/flytegg/ls-christmas-rp/releases/latest/download/RP.zip").apply { // TODO change URL/configure pack
 //                    println("RP Hash = $hash")
