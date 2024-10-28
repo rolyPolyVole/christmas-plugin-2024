@@ -75,6 +75,11 @@ class HousekeepingEventListener : Listener {
                 }
             }
 
+            fun applyTag(player: Player) {
+                player.scoreboard = ChristmasEventPlugin.instance.scoreBoardTab
+                ChristmasEventPlugin.instance.scoreBoardTab.getTeam(if (player.isOp) "a. staff" else "b. player")?.addEntry(player.name)
+            }
+
             joinMessage(null)
 
             player.apply {
