@@ -111,6 +111,8 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
     override fun endGame() {
         val winner = timeOnHill.maxBy { it.value }
 
+        Util.handlePlayers(eventPlayerAction = { it.teleport(gameConfig.spawnPoints.random().randomLocation()) })
+
         var yaw = 0F
         ChristmasEventPlugin.instance.serverWorld.spawn(MapSinglePoint(827.5, 105, 630.5, 0, 0), ItemDisplay::class.java) {
             it.setItemStack(ItemStack(Material.PLAYER_HEAD).apply {
