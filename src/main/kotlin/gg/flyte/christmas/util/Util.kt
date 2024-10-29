@@ -12,8 +12,6 @@ import java.io.InputStream
 object Util {
     data class Contributor(val playerName: String, val contribution: String, val location: MapSinglePoint)
 
-    fun getMaxPlayers(): Int = ChristmasEventPlugin.instance.config.getInt("maximum-players")
-
     fun getEventContributors(): List<Contributor> {
         val config = ChristmasEventPlugin.instance.config
 
