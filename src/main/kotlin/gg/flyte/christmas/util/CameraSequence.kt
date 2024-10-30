@@ -127,6 +127,21 @@ class CameraSequence(
         private var itemDisplay: ItemDisplay? = null
         private var textDisplay: TextDisplay? = null
 
+        /**
+         * Due to the atrocities of the Bukkit API, this runnable must maintain a very specific
+         * code execution order, so that the ItemDisplay continues to interpolate, the player
+         * continues to spectate, and the TextDisplay is continually mounted onto the ItemDisplay.
+         *
+         * If the order of execution is changed, there will be breakages with an unknown number of API components.
+         *
+         * The current order is such that:
+         * - ItemDisplay's teleportDuration must be set in the spawn lambda
+         * - TextDisplay's transformation must be set in the spawn lambda
+         * - The spawn lambdas for both entities must be separate.
+         * - Player must be teleported and set to spectator at least 5 ticks after the ItemDisplay is spawned.
+         * - The TextDisplay must be removed before each ItemDisplay teleporation.
+         * - The TextDisplay must be re-added as a passenger after each ItemDisplay teleportation.
+         */
         override fun run() {
             var nextPosition = interpolatedPath[currentTick]
 
