@@ -150,9 +150,9 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
                     return@onClick
                 }
 
+                ChristmasEventPlugin.instance.eventController.prepareStart()
                 whoClicked.playSound(Sound.ENTITY_PLAYER_LEVELUP)
                 whoClicked.sendMessage(Component.text("Game starting! Please wait...", NamedTextColor.GREEN))
-                ChristmasEventPlugin.instance.eventController.prepareStart()
 
                 selectedIndex = -1
                 menu.setItem(13, setGameSwitcher())
