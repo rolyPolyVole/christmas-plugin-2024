@@ -597,8 +597,8 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         SLOWNESS("Slowness"),
         BLINDNESS("Blindness"),
         RANDOM_TP("Random TP"),
-        PUSH_SELF("Dangerous Self-Boost"),
-        PUSH_RANDOM("Dangerous Random-Boost"),
+        PUSH_SELF("Random Self-Boost"),
+        PUSH_RANDOM("Random Player Boost"),
         DOUBLE_JUMP("Double Jump")
     }
 }
