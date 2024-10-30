@@ -186,7 +186,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
         Util.handlePlayers(
             eventPlayerAction = {
-                it.playSound(it.location, Sound.BLOCK_BEACON_ACTIVATE, 1F, 5F)
+                it.playSound(Sound.BLOCK_BEACON_ACTIVATE)
                 for (itemStack in it.inventory.storageContents) {
                     if (itemStack?.type == selectedMaterial) itemStack.type = Material.AIR // ensure no power-up items are removed
                 }
@@ -296,7 +296,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
                 tasks += delay(80) { newRound() }
             } else {
-                remainingPlayers().forEach { it.playSound(it.location, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1.0f, 1.0f) }
+                remainingPlayers().forEach { it.playSound(Sound.BLOCK_NOTE_BLOCK_BASEDRUM) }
             }
         }
 
