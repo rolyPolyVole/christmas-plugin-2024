@@ -17,6 +17,7 @@ import org.bukkit.entity.Player
 import revxrsal.commands.annotation.Command
 import revxrsal.commands.bukkit.annotation.CommandPermission
 
+@Suppress("unused") // power of lamp!
 class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".colourise(), 54)) {
     private val availableGames = GameConfig.entries
     private var selectedIndex = -1
@@ -69,14 +70,12 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
 
     @Command("event")
     @CommandPermission("event.op")
-    @Suppress("unused") // power of lamp!
     fun handleCommand(sender: Player) {
         menu.open(true, sender)
     }
 
     @Command("optout")
     @CommandPermission("event.optout")
-    @Suppress("unused") // power of lamp!
     fun optOut(sender: Player) {
         var remove = ChristmasEventPlugin.instance.eventController.optOut.remove(sender.uniqueId)
         if (remove) {
