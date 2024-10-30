@@ -35,6 +35,10 @@ data class MapSinglePoint(
  */
 data class MapRegion(val minPoint: MapSinglePoint, val maxPoint: MapSinglePoint) {
 
+    companion object {
+        fun single(point: MapSinglePoint): MapRegion = MapRegion(point, point) // TODO integrate everywhere
+    }
+
     /**
      * Checks if a location is within the region
      */
