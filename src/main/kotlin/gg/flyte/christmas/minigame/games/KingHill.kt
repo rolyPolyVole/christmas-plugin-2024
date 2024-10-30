@@ -7,6 +7,7 @@ import gg.flyte.christmas.minigame.world.MapRegion
 import gg.flyte.christmas.minigame.world.MapSinglePoint
 import gg.flyte.christmas.util.Util
 import gg.flyte.twilight.event.event
+import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.scheduler.delay
 import gg.flyte.twilight.scheduler.repeatingTask
 import gg.flyte.twilight.time.TimeUnit
@@ -29,7 +30,6 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
 import java.time.Duration
 import java.util.UUID
-import gg.flyte.twilight.extension.playSound as playSoundSimple
 
 class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
     private var hillRegion = MapRegion(MapSinglePoint(824, 85, 633), MapSinglePoint(830, 88, 627))
@@ -75,7 +75,7 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
                 Util.handlePlayers(eventPlayerAction = {
                     if (hillRegion.contains(it.location)) {
                         timeOnHill[it.uniqueId] = timeOnHill[it.uniqueId]!! + 1
-                        it.playSoundSimple(Sound.ENTITY_ITEM_PICKUP)
+                        it.playSound(Sound.ENTITY_ITEM_PICKUP)
                         it.sendMessage(Component.text("+1 second", NamedTextColor.GREEN))
                     }
                 })
@@ -150,7 +150,7 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
             if (entity is Player && damager is Player) {
                 if (!pvpEnabled) {
                     isCancelled = true
-                    (damager as Player).playSoundSimple(Sound.BLOCK_NOTE_BLOCK_BASS)
+                    (damager as Player).playSound(Sound.BLOCK_NOTE_BLOCK_BASS)
                 }
             }
         }
@@ -164,7 +164,7 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
         listeners += event<PlayerMoveEvent> {
             if (player.location.blockY < respawnBelow) {
                 player.teleport(gameConfig.spawnPoints.random().randomLocation())
-                player.playSoundSimple(Sound.ENTITY_PLAYER_HURT)
+                player.playSound(Sound.ENTITY_PLAYER_HURT)
             }
         }
     }
