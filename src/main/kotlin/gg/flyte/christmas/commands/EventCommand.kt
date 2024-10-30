@@ -133,11 +133,12 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
             .setName(availableGames[selectedIndex].displayName.toLegacyString().colourise())
             .setLore(
                 "",
-                "&cThis will begin the countdown".colourise(),
-                "&cimmediately, &aand prepare the players".colourise(),
+                "&aThis will begin the countdown".colourise(),
+                "&cimmediately &aand prepare the players".colourise(),
                 "",
-                "&eIf you do not want to start yet, simply".colourise(),
-                "&eexit this menu. The game has already been set.".colourise()
+                "&eIf you do not want to start".colourise(),
+                "&eyet, simply exit this menu. ".colourise(),
+                "&eThe game has already been set.".colourise()
             )
             .setEnchantmentGlint(true)
             .closeWhenClicked(true)
