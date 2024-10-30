@@ -405,8 +405,10 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
             Bukkit.getOnlinePlayers().forEach { loopedPlayer ->
                 npc.spawnFor(loopedPlayer)
-                animationTasks += repeatingTask((3..5).random(), (1..4).random()) {
+
+                animationTasks += repeatingTask((3..5).random(), (1..3).random()) {
                     val packet: PacketWrapper<*>
+
                     if (Random.nextBoolean()) {
                         packet = WrapperPlayServerEntityAnimation(
                             npc.id,
@@ -422,6 +424,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
                 var index = 0;
                 animationTasks += repeatingTask(((1..5)).random(), 1) {
+                var jumpIndex = 0;
                     val yUpdates = listOf(
                         0.2083333333,
                         0.2083333333,
@@ -436,20 +439,12 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                         -0.2083333333,
                         -0.2083333333,
                     )
-                    if (index == yUpdates.size) {
-                        index = 0
-                    }
+                    if (jumpIndex == yUpdates.size) jumpIndex = 0 // jump again!
 
-                    val packet = WrapperPlayServerEntityRelativeMove(
-                        npc.id,
-                        0.0,
-                        (yUpdates[index]),
-                        0.0,
-                        true
-                    )
+                    val packet = WrapperPlayServerEntityRelativeMove(npc.id, 0.0, (yUpdates[jumpIndex]), 0.0, true)
                     if (loopedPlayer != null) PacketEvents.getAPI().playerManager.getUser(loopedPlayer).sendPacket(packet)
 
-                    index++
+                    jumpIndex++
                 } // NPC Jumping
 
                 delay(15, TimeUnit.SECONDS) {
