@@ -422,9 +422,8 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                     if (loopedPlayer != null) PacketEvents.getAPI().playerManager.getUser(loopedPlayer).sendPacket(packet)
                 } // NPC Crouching & Swinging
 
-                var index = 0;
-                animationTasks += repeatingTask(((1..5)).random(), 1) {
                 var jumpIndex = 0;
+                animationTasks += repeatingTask(((1..5)).random(), (4..10).random()) {
                     val yUpdates = listOf(
                         0.2083333333,
                         0.2083333333,
