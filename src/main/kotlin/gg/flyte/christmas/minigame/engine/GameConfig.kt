@@ -2,7 +2,6 @@ package gg.flyte.christmas.minigame.engine
 
 import gg.flyte.christmas.minigame.games.BlockParty
 import gg.flyte.christmas.minigame.games.KingHill
-import gg.flyte.christmas.minigame.world.GameRegion
 import gg.flyte.christmas.minigame.world.MapRegion
 import gg.flyte.christmas.minigame.world.MapSinglePoint
 import net.kyori.adventure.text.Component
