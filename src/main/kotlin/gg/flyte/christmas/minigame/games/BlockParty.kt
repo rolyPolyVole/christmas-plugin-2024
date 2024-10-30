@@ -19,7 +19,6 @@ import gg.flyte.christmas.util.Util
 import gg.flyte.christmas.util.colourise
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.playSound
-import gg.flyte.twilight.extension.removeActivePotionEffects
 import gg.flyte.twilight.scheduler.TwilightRunnable
 import gg.flyte.twilight.scheduler.delay
 import gg.flyte.twilight.scheduler.repeatingTask
@@ -341,7 +340,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         player.apply {
             inventory.storageContents = arrayOf()
             inventory.setItemInOffHand(null)
-            removeActivePotionEffects()
+            clearActivePotionEffects()
             if (allowFlight) allowFlight = false // if had double-jump
 
             if (reason == EliminationReason.ELIMINATED) {

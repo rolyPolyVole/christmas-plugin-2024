@@ -162,6 +162,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
 
         if (reason == EliminationReason.LEFT_GAME) {
             player.teleport(gameConfig.spectatorSpawnLocations.random())
+            player.clearActivePotionEffects()
         } else {
             // spectate item
             ItemStack(Material.COMPASS).apply {
