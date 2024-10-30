@@ -13,21 +13,27 @@ import kotlin.reflect.KClass
 enum class GameConfig(
     val gameClass: KClass<out EventMiniGame>,
     val displayName: Component,
+    val smallDisplayName: Component,
     val colour: TextColor,
+    val instructions: String,
+    val minPlayers: Int,
     val spawnPoints: List<MapRegion>,
+    val overviewLocations: List<MapSinglePoint>,
     val spectatorSpawnLocations: List<MapSinglePoint>,
     val spectatorCameraLocations: List<MapSinglePoint>,
-    val overviewLocations: List<MapSinglePoint>,
-    val instructions: String,
-    val menuMaterial: Material,
-    val gameRegion: GameRegion,
-    val minPlayers: Int,
 ) {
     //region BLOCK_PARTY
     BLOCK_PARTY(
         BlockParty::class,
-        Component.text("Block Party").color(TextColor.color(224, 92, 111)),
+        Component.text("Block Party", TextColor.color(224, 92, 111)),
+        // small text here:
+        Component.text("ʙʟᴏᴄᴋ ᴘᴀʀᴛʏ", TextColor.color(224, 92, 111)),
+        Material.MAGENTA_GLAZED_TERRACOTTA,
         TextColor.color(224, 92, 111),
+        " • Dance around the colourful floor until the christmas music stops.\n\n" +
+                " • Run and stand on the colour which has been chosen (check hotbar) before the timer ends.\n\n" +
+                " • After the timer, the map will clear all blocks except the chosen colour blocks. To win, survive the most rounds!",
+        1,
         listOf(
             MapRegion(
                 MapSinglePoint(624, 111, 808),
@@ -71,13 +77,22 @@ enum class GameConfig(
             MapSinglePoint(609, 117, 787, -40.830444F, 34.319355F),
             MapSinglePoint(617, 117, 787, -5.60672F, 21.597097F),
         ),
-
-        " • Dance around the colourful floor until the christmas music stops.\n\n" +
-                " • Run and stand on the colour which has been chosen (check hotbar) and stand on it before the timer ends.\n\n" +
-                " • After the timer, the map will clear all blocks except the chosen colour blocks. To win, survive the most rounds!",
-        Material.MAGENTA_GLAZED_TERRACOTTA,
-        GameRegion(),
-        1,
+        listOf(
+            MapSinglePoint(616.5, 118, 819.5, 180, 35),
+            MapSinglePoint(597.5, 118, 800.5, -90, 35),
+            MapSinglePoint(616.5, 118, 781.5, 0, 35),
+            MapSinglePoint(635.5, 118, 800.5, 90, 35)
+        ),
+        listOf(
+            MapSinglePoint(645.5, 112, 799.5, 90, 0),
+            MapSinglePoint(636.5, 113, 820.5, 135, 0),
+            MapSinglePoint(616.5, 112, 829.5, -180, 0),
+            MapSinglePoint(596.5, 113, 820.5, -135, 0),
+            MapSinglePoint(587.5, 112, 800.5, -90, 0),
+            MapSinglePoint(596.5, 113, 780.5, -45, 0),
+            MapSinglePoint(616.5, 112, 771.5, 0, 0),
+            MapSinglePoint(636.5, 113, 780.5, 45, 0)
+        ),
     ),
     //endregion
 
@@ -85,7 +100,14 @@ enum class GameConfig(
     KING_OF_THE_HILL(
         KingHill::class,
         Component.text("King of the Hill").color(TextColor.color(247, 1, 35)),
+        Component.text("ᴋɪɴɢ ᴏғ ᴛʜᴇ ʜɪʟʟ").color(TextColor.color(247, 1, 35)),
+        Material.STICK,
         TextColor.color(247, 1, 35),
+
+        " • Be the King of The Hill! Stand in the centre of the map to gain points every second.\n\n" +
+                " • Knock other players off the map with your knockback stick. Avoid falling off yourself!\n\n" +
+                " • The player stood in the centre of the map for the longest timem, wins!",
+        1,
 
         listOf(
             MapRegion(
@@ -134,19 +156,8 @@ enum class GameConfig(
             )
         ),
 
-        listOf(), // TODO still fill in, cuz we have opted out players.
-
         listOf(
-            MapSinglePoint(827, 90, 630, 90, 90),
-            MapSinglePoint(847, 93, 664, 150, 25),
-            MapSinglePoint(814, 93, 667, -160, 25),
-            MapSinglePoint(840, 93, 595, 22, 25),
-            MapSinglePoint(809, 93, 596, -27, 25)
-        ),
-
-        listOf(
-//            MapSinglePoint(827, 88, 583, 179.23477F, 78.12712F),
-//            MapSinglePoint(827, 88, 587, 179.57143F, 74.42298F),
+            MapSinglePoint(827, 88, 587, 179.57143F, 74.42298F),
             MapSinglePoint(827, 88, 594, 179.85931F, 67.05221F),
             MapSinglePoint(827, 88, 602, 179.89876F, 56.5931F),
             MapSinglePoint(827, 88, 610, 179.67241F, 46.63012F),
@@ -174,12 +185,16 @@ enum class GameConfig(
             MapSinglePoint(845, 124, 648, 131.03406F, 57.888565F),
             MapSinglePoint(842, 125, 652, 139.14163F, 60.207817F),
         ),
-        " • Be the King of The Hill! Stand in the centre of the map to gain points every second.\n\n" +
-                " • Knock other players off the map with your knockback stick. Avoid falling off yourself!\n\n" +
-                " • The player stood in the centre of the map for the longest timem, wins!",
-        Material.STICK,
-        GameRegion(),
-        1
+
+        listOf(), // TODO still fill in, cuz we have opted out players.
+
+        listOf(
+            MapSinglePoint(827, 90, 630, 90, 90),
+            MapSinglePoint(847, 93, 664, 150, 25),
+            MapSinglePoint(814, 93, 667, -160, 25),
+            MapSinglePoint(840, 93, 595, 22, 25),
+            MapSinglePoint(809, 93, 596, -27, 25)
+        ),
     ),
     //endregion
 
