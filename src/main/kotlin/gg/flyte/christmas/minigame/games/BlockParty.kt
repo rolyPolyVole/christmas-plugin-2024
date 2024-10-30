@@ -567,7 +567,9 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                         remainingPlayers().random().apply {
                             velocity = this.location.direction.multiply(2).add(Vector(0.0, 1.5, 0.0))
                             sendMessage(Component.text("You've been pushed by a power-up!").color(gameConfig.colour))
-                            eventPlayer.sendMessage(Component.text("You've pushed a random player ($name) with the power-up!").color(gameConfig.colour))
+                            eventPlayer.sendMessage(
+                                Component.text("You've pushed a random player ($name) with the power-up!", gameConfig.colour)
+                            )
                         }
                     }
 
