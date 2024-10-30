@@ -43,10 +43,6 @@
 - Disable fucking explosives and lava.
 - Autogive players decorations so that their first thought is not to desecrate the tree!
 
-### Block Party:
-
-- Double jumps
-
 Questions:
 - are we capping player limit?
 
