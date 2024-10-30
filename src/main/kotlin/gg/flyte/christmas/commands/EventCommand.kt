@@ -84,6 +84,8 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
             ChristmasEventPlugin.instance.eventController.optOut.add(sender.uniqueId)
             sender.sendMessage(Component.text("You have opted out of the event!", NamedTextColor.RED))
         }
+
+        sender.playSound(Sound.UI_BUTTON_CLICK)
     }
 
     private fun setGameSwitcher(): MenuItem {
