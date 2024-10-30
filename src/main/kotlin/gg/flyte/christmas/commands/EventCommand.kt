@@ -156,7 +156,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
 
                 selectedIndex = -1
                 menu.setItem(13, setGameSwitcher())
-                menu.setItem(38, null)
+                menu.removeItem(38)
             }
         )
         ChristmasEventPlugin.instance.eventController.sidebarManager.update()
