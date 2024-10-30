@@ -77,7 +77,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
     private var roundNumber = 0
     private var harder = false
     private var powerUpLocation: MapSinglePoint? = null
-    private var secondsForRound = 10 // First round 9 seconds to find safe squares (see line 115)
+    private var secondsForRound = 10
     private var safeBlocks = mutableListOf<MapSinglePoint>()
     private var bombedSquares = mutableListOf<MapSinglePoint>()
     private var currentBossBar: BossBar? = null
