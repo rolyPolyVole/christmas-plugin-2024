@@ -14,6 +14,7 @@ enum class GameConfig(
     val gameClass: KClass<out EventMiniGame>,
     val displayName: Component,
     val smallDisplayName: Component,
+    val menuMaterial: Material,
     val colour: TextColor,
     val instructions: String,
     val minPlayers: Int,
