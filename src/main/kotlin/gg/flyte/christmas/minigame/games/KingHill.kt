@@ -23,8 +23,6 @@ import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.ItemDisplay
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityDamageByEntityEvent
-import org.bukkit.event.inventory.InventoryOpenEvent
-import org.bukkit.event.inventory.InventoryType
 import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
@@ -153,12 +151,6 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
                     isCancelled = true
                     (damager as Player).playSound(Sound.BLOCK_NOTE_BLOCK_BASS)
                 }
-            }
-        }
-
-        listeners += event<InventoryOpenEvent> {
-            if (inventory.type == InventoryType.BARREL) {
-                isCancelled = true
             }
         }
 

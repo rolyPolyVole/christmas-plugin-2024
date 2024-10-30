@@ -5,7 +5,6 @@ import dev.shreyasayyengar.menuapi.menu.MenuItem
 import dev.shreyasayyengar.menuapi.menu.StandardMenu
 import gg.flyte.christmas.ChristmasEventPlugin
 import gg.flyte.christmas.util.CameraSequence
-import gg.flyte.christmas.util.colourise
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.scheduler.async
@@ -29,8 +28,8 @@ import org.bukkit.event.entity.EntityCombustEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.event.inventory.InventoryType
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
@@ -161,6 +160,10 @@ class HousekeepingEventListener : Listener {
         }
 
         event<FoodLevelChangeEvent> { isCancelled = true }
+
+        event<InventoryOpenEvent> {
+            if (inventory.type == InventoryType.BARREL) isCancelled = true
+        }
 
         event<InventoryClickEvent> {
             if (clickedInventory !is PlayerInventory) return@event
