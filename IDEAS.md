@@ -55,3 +55,5 @@ Playtest Considerations:
 - Making sure opted out players are consistently left out of games.
 - Join the server as we do map overview. (separate)
 
+## Stream:
+- Drumroll while rolling givaway?
