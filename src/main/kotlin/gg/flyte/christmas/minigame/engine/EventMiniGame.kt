@@ -13,6 +13,7 @@ import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
+import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Entity
@@ -78,16 +79,10 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
             .append(Component.text("\n"))
             .color(gameConfig.colour)
 
-        CameraSequence(
-            Bukkit.getOnlinePlayers(),
-            displayComponent,
-            gameConfig.overviewLocations,
-            700
-        ) {
+        CameraSequence(gameConfig.overviewLocations, Bukkit.getOnlinePlayers(), displayComponent) {
             // when sequence finished:
             Util.handlePlayers(
                 eventPlayerAction = {
-
                     // if player was eliminated during the sequence (left server), don't prepare them.
                     if (!(remainingPlayers().map { it.uniqueId }.contains(it.uniqueId))) return@handlePlayers
 

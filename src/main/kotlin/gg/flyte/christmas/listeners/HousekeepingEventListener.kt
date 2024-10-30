@@ -148,7 +148,7 @@ class HousekeepingEventListener : Listener {
         }
 
         event<PlayerStopSpectatingEntityEvent> {
-            if (CameraSequence.ACTIVE_CAMERA.contains(spectatorTarget.uniqueId)) {
+            if (CameraSequence.ACTIVE_CAMERAS.contains(spectatorTarget.uniqueId)) {
                 isCancelled = true
                 return@event
             }
