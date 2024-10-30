@@ -106,6 +106,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
     }
 
     override fun preparePlayer(player: Player) {
+        player.inventory.clear()
         player.gameMode = GameMode.ADVENTURE
         player.teleport(gameConfig.spawnPoints.random().randomLocation())
     }
@@ -128,9 +129,11 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                     eventPlayerAction = {
                         it.showTitle(Title.title(Component.text("Hard Mode!", gameConfig.colour), Component.text("")))
                         it.sendMessage(
-                            Component.text("The floor will now change right before the timer starts... stay quick!")
-                                .color(NamedTextColor.RED)
-                                .decorate(TextDecoration.BOLD)
+                            Component.text(
+                                "The floor will now change right before the timer starts... stay quick!",
+                                NamedTextColor.RED,
+                                TextDecoration.BOLD
+                            )
                         )
                         it.playSound(Sound.ENTITY_ENDER_DRAGON_GROWL)
                     },
