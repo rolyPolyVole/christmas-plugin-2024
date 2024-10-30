@@ -142,7 +142,6 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
                 "&eyet, simply exit this menu. ".colourise(),
                 "&eThe game has already been set.".colourise()
             )
-            .setEnchantmentGlint(true)
             .closeWhenClicked(true)
             .onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
                 if (ChristmasEventPlugin.instance.eventController.currentGame == null) {
