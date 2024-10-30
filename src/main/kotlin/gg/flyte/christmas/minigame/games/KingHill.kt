@@ -44,6 +44,7 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
     }
 
     override fun preparePlayer(player: Player) {
+        player.inventory.clear()
         player.gameMode = GameMode.ADVENTURE
         player.teleport(gameConfig.spawnPoints.random().randomLocation())
 
