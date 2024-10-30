@@ -345,7 +345,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
             if (allowFlight) allowFlight = false // if had double-jump
 
             if (reason == EliminationReason.ELIMINATED) {
-                if (gameMode != GameMode.SPECTATOR) world.strikeLightning(location) // don't strike if in camera sequence or spectating
+                if (gameMode != GameMode.SPECTATOR) world.strikeLightning(location) // don't strike if in camera sequence
 
                 val itemDisplay = world.spawn(location, ItemDisplay::class.java) {
                     it.setItemStack(ItemStack(Material.AIR))
