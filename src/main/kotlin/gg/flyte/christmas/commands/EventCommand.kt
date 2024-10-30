@@ -62,6 +62,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
                 ChristmasEventPlugin.instance.eventController.currentGame!!.endGame()
                 whoClicked.sendMessage(Component.text("Game terminated!", NamedTextColor.RED))
                 whoClicked.playSound(Sound.ENTITY_GENERIC_EXPLODE)
+                ChristmasEventPlugin.instance.eventController.sidebarManager.update()
             }
         )
     }
@@ -156,5 +157,6 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
                 menu.setItem(13, setGameSwitcher())
             }
         )
+        ChristmasEventPlugin.instance.eventController.sidebarManager.update()
     }
 }
