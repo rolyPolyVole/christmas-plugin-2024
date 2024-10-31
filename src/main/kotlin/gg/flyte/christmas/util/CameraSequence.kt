@@ -171,8 +171,8 @@ class CameraSequence(
                             textDisplay.backgroundColor = Color.fromARGB(225, 38, 38, 38)
                             textDisplay.billboard = Display.Billboard.CENTER
                             textDisplay.isSeeThrough = true
-                            textDisplay.interpolationDuration = 50 // 50 ticks to move up
                             textDisplay.interpolationDelay = 50 // 50 ticks to stay down
+                            textDisplay.interpolationDuration = 50 // 50 ticks to move up
                             textDisplay.transformation = textDisplay.transformation.apply {
                                 translation.add(0F, -10F, -3F)
                             }
