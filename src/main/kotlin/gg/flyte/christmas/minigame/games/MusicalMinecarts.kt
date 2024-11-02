@@ -273,8 +273,8 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         player.playSound(Sound.ENTITY_ITEM_BREAK)
         player.showTitle(
             Title.title(
-                Component.text("Stunned!", NamedTextColor.RED),
-                Component.text("You clicked too early! The music has not stopped...", NamedTextColor.GOLD),
+                Component.text("Stunned! You clicked too early!", NamedTextColor.RED),
+                Component.text("The music has not stopped...", NamedTextColor.GOLD),
                 Title.Times.times(Duration.ZERO, Duration.ofSeconds(3), Duration.ofMillis(500))
             )
         )
