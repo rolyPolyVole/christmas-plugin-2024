@@ -64,7 +64,7 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
         }
 
         /**
-         * Creates a new [WorldNPC] from an existing [Player] reference.
+         * Creates a new [WorldNPC] modelled from an existing [Player] reference.
          */
         fun createFromLive(displayName: String, modelAfter: Player, location: Location): WorldNPC {
             // use the live player's texture properties
@@ -73,7 +73,7 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
         }
 
         /**
-         * Creates a new [WorldNPC] from a player name.
+         * Creates a new [WorldNPC] modelled from a player name.
          */
         fun createFromName(displayName: String, modelAfter: String, location: Location): WorldNPC {
             // fetch texture properties from Mojang using player name
