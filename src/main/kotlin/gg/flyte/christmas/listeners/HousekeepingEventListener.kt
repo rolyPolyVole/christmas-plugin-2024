@@ -9,6 +9,7 @@ import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.hidePlayer
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.extension.showPlayer
+import gg.flyte.twilight.extension.toComponent
 import gg.flyte.twilight.scheduler.async
 import gg.flyte.twilight.scheduler.delay
 import io.github.retrooper.packetevents.util.SpigotConversionUtil
@@ -48,8 +49,21 @@ import kotlin.math.ceil
 class HousekeepingEventListener : Listener {
     init {
         event<ServerListPingEvent> {
-            motd = "             &f&k|||||| &dFlyte #ff1515C#ff2a2ah#ff3f3fr#ff5454i#ff6969s#ff7e7et#ff9393m#ffa8a8a#ffbdbds #e6ca97E#ccd771v#b3e54ce#99f226n#80ff00t &f&k||||||".colourise()
-            // TODO Finish second line + maybe add X mas symbols special characters
+            // TODO finish sponsors
+            val footer = Component.text("       ")
+                .append(MiniMessage.miniMessage().deserialize("<gradient:#fffdb8:#ffffff>ᴄᴀʀʙᴏɴ.ʜᴏꜱᴛ</gradient>"))
+                .append(text(" • ", NamedTextColor.WHITE))
+                .append(text("ʙᴜɪʟᴛʙʏʙɪᴛ.ᴄᴏᴍ ", TextColor.color(72, 133, 190)))
+
+            val motd = Component.empty()
+                .append(text("        ||||||  ", NamedTextColor.WHITE, TextDecoration.BOLD, TextDecoration.OBFUSCATED))
+                .append("<gradient:#F396E1:#FFFFFF>ꜰʟʏᴛ</gradient><gradient:#FFFFFF:#FFFFFF>ᴇ</gradient> ".toComponent())
+                .append("<gradient:#51F651:#FAEDCB>ᴄʜʀɪsᴛᴍ</gradient><gradient:#FAEDCB:#D12020>ᴀs ᴇᴠ</gradient><gradient:#D12020:#D12020>ᴇɴᴛ</gradient>".toComponent())
+                .append(text("  ||||||", NamedTextColor.WHITE, TextDecoration.BOLD, TextDecoration.OBFUSCATED))
+                .append(text("\n"))
+                .append(footer)
+
+            motd(motd)
         }
 
         event<AsyncChatEvent> {
