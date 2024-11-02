@@ -2,11 +2,13 @@ package gg.flyte.christmas.minigame.engine
 
 import gg.flyte.christmas.minigame.games.BlockParty
 import gg.flyte.christmas.minigame.games.KingHill
+import gg.flyte.christmas.minigame.games.MusicalMinecarts
 import gg.flyte.christmas.minigame.world.MapRegion
 import gg.flyte.christmas.minigame.world.MapSinglePoint
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
 import org.bukkit.Material
+import kotlin.collections.listOf
 import kotlin.reflect.KClass
 
 enum class GameConfig(
@@ -39,22 +41,6 @@ enum class GameConfig(
                 MapSinglePoint(624, 111, 808),
                 MapSinglePoint(604, 111, 788)
             )
-        ),
-        listOf(
-            MapSinglePoint(645.5, 112, 799.5, 90, 0),
-            MapSinglePoint(636.5, 113, 820.5, 135, 0),
-            MapSinglePoint(616.5, 112, 829.5, -180, 0),
-            MapSinglePoint(596.5, 113, 820.5, -135, 0),
-            MapSinglePoint(587.5, 112, 800.5, -90, 0),
-            MapSinglePoint(596.5, 113, 780.5, -45, 0),
-            MapSinglePoint(616.5, 112, 771.5, 0, 0),
-            MapSinglePoint(636.5, 113, 780.5, 45, 0)
-        ),
-        listOf(
-            MapSinglePoint(616.5, 118, 819.5, 180, 35),
-            MapSinglePoint(597.5, 118, 800.5, -90, 35),
-            MapSinglePoint(616.5, 118, 781.5, 0, 35),
-            MapSinglePoint(635.5, 118, 800.5, 90, 35)
         ),
         listOf(
             MapSinglePoint(677, 148, 755, 48.056213F, 85.83555F),
@@ -198,6 +184,46 @@ enum class GameConfig(
     ),
     //endregion
 
+    //region MUSICAL_MINECARTS 142, 0, 3
+    MUSICAL_MINECARTS(
+        MusicalMinecarts::class,
+        Component.text("Musical Minecarts", TextColor.color(142, 0, 3)),
+        Component.text("ᴍᴜꜱɪᴄᴀʟ ᴍɪɴᴇᴄᴀʀᴛꜱ", TextColor.color(142, 0, 3)),
+        Material.MINECART,
+        TextColor.color(142, 0, 3),
+        " • Dance around the snowy platform until the christmas music stops.\n\n" + // TODO change snowy/icy depending on map lol
+                " • Run to the nearest minecart and get inside before the timer ends.\n\n" +
+                " • If you fail to find a minecart before the timer ends, you will be ELIMINATED!\n\n" +
+                " • Do NOT click the minecarts until the music has stopped... or else you will be STUNNED!",
+        1,
+        listOf(MapRegion.single(MapSinglePoint(553, 203, 593))),
+        listOf(
+            MapSinglePoint(535, 212, 612, -134.63545F, 36.587585F),
+            MapSinglePoint(535, 212, 609, -128.16087F, 37.477802F),
+            MapSinglePoint(536, 212, 598, -107.6864F, 42.090744F),
+            MapSinglePoint(536, 212, 589, -81.384834F, 44.35675F),
+            MapSinglePoint(538, 212, 580, -58.80621F, 43.871178F),
+            MapSinglePoint(542, 212, 574, -30.723955F, 40.553097F),
+            MapSinglePoint(548, 212, 569, -26.5966F, 40.22938F),
+            MapSinglePoint(556, 212, 566, -2.6418605F, 38.772663F),
+            MapSinglePoint(564, 212, 569, 25.683008F, 39.339165F),
+            MapSinglePoint(572, 212, 573, 42.354305F, 39.66288F),
+            MapSinglePoint(576, 212, 581, 63.07208F, 40.067524F),
+            MapSinglePoint(576, 212, 591, 83.627594F, 41.443314F),
+            MapSinglePoint(576, 212, 600, 102.32168F, 41.362385F),
+            MapSinglePoint(574, 212, 608, 122.87687F, 42.738174F),
+            MapSinglePoint(567, 212, 613, 136.55391F, 45.408825F),
+            MapSinglePoint(557, 212, 609, 168.43948F, 53.74449F),
+            MapSinglePoint(554, 212, 597, -128.1127F, 75.918816F),
+            MapSinglePoint(554, 212, 594, -89.91446F, 88.057785F),
+            MapSinglePoint(554, 206, 594, -89.83353F, 88.219635F),
+            MapSinglePoint(554, 204, 594, -88.70047F, 88.381485F)
+        ),
+
+        listOf(MapSinglePoint(554, 204, 594, -88.70047F, 88.381485F)),
+        listOf(MapSinglePoint(554, 204, 594, -88.70047F, 88.381485F)),
+    )
+    //endregion
 
 //    MUSICAL_MINECARTS, // 142, 0, 3
 //    SLED_RACING, // 24, 48, 15
