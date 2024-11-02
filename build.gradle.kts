@@ -24,8 +24,8 @@ dependencies {
     paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
 
     implementation("gg.flyte:twilight:1.1.15")
-    implementation("io.github.revxrsal:lamp.common:4.0.0-beta.17")
-    implementation("io.github.revxrsal:lamp.bukkit:4.0.0-beta.17")
+    implementation("io.github.revxrsal:lamp.common:4.0.0-beta.19")
+    implementation("io.github.revxrsal:lamp.bukkit:4.0.0-beta.19")
     implementation("com.github.ShreyasAyyengar:MenuAPI:2.2")
     implementation("fr.mrmicky:fastboard:2.1.3")
 
