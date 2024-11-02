@@ -6,15 +6,13 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("io.papermc.paperweight.userdev") version "1.7.3"
     id("xyz.jpenilla.run-paper") version "2.3.1"
-    id("com.gradleup.shadow") version ("8.3.3")
 }
 
-group = "host.carbon"
+group = "gg.flyte.christmas"
 version = "1.0"
 
 repositories {
     mavenCentral()
-    maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.codemc.io/repository/maven-releases/")
     maven("https://jitpack.io")
     maven("https://repo.flyte.gg/releases")
