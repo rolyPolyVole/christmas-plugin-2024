@@ -15,12 +15,15 @@ import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import revxrsal.commands.annotation.Command
+import revxrsal.commands.annotation.Subcommand
 import revxrsal.commands.bukkit.annotation.CommandPermission
 
 @Suppress("unused") // power of lamp!
+@Command("event")
 class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".colourise(), 54)) {
     private val availableGames = GameConfig.entries
     private var selectedIndex = -1
+    private var interactedWithGameSwitcher = false
 
     init {
         menu.setItem(13, setGameSwitcher())
@@ -66,15 +69,26 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
                 ChristmasEventPlugin.instance.eventController.sidebarManager.update()
             }
         )
+
+        menu.onClose { whoClosed, inventory, event ->
+            if (!interactedWithGameSwitcher) return@onClose
+            ChristmasEventPlugin.instance.eventController.setMiniGame(availableGames[selectedIndex])
+            ChristmasEventPlugin.instance.eventController.sidebarManager.update()
+            whoClosed.sendMessage(
+                Component.text("Selected game: ", NamedTextColor.GRAY)
+                    .append(availableGames[selectedIndex].displayName.color(availableGames[selectedIndex].colour))
+            )
+            whoClosed.playSound(Sound.UI_BUTTON_CLICK)
+        }
     }
 
-    @Command("event")
-    @CommandPermission("event.op")
+    @CommandPermission("event.panel")
     fun handleCommand(sender: Player) {
         menu.open(true, sender)
+        interactedWithGameSwitcher = false
     }
 
-    @Command("optout")
+    @Subcommand("optout")
     @CommandPermission("event.optout")
     fun optOut(sender: Player) {
         var remove = ChristmasEventPlugin.instance.eventController.optOut.remove(sender.uniqueId)
@@ -86,6 +100,12 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
         }
 
         sender.playSound(Sound.UI_BUTTON_CLICK)
+    }
+
+    @Subcommand("DANGER-load-crash")
+    @CommandPermission("event.loadcrash")
+    fun loadCrash() {
+        println("load crash called!")
     }
 
     private fun setGameSwitcher(): MenuItem {
@@ -100,12 +120,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
                 this.itemStack.type = availableGames[selectedIndex].menuMaterial
 
                 menu.setItem(13, this)
-
-                ChristmasEventPlugin.instance.eventController.setMiniGame(availableGames[selectedIndex])
-                whoClicked.sendMessage(
-                    Component.text("Selected game: ", NamedTextColor.GRAY)
-                        .append(availableGames[selectedIndex].displayName.color(availableGames[selectedIndex].colour))
-                )
+                interactedWithGameSwitcher = true
                 whoClicked.playSound(Sound.UI_BUTTON_CLICK)
             }
         }
@@ -159,6 +174,5 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
                 menu.removeItem(38)
             }
         )
-        ChristmasEventPlugin.instance.eventController.sidebarManager.update()
     }
 }
