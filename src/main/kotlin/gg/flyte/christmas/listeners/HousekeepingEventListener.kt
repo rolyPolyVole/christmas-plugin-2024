@@ -6,9 +6,12 @@ import dev.shreyasayyengar.menuapi.menu.StandardMenu
 import gg.flyte.christmas.ChristmasEventPlugin
 import gg.flyte.christmas.util.CameraSequence
 import gg.flyte.twilight.event.event
+import gg.flyte.twilight.extension.hidePlayer
 import gg.flyte.twilight.extension.playSound
+import gg.flyte.twilight.extension.showPlayer
 import gg.flyte.twilight.scheduler.async
 import gg.flyte.twilight.scheduler.delay
+import io.github.retrooper.packetevents.util.SpigotConversionUtil
 import io.papermc.paper.chat.ChatRenderer
 import io.papermc.paper.event.player.AsyncChatEvent
 import net.kyori.adventure.text.Component
@@ -33,6 +36,7 @@ import org.bukkit.event.inventory.InventoryType
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerResourcePackStatusEvent
 import org.bukkit.event.player.PlayerSwapHandItemsEvent
@@ -129,6 +133,20 @@ class HousekeepingEventListener : Listener {
         event<PlayerQuitEvent> {
             quitMessage(null)
             delay(1) { ChristmasEventPlugin.instance.eventController.onPlayerQuit(player) } // getOnlinePlayers does not update until the next tick
+        }
+
+        event<PlayerMoveEvent> {
+            // hide players when they are close to NPCs, they obstruct the view
+            val locations = ChristmasEventPlugin.instance.worldNPCs.map {
+                SpigotConversionUtil.toBukkitLocation(
+                    ChristmasEventPlugin.instance.serverWorld,
+                    it.npc.location
+                )
+            }
+
+            val hide = locations.any { it.distance(player.location) < 3 }
+            if (hide) player.hidePlayer() else player.showPlayer()
+
         }
 
         event<PlayerResourcePackStatusEvent> {
