@@ -126,14 +126,16 @@ class ChristmasEventPlugin : JavaPlugin() {
         // player list displays entries by alphabetical order of the team they have entries with
         scoreBoardTab = Bukkit.getScoreboardManager().newScoreboard.apply {
             registerNewTeam("a. staff").apply {
-                setOption(Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER)
+                setOption(Option.COLLISION_RULE, Team.OptionStatus.NEVER)
+                setOption(Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS)
                 color(NamedTextColor.GRAY)
                 prefix(Component.text("ѕᴛᴀꜰꜰ ", NamedTextColor.RED, TextDecoration.BOLD))
             }
 
             registerNewTeam("b. player").apply {
                 color(NamedTextColor.GRAY)
-                setOption(Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER)
+                setOption(Option.COLLISION_RULE, Team.OptionStatus.NEVER)
+                setOption(Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS)
             }
         }
 
