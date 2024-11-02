@@ -10,7 +10,6 @@ import gg.flyte.twilight.extension.hidePlayer
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.extension.showPlayer
 import gg.flyte.twilight.extension.toComponent
-import gg.flyte.twilight.scheduler.async
 import gg.flyte.twilight.scheduler.delay
 import io.github.retrooper.packetevents.util.SpigotConversionUtil
 import io.papermc.paper.chat.ChatRenderer
@@ -39,7 +38,6 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.event.player.PlayerQuitEvent
-import org.bukkit.event.player.PlayerResourcePackStatusEvent
 import org.bukkit.event.player.PlayerSwapHandItemsEvent
 import org.bukkit.event.server.ServerListPingEvent
 import org.bukkit.inventory.ItemStack
@@ -103,12 +101,13 @@ class HousekeepingEventListener : Listener {
             joinMessage(null)
 
             player.apply {
-                async {
-                    RemoteFile("https://github.com/flytegg/ls-christmas-rp/releases/latest/download/RP.zip").apply { // TODO change URL/configure pack
+//                TODO change URL/configure pack (uncomment when works)
+//                async {
+//                    RemoteFile("https://github.com/flytegg/ls-christmas-rp/releases/latest/download/RP.zip").apply {
 //                    println("RP Hash = $hash")
 //                    setResourcePack(url, hash, true)
-                    }
-                }
+//                    }
+//                }
 
                 gameMode = GameMode.ADVENTURE
 
@@ -131,6 +130,7 @@ class HousekeepingEventListener : Listener {
                 .append(text("\n"))
                 .append(text("\n(${Bukkit.getOnlinePlayers().size} ᴘʟᴀʏᴇʀꜱ)", NamedTextColor.GRAY))
 
+            // TODO finish sponsors
             val footer = Component.text("\nꜰʟʏᴛᴇ.ɢɢ/ᴅᴏɴᴀᴛᴇ\n\n", NamedTextColor.LIGHT_PURPLE)
                 .append(MiniMessage.miniMessage().deserialize(" <gradient:#ff80e8:#ffffff>ꜰʟʏᴛᴇ.ɢɢ</gradient>"))
                 .append(text(" • ", NamedTextColor.WHITE))
@@ -163,10 +163,11 @@ class HousekeepingEventListener : Listener {
 
         }
 
-        event<PlayerResourcePackStatusEvent> {
-            if (status == PlayerResourcePackStatusEvent.Status.ACCEPTED || status == PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED) return@event
-//            player.kick("&cYou &f&nmust&c accept the resource pack to play on this server!".asComponent()) // TODO uncomment when pack works
-        }
+        // TODO uncomment when pack works
+//        event<PlayerResourcePackStatusEvent> {
+//            if (status == PlayerResourcePackStatusEvent.Status.ACCEPTED || status == PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED) return@event
+//            player.kick("&cYou &f&nmust&c accept the resource pack to play on this server!".asComponent())
+//        }
 
         event<PlayerDropItemEvent> { isCancelled = true }
 
