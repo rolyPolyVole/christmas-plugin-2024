@@ -10,6 +10,7 @@ import gg.flyte.christmas.minigame.world.MapSinglePoint
 import gg.flyte.christmas.npc.WorldNPC
 import gg.flyte.christmas.util.Util
 import gg.flyte.christmas.util.colourise
+import gg.flyte.christmas.util.eventController
 import gg.flyte.twilight.twilight
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder
 import net.kyori.adventure.text.Component
@@ -142,6 +143,6 @@ class ChristmasEventPlugin : JavaPlugin() {
         lobbySpawn = MapSinglePoint(559.5, 105, 554.5, 180, 0)
 
         GameConfig.entries.forEach { it.gameClass.primaryConstructor } // preload/cache classes for reflection
-        eventController.startPlaylist()
+        eventController().startPlaylist()
     }
 }

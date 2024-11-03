@@ -2,7 +2,6 @@ package gg.flyte.christmas.util
 
 import com.google.common.base.Preconditions
 import fr.mrmicky.fastboard.adventure.FastBoard
-import gg.flyte.christmas.ChristmasEventPlugin
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor
@@ -80,8 +79,7 @@ class SidebarManager {
     }
 
     private fun currentGameLine(): Component {
-        val eventController = ChristmasEventPlugin.instance.eventController
-        val gameName = eventController.currentGame?.gameConfig?.smallDisplayName ?: Component.text("ɴᴏɴᴇ", NamedTextColor.GRAY)
+        val gameName = eventController().currentGame?.gameConfig?.smallDisplayName ?: Component.text("ɴᴏɴᴇ", NamedTextColor.GRAY)
 
         return Component.text()
             .append(Component.text("ɢᴀᴍᴇ", NamedTextColor.AQUA))

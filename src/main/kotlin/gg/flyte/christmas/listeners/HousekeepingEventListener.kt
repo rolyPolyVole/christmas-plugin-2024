@@ -5,6 +5,7 @@ import dev.shreyasayyengar.menuapi.menu.MenuItem
 import dev.shreyasayyengar.menuapi.menu.StandardMenu
 import gg.flyte.christmas.ChristmasEventPlugin
 import gg.flyte.christmas.util.CameraSequence
+import gg.flyte.christmas.util.eventController
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.hidePlayer
 import gg.flyte.twilight.extension.playSound
@@ -116,8 +117,8 @@ class HousekeepingEventListener : Listener {
                 inventory.clear()
                 inventory.helmet = applyChristmasHat((1..3).random())
 
-                ChristmasEventPlugin.instance.eventController.onPlayerJoin(this)
-                ChristmasEventPlugin.instance.eventController.songPlayer?.addPlayer(this)
+                eventController().onPlayerJoin(this)
+                eventController().songPlayer?.addPlayer(this)
                 ChristmasEventPlugin.instance.worldNPCs.forEach { it.spawnFor(this) }
 
                 applyTag(this)
@@ -140,13 +141,13 @@ class HousekeepingEventListener : Listener {
                 .append(text("\n"))
             Bukkit.getOnlinePlayers().forEach { it.sendPlayerListHeaderAndFooter(header, footer) }
 
-            ChristmasEventPlugin.instance.eventController.points.putIfAbsent(player.uniqueId, 0)
-            ChristmasEventPlugin.instance.eventController.sidebarManager.update()
+            eventController().points.putIfAbsent(player.uniqueId, 0)
+            eventController().sidebarManager.update()
         }
 
         event<PlayerQuitEvent> {
             quitMessage(null)
-            delay(1) { ChristmasEventPlugin.instance.eventController.onPlayerQuit(player) } // getOnlinePlayers does not update until the next tick
+            delay(1) { eventController().onPlayerQuit(player) } // getOnlinePlayers does not update until the next tick
         }
 
         event<PlayerMoveEvent> {
@@ -185,7 +186,7 @@ class HousekeepingEventListener : Listener {
                 return@event
             }
 
-            val currentGame = ChristmasEventPlugin.instance.eventController.currentGame
+            val currentGame = eventController().currentGame
             if (currentGame?.spectateEntities?.values?.map { it.uniqueId }?.contains(spectatorTarget.uniqueId) == true) {
                 player.teleport(currentGame.gameConfig.spectatorSpawnLocations.random())
                 player.gameMode = GameMode.ADVENTURE
@@ -212,7 +213,7 @@ class HousekeepingEventListener : Listener {
     }
 
     private fun openSpectateMenu(player: Player) {
-        var locationSize = ChristmasEventPlugin.instance.eventController.currentGame!!.gameConfig.spectatorCameraLocations.size
+        var locationSize = eventController().currentGame!!.gameConfig.spectatorCameraLocations.size
 
         var standardMenu = StandardMenu(
             "Spectate Map:",
@@ -227,7 +228,7 @@ class HousekeepingEventListener : Listener {
                 .setName("Spectate Point $i")
                 .setSkullTexture("66f88107041ff1ad84b0a4ae97298bd3d6b59d0402cbc679bd2f77356d454bc4")
                 .onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
-                    val requestedCameraEntity = ChristmasEventPlugin.instance.eventController.currentGame!!.spectateEntities[i]
+                    val requestedCameraEntity = eventController().currentGame!!.spectateEntities[i]
                     whoClicked.gameMode = GameMode.SPECTATOR
                     whoClicked.spectatorTarget = requestedCameraEntity
                     whoClicked.closeInventory()

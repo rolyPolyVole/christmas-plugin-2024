@@ -3,6 +3,7 @@ package gg.flyte.christmas.minigame.engine
 import gg.flyte.christmas.ChristmasEventPlugin
 import gg.flyte.christmas.util.CameraSequence
 import gg.flyte.christmas.util.Util
+import gg.flyte.christmas.util.eventController
 import gg.flyte.twilight.event.TwilightListener
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.scheduler.TwilightRunnable
@@ -37,7 +38,6 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
     protected val tasks = mutableListOf<TwilightRunnable?>()
     val spectateEntities = mutableMapOf<Int, Entity>()
     lateinit var state: GameState
-    val eventController get() = ChristmasEventPlugin.instance.eventController
 
     /**
      * Initialises the game's spectator entities, which are used to allow players to spectate the game.
@@ -86,17 +86,17 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
                     // if player was eliminated during the sequence (left server), don't prepare them.
                     if (!(remainingPlayers().map { it.uniqueId }.contains(it.uniqueId))) return@handlePlayers
 
-                    preparePlayer(it)
-                    it.sendMessage(
-                        Component.text("\n------------------[INSTRUCTIONS]------------------\n", gameConfig.colour)
-                            .append(Component.text(gameConfig.instructions, NamedTextColor.WHITE))
-                            .append(Component.text("\n-------------------------------------------------\n", gameConfig.colour))
-                    )
-                },
-                optedOutAction = {
-                    it.teleport(gameConfig.spectatorSpawnLocations.random())
-                }
-            )
+                preparePlayer(it)
+                it.sendMessage(
+                    Component.text("\n------------------[INSTRUCTIONS]------------------\n", gameConfig.colour)
+                        .append(Component.text(gameConfig.instructions, NamedTextColor.WHITE))
+                        .append(Component.text("\n-------------------------------------------------\n", gameConfig.colour))
+                )
+            },
+            optedOutAction = {
+                it.teleport(gameConfig.spectatorSpawnLocations.random())
+            }
+        )
 
             startGame()
         }
@@ -125,14 +125,14 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
         listeners.forEach { it.unregister() }
         spectateEntities.values.forEach { it.remove() }
         eliminatedPlayers.clear()
-        eventController.currentGame = null
-        eventController.sidebarManager.dataSupplier = eventController.points
+        eventController().currentGame = null
+        eventController().sidebarManager.dataSupplier = eventController().points
 
         Bukkit.getOnlinePlayers().forEach {
             it.gameMode = GameMode.ADVENTURE // could be spectating camera
             it.inventory.clear()
             it.teleport(ChristmasEventPlugin.instance.lobbySpawn)
-            eventController.sidebarManager.update(it)
+            eventController().sidebarManager.update(it)
         }
 
     }
@@ -213,7 +213,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
                     val times = Title.Times.times(Duration.ZERO, Duration.ofMillis(1100), Duration.ZERO)
 
                     Util.handlePlayers(eventPlayerAction = {
-                        eventController.countdownMap[seconds]?.let { titleText ->
+                        eventController().countdownMap[seconds]?.let { titleText ->
                             it.showTitle(Title.title(titleText, Component.text(""), times))
                             it.playSound(Sound.UI_BUTTON_CLICK)
                         }

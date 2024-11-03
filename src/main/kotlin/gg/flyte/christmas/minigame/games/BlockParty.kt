@@ -17,6 +17,7 @@ import gg.flyte.christmas.npc.WorldNPC
 import gg.flyte.christmas.util.SongReference
 import gg.flyte.christmas.util.Util
 import gg.flyte.christmas.util.colourise
+import gg.flyte.christmas.util.eventController
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.scheduler.TwilightRunnable
@@ -146,9 +147,9 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
         // let song play for a few rounds
         if (roundNumber % 3 == 0) {
-            eventController.startPlaylist(SongReference.ALL_I_WANT_FOR_CHRISTMAS_IS_YOU) // beginning makes it hard to differentiate when it has stopped.
+            eventController().startPlaylist(SongReference.ALL_I_WANT_FOR_CHRISTMAS_IS_YOU) // beginning makes it hard to differentiate when it has stopped.
         } else {
-            eventController.songPlayer?.isPlaying = true
+            eventController().songPlayer?.isPlaying = true
         }
 
         newFloor()
@@ -161,7 +162,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
             }
         }
 
-        remainingPlayers().forEach { eventController.points.put(it.uniqueId, eventController.points[it.uniqueId]!! + 10) }
+        remainingPlayers().forEach { eventController().points.put(it.uniqueId, eventController().points[it.uniqueId]!! + 10) }
     }
 
     private fun newFloor(clearBombs: Boolean = true) {
@@ -239,7 +240,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
         if (harder) newFloor(false) // hard mode changes floor right before countdown starts
 
-        eventController.songPlayer?.isPlaying = false
+        eventController().songPlayer?.isPlaying = false
         remainingPlayers().forEach { it.playSound(Sound.BLOCK_NOTE_BLOCK_BASEDRUM) }
 
         val itemStack = MenuItem(ItemStack(selectedMaterial)).itemStack.apply {
@@ -373,7 +374,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
     override fun endGame() {
         val winner = remainingPlayers().first()
-        eventController.points.put(winner.uniqueId, eventController.points[winner.uniqueId]!! + 15)
+        eventController().points.put(winner.uniqueId, eventController().points[winner.uniqueId]!! + 15)
 
         Util.handlePlayers(
             eventPlayerAction = {

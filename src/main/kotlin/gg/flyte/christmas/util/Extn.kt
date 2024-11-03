@@ -1,5 +1,6 @@
 package gg.flyte.christmas.util
 
+import gg.flyte.christmas.ChristmasEventPlugin
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.ChatColor
@@ -28,3 +29,5 @@ fun String.colourise(): String {
 fun Component.toLegacyString(): String {
     return LegacyComponentSerializer.legacyAmpersand().serialize(this)
 }
+
+fun eventController() = ChristmasEventPlugin.instance.eventController

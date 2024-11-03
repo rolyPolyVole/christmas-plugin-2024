@@ -6,6 +6,7 @@ import gg.flyte.christmas.minigame.engine.GameConfig
 import gg.flyte.christmas.minigame.world.MapRegion
 import gg.flyte.christmas.minigame.world.MapSinglePoint
 import gg.flyte.christmas.util.Util
+import gg.flyte.christmas.util.eventController
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.scheduler.delay
@@ -38,7 +39,7 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
 
     override fun startGameOverview() {
         super.startGameOverview()
-        eventController.sidebarManager.dataSupplier = timeOnHill
+        eventController().sidebarManager.dataSupplier = timeOnHill
     }
 
     override fun preparePlayer(player: Player) {
@@ -97,7 +98,7 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
             val timeComponent = Component.text("ᴛɪᴍᴇ ʟᴇғᴛ: ", NamedTextColor.AQUA)
                 .append(Component.text(gameTime.toString(), NamedTextColor.RED, TextDecoration.BOLD))
 
-            Bukkit.getOnlinePlayers().forEach { eventController.sidebarManager.updateLines(it, listOf(Component.empty(), timeComponent)) }
+            Bukkit.getOnlinePlayers().forEach { eventController().sidebarManager.updateLines(it, listOf(Component.empty(), timeComponent)) }
         }
     }
 

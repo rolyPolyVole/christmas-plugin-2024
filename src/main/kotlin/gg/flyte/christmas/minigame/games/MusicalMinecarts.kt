@@ -14,6 +14,7 @@ import gg.flyte.christmas.npc.WorldNPC
 import gg.flyte.christmas.util.SongReference
 import gg.flyte.christmas.util.Util
 import gg.flyte.christmas.util.colourise
+import gg.flyte.christmas.util.eventController
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.scheduler.TwilightRunnable
@@ -134,9 +135,9 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
         // let song play for a few rounds
         if (roundNumber % 3 == 0) {
-            eventController.startPlaylist(SongReference.ALL_I_WANT_FOR_CHRISTMAS_IS_YOU) // beginning makes it hard to differentiate when it has stopped.
+            eventController().startPlaylist(SongReference.ALL_I_WANT_FOR_CHRISTMAS_IS_YOU) // beginning makes it hard to differentiate when it has stopped.
         } else {
-            eventController.songPlayer?.isPlaying = true
+            eventController().songPlayer?.isPlaying = true
         }
 
         if (!harder) {
@@ -153,7 +154,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
             }
         }
 
-        remainingPlayers().forEach { eventController.points.put(it.uniqueId, eventController.points[it.uniqueId]!! + 10) }
+        remainingPlayers().forEach { eventController().points.put(it.uniqueId, eventController().points[it.uniqueId]!! + 10) }
     }
 
     private fun summonCarts() {
@@ -209,7 +210,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         isCountdownActive = true
         canEnter = true
 
-        eventController.songPlayer?.isPlaying = false
+        eventController().songPlayer?.isPlaying = false
         remainingPlayers().forEach { it.playSound(Sound.BLOCK_NOTE_BLOCK_BASEDRUM) }
 
         val timerBar: BossBar = BossBar.bossBar(
@@ -349,7 +350,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
     override fun endGame() {
 //        val winner = remainingPlayers().first()  TODO change back
         val winner = Bukkit.getPlayer("Shreyas008")!!
-        eventController.points.put(winner.uniqueId, eventController.points[winner.uniqueId]!! + 15)
+        eventController().points.put(winner.uniqueId, eventController().points[winner.uniqueId]!! + 15)
 
         Util.handlePlayers(
             eventPlayerAction = {

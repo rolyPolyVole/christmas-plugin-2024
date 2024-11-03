@@ -5,6 +5,7 @@ import dev.shreyasayyengar.menuapi.menu.StandardMenu
 import gg.flyte.christmas.ChristmasEventPlugin
 import gg.flyte.christmas.minigame.engine.GameConfig
 import gg.flyte.christmas.util.colourise
+import gg.flyte.christmas.util.eventController
 import gg.flyte.christmas.util.toLegacyString
 import gg.flyte.twilight.extension.playSound
 import net.kyori.adventure.text.Component
@@ -50,7 +51,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
 
         menu.setItem(42, MenuItem(Material.RED_CONCRETE)
             .setName(
-                "&cKill Current Game: " + (ChristmasEventPlugin.instance.eventController.currentGame?.gameConfig?.displayName
+                "&cKill Current Game: " + (eventController().currentGame?.gameConfig?.displayName
                     ?: "None".colourise())
             )
             .setLore(
@@ -59,16 +60,16 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
                 "&cand teleport all players back to the lobby.".colourise(),
             )
             .onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
-                if (ChristmasEventPlugin.instance.eventController.currentGame == null) {
+                if (eventController().currentGame == null) {
                     whoClicked.playSound(Sound.ENTITY_VILLAGER_NO)
                     whoClicked.sendMessage(Component.text("No game is currently running!", NamedTextColor.RED))
                     return@onClick
                 }
 
-                ChristmasEventPlugin.instance.eventController.currentGame!!.endGame()
+                eventController().currentGame!!.endGame()
                 whoClicked.sendMessage(Component.text("Game terminated!", NamedTextColor.RED))
                 whoClicked.playSound(Sound.ENTITY_GENERIC_EXPLODE)
-                ChristmasEventPlugin.instance.eventController.sidebarManager.update()
+                eventController().sidebarManager.update()
             }
         )
 
@@ -76,8 +77,8 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
             if (whoClosed.uniqueId != modifyingGame) return@onClose // not the one who interacted with the game switcher
 
             modifyingGame = null
-            ChristmasEventPlugin.instance.eventController.setMiniGame(availableGames[selectedIndex])
-            ChristmasEventPlugin.instance.eventController.sidebarManager.update()
+            eventController().setMiniGame(availableGames[selectedIndex])
+            eventController().sidebarManager.update()
             whoClosed.sendMessage(
                 Component.text("Selected game: ", NamedTextColor.GRAY)
                     .append(availableGames[selectedIndex].displayName.color(availableGames[selectedIndex].colour))
@@ -94,11 +95,11 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
     @Subcommand("optout")
     @CommandPermission("event.optout")
     fun optOut(sender: Player) {
-        var remove = ChristmasEventPlugin.instance.eventController.optOut.remove(sender.uniqueId)
+        var remove = eventController().optOut.remove(sender.uniqueId)
         if (remove) {
             sender.sendMessage(Component.text("You have opted back into the event!", NamedTextColor.GREEN))
         } else {
-            ChristmasEventPlugin.instance.eventController.optOut.add(sender.uniqueId)
+            eventController().optOut.add(sender.uniqueId)
             sender.sendMessage(Component.text("You have opted out of the event!", NamedTextColor.RED))
         }
 
@@ -108,10 +109,10 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
     @Subcommand("DANGER-load-crash")
     @CommandPermission("event.loadcrash")
     fun loadCrash(sender: CommandSender) {
-        ChristmasEventPlugin.instance.eventController.points.clear()
+        eventController().points.clear()
         ChristmasEventPlugin.instance.config.getConfigurationSection("points")?.getKeys(false)?.forEach {
-            ChristmasEventPlugin.instance.eventController.points[UUID.fromString(it)] = ChristmasEventPlugin.instance.config.getInt("points.$it")
-            ChristmasEventPlugin.instance.eventController.sidebarManager.update()
+            eventController().points[UUID.fromString(it)] = ChristmasEventPlugin.instance.config.getInt("points.$it")
+            eventController().sidebarManager.update()
         }
 
         sender.sendMessage(Component.text("Loaded crash data! Your scoreboard should now show the most recent serialised data!", NamedTextColor.GREEN))
@@ -175,13 +176,13 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
             )
             .onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
                 whoClicked.closeInventory()
-                if (ChristmasEventPlugin.instance.eventController.currentGame == null) {
+                if (eventController().currentGame == null) {
                     whoClicked.playSound(Sound.ENTITY_VILLAGER_NO)
                     whoClicked.sendMessage(Component.text("No game is currently selected!", NamedTextColor.RED))
                     return@onClick
                 }
 
-                ChristmasEventPlugin.instance.eventController.prepareStart()
+                eventController().prepareStart()
                 whoClicked.playSound(Sound.ENTITY_PLAYER_LEVELUP)
                 whoClicked.sendMessage(Component.text("Game starting! Please wait...", NamedTextColor.GREEN))
 

@@ -40,7 +40,7 @@ object Util {
 
         return Bukkit.getOnlinePlayers().filter { player ->
             val isCameraPlayer = player.uniqueId == instance.cameraPlayer
-            val isOptOut = instance.eventController.optOut.contains(player.uniqueId)
+            val isOptOut = eventController().optOut.contains(player.uniqueId)
 
             when {
                 isCameraPlayer -> {
