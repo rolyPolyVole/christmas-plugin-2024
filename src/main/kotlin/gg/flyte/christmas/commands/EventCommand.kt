@@ -17,13 +17,14 @@ import org.bukkit.entity.Player
 import revxrsal.commands.annotation.Command
 import revxrsal.commands.annotation.Subcommand
 import revxrsal.commands.bukkit.annotation.CommandPermission
+import java.util.UUID
 
 @Suppress("unused") // power of lamp!
 @Command("event")
 class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".colourise(), 54)) {
     private val availableGames = GameConfig.entries
     private var selectedIndex = -1
-    private var interactedWithGameSwitcher = false
+    private var modifyingGame: UUID? = null
 
     init {
         menu.setItem(13, setGameSwitcher())
@@ -71,7 +72,9 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
         )
 
         menu.onClose { whoClosed, inventory, event ->
-            if (!interactedWithGameSwitcher) return@onClose
+            if (whoClosed.uniqueId != modifyingGame) return@onClose // not the one who interacted with the game switcher
+
+            modifyingGame = null
             ChristmasEventPlugin.instance.eventController.setMiniGame(availableGames[selectedIndex])
             ChristmasEventPlugin.instance.eventController.sidebarManager.update()
             whoClosed.sendMessage(
@@ -85,7 +88,6 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
     @CommandPermission("event.panel")
     fun handleCommand(sender: Player) {
         menu.open(true, sender)
-        interactedWithGameSwitcher = false
     }
 
     @Subcommand("optout")
@@ -115,12 +117,19 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
             onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
                 inventoryClickEvent.isCancelled = true
 
+                if (modifyingGame != null && modifyingGame != whoClicked.uniqueId) {
+                    whoClicked.closeInventory()
+                    whoClicked.sendMessage(Component.text("Someone else is currently modifying the game!", NamedTextColor.RED))
+                    whoClicked.playSound(Sound.ENTITY_VILLAGER_NO)
+                    return@onClick
+                }
+
+                modifyingGame = whoClicked.uniqueId
                 selectedIndex = (selectedIndex + 1) % availableGames.size // cycle around
                 updateRotatingItem(this)
                 this.itemStack.type = availableGames[selectedIndex].menuMaterial
 
                 menu.setItem(13, this)
-                interactedWithGameSwitcher = true
                 whoClicked.playSound(Sound.UI_BUTTON_CLICK)
             }
         }
