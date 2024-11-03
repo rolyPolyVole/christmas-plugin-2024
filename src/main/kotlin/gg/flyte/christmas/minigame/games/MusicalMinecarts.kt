@@ -3,6 +3,7 @@ package gg.flyte.christmas.minigame.games
 import com.github.retrooper.packetevents.PacketEvents
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityAnimation
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityHeadLook
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityRotation
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSetPassengers
 import gg.flyte.christmas.ChristmasEventPlugin
 import gg.flyte.christmas.minigame.engine.EventMiniGame
@@ -41,9 +42,10 @@ import org.bukkit.entity.Player
 import org.bukkit.event.block.BlockPhysicsEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerDropItemEvent
-import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerToggleFlightEvent
+import org.bukkit.event.vehicle.VehicleEnterEvent
+import org.bukkit.event.vehicle.VehicleExitEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
@@ -71,7 +73,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
     override fun startGameOverview() {
         repeat(25) {
-            getMinecart(false).also {
+            summonMinecart().also {
                 overviewTasks += repeatingTask((0..8).random(), (2..6).random()) {
                     if (!(it.isOnGround)) return@repeatingTask
 
@@ -110,6 +112,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         if (secondsForRound > 2) secondsForRound--
 
         minecarts.forEach { it.remove() }.also { minecarts.clear() }
+        Util.handlePlayers(eventPlayerAction = { it.teleport(gameConfig.spawnPoints.random().randomLocation()) })
 
         when {
             remainingPlayers().size == 20 && !harder -> {
@@ -137,8 +140,8 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         }
 
         if (!harder) {
-            summonCarts()
             canEnter = false
+            summonCarts()
         } // easy-mode summons carts during new rounds.
         powerUp()
 
@@ -155,7 +158,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
     private fun summonCarts() {
         repeat(25) {
-            getMinecart()
+            summonMinecart()
         }
 
         Util.handlePlayers(
@@ -245,8 +248,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         }
 
         // BossBar ticker
-        bossBarTask = repeatingTask(1, 1)
-        {
+        bossBarTask = repeatingTask(1, 1) {
             if (remainingTicks <= 0) {
                 this.cancel()
 
@@ -268,19 +270,24 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
     }
 
     private fun stunPlayer(player: Player) {
-        player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 20 * 3, 5, false, false, false))
-        player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20 * 3, 5, false, false, false))
+        player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, Integer.MAX_VALUE, 25, false, false, false))
+        player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 1, false, false, false))
         player.playSound(Sound.ENTITY_ITEM_BREAK)
         player.showTitle(
             Title.title(
-                Component.text("Stunned! You clicked too early!", NamedTextColor.RED),
+                Component.text("Stunned! Too early!", NamedTextColor.RED),
                 Component.text("The music has not stopped...", NamedTextColor.GOLD),
                 Title.Times.times(Duration.ZERO, Duration.ofSeconds(3), Duration.ofMillis(500))
             )
         )
 
         stunnedPlayers.add(player)
-        delay(3, TimeUnit.SECONDS) { stunnedPlayers.remove(player) }
+
+        delay(5, TimeUnit.SECONDS) {
+            stunnedPlayers.remove(player)
+            player.removePotionEffect(PotionEffectType.SLOWNESS)
+            player.removePotionEffect(PotionEffectType.BLINDNESS)
+        }
     }
 
     override fun eliminate(player: Player, reason: EliminationReason) {
@@ -340,7 +347,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
     }
 
     override fun endGame() {
-//        val winner = remainingPlayers().first()
+//        val winner = remainingPlayers().first()  TODO change back
         val winner = Bukkit.getPlayer("Shreyas008")!!
         eventController.points.put(winner.uniqueId, eventController.points[winner.uniqueId]!! + 15)
 
@@ -352,7 +359,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                 it.hideBossBar(if (currentBossBar != null) currentBossBar!! else return@handlePlayers)
             },
         )
-        tasks.forEach { it?.cancel() } // this will cancel all game tasks. (bossbar, floor changing etc)
+        tasks.forEach { it?.cancel() } // this will cancel all game tasks.
         doWinAnimation(winner)
     }
 
@@ -412,11 +419,10 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                     val npc = WorldNPC.createFromLive(displayName, player, location).also { worldNPCs.add(it) }
 
                     Bukkit.getOnlinePlayers().forEach { loopedPlayer ->
-                        npc.npc.apply {
-                            mainHand = SpigotConversionUtil.fromBukkitItemStack(ItemStack(Material.MINECART))
-                            updateEquipment()
-                        }
+                        npc.npc.mainHand = SpigotConversionUtil.fromBukkitItemStack(ItemStack(Material.MINECART))
+                        npc.npc.updateEquipment()
                         npc.spawnFor(loopedPlayer)
+
                         val passengerPacket = WrapperPlayServerSetPassengers(minecart.entityId, intArrayOf(npc.id))
                         delay(1) { PacketEvents.getAPI().playerManager.getUser(loopedPlayer).sendPacket(passengerPacket) }
 
@@ -428,22 +434,27 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                                         WrapperPlayServerEntityAnimation.EntityAnimationType.SWING_MAIN_ARM
                                     )
                                 )
-                        }
+                        } // NPC swing
 
                         var yaw = 0
                         animationTasks += repeatingTask((3..5).random(), (3..5).random()) {
-                            PacketEvents.getAPI().playerManager.getUser(loopedPlayer)
-                                .sendPacket(WrapperPlayServerEntityHeadLook(npc.id, yaw.toFloat()))
-                            yaw = (yaw + 5) % 360
-                        }
+                            PacketEvents.getAPI().playerManager.getUser(loopedPlayer).apply {
+                                sendPacket(WrapperPlayServerEntityHeadLook(npc.id, yaw.toFloat()))
+                                sendPacket(WrapperPlayServerEntityRotation(npc.id, yaw.toFloat(), 0F, true))
+                            }
+                            yaw += 10
+                        } // NPC look
                     }
                 }
             }
         }
 
-        delay(25, TimeUnit.SECONDS) {
+        delay(20, TimeUnit.SECONDS) {
             Bukkit.getOnlinePlayers().forEach { player -> worldNPCs.forEach { it.despawnFor(player) } }
+            minecarts.forEach { it.remove() }
             animationTasks.forEach { it.cancel() }
+            poweredRails.keys.flatMap { it.toSingleBlockLocations() }.forEach { it.block.type = Material.AIR }
+            connectorRails.keys.forEach { it.block.type = Material.AIR }
             super.endGame()
         }
     }
@@ -455,11 +466,21 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
         listeners += event<VehicleEnterEvent> {
             if (entered !is Player) return@event
-            if (stunnedPlayers.contains(entered)) return@event
+
+            if (stunnedPlayers.contains(entered as Player)) {
+                isCancelled = true
+                return@event
+            }
+
             if (!canEnter) {
                 stunPlayer(entered as Player)
                 isCancelled = true
             }
+        }
+
+        listeners += event<VehicleExitEvent> {
+            if (exited !is Player) return@event
+            isCancelled = true
         }
 
         listeners += event<PlayerInteractEvent> {
@@ -526,18 +547,11 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
             if (item?.type == Material.MINECART) {
                 if (player.vehicle == null) {
-                    val minecart = getMinecart()
+                    val minecart = summonMinecart()
                     minecart.addPassenger(player)
                     minecarts.add(minecart)
                     item?.amount = item?.amount?.minus(1) ?: 0
                 }
-            }
-        }
-
-        listeners += event<PlayerInteractEntityEvent> {
-            if (rightClicked is Minecart) {
-                if (stunnedPlayers.contains(player)) return@event
-                if (!canEnter) stunPlayer(player)
             }
         }
 
@@ -555,12 +569,10 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         }
     }
 
-    private fun getMinecart(cosmeticOnly: Boolean = true): Minecart {
+    private fun summonMinecart(): Minecart {
         return ChristmasEventPlugin.instance.serverWorld.spawn(floorRegion.randomLocation().add(0.0, 1.5, 0.0), Minecart::class.java) {
             it.isInvulnerable = true
             it.isSlowWhenEmpty = false
-            it.isGlowing = cosmeticOnly
-
             minecarts.add(it)
         }
     }
