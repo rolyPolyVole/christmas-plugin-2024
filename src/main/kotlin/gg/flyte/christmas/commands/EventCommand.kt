@@ -13,6 +13,7 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Sound
+import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import revxrsal.commands.annotation.Command
 import revxrsal.commands.annotation.Subcommand
@@ -106,8 +107,13 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
 
     @Subcommand("DANGER-load-crash")
     @CommandPermission("event.loadcrash")
-    fun loadCrash() {
-        println("load crash called!")
+    fun loadCrash(sender: CommandSender) {
+        ChristmasEventPlugin.instance.eventController.points.clear()
+        ChristmasEventPlugin.instance.config.getConfigurationSection("points")?.getKeys(false)?.forEach {
+            ChristmasEventPlugin.instance.eventController.points[UUID.fromString(it)] = ChristmasEventPlugin.instance.config.getInt("points.$it")
+        }
+
+        sender.sendMessage(Component.text("Loaded crash data! Your scoreboard should now show the most recent serialised data!", NamedTextColor.GREEN))
     }
 
     private fun setGameSwitcher(): MenuItem {

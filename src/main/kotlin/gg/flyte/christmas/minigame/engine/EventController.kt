@@ -212,4 +212,11 @@ class EventController() {
         val sorted = points.entries.sortedByDescending { it.value }
         return sorted.indexOfFirst { it.key == uuid } + 1
     }
+
+    fun serialisePoints() {
+        ChristmasEventPlugin.instance.config.set("points", null)
+        points.forEach { (uuid, points) -> ChristmasEventPlugin.instance.config.set("points.$uuid", points) }
+
+        ChristmasEventPlugin.instance.saveConfig()
+    }
 }
