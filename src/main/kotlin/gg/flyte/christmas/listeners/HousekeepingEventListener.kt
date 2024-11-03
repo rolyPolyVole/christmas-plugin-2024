@@ -212,7 +212,7 @@ class HousekeepingEventListener : Listener {
     }
 
     private fun openSpectateMenu(player: Player) {
-        var locationSize = ChristmasEventPlugin.instance.eventController.currentGame?.gameConfig!!.spectatorCameraLocations.size
+        var locationSize = ChristmasEventPlugin.instance.eventController.currentGame!!.gameConfig.spectatorCameraLocations.size
 
         var standardMenu = StandardMenu(
             "Spectate Map:",
