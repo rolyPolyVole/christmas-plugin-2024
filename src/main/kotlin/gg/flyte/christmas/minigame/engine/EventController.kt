@@ -85,7 +85,7 @@ class EventController() {
                 }
 
                 else -> {
-                    val times = Title.Times.times(Duration.ofMillis(0), Duration.ofMillis(1100), Duration.ofMillis(0))
+                    val times = Title.Times.times(Duration.ZERO, Duration.ofMillis(1100), Duration.ZERO)
 
                     // TODO check for any usages of getOnlinePlayers and replace with Util
 
@@ -149,7 +149,7 @@ class EventController() {
                                 Title.title(
                                     Component.text("⦅x⦆", NamedTextColor.DARK_RED),
                                     Component.text("Waiting for more players...", NamedTextColor.RED),
-                                    Title.Times.times(Duration.ofMillis(0), Duration.ofSeconds(5), Duration.ofSeconds(1))
+                                    Title.Times.times(Duration.ZERO, Duration.ofSeconds(5), Duration.ofSeconds(1))
                                 )
                             )
 
@@ -160,7 +160,7 @@ class EventController() {
                                 Title.title(
                                     Component.text("⦅x⦆", NamedTextColor.DARK_RED),
                                     Component.text("Waiting for more players...", NamedTextColor.RED),
-                                    Title.Times.times(Duration.ofMillis(0), Duration.ofSeconds(5), Duration.ofSeconds(1))
+                                    Title.Times.times(Duration.ZERO, Duration.ofSeconds(5), Duration.ofSeconds(1))
                                 )
                             )
                             it.playSound(Sound.BLOCK_NOTE_BLOCK_BASS)

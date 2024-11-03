@@ -210,7 +210,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
                 }
 
                 else -> {
-                    val times = Title.Times.times(Duration.ofMillis(0), Duration.ofMillis(1100), Duration.ofMillis(0))
+                    val times = Title.Times.times(Duration.ZERO, Duration.ofMillis(1100), Duration.ZERO)
 
                     Util.handlePlayers(eventPlayerAction = {
                         eventController.countdownMap[seconds]?.let { titleText ->
