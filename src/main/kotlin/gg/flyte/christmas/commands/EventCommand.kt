@@ -157,8 +157,8 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
                 "&eyet, simply exit this menu. ".colourise(),
                 "&eThe game has already been set.".colourise()
             )
-            .closeWhenClicked(true)
             .onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
+                whoClicked.closeInventory()
                 if (ChristmasEventPlugin.instance.eventController.currentGame == null) {
                     whoClicked.playSound(Sound.ENTITY_VILLAGER_NO)
                     whoClicked.sendMessage(Component.text("No game is currently selected!", NamedTextColor.RED))
