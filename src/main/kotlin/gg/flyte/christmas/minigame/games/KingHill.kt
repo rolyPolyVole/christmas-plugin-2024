@@ -93,7 +93,7 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
     }
 
     private fun updateScoreboard() {
-        tasks += repeatingTask(1, TimeUnit.SECONDS) {
+        tasks += repeatingTask(10) {
             val timeComponent = Component.text("ᴛɪᴍᴇ ʟᴇғᴛ: ", NamedTextColor.AQUA)
                 .append(Component.text(gameTime.toString(), NamedTextColor.RED, TextDecoration.BOLD))
 
