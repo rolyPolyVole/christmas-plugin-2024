@@ -111,6 +111,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
         ChristmasEventPlugin.instance.eventController.points.clear()
         ChristmasEventPlugin.instance.config.getConfigurationSection("points")?.getKeys(false)?.forEach {
             ChristmasEventPlugin.instance.eventController.points[UUID.fromString(it)] = ChristmasEventPlugin.instance.config.getInt("points.$it")
+            ChristmasEventPlugin.instance.eventController.sidebarManager.update()
         }
 
         sender.sendMessage(Component.text("Loaded crash data! Your scoreboard should now show the most recent serialised data!", NamedTextColor.GREEN))
