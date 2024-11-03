@@ -453,6 +453,15 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
         listeners += event<InventoryClickEvent> { isCancelled = true }
 
+        listeners += event<VehicleEnterEvent> {
+            if (entered !is Player) return@event
+            if (stunnedPlayers.contains(entered)) return@event
+            if (!canEnter) {
+                stunPlayer(entered as Player)
+                isCancelled = true
+            }
+        }
+
         listeners += event<PlayerInteractEvent> {
             if (clickedBlock?.type == Material.BEACON) {
                 clickedBlock?.type = Material.AIR
