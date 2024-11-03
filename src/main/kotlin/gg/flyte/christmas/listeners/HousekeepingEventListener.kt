@@ -176,7 +176,7 @@ class HousekeepingEventListener : Listener {
         event<PlayerInteractEvent> {
             if (item?.type == Material.COMPASS) {
                 openSpectateMenu(player)
-            }
+            } // NOTE: if other games use compasses, this method will need adjustment.
         }
 
         event<PlayerStopSpectatingEntityEvent> {
