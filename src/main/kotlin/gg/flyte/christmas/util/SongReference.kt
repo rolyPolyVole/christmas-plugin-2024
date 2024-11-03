@@ -27,6 +27,7 @@ enum class SongReference(val title: String, val song: Song) {
     JOY_TO_THE_WORLD("Joy To The World", parse("JOY_TO_THE_WORLD.nbs")),
     LAST_CHRISTMAS("Last Christmas", parse("LAST_CHRISTMAS.nbs")),
     O_COME_ALL_YE_FAITHFUL("O' Come All Ye Faithful", parse("O_COME_ALL_YE_FAITHFUL.nbs")),
+    RUDOLPH_THE_RED_NOSED_REINDEER("Rudolph The Red Nosed Reindeer", parse("RUDOLPH_THE_RED_NOSED_REINDEER.nbs")),
     SILENT_NIGHT("Silent Night", parse("SILENT_NIGHT.nbs")),
     SLEIGH_RIDE("Sleigh Ride", parse("SLEIGH_RIDE.nbs")),
     TWELVE_DAYS_OF_CHRISTMAS("Twelve Days Of Christmas", parse("TWELVE_DAYS_OF_CHRISTMAS.nbs")),
