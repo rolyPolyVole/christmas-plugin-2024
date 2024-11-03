@@ -11,12 +11,9 @@
 - Hide players when they are close to a leaderboard NPC for visibility
 - eliminated players get titles/nudges to donate while they wait (clickable links)
     - On-Screen Banner ads using bossbars, resource packs and displays.
-- Spectate Camera (fixed points in a game map, which player can cycle through)
 - Staff Utils Menu:
-    - Teleport “to me”
     - Teleport all players to a “screenie” location. player’s movement is locked and facing forward to facilitate an easy event screenie. (ik stephen
       will love this)
-    - Opt out of games (for staff)
 
 ## Game Specific:
 
@@ -44,12 +41,16 @@
 - Autogive players decorations so that their first thought is not to desecrate the tree!
 
 Questions:
+
 - are we capping player limit?
 
-Playtest Considerations: 
+## Stream:
+
+- Drumroll while rolling givaway?
+
+Playtest Considerations:
+
 - Joining & Leaving at various times in the event (overviews, midgame, ending, etc)
 - Making sure opted out players are consistently left out of games.
 - Join the server as we do map overview. (separate)
-
-## Stream:
-- Drumroll while rolling givaway?
+- Do we want name above head?
