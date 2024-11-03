@@ -87,8 +87,6 @@ class EventController() {
                 else -> {
                     val times = Title.Times.times(Duration.ZERO, Duration.ofMillis(1100), Duration.ZERO)
 
-                    // TODO check for any usages of getOnlinePlayers and replace with Util
-
                     Util.handlePlayers(
                         eventPlayerAction = {
                             countdownMap[seconds]?.let { titleText ->
