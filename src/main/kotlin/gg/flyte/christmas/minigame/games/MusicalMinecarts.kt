@@ -104,7 +104,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
         simpleCountdown { newRound() }
         Util.handlePlayers(eventPlayerAction = {
-            it.sendMessage(Component.text("Remember, do NOT click the minecarts early... you will be stunned!"))
+            it.sendMessage(Component.text("Remember, do NOT click the minecarts early... you will be stunned!", gameConfig.colour))
         })
     }
 
