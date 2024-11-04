@@ -127,6 +127,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
         eliminatedPlayers.clear()
         eventController().currentGame = null
         eventController().sidebarManager.dataSupplier = eventController().points
+        eventController().serialisePoints()
 
         Bukkit.getOnlinePlayers().forEach {
             it.gameMode = GameMode.ADVENTURE // could be spectating camera
