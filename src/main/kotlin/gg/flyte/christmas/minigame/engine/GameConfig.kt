@@ -105,17 +105,8 @@ enum class GameConfig(
                 MapSinglePoint(861.5, 85, 656.5, 135, 0),
                 MapSinglePoint(855.5, 85, 660.5, 135, 0)
             ),
-
-            MapRegion(
-                MapSinglePoint(798.5, 86, 662.5, -135, 0),
-                MapSinglePoint(798.5, 86, 662.5, -135, 0)
-            ),
-
-            MapRegion(
-                MapSinglePoint(787.5, 86, 630.5, -90, 0),
-                MapSinglePoint(787.5, 86, 630.5, -90, 0)
-            ),
-
+            MapRegion.single(MapSinglePoint(798.5, 86, 662.5, -135, 0)),
+            MapRegion.single(MapSinglePoint(787.5, 86, 630.5, -90, 0)),
             MapRegion(
                 MapSinglePoint(792.5, 85, 601.5, -45, 0),
                 MapSinglePoint(797.5, 85, 604.5, -45, 0)
