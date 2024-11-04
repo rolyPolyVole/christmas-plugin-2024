@@ -354,8 +354,6 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
     }
 
     override fun endGame() {
-//        val winner = remainingPlayers().first()  TODO change back
-        val winner = Bukkit.getPlayer("Shreyas008")!!
         hasEnded = true
         eventController().points.put(winner.uniqueId, eventController().points[winner.uniqueId]!! + 15)
 
