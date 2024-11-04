@@ -118,7 +118,6 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         if (secondsForRound > 2) secondsForRound--
 
         minecarts.forEach { it.remove() }.also { minecarts.clear() }
-        Util.handlePlayers(eventPlayerAction = { it.teleport(gameConfig.spawnPoints.random().randomLocation()) })
 
         when {
             remainingPlayers().size == 20 && !harder -> {
@@ -160,55 +159,6 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         }
 
         remainingPlayers().forEach { eventController().points.put(it.uniqueId, eventController().points[it.uniqueId]!! + 10) }
-    }
-
-    private fun summonCarts() {
-        repeat(25) {
-            summonMinecart()
-        }
-
-        Util.handlePlayers(
-            eventPlayerAction = {
-                it.playSound(Sound.ENTITY_ITEM_PICKUP)
-            },
-            optedOutAction = {
-                it.playSound(Sound.ENTITY_ITEM_PICKUP)
-            }
-        )
-    }
-
-    private fun powerUp() {
-        var reducedFrequency = remainingPlayers().size < 4 && roundNumber % 4 == 0 // 4 remaining -> every 4th round
-        var regularPowerUp = remainingPlayers().size > 4 && roundNumber % 2 == 0 // 5+ remaining -> every 2nd round
-
-        if (reducedFrequency || regularPowerUp) {
-
-            val localLocation = floorRegion.randomLocation()
-            powerUpLocation = MapSinglePoint(localLocation.blockX, localLocation.blockY + 1.0, localLocation.blockZ)
-            powerUpLocation!!.block.type = Material.BEACON
-            powerUpLocation!!.world.spawn(powerUpLocation!!, Firework::class.java) {
-                it.fireworkMeta = it.fireworkMeta.apply {
-                    addEffect(
-                        FireworkEffect.builder()
-                            .with(FireworkEffect.Type.BALL_LARGE)
-                            .withColor(Color.FUCHSIA, Color.PURPLE, Color.MAROON).withFade(Color.FUCHSIA, Color.PURPLE, Color.MAROON).build()
-                    )
-                }
-                it.detonate()
-            }
-
-            val notification = Component.text(">> A mysterious power-up has spawned on the floor! <<", gameConfig.colour, TextDecoration.BOLD)
-            Util.handlePlayers(
-                eventPlayerAction = {
-                    it.sendMessage(notification)
-                    it.sendMessage(Component.text("Find the beacon on the map to unlock it!", NamedTextColor.GRAY))
-                    it.playSound(Sound.BLOCK_NOTE_BLOCK_PLING)
-                },
-                optedOutAction = {
-                    it.sendMessage(notification)
-                }
-            )
-        }
     }
 
     private fun prepareElimination() {
@@ -276,27 +226,6 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         tasks += gameLogicTask
     }
 
-    private fun stunPlayer(player: Player) {
-        player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, Integer.MAX_VALUE, 25, false, false, false))
-        player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 1, false, false, false))
-        player.playSound(Sound.ENTITY_ITEM_BREAK)
-        player.showTitle(
-            Title.title(
-                Component.text("Stunned! Too early!", NamedTextColor.RED),
-                Component.text("The music has not stopped...", NamedTextColor.GOLD),
-                Title.Times.times(Duration.ZERO, Duration.ofSeconds(3), Duration.ofMillis(500))
-            )
-        )
-
-        stunnedPlayers.add(player)
-
-        delay(5, TimeUnit.SECONDS) {
-            stunnedPlayers.remove(player)
-            player.removePotionEffect(PotionEffectType.SLOWNESS)
-            player.removePotionEffect(PotionEffectType.BLINDNESS)
-        }
-    }
-
     override fun eliminate(player: Player, reason: EliminationReason) {
         if (currentBossBar != null) player.hideBossBar(currentBossBar!!)
 
@@ -335,17 +264,17 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
                 addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20 * 4, 1, false, false, false))
                 playSound(Sound.ENTITY_PLAYER_HURT)
-
-                delay(1) {
-                    val randomSpecLocation = gameConfig.spectatorSpawnLocations.random()
-                    itemDisplay.teleport(randomSpecLocation)
-                    itemDisplay.addPassenger(player)
-
-                    delay(59) {
-                        itemDisplay.remove()
-                        player.teleport(randomSpecLocation)
-                    }
-                }
+// TODO impl
+//                delay(1) {
+//                    val randomSpecLocation = gameConfig.spectatorSpawnLocations.random()
+//                    itemDisplay.teleport(randomSpecLocation)
+//                    itemDisplay.addPassenger(player)
+//
+//                    delay(59) {
+//                        itemDisplay.remove()
+//                        player.teleport(randomSpecLocation)
+//                    }
+//                }
             } // animate death
         }
         super.eliminate(player, reason)
@@ -368,8 +297,84 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                 it.hideBossBar(if (currentBossBar != null) currentBossBar!! else return@handlePlayers)
             },
         )
-        tasks.forEach { it?.cancel() } // this will cancel all game tasks.
         doWinAnimation(winner)
+    }
+
+    private fun summonCarts() {
+        val numCarts = if (remainingPlayers().size == 2) 1 else ceil(remainingPlayers().size * 2 / 3.0).toInt() // ceil condition fails at 2 players
+        repeat(numCarts) { summonMinecart() }
+
+        Util.handlePlayers(
+            eventPlayerAction = {
+                it.playSound(Sound.ENTITY_ITEM_PICKUP)
+            },
+            optedOutAction = {
+                it.playSound(Sound.ENTITY_ITEM_PICKUP)
+            }
+        )
+    }
+
+    private fun powerUp() {
+        var reducedFrequency = remainingPlayers().size < 4 && roundNumber % 4 == 0 // 4 remaining -> every 4th round
+        var regularPowerUp = remainingPlayers().size > 4 && roundNumber % 2 == 0 // 5+ remaining -> every 2nd round
+
+        if (reducedFrequency || regularPowerUp) {
+
+            val localLocation = floorRegion.randomLocation()
+            powerUpLocation = MapSinglePoint(localLocation.blockX, localLocation.blockY + 1.0, localLocation.blockZ)
+            powerUpLocation!!.block.type = Material.BEACON
+            powerUpLocation!!.world.spawn(powerUpLocation!!, Firework::class.java) {
+                it.fireworkMeta = it.fireworkMeta.apply {
+                    addEffect(
+                        FireworkEffect.builder()
+                            .with(FireworkEffect.Type.BALL_LARGE)
+                            .withColor(Color.FUCHSIA, Color.PURPLE, Color.MAROON).withFade(Color.FUCHSIA, Color.PURPLE, Color.MAROON).build()
+                    )
+                }
+                it.detonate()
+            }
+
+            val notification = Component.text(">> A mysterious power-up has spawned on the floor! <<", gameConfig.colour, TextDecoration.BOLD)
+            Util.handlePlayers(
+                eventPlayerAction = {
+                    it.sendMessage(notification)
+                    it.sendMessage(Component.text("Find the beacon on the map to unlock it!", NamedTextColor.GRAY))
+                    it.playSound(Sound.BLOCK_NOTE_BLOCK_PLING)
+                },
+                optedOutAction = {
+                    it.sendMessage(notification)
+                }
+            )
+        }
+    }
+
+    private fun stunPlayer(player: Player) {
+        player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, Integer.MAX_VALUE, 25, false, false, false))
+        player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 1, false, false, false))
+        player.playSound(Sound.ENTITY_ITEM_BREAK)
+        player.showTitle(
+            Title.title(
+                Component.text("Stunned! Too early!", NamedTextColor.RED),
+                Component.text("The music has not stopped...", NamedTextColor.GOLD),
+                Title.Times.times(Duration.ZERO, Duration.ofSeconds(10), Duration.ofMillis(250))
+            )
+        )
+
+        stunnedPlayers.add(player)
+
+        delay(10, TimeUnit.SECONDS) {
+            stunnedPlayers.remove(player)
+            player.removePotionEffect(PotionEffectType.SLOWNESS)
+            player.removePotionEffect(PotionEffectType.BLINDNESS)
+        }
+    }
+
+    private fun summonMinecart(): Minecart {
+        return ChristmasEventPlugin.instance.serverWorld.spawn(floorRegion.randomLocation().add(0.0, 1.5, 0.0), Minecart::class.java) {
+            it.isInvulnerable = true
+            it.isSlowWhenEmpty = false
+            minecarts.add(it)
+        }
     }
 
     private fun doWinAnimation(player: Player) {
@@ -578,14 +583,6 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
         listeners += event<BlockPhysicsEvent> {
             if (block.type == Material.POWERED_RAIL) isCancelled = true
-        }
-    }
-
-    private fun summonMinecart(): Minecart {
-        return ChristmasEventPlugin.instance.serverWorld.spawn(floorRegion.randomLocation().add(0.0, 1.5, 0.0), Minecart::class.java) {
-            it.isInvulnerable = true
-            it.isSlowWhenEmpty = false
-            minecarts.add(it)
         }
     }
 
