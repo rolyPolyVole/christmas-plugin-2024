@@ -479,6 +479,10 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
         listeners += event<VehicleEnterEvent> {
             if (entered !is Player) return@event
+            if (entered.vehicle != null) { // prevent moving between minecarts
+                isCancelled = true
+                return@event
+            }
 
             if (stunnedPlayers.contains(entered as Player)) {
                 isCancelled = true
