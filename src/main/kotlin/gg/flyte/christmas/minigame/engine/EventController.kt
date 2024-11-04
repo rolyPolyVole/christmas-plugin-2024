@@ -214,7 +214,7 @@ class EventController() {
     }
 
     fun addPoints(uuid: UUID, amount: Int) {
-        points[uuid] = points.getOrDefault(uuid, 0) + amount
+        points[uuid] = points.getOrDefault(uuid, 0) + amount // will never default to zero. PlayerJoinEvent puts 0 points
     }
 
     fun serialisePoints() {
