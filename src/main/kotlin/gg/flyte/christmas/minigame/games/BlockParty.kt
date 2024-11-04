@@ -153,7 +153,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         }
 
         newFloor()
-        powerUp()
+        handlePowerUp()
 
         val delayBeforePrepareRemoveFloor = (6..10).random()
         tasks += delay(delayBeforePrepareRemoveFloor, TimeUnit.SECONDS) {
@@ -165,76 +165,6 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         remainingPlayers().forEach { eventController().points.put(it.uniqueId, eventController().points[it.uniqueId]!! + 10) }
     }
 
-    private fun newFloor(clearBombs: Boolean = true) {
-        if (clearBombs) bombedSquares.clear()
-        safeBlocks.clear()
-
-        this.selectedMaterial = colourMap.keys.random()
-        val safeSquare1 = groupedSquares.indices.random()
-        val safeSquare2 = groupedSquares.indices.random()
-
-        groupedSquares.forEachIndexed { index, groupedSquareRegion ->
-            val mat: Material = if (index == safeSquare1 || index == safeSquare2) selectedMaterial else colourMap.keys.random()
-            var blockLocations = groupedSquareRegion.toSingleBlockLocations()
-
-            if (mat == selectedMaterial) safeBlocks.addAll(blockLocations)
-
-            blockLocations.forEach { it.block.type = mat }
-        }
-
-        bombedSquares.forEach { it.block.type = selectedMaterial } // if colour bombs used, change those squares to safe.
-
-        Util.handlePlayers(
-            eventPlayerAction = {
-                it.playSound(Sound.BLOCK_BEACON_ACTIVATE)
-                for (itemStack in it.inventory.storageContents) {
-                    if (itemStack?.type == selectedMaterial) itemStack.type = Material.AIR // ensure no power-up items are removed
-                }
-            },
-            optedOutAction = {
-                it.playSound(Sound.BLOCK_BEACON_ACTIVATE)
-            }
-        )
-    }
-
-    private fun powerUp() {
-        var reducedFrequency = remainingPlayers().size < 4 && roundNumber % 4 == 0 // 4 remaining -> every 4th round
-        var regularPowerUp = remainingPlayers().size > 4 && roundNumber % 2 == 0 // 5+ remaining -> every 2nd round
-
-        if (reducedFrequency || regularPowerUp) {
-
-            val localLocation = groupedSquares.random().randomLocation()
-            powerUpLocation = MapSinglePoint(localLocation.blockX, localLocation.blockY + 1.0, localLocation.blockZ)
-            powerUpLocation!!.block.type = Material.BEACON
-            powerUpLocation!!.world.spawn(powerUpLocation!!, Firework::class.java) {
-                it.fireworkMeta = it.fireworkMeta.apply {
-                    addEffect(
-                        FireworkEffect.builder()
-                            .with(FireworkEffect.Type.BALL_LARGE)
-                            .withColor(Color.FUCHSIA, Color.PURPLE, Color.MAROON).withFade(Color.FUCHSIA, Color.PURPLE, Color.MAROON).build()
-                    )
-                }
-                it.detonate()
-            }
-
-
-            val notification = Component.text(">> A mysterious power-up has spawned on the floor! <<")
-                .color(gameConfig.colour)
-                .decorate(TextDecoration.BOLD)
-
-            Util.handlePlayers(
-                eventPlayerAction = {
-                    it.sendMessage(notification)
-                    it.sendMessage(Component.text("Find the beacon on the map to unlock it!", NamedTextColor.GRAY))
-                    it.playSound(Sound.BLOCK_NOTE_BLOCK_PLING)
-                },
-                optedOutAction = {
-                    it.sendMessage(notification)
-                }
-            )
-        }
-    }
-
     private fun prepareRemoveFloor() {
         isCountdownActive = true
 
@@ -243,8 +173,14 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         eventController().songPlayer?.isPlaying = false
         remainingPlayers().forEach { it.playSound(Sound.BLOCK_NOTE_BLOCK_BASEDRUM) }
 
+        // hint players with the material they need to stand on
         val itemStack = MenuItem(ItemStack(selectedMaterial)).itemStack.apply {
             itemMeta = itemMeta.apply { isHideTooltip = true }
+        }
+        remainingPlayers().forEach {
+            for ((index, stack) in it.inventory.storageContents.withIndex()) {
+                if (stack == null) it.inventory.setItem(index, itemStack)
+            }
         }
 
         val timerBar: BossBar = BossBar.bossBar(
@@ -256,11 +192,6 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
         currentBossBar = timerBar
 
-        remainingPlayers().forEach {
-            for ((index, stack) in it.inventory.storageContents.withIndex()) {
-                if (stack == null) it.inventory.setItem(index, itemStack)
-            }
-        } // only remaining players get items
         Util.handlePlayers(
             eventPlayerAction = { it.showBossBar(timerBar) },
             optedOutAction = { it.showBossBar(timerBar) } // all can see ticker
@@ -293,7 +224,6 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                 }
 
                 isCountdownActive = false
-
                 tasks += delay(80) { newRound() }
             } else {
                 remainingPlayers().forEach { it.playSound(Sound.BLOCK_NOTE_BLOCK_BASEDRUM) }
@@ -373,6 +303,8 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
     }
 
     override fun endGame() {
+        tasks.forEach { it?.cancel() } // this will cancel all game tasks.
+
         val winner = remainingPlayers().first()
         eventController().points.put(winner.uniqueId, eventController().points[winner.uniqueId]!! + 15)
 
@@ -384,8 +316,77 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                 it.hideBossBar(if (currentBossBar != null) currentBossBar!! else return@handlePlayers)
             },
         )
-        tasks.forEach { it?.cancel() } // this will cancel all game tasks.
         doWinAnimation(winner)
+    }
+
+    private fun newFloor(clearBombs: Boolean = true) {
+        if (clearBombs) bombedSquares.clear()
+        safeBlocks.clear()
+
+        this.selectedMaterial = colourMap.keys.random()
+        val safeSquare1 = groupedSquares.indices.random()
+        val safeSquare2 = groupedSquares.indices.random()
+
+        groupedSquares.forEachIndexed { index, groupedSquareRegion ->
+            val mat: Material = if (index == safeSquare1 || index == safeSquare2) selectedMaterial else colourMap.keys.random()
+            var blockLocations = groupedSquareRegion.toSingleBlockLocations()
+
+            if (mat == selectedMaterial) safeBlocks.addAll(blockLocations)
+
+            blockLocations.forEach { it.block.type = mat }
+        }
+
+        bombedSquares.forEach { it.block.type = selectedMaterial } // if colour bombs used, change those squares to safe.
+
+        Util.handlePlayers(
+            eventPlayerAction = {
+                it.playSound(Sound.BLOCK_BEACON_ACTIVATE)
+                for (itemStack in it.inventory.storageContents) {
+                    if (itemStack?.type == selectedMaterial) itemStack.type = Material.AIR // ensure no power-up items are removed
+                }
+            },
+            optedOutAction = {
+                it.playSound(Sound.BLOCK_BEACON_ACTIVATE)
+            }
+        )
+    }
+
+    private fun handlePowerUp() {
+        var reducedFrequency = remainingPlayers().size < 4 && roundNumber % 4 == 0 // 4 remaining -> every 4th round
+        var regularPowerUp = remainingPlayers().size > 4 && roundNumber % 2 == 0 // 5+ remaining -> every 2nd round
+
+        if (reducedFrequency || regularPowerUp) {
+
+            val localLocation = groupedSquares.random().randomLocation()
+            powerUpLocation = MapSinglePoint(localLocation.blockX, localLocation.blockY + 1.0, localLocation.blockZ)
+            powerUpLocation!!.block.type = Material.BEACON
+            powerUpLocation!!.world.spawn(powerUpLocation!!, Firework::class.java) {
+                it.fireworkMeta = it.fireworkMeta.apply {
+                    addEffect(
+                        FireworkEffect.builder()
+                            .with(FireworkEffect.Type.BALL_LARGE)
+                            .withColor(Color.FUCHSIA, Color.PURPLE, Color.MAROON).withFade(Color.FUCHSIA, Color.PURPLE, Color.MAROON).build()
+                    )
+                }
+                it.detonate()
+            }
+
+
+            val notification = Component.text(">> A mysterious power-up has spawned on the floor! <<")
+                .color(gameConfig.colour)
+                .decorate(TextDecoration.BOLD)
+
+            Util.handlePlayers(
+                eventPlayerAction = {
+                    it.sendMessage(notification)
+                    it.sendMessage(Component.text("Find the beacon on the map to unlock it!", NamedTextColor.GRAY))
+                    it.playSound(Sound.BLOCK_NOTE_BLOCK_PLING)
+                },
+                optedOutAction = {
+                    it.sendMessage(notification)
+                }
+            )
+        }
     }
 
     private fun doWinAnimation(player: Player) {
