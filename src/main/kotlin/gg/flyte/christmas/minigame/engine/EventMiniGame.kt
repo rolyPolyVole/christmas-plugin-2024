@@ -121,9 +121,9 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
      * overridden by subclasses for custom end-game behavior.
      */
     open fun endGame() {
-        tasks.forEach { it?.cancel() }
-        listeners.forEach { it.unregister() }
-        spectateEntities.values.forEach { it.remove() }
+        tasks.forEach { it?.cancel() }.also { tasks.clear() }
+        listeners.forEach { it.unregister() }.also { listeners.clear() }
+        spectateEntities.values.forEach { it.remove() }.also { spectateEntities.clear() }
         eliminatedPlayers.clear()
         eventController().currentGame = null
         eventController().sidebarManager.dataSupplier = eventController().points
