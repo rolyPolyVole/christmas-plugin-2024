@@ -158,7 +158,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
             }
         }
 
-        remainingPlayers().forEach { eventController().points.put(it.uniqueId, eventController().points[it.uniqueId]!! + 10) }
+        remainingPlayers().forEach {eventController().addPoints(it.uniqueId, 10)}
     }
 
     private fun prepareElimination() {

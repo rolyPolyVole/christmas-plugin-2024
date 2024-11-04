@@ -102,7 +102,6 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
         }
     }
 
-
     override fun eliminate(player: Player, reason: EliminationReason) {
         // Note: this game does not eliminate players, remove call to super
         // super.eliminate(player, reason)
@@ -110,8 +109,9 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
 
     override fun endGame() {
         val winner = timeOnHill.maxBy { it.value }
-
         Util.handlePlayers(eventPlayerAction = { it.teleport(gameConfig.spawnPoints.random().randomLocation()) })
+
+        for (entry in timeOnHill) eventController().addPoints(entry.key, entry.value)
 
         var yaw = 0F
         ChristmasEventPlugin.instance.serverWorld.spawn(MapSinglePoint(827.5, 105, 630.5, 0, 0), ItemDisplay::class.java) {

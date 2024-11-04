@@ -213,6 +213,10 @@ class EventController() {
         return sorted.indexOfFirst { it.key == uuid } + 1
     }
 
+    fun addPoints(uuid: UUID, amount: Int) {
+        points[uuid] = points.getOrDefault(uuid, 0) + amount
+    }
+
     fun serialisePoints() {
         ChristmasEventPlugin.instance.config.set("points", null)
         points.forEach { (uuid, points) -> ChristmasEventPlugin.instance.config.set("points.$uuid", points) }

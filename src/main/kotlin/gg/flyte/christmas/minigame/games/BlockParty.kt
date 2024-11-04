@@ -162,7 +162,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
             }
         }
 
-        remainingPlayers().forEach { eventController().points.put(it.uniqueId, eventController().points[it.uniqueId]!! + 10) }
+        remainingPlayers().forEach { eventController().addPoints(it.uniqueId, 10) }
     }
 
     private fun prepareRemoveFloor() {
@@ -306,7 +306,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         tasks.forEach { it?.cancel() } // this will cancel all game tasks.
 
         val winner = remainingPlayers().first()
-        eventController().points.put(winner.uniqueId, eventController().points[winner.uniqueId]!! + 15)
+        eventController().addPoints(winner.uniqueId, 15)
 
         Util.handlePlayers(
             eventPlayerAction = {
