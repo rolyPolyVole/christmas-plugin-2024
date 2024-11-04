@@ -45,8 +45,8 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerToggleFlightEvent
+import org.bukkit.event.player.PlayerToggleSneakEvent
 import org.bukkit.event.vehicle.VehicleEnterEvent
-import org.bukkit.event.vehicle.VehicleExitEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
@@ -465,6 +465,10 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
         listeners += event<InventoryClickEvent> { isCancelled = true }
 
+        listeners += event<PlayerToggleSneakEvent> {
+            if (player.vehicle != null) isCancelled = true
+        }
+
         listeners += event<VehicleEnterEvent> {
             if (entered !is Player) return@event
 
@@ -477,11 +481,6 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                 stunPlayer(entered as Player)
                 isCancelled = true
             }
-        }
-
-        listeners += event<VehicleExitEvent> {
-            if (exited !is Player) return@event
-            isCancelled = true
         }
 
         listeners += event<PlayerInteractEvent> {
