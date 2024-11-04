@@ -69,6 +69,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
     private var gameLogicTask: TwilightRunnable? = null
     private var isCountdownActive = false
     private var harder = false
+    private var hasEnded = false
     private var stunnedPlayers = mutableSetOf<Player>()
     private var canEnter = false
 
@@ -111,6 +112,8 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
     }
 
     private fun newRound() {
+        if (hasEnded) return
+
         roundNumber++
         if (secondsForRound > 2) secondsForRound--
 
@@ -244,7 +247,8 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                 remainingPlayers().forEach { if (it.vehicle == null) eliminate(it, EliminationReason.ELIMINATED) }
 
                 isCountdownActive = false
-                tasks += delay(80) { newRound() }
+
+                if (!hasEnded) tasks += delay(80) { newRound() }
             } else {
                 remainingPlayers().forEach { it.playSound(Sound.BLOCK_NOTE_BLOCK_BASEDRUM) }
             }
@@ -352,6 +356,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
     override fun endGame() {
 //        val winner = remainingPlayers().first()  TODO change back
         val winner = Bukkit.getPlayer("Shreyas008")!!
+        hasEnded = true
         eventController().points.put(winner.uniqueId, eventController().points[winner.uniqueId]!! + 15)
 
         Util.handlePlayers(
