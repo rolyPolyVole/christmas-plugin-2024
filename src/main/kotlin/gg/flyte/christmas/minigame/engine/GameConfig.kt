@@ -92,7 +92,7 @@ enum class GameConfig(
 
         " • Be the King of The Hill! Stand in the centre of the map to gain points every second.\n\n" +
                 " • Knock other players off the map with your knockback stick. Avoid falling off yourself!\n\n" +
-                " • The player stood in the centre of the map for the longest timem, wins!",
+                " • The player stood in the centre of the map for the longest time, wins!",
         1,
 
         listOf(
