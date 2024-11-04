@@ -26,8 +26,6 @@ fun String.colourise(): String {
     return ChatColor.translateAlternateColorCodes('&', message)
 }
 
-fun Component.toLegacyString(): String {
-    return LegacyComponentSerializer.legacyAmpersand().serialize(this)
-}
+fun Component.toLegacyString(): String = LegacyComponentSerializer.legacyAmpersand().serialize(this)
 
 fun eventController() = ChristmasEventPlugin.instance.eventController
