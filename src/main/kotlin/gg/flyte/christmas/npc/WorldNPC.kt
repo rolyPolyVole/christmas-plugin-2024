@@ -57,6 +57,7 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
         fun setLeaderBoardNPC(position: Int, player: Player) {
             // remove existing leader, if any, and spawn new leader
             for (player in Bukkit.getOnlinePlayers()) leaderBoardNPCs[position]?.despawnFor(player)
+            worldNPCs.remove(leaderBoardNPCs[position])
 
             leaderBoardNPCs[position] = createFromLive("lol", player, leaderboardPositionToLocation[position]!!)
 
