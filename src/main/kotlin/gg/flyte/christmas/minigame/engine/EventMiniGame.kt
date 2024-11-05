@@ -160,10 +160,12 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
      */
     open fun eliminate(player: Player, reason: EliminationReason) {
         eliminatedPlayers.add(player.uniqueId)
+        player.clearActivePotionEffects()
+        player.inventory.storageContents = arrayOf()
+        player.inventory.setItemInOffHand(null)
 
         if (reason == EliminationReason.LEFT_GAME) {
             player.teleport(gameConfig.spectatorSpawnLocations.random())
-            player.clearActivePotionEffects()
         } else {
             // spectate item
             ItemStack(Material.COMPASS).apply {

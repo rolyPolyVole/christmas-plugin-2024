@@ -243,14 +243,10 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         )
 
         player.apply {
-            inventory.storageContents = arrayOf()
-            inventory.setItemInOffHand(null)
-            clearActivePotionEffects()
             if (allowFlight) allowFlight = false // if had double-jump
 
             if (reason == EliminationReason.ELIMINATED) {
                 if (gameMode != GameMode.SPECTATOR) {
-                    world.getBlockAt(location.clone().add(0.0, 10.0, 0.0)).type = Material.ANVIL // drop anvil on death (also obstacle)
                     Util.handlePlayers(
                         eventPlayerAction = { it.playSound(Sound.ENTITY_ITEM_BREAK) },
                         optedOutAction = { it.playSound(Sound.ENTITY_ITEM_BREAK) }

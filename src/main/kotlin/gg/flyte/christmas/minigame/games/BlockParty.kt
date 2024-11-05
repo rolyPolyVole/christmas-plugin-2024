@@ -269,9 +269,6 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         )
 
         player.apply {
-            inventory.storageContents = arrayOf()
-            inventory.setItemInOffHand(null)
-            clearActivePotionEffects()
             if (allowFlight) allowFlight = false // if had double-jump
 
             if (reason == EliminationReason.ELIMINATED) {
