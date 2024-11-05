@@ -19,7 +19,9 @@ import gg.flyte.christmas.util.Util
 import gg.flyte.christmas.util.colourise
 import gg.flyte.christmas.util.eventController
 import gg.flyte.twilight.event.event
+import gg.flyte.twilight.extension.hidePlayer
 import gg.flyte.twilight.extension.playSound
+import gg.flyte.twilight.extension.showPlayer
 import gg.flyte.twilight.scheduler.TwilightRunnable
 import gg.flyte.twilight.scheduler.delay
 import gg.flyte.twilight.scheduler.repeatingTask
@@ -39,7 +41,6 @@ import org.bukkit.entity.Firework
 import org.bukkit.entity.ItemDisplay
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.event.player.PlayerToggleFlightEvent
@@ -286,10 +287,12 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                     val randomSpecLocation = gameConfig.spectatorSpawnLocations.random()
                     itemDisplay.teleport(randomSpecLocation)
                     itemDisplay.addPassenger(player)
+                    player.hidePlayer()
 
                     delay(59) {
                         itemDisplay.remove()
                         player.teleport(randomSpecLocation)
+                        player.showPlayer()
                     }
                 }
             } // animate death
@@ -455,8 +458,6 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
     }
 
     override fun handleGameEvents() {
-        listeners += event<PlayerDropItemEvent> { isCancelled = true }
-
         listeners += event<InventoryClickEvent> { isCancelled = true }
 
         listeners += event<PlayerMoveEvent> {
@@ -598,3 +599,5 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         DOUBLE_JUMP("Double Jump")
     }
 }
+
+// TODO figure out system for consistent iventory events (drop item, inventory click etc.).
