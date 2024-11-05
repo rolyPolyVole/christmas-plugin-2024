@@ -74,11 +74,11 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
         }
 
         /**
-         * Creates a new [WorldNPC] modelled from a player name.
+         * Creates a new [WorldNPC] modelled from a [UUID] reference.
          */
-        fun createFromName(displayName: String, modelAfter: String, location: Location): WorldNPC {
+        fun createFromUniqueId(displayName: String, modelAfter: UUID, location: Location): WorldNPC {
             // fetch texture properties from Mojang using player name
-            val textureProperty = MojangAPIUtil.requestPlayerTextureProperties(Bukkit.getOfflinePlayer(modelAfter).uniqueId)
+            val textureProperty = MojangAPIUtil.requestPlayerTextureProperties(modelAfter)
             return WorldNPC(displayName, textureProperty, location).also { worldNPCs += it }
         }
     }

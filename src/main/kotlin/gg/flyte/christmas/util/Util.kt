@@ -8,9 +8,10 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
+import java.util.UUID
 
 object Util {
-    data class Contributor(val playerName: String, val contribution: String, val location: MapSinglePoint)
+    data class Contributor(val uniqueId: UUID, val contribution: String, val location: MapSinglePoint)
 
     fun getEventContributors(): List<Contributor> {
         val config = ChristmasEventPlugin.instance.config
@@ -18,7 +19,7 @@ object Util {
         return config.getStringList("contributors").map { contributor ->
             val (ign, contribution, coords) = contributor.substring(1, contributor.length - 1).split("><")
             val (x, y, z) = coords.split(",").map { it.trim().toDouble() }
-            Contributor(ign, contribution, MapSinglePoint(x, y, z))
+            Contributor(UUID.fromString(ign), contribution, MapSinglePoint(x, y, z))
         }
     }
 

@@ -92,14 +92,14 @@ class ChristmasEventPlugin : JavaPlugin() {
 
     private fun loadContributorNPCs() {
         for (contributor in Util.getEventContributors()) {
-            val playerName = contributor.playerName
+            val uniqueId = contributor.uniqueId
             val contribution = contributor.contribution
             val location = contributor.location // TODO configure pitch and yaw
 
             var randomColour: String = listOf("4", "c", "6", "2", "a", "9").random()
-            val displayName: String = "§$randomColour$playerName".colourise()
+            val displayName: String = "§$randomColour${MojangAPIUtil.requestPlayerName(uniqueId)}".colourise()
 
-            var createFromName = WorldNPC.createFromName(displayName, playerName, location).also { worldNPCs += it }
+            var createFromName = WorldNPC.createFromUniqueId(displayName, uniqueId, location).also { worldNPCs += it }
             createFromName.npc.prefixName = Component.text("§$randomColour§kW ")
             createFromName.npc.suffixName = Component.text(" §$randomColour§kW")
 
