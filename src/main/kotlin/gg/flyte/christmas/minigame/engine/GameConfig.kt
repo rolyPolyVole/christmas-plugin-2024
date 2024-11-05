@@ -99,7 +99,6 @@ enum class GameConfig(
                 MapSinglePoint(826.5, 88, 680.5, 180, 0),
                 MapSinglePoint(836.5, 88, 675.5, 180, 0)
             ),
-
             MapRegion(
                 MapSinglePoint(861.5, 85, 656.5, 135, 0),
                 MapSinglePoint(855.5, 85, 660.5, 135, 0)
@@ -110,22 +109,18 @@ enum class GameConfig(
                 MapSinglePoint(792.5, 85, 601.5, -45, 0),
                 MapSinglePoint(797.5, 85, 604.5, -45, 0)
             ),
-
             MapRegion(
                 MapSinglePoint(820.5, 85, 587.5, 0, 0),
                 MapSinglePoint(825.5, 85, 588.5, 0, 0)
             ),
-
             MapRegion(
                 MapSinglePoint(857.5, 85, 597.5, 45, 0),
                 MapSinglePoint(853.5, 85, 601.5, 45, 0)
             ),
-
             MapRegion(
                 MapSinglePoint(867.5, 86, 627.5, 90, 0),
                 MapSinglePoint(866.5, 86, 626.5, 90, 0)
             ),
-
             MapRegion(
                 MapSinglePoint(861.5, 85, 660.5, 135, 0),
                 MapSinglePoint(857.5, 85, 656.5, 135, 0)
