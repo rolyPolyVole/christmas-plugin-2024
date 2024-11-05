@@ -1,6 +1,7 @@
 package gg.flyte.christmas
 
 import com.github.retrooper.packetevents.PacketEvents
+import com.github.retrooper.packetevents.util.MojangAPIUtil
 import dev.shreyasayyengar.menuapi.menu.MenuManager
 import gg.flyte.christmas.commands.EventCommand
 import gg.flyte.christmas.listeners.HousekeepingEventListener
