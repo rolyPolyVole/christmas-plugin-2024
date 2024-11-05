@@ -110,7 +110,6 @@ class ChristmasEventPlugin : JavaPlugin() {
                 text(Component.text(contribution, TextColor.color(255, 196, 255)))
                 backgroundColor = Color.fromRGB(84, 72, 84)
                 billboard = Display.Billboard.CENTER
-                isSeeThrough = false
             }
         }
     }
