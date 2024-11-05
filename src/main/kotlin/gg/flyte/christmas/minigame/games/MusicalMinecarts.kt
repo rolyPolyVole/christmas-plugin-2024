@@ -16,7 +16,9 @@ import gg.flyte.christmas.util.Util
 import gg.flyte.christmas.util.colourise
 import gg.flyte.christmas.util.eventController
 import gg.flyte.twilight.event.event
+import gg.flyte.twilight.extension.hidePlayer
 import gg.flyte.twilight.extension.playSound
+import gg.flyte.twilight.extension.showPlayer
 import gg.flyte.twilight.scheduler.TwilightRunnable
 import gg.flyte.twilight.scheduler.delay
 import gg.flyte.twilight.scheduler.repeatingTask
@@ -37,12 +39,12 @@ import org.bukkit.block.data.Powerable
 import org.bukkit.block.data.Rail
 import org.bukkit.block.data.Rail.Shape
 import org.bukkit.entity.Firework
+import org.bukkit.entity.Item
 import org.bukkit.entity.ItemDisplay
 import org.bukkit.entity.Minecart
 import org.bukkit.entity.Player
 import org.bukkit.event.block.BlockPhysicsEvent
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerToggleFlightEvent
 import org.bukkit.event.player.PlayerToggleSneakEvent
@@ -55,7 +57,7 @@ import java.time.Duration
 import kotlin.math.ceil
 import kotlin.random.Random
 
-//@Suppress("DuplicatedCode") // nature of this game is very similar to BlockParty. TODO uncomment
+@Suppress("DuplicatedCode") // nature of this game is very similar to other music-controlled games.
 class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
     private var overviewTasks: MutableList<TwilightRunnable> = mutableListOf()
 
@@ -259,18 +261,19 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                 }
 
                 addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20 * 4, 1, false, false, false))
-                playSound(Sound.ENTITY_PLAYER_HURT)
-// TODO impl
-//                delay(1) {
-//                    val randomSpecLocation = gameConfig.spectatorSpawnLocations.random()
-//                    itemDisplay.teleport(randomSpecLocation)
-//                    itemDisplay.addPassenger(player)
-//
-//                    delay(59) {
-//                        itemDisplay.remove()
-//                        player.teleport(randomSpecLocation)
-//                    }
-//                }
+                //  TODO impl
+                delay(1) {
+                    val randomSpecLocation = gameConfig.spectatorSpawnLocations.random()
+                    itemDisplay.teleport(randomSpecLocation)
+                    itemDisplay.addPassenger(player)
+                    player.hidePlayer()
+
+                    delay(59) {
+                        itemDisplay.remove()
+                        player.teleport(randomSpecLocation)
+                        player.showPlayer()
+                    }
+                }
             } // animate death
         }
         super.eliminate(player, reason)
@@ -388,6 +391,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
             MapSinglePoint(564, 203, 588) to Shape.SOUTH_WEST,
             MapSinglePoint(546, 203, 588) to Shape.SOUTH_EAST
         )
+        val droppedItems = mutableListOf<Item>()
 
         connectorRails.forEach { (location, shape) ->
             location.block.apply {
@@ -424,30 +428,33 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                 location.world.spawn(location.add(0.0, 1.0, 0.0), Minecart::class.java) { minecart ->
                     minecart.maxSpeed = 0.6
                     minecart.velocity = direction.normalize()
+                    minecarts.add(minecart)
 
                     val displayName = "§${listOf("4", "c", "6", "2", "a", "9").random()}${player.name}".colourise()
                     val npc = WorldNPC.createFromLive(displayName, player, location).also { worldNPCs.add(it) }
 
                     Bukkit.getOnlinePlayers().forEach { loopedPlayer ->
+                        npc.spawnFor(loopedPlayer)
                         npc.npc.mainHand = SpigotConversionUtil.fromBukkitItemStack(ItemStack(Material.MINECART))
                         npc.npc.updateEquipment()
-                        npc.spawnFor(loopedPlayer)
 
                         val passengerPacket = WrapperPlayServerSetPassengers(minecart.entityId, intArrayOf(npc.id))
                         delay(1) { PacketEvents.getAPI().playerManager.getUser(loopedPlayer).sendPacket(passengerPacket) }
 
-                        animationTasks += repeatingTask((3..5).random(), (1..3).random()) {
+                        animationTasks += repeatingTask((2..10).random(), (1..6).random()) {
                             PacketEvents.getAPI().playerManager.getUser(loopedPlayer)
                                 .sendPacket(
-                                    WrapperPlayServerEntityAnimation(
-                                        npc.id,
-                                        WrapperPlayServerEntityAnimation.EntityAnimationType.SWING_MAIN_ARM
-                                    )
+                                    WrapperPlayServerEntityAnimation(npc.id, WrapperPlayServerEntityAnimation.EntityAnimationType.SWING_MAIN_ARM)
                                 )
+
+                            minecart.world.dropItemNaturally(minecart.location.add(0.0, 1.0, 0.0), ItemStack(Material.MINECART)) {
+                                it.velocity = Vector(Random.nextDouble(-1.0, 1.0), Random.nextDouble(0.0, 0.5), Random.nextDouble(-1.0, 1.0))
+                                droppedItems.add(it)
+                            }
                         } // NPC swing
 
                         var yaw = 0
-                        animationTasks += repeatingTask((3..5).random(), (3..5).random()) {
+                        animationTasks += repeatingTask((2..10).random(), 4) {
                             PacketEvents.getAPI().playerManager.getUser(loopedPlayer).apply {
                                 sendPacket(WrapperPlayServerEntityHeadLook(npc.id, yaw.toFloat()))
                                 sendPacket(WrapperPlayServerEntityRotation(npc.id, yaw.toFloat(), 0F, true))
@@ -462,6 +469,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         delay(20, TimeUnit.SECONDS) {
             Bukkit.getOnlinePlayers().forEach { player -> worldNPCs.forEach { it.despawnFor(player) } }
             minecarts.forEach { it.remove() }
+            droppedItems.forEach { it.remove() }
             animationTasks.forEach { it.cancel() }
             poweredRails.keys.flatMap { it.toSingleBlockLocations() }.forEach { it.block.type = Material.AIR }
             connectorRails.keys.forEach { it.block.type = Material.AIR }
@@ -470,8 +478,6 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
     }
 
     override fun handleGameEvents() {
-        listeners += event<PlayerDropItemEvent> { isCancelled = true }
-
         listeners += event<InventoryClickEvent> { isCancelled = true }
 
         listeners += event<PlayerToggleSneakEvent> {
