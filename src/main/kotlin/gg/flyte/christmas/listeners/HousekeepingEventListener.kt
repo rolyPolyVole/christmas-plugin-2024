@@ -1,6 +1,16 @@
 package gg.flyte.christmas.listeners
 
 import com.destroystokyo.paper.event.player.PlayerStopSpectatingEntityEvent
+import com.github.retrooper.packetevents.PacketEvents
+import com.github.retrooper.packetevents.event.PacketListener
+import com.github.retrooper.packetevents.event.PacketListenerPriority
+import com.github.retrooper.packetevents.event.PacketReceiveEvent
+import com.github.retrooper.packetevents.protocol.packettype.PacketType
+import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientInteractEntity
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityAnimation
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityHeadLook
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityRelativeMove
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityRotation
 import dev.shreyasayyengar.menuapi.menu.MenuItem
 import dev.shreyasayyengar.menuapi.menu.StandardMenu
 import gg.flyte.christmas.ChristmasEventPlugin
@@ -12,6 +22,7 @@ import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.extension.showPlayer
 import gg.flyte.twilight.extension.toComponent
 import gg.flyte.twilight.scheduler.delay
+import gg.flyte.twilight.scheduler.repeatingTask
 import io.github.retrooper.packetevents.util.SpigotConversionUtil
 import io.papermc.paper.chat.ChatRenderer
 import io.papermc.paper.event.player.AsyncChatEvent
@@ -43,10 +54,13 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent
 import org.bukkit.event.server.ServerListPingEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.PlayerInventory
+import kotlin.apply
 import kotlin.math.ceil
 
-class HousekeepingEventListener : Listener {
+class HousekeepingEventListener : Listener, PacketListener {
     init {
+        PacketEvents.getAPI().eventManager.registerListener(this, PacketListenerPriority.NORMAL)
+
         event<ServerListPingEvent> {
             // TODO finish sponsors
             val footer = Component.text("       ")
@@ -151,17 +165,23 @@ class HousekeepingEventListener : Listener {
         }
 
         event<PlayerMoveEvent> {
-            // hide players when they are close to NPCs, they obstruct the view
-            val locations = ChristmasEventPlugin.instance.worldNPCs.map {
-                SpigotConversionUtil.toBukkitLocation(
-                    ChristmasEventPlugin.instance.serverWorld,
-                    it.npc.location
-                )
+            val worldNPCs = ChristmasEventPlugin.instance.worldNPCs
+            val playerLocation = player.location
+            val npcLocations = worldNPCs.map { SpigotConversionUtil.toBukkitLocation(ChristmasEventPlugin.instance.serverWorld, it.npc.location) }
+
+            // hide player if near any NPC (they obstruct view)
+            if (npcLocations.any { it.distance(playerLocation) < 3 }) player.hidePlayer() else player.showPlayer()
+
+            // make NPCs look at player if within range
+            worldNPCs.forEach { npc ->
+                val npcLocation = SpigotConversionUtil.toBukkitLocation(ChristmasEventPlugin.instance.serverWorld, npc.npc.location)
+                if (npcLocation.distance(playerLocation) <= 25) {
+                    val lookVector = npcLocation.apply { setDirection(playerLocation.toVector().subtract(toVector())) }
+                    val playerManager = PacketEvents.getAPI().playerManager.getUser(player)
+                    playerManager.sendPacket(WrapperPlayServerEntityHeadLook(npc.id, lookVector.yaw))
+                    playerManager.sendPacket(WrapperPlayServerEntityRotation(npc.id, lookVector.yaw, lookVector.pitch, false))
+                }
             }
-
-            val hide = locations.any { it.distance(player.location) < 3 }
-            if (hide) player.hidePlayer() else player.showPlayer()
-
         }
 
         // TODO uncomment when pack works
@@ -210,6 +230,45 @@ class HousekeepingEventListener : Listener {
         event<EntityCombustEvent> { if (entity is Player) isCancelled = true }
 
         event<EntityDamageEvent> { isCancelled = true /* TODO examine later*/ }
+    }
+
+    override fun onPacketReceive(event: PacketReceiveEvent) {
+        if (event.packetType != PacketType.Play.Client.INTERACT_ENTITY) return
+        WrapperPlayClientInteractEntity(event).apply {
+            ChristmasEventPlugin.instance.worldNPCs.find { it.npc.id == entityId }?.let { clickedNPC ->
+
+                if (action == WrapperPlayClientInteractEntity.InteractAction.ATTACK) {
+                    event.user.sendPacket(
+                        WrapperPlayServerEntityAnimation(clickedNPC.npc.id, WrapperPlayServerEntityAnimation.EntityAnimationType.SWING_MAIN_ARM)
+                    )
+                } else if (action == WrapperPlayClientInteractEntity.InteractAction.INTERACT) {
+                    println("called")
+                    var jumpIndex = 0
+                    repeatingTask(1) {
+                        val yUpdates = listOf(
+                            0.2083333333333333333333,
+                            0.2083333333333333333333,
+                            0.2083333333333333333333,
+                            0.2083333333333333333333,
+                            0.2083333333333333333333,
+                            0.2083333333333333333333,
+                            -0.2083333333333333333333,
+                            -0.2083333333333333333333,
+                            -0.2083333333333333333333,
+                            -0.2083333333333333333333,
+                            -0.2083333333333333333333,
+                            -0.2083333333333333333333,
+                        )
+                        if (jumpIndex == yUpdates.size - 1) cancel()
+
+                        val deltaPacket = WrapperPlayServerEntityRelativeMove(clickedNPC.npc.id, 0.0, (yUpdates[jumpIndex]), 0.0, true)
+                        event.user.sendPacket(deltaPacket)
+
+                        jumpIndex++
+                    } // NPC Jumping
+                }
+            }
+        }
     }
 
     private fun openSpectateMenu(player: Player) {
