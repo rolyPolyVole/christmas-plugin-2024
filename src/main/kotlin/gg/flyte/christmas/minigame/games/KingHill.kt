@@ -93,15 +93,6 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
         }
     }
 
-    private fun updateScoreboard() {
-        tasks += repeatingTask(10) {
-            val timeComponent = Component.text("ᴛɪᴍᴇ ʟᴇғᴛ: ", NamedTextColor.AQUA)
-                .append(Component.text(gameTime.toString(), NamedTextColor.RED, TextDecoration.BOLD))
-
-            Bukkit.getOnlinePlayers().forEach { eventController().sidebarManager.updateLines(it, listOf(Component.empty(), timeComponent)) }
-        }
-    }
-
     override fun eliminate(player: Player, reason: EliminationReason) {
         // Note: this game does not eliminate players, remove call to super
         // super.eliminate(player, reason)
@@ -143,6 +134,13 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
                 super.endGame()
             }
         }
+    }
+
+    private fun updateScoreboard() {
+        val timeComponent = Component.text("ᴛɪᴍᴇ ʟᴇғᴛ: ", NamedTextColor.AQUA)
+            .append(Component.text(gameTime.toString(), NamedTextColor.RED, TextDecoration.BOLD))
+
+        Bukkit.getOnlinePlayers().forEach { eventController().sidebarManager.updateLines(it, listOf(Component.empty(), timeComponent)) }
     }
 
     override fun handleGameEvents() {
