@@ -28,7 +28,6 @@ enum class GameConfig(
     BLOCK_PARTY(
         BlockParty::class,
         Component.text("Block Party", TextColor.color(224, 92, 111)),
-        // small text here:
         Component.text("ʙʟᴏᴄᴋ ᴘᴀʀᴛʏ", TextColor.color(224, 92, 111)),
         Material.MAGENTA_GLAZED_TERRACOTTA,
         TextColor.color(224, 92, 111),
