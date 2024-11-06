@@ -93,10 +93,13 @@ class ChristmasEventPlugin : JavaPlugin() {
     private fun registerPacketAPI() {
         PacketEvents.getAPI().init()
     }
+
     private fun handleDonations() {
-        RefreshToken(config.getString("donations.clientId")?: throw IllegalArgumentException("clientId cannot be empty"),
-                    config.getString("donations.clientSecret")?: throw IllegalArgumentException("clientSecret cannot be empty"))
-        DonationListener(config.getString("donations.campaignId")?: throw IllegalArgumentException("campaignId cannot be empty"))
+        RefreshToken(
+            config.getString("donations.clientId") ?: throw IllegalArgumentException("clientId cannot be empty"),
+            config.getString("donations.clientSecret") ?: throw IllegalArgumentException("clientSecret cannot be empty")
+        )
+        DonationListener(config.getString("donations.campaignId") ?: throw IllegalArgumentException("campaignId cannot be empty"))
     }
 
     private fun loadContributorNPCs() {
