@@ -297,6 +297,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                 }
             } // animate death
         }
+
         super.eliminate(player, reason)
 
         if (remainingPlayers().size == 1) endGame()
@@ -390,7 +391,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
     }
 
     private fun doWinAnimation(player: Player) {
-        newFloor(true) // platform for NPC's to stand on.
+        newFloor(true) // platform for NPCs to stand on.
         val worldNPCs = mutableListOf<WorldNPC>()
         val animationTasks = mutableListOf<TwilightRunnable>()
 
