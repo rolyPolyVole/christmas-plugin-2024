@@ -1,5 +1,6 @@
 package gg.flyte.christmas.util
 
+import com.google.common.base.Preconditions
 import gg.flyte.christmas.ChristmasEventPlugin
 import gg.flyte.christmas.minigame.world.MapSinglePoint
 import org.bukkit.Bukkit
@@ -54,6 +55,28 @@ object Util {
                     eventPlayerAction?.invoke(player)
                     true
                 }
+            }
+        }
+    }
+
+    /**
+     * Gets the location of where a summary NPC should be, given the placement position.
+     * A summary NPC is an NPC that represents a player's position on the leaderboard **after an individual minigame**.
+     * @param position The position on the leaderboard. (zero-indexed) (first, second, third)
+     * @return The location of the NPC.
+     *
+     * @throws IllegalArgumentException If the position is not between 0 and 2.
+     */
+    // TODO write in actual locations when map is finished.
+    fun getNPCSummaryLocation(position: Int): MapSinglePoint {
+        Preconditions.checkArgument(position in 0..2, "Leaderboard only supports positions between 0 and 2")
+
+        return when (position) {
+            0 -> return MapSinglePoint(633, 216, 489, 90, 0)
+            1 -> return MapSinglePoint(633, 214, 484, 90, 0)
+            2 -> return MapSinglePoint(633, 213, 494, 90, 0)
+            else -> {
+                throw IllegalStateException("Leaderboard only supports positions between 0 and 2")
             }
         }
     }
