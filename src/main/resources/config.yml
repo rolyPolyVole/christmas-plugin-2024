@@ -11,4 +11,10 @@ contributors:
   - "<Notch><Creator of Minecraft><563.5, 105, 554.5>"
   - "<stxphen><Event Host><559.5, 105, 554.5>"
 
+# Donation Auth
+donations:
+  clientId: ""
+  clientSecret: ""
+  campaignId: ""
+
 points:
