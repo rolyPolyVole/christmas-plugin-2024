@@ -166,17 +166,15 @@ class CameraSequence(
                             delay(5) { textDisplay.transformation = textDisplay.transformation.apply { translation.add(0F, 8.5F, 0F) } }
                         }
                     }
-                    players.forEach { player ->
-                        player.gameMode = GameMode.SPECTATOR
-                        player.teleport(itemDisplay!!.location)
-                        delay(5) {
-                            player.spectatorTarget = itemDisplay
-                        }
-                    }
 
                     ACTIVE_CAMERAS.add(itemDisplay!!.uniqueId)
                 }
 
+                players.forEach { player ->
+                    player.gameMode = GameMode.SPECTATOR
+                    player.teleport(itemDisplay!!.location)
+                    delay(7) { player.spectatorTarget = itemDisplay }
+                }
             } else {
                 itemDisplay?.apply {
                     if (textDisplay != null) removePassenger(textDisplay!!)
