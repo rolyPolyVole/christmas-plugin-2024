@@ -98,9 +98,7 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
     }
 
     override fun endGame() {
-        val winner = timeOnHill.maxBy { it.value }
         Util.handlePlayers(eventPlayerAction = { it.teleport(gameConfig.spawnPoints.random().randomLocation()) })
-
         for (entry in timeOnHill) eventController().addPoints(entry.key, entry.value)
 
         var yaw = 0F
