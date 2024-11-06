@@ -288,34 +288,6 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
     abstract fun handleGameEvents()
 
     /**
-     * As the super-class, this only handles game logic for player elimination.
-     * Subclasses should override for cosmetic functionality
-     * and call `super.eliminate()` to ensure engine logic is maintained.
-     * @param player The player to eliminate.
-     * @param reason The reason for elimination.
-     */
-    open fun eliminate(player: Player, reason: EliminationReason) {
-        eliminatedPlayers.add(player.uniqueId)
-        player.clearActivePotionEffects()
-        player.inventory.storageContents = arrayOf()
-        player.inventory.setItemInOffHand(null)
-
-        if (reason == EliminationReason.LEFT_GAME) {
-            player.teleport(gameConfig.spectatorSpawnLocations.random())
-        } else {
-            // spectate item
-            ItemStack(Material.COMPASS).apply {
-                itemMeta = itemMeta.apply {
-                    displayName(Component.text("Spectate", NamedTextColor.WHITE))
-                    editMeta {
-                        lore(listOf(Component.text("Click to Spectate!", NamedTextColor.GRAY)))
-                    }
-                }
-            }.let { player.inventory.setItem(8, it) }
-        }
-    }
-
-    /**
      * Handles player joining the game.
      */
     open fun onPlayerJoin(player: Player) {
