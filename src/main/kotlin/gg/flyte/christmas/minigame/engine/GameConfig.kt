@@ -63,12 +63,6 @@ enum class GameConfig(
             MapSinglePoint(617, 117, 787, -5.60672F, 21.597097F),
         ),
         listOf(
-            MapSinglePoint(616.5, 118, 819.5, 180, 35),
-            MapSinglePoint(597.5, 118, 800.5, -90, 35),
-            MapSinglePoint(616.5, 118, 781.5, 0, 35),
-            MapSinglePoint(635.5, 118, 800.5, 90, 35)
-        ),
-        listOf(
             MapSinglePoint(645.5, 112, 799.5, 90, 0),
             MapSinglePoint(636.5, 113, 820.5, 135, 0),
             MapSinglePoint(616.5, 112, 829.5, -180, 0),
@@ -78,6 +72,12 @@ enum class GameConfig(
             MapSinglePoint(616.5, 112, 771.5, 0, 0),
             MapSinglePoint(636.5, 113, 780.5, 45, 0)
         ),
+        listOf(
+            MapSinglePoint(616.5, 118, 819.5, 180, 35),
+            MapSinglePoint(597.5, 118, 800.5, -90, 35),
+            MapSinglePoint(616.5, 118, 781.5, 0, 35),
+            MapSinglePoint(635.5, 118, 800.5, 90, 35)
+        )
     ),
     //endregion
 
