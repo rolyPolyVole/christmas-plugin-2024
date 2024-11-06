@@ -51,6 +51,7 @@ import org.bukkit.util.Vector
 import kotlin.math.ceil
 import kotlin.random.Random
 
+@Suppress("DuplicatedCode") // nature of this game is very similar to other music-controlled games.
 class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
     private lateinit var overviewTask: TwilightRunnable
 
