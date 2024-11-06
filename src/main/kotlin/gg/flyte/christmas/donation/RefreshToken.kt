@@ -1,4 +1,4 @@
-package gg.flyte.christmas.donate
+package gg.flyte.christmas.donation
 
 import com.google.gson.JsonParser
 import gg.flyte.twilight.scheduler.repeat
