@@ -1,4 +1,4 @@
-package gg.flyte.christmas.donate
+package gg.flyte.christmas.donation
 
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList

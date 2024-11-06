@@ -1,10 +1,10 @@
-package gg.flyte.christmas.donate
+package gg.flyte.christmas.donation
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import gg.flyte.christmas.ChristmasEventPlugin
-import gg.flyte.christmas.donate.RefreshToken.Companion.accessToken
+import gg.flyte.christmas.donation.RefreshToken.Companion.accessToken
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay

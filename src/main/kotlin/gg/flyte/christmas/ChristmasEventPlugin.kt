@@ -4,8 +4,8 @@ import com.github.retrooper.packetevents.PacketEvents
 import com.github.retrooper.packetevents.util.MojangAPIUtil
 import dev.shreyasayyengar.menuapi.menu.MenuManager
 import gg.flyte.christmas.commands.EventCommand
-import gg.flyte.christmas.donate.DonationListener
-import gg.flyte.christmas.donate.RefreshToken
+import gg.flyte.christmas.donation.DonationListener
+import gg.flyte.christmas.donation.RefreshToken
 import gg.flyte.christmas.listeners.HousekeepingEventListener
 import gg.flyte.christmas.minigame.engine.EventController
 import gg.flyte.christmas.minigame.engine.GameConfig
