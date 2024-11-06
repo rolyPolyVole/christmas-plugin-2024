@@ -21,9 +21,9 @@ class CameraSequence(
     locations: List<MapSinglePoint>,
     private val players: Collection<Player>,
     private val component: Component?,
+    teleportDuration: Int = 15,
     private val onComplete: (() -> Unit)? = null
 ) {
-    private val teleportDuration = 15
     private val timelineSeparation = 30
 
     companion object {
@@ -110,11 +110,7 @@ class CameraSequence(
         return (angle1 + shortestDelta * t)
     }
 
-    private inner class SequenceTask(
-        private var interpolatedPath: Map<Int, Point>,
-        private val teleportDuration: Int,
-
-        ) : BukkitRunnable() {
+    private inner class SequenceTask(private var interpolatedPath: Map<Int, Point>, private val teleportDuration: Int) : BukkitRunnable() {
         private var currentTick = 0;
         private var itemDisplay: ItemDisplay? = null
         private var textDisplay: TextDisplay? = null
