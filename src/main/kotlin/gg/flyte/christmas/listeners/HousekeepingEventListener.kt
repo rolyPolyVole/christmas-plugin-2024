@@ -5,11 +5,15 @@ import com.github.retrooper.packetevents.PacketEvents
 import com.github.retrooper.packetevents.event.PacketListener
 import com.github.retrooper.packetevents.event.PacketListenerPriority
 import com.github.retrooper.packetevents.event.PacketReceiveEvent
+import com.github.retrooper.packetevents.protocol.entity.data.EntityData
+import com.github.retrooper.packetevents.protocol.entity.data.EntityDataTypes
+import com.github.retrooper.packetevents.protocol.entity.pose.EntityPose
 import com.github.retrooper.packetevents.protocol.packettype.PacketType
+import com.github.retrooper.packetevents.protocol.player.InteractionHand
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientInteractEntity
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityAnimation
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityHeadLook
-import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityRelativeMove
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityMetadata
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityRotation
 import dev.shreyasayyengar.menuapi.menu.MenuItem
 import dev.shreyasayyengar.menuapi.menu.StandardMenu
@@ -22,7 +26,6 @@ import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.extension.showPlayer
 import gg.flyte.twilight.extension.toComponent
 import gg.flyte.twilight.scheduler.delay
-import gg.flyte.twilight.scheduler.repeatingTask
 import io.github.retrooper.packetevents.util.SpigotConversionUtil
 import io.papermc.paper.chat.ChatRenderer
 import io.papermc.paper.event.player.AsyncChatEvent
@@ -201,6 +204,7 @@ class HousekeepingEventListener : Listener, PacketListener {
         }
 
         event<PlayerStopSpectatingEntityEvent> {
+            // prevents any camera sequence from being escaped
             if (CameraSequence.ACTIVE_CAMERAS.contains(spectatorTarget.uniqueId)) {
                 isCancelled = true
                 return@event
@@ -241,30 +245,20 @@ class HousekeepingEventListener : Listener, PacketListener {
                     event.user.sendPacket(
                         WrapperPlayServerEntityAnimation(clickedNPC.npc.id, WrapperPlayServerEntityAnimation.EntityAnimationType.SWING_MAIN_ARM)
                     )
-                } else if (action == WrapperPlayClientInteractEntity.InteractAction.INTERACT) {
-                    var jumpIndex = 0
-                    repeatingTask(1) {
-                        val yUpdates = listOf(
-                            0.2083333333333333333333,
-                            0.2083333333333333333333,
-                            0.2083333333333333333333,
-                            0.2083333333333333333333,
-                            0.2083333333333333333333,
-                            0.2083333333333333333333,
-                            -0.2083333333333333333333,
-                            -0.2083333333333333333333,
-                            -0.2083333333333333333333,
-                            -0.2083333333333333333333,
-                            -0.2083333333333333333333,
-                            -0.2083333333333333333333,
-                        )
-                        if (jumpIndex == yUpdates.size - 1) cancel()
+                } else if (action == WrapperPlayClientInteractEntity.InteractAction.INTERACT) { // fired twice
+                    if (hand != InteractionHand.MAIN_HAND) return
 
-                        val deltaPacket = WrapperPlayServerEntityRelativeMove(clickedNPC.npc.id, 0.0, (yUpdates[jumpIndex]), 0.0, true)
-                        event.user.sendPacket(deltaPacket)
+                    WrapperPlayServerEntityMetadata(
+                        clickedNPC.npc.id,
+                        listOf(EntityData(6, EntityDataTypes.ENTITY_POSE, EntityPose.CROUCHING))
+                    ).also { event.user.sendPacket(it) }
 
-                        jumpIndex++
-                    } // NPC Jumping
+                    delay(3) {
+                        WrapperPlayServerEntityMetadata(
+                            clickedNPC.npc.id,
+                            listOf(EntityData(6, EntityDataTypes.ENTITY_POSE, EntityPose.STANDING))
+                        ).also { event.user.sendPacket(it) }
+                    }
                 }
             }
         }
