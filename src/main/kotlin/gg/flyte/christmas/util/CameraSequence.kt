@@ -31,9 +31,7 @@ class CameraSequence(
     }
 
     init {
-        if (locations.size < 2) {
-            throw IllegalArgumentException("At least 2 locations are required for a camera sequence.")
-        }
+        if (locations.size < 2) throw IllegalArgumentException("At least 2 locations are required for a camera sequence.")
 
         val controlPoints = mutableMapOf<Int, Point>()
         for ((index, location) in locations.withIndex()) {
@@ -44,8 +42,7 @@ class CameraSequence(
             )
         }
 
-        SequenceTask(generateSmoothPath(controlPoints), teleportDuration)
-            .runTaskTimer(ChristmasEventPlugin.instance, 0, 1)
+        SequenceTask(generateSmoothPath(controlPoints), teleportDuration).runTaskTimer(ChristmasEventPlugin.instance, 0, 1)
     }
 
     data class Point(
@@ -61,9 +58,7 @@ class CameraSequence(
         val keys = sortedPoints.keys.toList()
         val values = sortedPoints.values.toList()
 
-        if (keys.size < 2) {
-            throw IllegalArgumentException("At least 2 points are required for interpolation.")
-        }
+        if (keys.size < 2) throw IllegalArgumentException("At least 2 points are required for interpolation.")
 
         val totalTicks = keys.last()
 
@@ -96,7 +91,6 @@ class CameraSequence(
     }
 
     private fun catmullRomPosition(p0: Vector, p1: Vector, p2: Vector, p3: Vector, t: Double): Vector {
-
         return Vector(
             lerpSmooth(p0.x, p1.x, p2.x, p3.x, t),
             lerpSmooth(p0.y, p1.y, p2.y, p3.y, t),
@@ -107,9 +101,7 @@ class CameraSequence(
     private fun lerpSmooth(d0: Double, d1: Double, d2: Double, d3: Double, t: Double): Double {
         val t2 = t * t
         val t3 = t2 * t
-        return 0.5 * (2 * d1 + (-d0 + d2) * t +
-                (2 * d0 - 5 * d1 + 4 * d2 - d3) * t2 +
-                (-d0 + 3 * d1 - 3 * d2 + d3) * t3)
+        return 0.5 * (2 * d1 + (-d0 + d2) * t + (2 * d0 - 5 * d1 + 4 * d2 - d3) * t2 + (-d0 + 3 * d1 - 3 * d2 + d3) * t3)
     }
 
     private fun interpolateAngle(angle1: Float, angle2: Float, t: Double): Double {
@@ -162,26 +154,20 @@ class CameraSequence(
                     itemDisplay.setItemStack(ItemStack(Material.AIR))
                     itemDisplay.setRotation(nextPosition.pointYaw, nextPosition.pointPitch)
                     itemDisplay.teleportDuration = this.teleportDuration
+                    itemDisplay.viewRange = Float.MAX_VALUE
 
                     if (component != null) {
                         textDisplay = nextPosition.world.spawn(nextPosition, TextDisplay::class.java) { textDisplay ->
                             textDisplay.text(component)
+                            textDisplay.isSeeThrough = true
                             textDisplay.alignment = TextDisplay.TextAlignment.LEFT
                             textDisplay.lineWidth = 300
                             textDisplay.backgroundColor = Color.fromARGB(225, 38, 38, 38)
                             textDisplay.billboard = Display.Billboard.CENTER
-                            textDisplay.isSeeThrough = true
                             textDisplay.interpolationDelay = 50 // 50 ticks to stay down
                             textDisplay.interpolationDuration = 50 // 50 ticks to move up
-                            textDisplay.transformation = textDisplay.transformation.apply {
-                                translation.add(0F, -10F, -3F)
-                            }
-
-                            delay(5) {
-                                textDisplay.transformation = textDisplay.transformation.apply {
-                                    translation.add(0F, 8.5F, 0F)
-                                }
-                            }
+                            textDisplay.transformation = textDisplay.transformation.apply { translation.add(0F, -10F, -3F) }
+                            delay(5) { textDisplay.transformation = textDisplay.transformation.apply { translation.add(0F, 8.5F, 0F) } }
                         }
                     }
                     players.forEach { player ->
