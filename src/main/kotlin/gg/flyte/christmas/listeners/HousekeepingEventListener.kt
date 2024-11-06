@@ -271,16 +271,10 @@ class HousekeepingEventListener : Listener, PacketListener {
     }
 
     private fun openSpectateMenu(player: Player) {
-        var locationSize = eventController().currentGame!!.gameConfig.spectatorCameraLocations.size
+        var options = eventController().currentGame!!.gameConfig.spectatorCameraLocations.size
+        var standardMenu = StandardMenu("Spectate Map:", ceil(options.div(9.0)).toInt() * 9)
 
-        var standardMenu = StandardMenu(
-            "Spectate Map:",
-            ceil(
-                locationSize.div(9.0)
-            ).toInt() * 9
-        )
-
-        for (i in 0 until locationSize) {
+        for (i in 0 until options) {
 
             val menuItem = MenuItem(Material.PLAYER_HEAD)
                 .setName("Spectate Point $i")
