@@ -208,7 +208,7 @@ enum class GameConfig(
 
         listOf(MapSinglePoint(554, 204, 594, -88.70047F, 88.381485F)),
         listOf(MapSinglePoint(554, 204, 594, -88.70047F, 88.381485F)),
-    )
+    ),
     //endregion
 
 //    MUSICAL_MINECARTS, // 142, 0, 3
