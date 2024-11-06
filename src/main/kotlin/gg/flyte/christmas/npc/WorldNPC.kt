@@ -22,7 +22,7 @@ import java.util.UUID
 class WorldNPC private constructor(displayName: String, textureProperties: List<TextureProperty?>?, val location: Location) {
 
     private val userProfile: UserProfile = UserProfile(UUID.randomUUID(), displayName, textureProperties)
-    var id: Int = SpigotReflectionUtil.generateEntityId()
+    private var id: Int = SpigotReflectionUtil.generateEntityId()
     private val tablistName = Component.text("NPC-$id")
     val npc: NPC = NPC(userProfile, id, tablistName)
 

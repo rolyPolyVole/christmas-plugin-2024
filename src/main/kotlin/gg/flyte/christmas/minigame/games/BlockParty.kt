@@ -413,12 +413,12 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
                     if (Random.nextBoolean()) {
                         packet = WrapperPlayServerEntityAnimation(
-                            npc.id,
+                            npc.npc.id,
                             if (Random.nextBoolean()) WrapperPlayServerEntityAnimation.EntityAnimationType.SWING_MAIN_ARM else WrapperPlayServerEntityAnimation.EntityAnimationType.SWING_OFF_HAND
                         )
                     } else {
                         val pose = if (Random.nextBoolean()) EntityPose.STANDING else EntityPose.CROUCHING
-                        packet = WrapperPlayServerEntityMetadata(npc.id, listOf(EntityData(6, EntityDataTypes.ENTITY_POSE, pose)))
+                        packet = WrapperPlayServerEntityMetadata(npc.npc.id, listOf(EntityData(6, EntityDataTypes.ENTITY_POSE, pose)))
                     }
 
                     if (loopedPlayer != null) PacketEvents.getAPI().playerManager.getUser(loopedPlayer).sendPacket(packet)
@@ -442,7 +442,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                     )
                     if (jumpIndex == yUpdates.size) jumpIndex = 0 // jump again!
 
-                    val packet = WrapperPlayServerEntityRelativeMove(npc.id, 0.0, (yUpdates[jumpIndex]), 0.0, true)
+                    val packet = WrapperPlayServerEntityRelativeMove(npc.npc.id, 0.0, (yUpdates[jumpIndex]), 0.0, true)
                     if (loopedPlayer != null) PacketEvents.getAPI().playerManager.getUser(loopedPlayer).sendPacket(packet)
 
                     jumpIndex++

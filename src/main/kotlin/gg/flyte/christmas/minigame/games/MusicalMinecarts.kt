@@ -438,13 +438,13 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                         npc.npc.mainHand = SpigotConversionUtil.fromBukkitItemStack(ItemStack(Material.MINECART))
                         npc.npc.updateEquipment()
 
-                        val passengerPacket = WrapperPlayServerSetPassengers(minecart.entityId, intArrayOf(npc.id))
+                        val passengerPacket = WrapperPlayServerSetPassengers(minecart.entityId, intArrayOf(npc.npc.id))
                         delay(1) { PacketEvents.getAPI().playerManager.getUser(loopedPlayer).sendPacket(passengerPacket) }
 
                         animationTasks += repeatingTask((2..10).random(), (1..6).random()) {
                             PacketEvents.getAPI().playerManager.getUser(loopedPlayer)
                                 .sendPacket(
-                                    WrapperPlayServerEntityAnimation(npc.id, WrapperPlayServerEntityAnimation.EntityAnimationType.SWING_MAIN_ARM)
+                                    WrapperPlayServerEntityAnimation(npc.npc.id, WrapperPlayServerEntityAnimation.EntityAnimationType.SWING_MAIN_ARM)
                                 )
 
                             minecart.world.dropItemNaturally(minecart.location.add(0.0, 1.0, 0.0), ItemStack(Material.MINECART)) {
@@ -456,8 +456,8 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                         var yaw = 0
                         animationTasks += repeatingTask((2..10).random(), 4) {
                             PacketEvents.getAPI().playerManager.getUser(loopedPlayer).apply {
-                                sendPacket(WrapperPlayServerEntityHeadLook(npc.id, yaw.toFloat()))
-                                sendPacket(WrapperPlayServerEntityRotation(npc.id, yaw.toFloat(), 0F, true))
+                                sendPacket(WrapperPlayServerEntityHeadLook(npc.npc.id, yaw.toFloat()))
+                                sendPacket(WrapperPlayServerEntityRotation(npc.npc.id, yaw.toFloat(), 0F, true))
                             }
                             yaw += 10
                         } // NPC look

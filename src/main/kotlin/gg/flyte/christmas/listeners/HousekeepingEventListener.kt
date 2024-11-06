@@ -178,8 +178,8 @@ class HousekeepingEventListener : Listener, PacketListener {
                 if (npcLocation.distance(playerLocation) <= 25) {
                     val lookVector = npcLocation.apply { setDirection(playerLocation.toVector().subtract(toVector())) }
                     val playerManager = PacketEvents.getAPI().playerManager.getUser(player)
-                    playerManager.sendPacket(WrapperPlayServerEntityHeadLook(npc.id, lookVector.yaw))
-                    playerManager.sendPacket(WrapperPlayServerEntityRotation(npc.id, lookVector.yaw, lookVector.pitch, false))
+                    playerManager.sendPacket(WrapperPlayServerEntityHeadLook(npc.npc.id, lookVector.yaw))
+                    playerManager.sendPacket(WrapperPlayServerEntityRotation(npc.npc.id, lookVector.yaw, lookVector.pitch, false))
                 }
             }
         }
