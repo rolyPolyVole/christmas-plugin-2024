@@ -4,10 +4,6 @@ import gg.flyte.christmas.ChristmasEventPlugin
 import gg.flyte.christmas.minigame.world.MapSinglePoint
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStream
 import java.util.UUID
 
 object Util {
@@ -58,18 +54,6 @@ object Util {
                     eventPlayerAction?.invoke(player)
                     true
                 }
-            }
-        }
-    }
-
-    @Throws(IOException::class)
-    fun copyInputStreamToFile(inputStream: InputStream, file: File) {
-        // append = false
-        FileOutputStream(file, false).use { outputStream ->
-            val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
-            var bytesRead: Int
-            while (inputStream.read(buffer).also { bytesRead = it } != -1) {
-                outputStream.write(buffer, 0, bytesRead)
             }
         }
     }
