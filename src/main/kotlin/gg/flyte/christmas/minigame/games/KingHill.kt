@@ -94,8 +94,7 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
     }
 
     override fun eliminate(player: Player, reason: EliminationReason) {
-        // Note: this game does not eliminate players, remove call to super
-        // super.eliminate(player, reason)
+        // super.eliminate(player, reason) | Note: this game does not eliminate players, remove call to super
     }
 
     override fun endGame() {
