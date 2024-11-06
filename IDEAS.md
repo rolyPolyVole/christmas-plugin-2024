@@ -8,18 +8,18 @@
 - Contributors section in the Lobby
 - Add a sled slide in the lobby + carousel for static entertainment while giveaways/game selection is happening.
 - Spawn random snowballs for players to throw (keep this minimal)
-- Hide players when they are close to a leaderboard NPC for visibility
 - eliminated players get titles/nudges to donate while they wait (clickable links)
     - On-Screen Banner ads using bossbars, resource packs and displays.
 - Staff Utils Menu:
     - Teleport all players to a “screenie” location. player’s movement is locked and facing forward to facilitate an easy event screenie. (ik stephen
       will love this)
+- A firework spawns above everyone after a donation is made.
+- "Chaos" donations -> drop TNT in a spleef game, for example.
 
 ## Game Specific:
 
 ### Paintball:
 
-- Paintball projectile itemstacks should be coloured blocks
 - Integrate more UI elements (sound and particles)
 
 ### Sled Racing:
