@@ -101,11 +101,16 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
         Util.handlePlayers(eventPlayerAction = { it.teleport(gameConfig.spawnPoints.random().randomLocation()) })
         for (entry in timeOnHill) eventController().addPoints(entry.key, entry.value)
 
+        val (first) = timeOnHill.entries
+            .sortedByDescending { it.value }
+            .take(1)
+            .also { it.forEach { formattedWinners.put(it.key, it.value.toString() + " seconds") } }
+
         var yaw = 0F
         ChristmasEventPlugin.instance.serverWorld.spawn(MapSinglePoint(827.5, 105, 630.5, 0, 0), ItemDisplay::class.java) {
             it.setItemStack(ItemStack(Material.PLAYER_HEAD).apply {
                 val meta = itemMeta as SkullMeta
-                meta.owningPlayer = Bukkit.getOfflinePlayer(winner.key)
+                meta.owningPlayer = Bukkit.getOfflinePlayer(first.key)
                 itemMeta = meta
             })
             it.interpolationDelay = -1

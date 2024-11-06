@@ -278,14 +278,23 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         }
         super.eliminate(player, reason)
 
-        if (remainingPlayers().size == 1) endGame()
+        when (remainingPlayers().size) {
+            1 -> {
+                formattedWinners.put(player.uniqueId, roundNumber.toString())
+                endGame()
+            }
+
+            2 -> formattedWinners.put(player.uniqueId, roundNumber.toString())
+            3 -> formattedWinners.put(player.uniqueId, roundNumber.toString())
+        }
     }
 
     override fun endGame() {
         hasEnded = true
         tasks.forEach { it?.cancel() } // this will cancel all game tasks.
 
-        val winner = remainingPlayers().first()
+//        val winner = remainingPlayers().first()
+        val winner = Bukkit.getOnlinePlayers().random() // TODO for testing purposes
         eventController().points.put(winner.uniqueId, eventController().points[winner.uniqueId]!! + 15)
 
         Util.handlePlayers(
