@@ -242,7 +242,6 @@ class HousekeepingEventListener : Listener, PacketListener {
                         WrapperPlayServerEntityAnimation(clickedNPC.npc.id, WrapperPlayServerEntityAnimation.EntityAnimationType.SWING_MAIN_ARM)
                     )
                 } else if (action == WrapperPlayClientInteractEntity.InteractAction.INTERACT) {
-                    println("called")
                     var jumpIndex = 0
                     repeatingTask(1) {
                         val yUpdates = listOf(
