@@ -215,6 +215,82 @@ enum class GameConfig(
 //    SLED_RACING, // 24, 48, 15
 //    SPLEEF, // 64, 86, 40
 
-    // 174, 211, 216
+    //region PAINT_WARS
+    PAINT_WARS(
+        PaintWars::class,
+        Component.text("Paint Wars", TextColor.color(67, 122, 21)),
+        Component.text("ᴘᴀɪɴᴛ ᴡᴀʀꜱ", TextColor.color(67, 122, 21)),
+        Material.BRUSH,
+        TextColor.color(67, 122, 21),
+        " • Use your Paint Gun to shoot blocks around the map into your chosen block.\n\n" +
+                " • You can shoot over other player's blocks to reduce their score!\n\n" +
+                " • To win, cover the most amount of the map with your block/colour!",
+        1,
+        listOf(
+            MapRegion.single(MapSinglePoint(1529, 82, 410)),
+            MapRegion.single(MapSinglePoint(1524, 81, 455)),
+            MapRegion.single(MapSinglePoint(1567, 82, 418)),
+            MapRegion.single(MapSinglePoint(1557, 83, 401)),
+            MapRegion.single(MapSinglePoint(1558, 84, 502)),
+            MapRegion.single(MapSinglePoint(1593, 74, 481)),
+            MapRegion.single(MapSinglePoint(1496, 78, 419)),
+            MapRegion.single(MapSinglePoint(1475, 83, 448)),
+            MapRegion.single(MapSinglePoint(1559, 85, 520)),
+            MapRegion.single(MapSinglePoint(1583, 78, 468)),
+            MapRegion.single(MapSinglePoint(1567, 81, 427)),
+            MapRegion.single(MapSinglePoint(1555, 88, 381)),
+            MapRegion.single(MapSinglePoint(1551, 87, 522)),
+            MapRegion.single(MapSinglePoint(1526, 88, 501)),
+            MapRegion.single(MapSinglePoint(1639, 77, 472)),
+            MapRegion.single(MapSinglePoint(1623, 80, 518)),
+            MapRegion.single(MapSinglePoint(1518, 81, 412)),
+            MapRegion.single(MapSinglePoint(1558, 81, 461)),
+            MapRegion.single(MapSinglePoint(1607, 74, 479)),
+            MapRegion.single(MapSinglePoint(1574, 83, 512))
+        ),
+        listOf(
+            MapSinglePoint(1556, 100, 539, 170.46658F, 14.978098F),
+            MapSinglePoint(1552, 100, 527, 175.40344F, 19.024527F),
+            MapSinglePoint(1543, 100, 516, -177.63635F, 20.643103F),
+            MapSinglePoint(1533, 100, 504, -171.2427F, 22.261679F),
+            MapSinglePoint(1523, 100, 491, -163.14949F, 22.82818F),
+            MapSinglePoint(1516, 100, 476, -146.39671F, 20.238459F),
+            MapSinglePoint(1520, 102, 462, -140.24586F, 13.764181F),
+            MapSinglePoint(1530, 104, 451, -151.49516F, 9.313149F),
+            MapSinglePoint(1538, 105, 441, -160.55959F, 13.116758F),
+            MapSinglePoint(1543, 106, 432, -158.21254F, 24.042095F),
+            MapSinglePoint(1549, 107, 416, -176.09775F, 28.007605F),
+            MapSinglePoint(1552, 107, 402, -155.86522F, 42.089207F),
+            MapSinglePoint(1558, 107, 388, -57.94214F, 45.488205F),
+            MapSinglePoint(1571, 106, 385, -8.899562F, 38.123684F),
+            MapSinglePoint(1584, 100, 392, 12.384542F, 32.21588F),
+            MapSinglePoint(1591, 94, 405, 38.524437F, 28.331299F),
+            MapSinglePoint(1592, 89, 419, 52.444168F, 21.047709F),
+            MapSinglePoint(1589, 88, 434, 77.12698F, 17.810556F),
+            MapSinglePoint(1580, 88, 445, 91.53171F, 20.481207F),
+            MapSinglePoint(1564, 88, 448, 93.47391F, 19.105417F),
+            MapSinglePoint(1550, 88, 447, 98.41041F, 20.88585F),
+            MapSinglePoint(1536, 88, 441, -177.10092F, 23.313715F),
+            MapSinglePoint(1533, 88, 428, -163.58531F, 21.856997F),
+            MapSinglePoint(1541, 88, 417, -139.71074F, 24.28486F),
+            MapSinglePoint(1556, 88, 416, -108.6337F, 26.38901F),
+        ),
+        listOf(
+            MapSinglePoint(1578, 113, 546, 151, 18.2),
+        ),
+        listOf(
+            MapSinglePoint(1578, 113, 546, 151, 18.2),
+            MapSinglePoint(1494, 118, 501, -125, 38),
+            MapSinglePoint(1489, 92, 412, -68, 27),
+            MapSinglePoint(1577, 140, 354, 16, 43),
+            MapSinglePoint(1600, 86, 505, 139, -6),
+            MapSinglePoint(1571, 96, 427, 85, 9),
+            MapSinglePoint(1548, 86, 444, 24.5, 5.5),
+            MapSinglePoint(1600, 171, 502, 137, 25),
+            MapSinglePoint(1623, 136, 406, 64, 33),
+            MapSinglePoint(1558, 98, 416, -8, 26)
+        ),
+    )
+    //endregion
 
 }
