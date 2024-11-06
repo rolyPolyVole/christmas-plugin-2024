@@ -60,7 +60,6 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
             worldNPCs.remove(leaderBoardNPCs[position])
 
             leaderBoardNPCs[position] = createFromLive("lol", player, leaderboardPositionToLocation[position]!!)
-
             for (player in Bukkit.getOnlinePlayers()) leaderBoardNPCs[position]?.spawnFor(player)
         }
 
@@ -68,7 +67,6 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
          * Creates a new [WorldNPC] modelled from an existing [Player] reference.
          */
         fun createFromLive(displayName: String, modelAfter: Player, location: Location): WorldNPC {
-            // use the live player's texture properties
             val textureProperties = PacketEvents.getAPI().playerManager.getUser(modelAfter).profile.textureProperties
             return WorldNPC(displayName, textureProperties, location).also { worldNPCs += it }
         }
