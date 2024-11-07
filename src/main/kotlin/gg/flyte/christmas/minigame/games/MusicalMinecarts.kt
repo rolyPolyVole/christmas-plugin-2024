@@ -59,7 +59,7 @@ import kotlin.random.Random
 
 @Suppress("DuplicatedCode") // nature of this game is very similar to other music-controlled games.
 class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
-    private var overviewTasks: MutableList<TwilightRunnable> = mutableListOf()
+    private var overviewTasks = mutableListOf<TwilightRunnable>()
 
     private var floorRegion = MapRegion(MapSinglePoint(540, 202, 578), MapSinglePoint(570, 202, 607))
     private var roundNumber = 0

@@ -146,7 +146,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
     }
 
     private fun updateRotatingItem(menuItem: MenuItem) {
-        val lore: MutableList<String> = mutableListOf()
+        val lore = mutableListOf<String>()
 
         for (index in availableGames.indices) {
             val game = availableGames[index]

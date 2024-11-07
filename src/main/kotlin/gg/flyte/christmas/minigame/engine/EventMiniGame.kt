@@ -183,7 +183,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
             var value = it.value
             val displayName = "§${descendingColour[index]}${Bukkit.getPlayer(uniqueId)!!.name}"
             var placeLocation = Util.getNPCSummaryLocation(index)
-            val animationTasks: MutableList<TwilightRunnable> = mutableListOf()
+            val animationTasks = mutableListOf<TwilightRunnable>()
 
             WorldNPC.createFromUniqueId(displayName, uniqueId, placeLocation).also { npc ->
                 Bukkit.getOnlinePlayers().forEach { npc.spawnFor(it) }
@@ -270,6 +270,8 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
                 loopedPlayer.teleport(ChristmasEventPlugin.instance.lobbySpawn)
                 eventController().sidebarManager.update(loopedPlayer)
                 npcs.forEach { it.despawnFor(loopedPlayer) }
+
+                // TODO remove textdisplays
             }
         }
     }
