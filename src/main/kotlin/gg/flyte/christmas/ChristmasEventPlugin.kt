@@ -48,8 +48,7 @@ class ChristmasEventPlugin : JavaPlugin() {
     }
 
     override fun onLoad() {
-        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this))
-        PacketEvents.getAPI().load()
+        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this).also { it.load() })
     }
 
     override fun onEnable() {
