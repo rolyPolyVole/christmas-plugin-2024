@@ -186,7 +186,7 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
         Bukkit.getOnlinePlayers().forEach { eventController().sidebarManager.updateLines(it, listOf(Component.empty(), timeComponent)) }
     }
 
-    fun updateBlock(block: Block, player: Player, overrideRandom: Boolean) {
+    fun tryUpdateBlock(block: Block, player: Player, overrideRandom: Boolean) {
         if (!overrideRandom && Random.nextDouble() < 0.25) return // 75% chance to paint block
         if (block.type == Material.AIR) return
         if (block.type == playerBrushesBiMap[player.uniqueId]) return // block already painted by same player
@@ -243,13 +243,13 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
             if (!(hitBlock!!.type == Material.WHITE_WOOL || playerBrushesBiMap.inverse().containsKey(hitBlock!!.type))) return@event
 
             hitBlock!!.world.playSound(hitBlock!!.location, Sound.ENTITY_PLAYER_SPLASH, 0.5F, 1.0f)
-            updateBlock(hitBlock!!, entity.shooter as Player, false)
+            tryUpdateBlock(hitBlock!!, entity.shooter as Player, false)
 
             var hitBlockLocation = hitBlock!!.location
             for (x in -1..1) {
                 for (y in -1..1) {
                     for (z in -1..1) {
-                        updateBlock(
+                        tryUpdateBlock(
                             hitBlock!!.world.getBlockAt(
                                 Location(
                                     hitBlock!!.world,
