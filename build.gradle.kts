@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     application
     kotlin("jvm") version "2.0.20"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.gradleup.shadow") version "8.3.5"
     id("io.papermc.paperweight.userdev") version "1.7.3"
     id("xyz.jpenilla.run-paper") version "2.3.1"
 }
