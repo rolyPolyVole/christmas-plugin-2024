@@ -64,22 +64,6 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
         Material.BROWN_CONCRETE,
         Material.BLACK_CONCRETE,
         Material.WHITE_CONCRETE,
-        Material.RED_STAINED_GLASS,
-        Material.ORANGE_STAINED_GLASS,
-        Material.YELLOW_STAINED_GLASS,
-        Material.LIME_STAINED_GLASS,
-        Material.GREEN_STAINED_GLASS,
-        Material.LIGHT_BLUE_STAINED_GLASS,
-        Material.CYAN_STAINED_GLASS,
-        Material.BLUE_STAINED_GLASS,
-        Material.PURPLE_STAINED_GLASS,
-        Material.PINK_STAINED_GLASS,
-        Material.MAGENTA_STAINED_GLASS,
-        Material.LIGHT_GRAY_STAINED_GLASS,
-        Material.GRAY_STAINED_GLASS,
-        Material.BROWN_STAINED_GLASS,
-        Material.BLACK_STAINED_GLASS,
-        Material.WHITE_STAINED_GLASS,
         Material.RED_GLAZED_TERRACOTTA,
         Material.ORANGE_GLAZED_TERRACOTTA,
         Material.YELLOW_GLAZED_TERRACOTTA,
@@ -96,6 +80,22 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
         Material.BROWN_GLAZED_TERRACOTTA,
         Material.BLACK_GLAZED_TERRACOTTA,
         Material.WHITE_GLAZED_TERRACOTTA,
+        Material.RED_STAINED_GLASS,
+        Material.ORANGE_STAINED_GLASS,
+        Material.YELLOW_STAINED_GLASS,
+        Material.LIME_STAINED_GLASS,
+        Material.GREEN_STAINED_GLASS,
+        Material.LIGHT_BLUE_STAINED_GLASS,
+        Material.CYAN_STAINED_GLASS,
+        Material.BLUE_STAINED_GLASS,
+        Material.PURPLE_STAINED_GLASS,
+        Material.PINK_STAINED_GLASS,
+        Material.MAGENTA_STAINED_GLASS,
+        Material.LIGHT_GRAY_STAINED_GLASS,
+        Material.GRAY_STAINED_GLASS,
+        Material.BROWN_STAINED_GLASS,
+        Material.BLACK_STAINED_GLASS,
+        Material.WHITE_STAINED_GLASS,
         Material.RED_SHULKER_BOX,
         Material.ORANGE_SHULKER_BOX,
         Material.YELLOW_SHULKER_BOX,
@@ -117,6 +117,7 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
     private val changedBlocks = mutableListOf<Block>()
     private val scores = mutableMapOf<UUID, Int>()
     private var hasEnded = false
+    private var materialIndex = 0;
 
     override fun preparePlayer(player: Player) {
         player.gameMode = GameMode.ADVENTURE
@@ -130,17 +131,14 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
             }
         }.apply { player.inventory.setItem(0, this) }
 
-        // assign a unique paint brush to the player
-        if (paintMaterials.isEmpty()) { // edge case
+        if (paintMaterials.getOrElse(materialIndex) { null } == null) {
             var randomMaterial = Material.entries.toTypedArray().filter { it.isBlock }.random()
             while (playerBrushesBiMap.inverse().containsKey(randomMaterial)) {
                 randomMaterial = Material.entries.toTypedArray().random()
             }
         } else {
-            paintMaterials.random()
-                .also { playerBrushesBiMap[player.uniqueId] = it }
-                .also { paintMaterials.remove(it) }
-                .also { player.inventory.setItem(1, ItemStack(it)) }
+            playerBrushesBiMap[player.uniqueId] = paintMaterials[materialIndex].also { player.inventory.setItem(1, ItemStack(it)) }
+            materialIndex++
         }
     }
 
