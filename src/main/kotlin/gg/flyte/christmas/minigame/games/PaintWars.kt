@@ -188,7 +188,7 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
 
     fun tryUpdateBlock(block: Block, player: Player, overrideRandom: Boolean) {
         if (!overrideRandom && Random.nextDouble() < 0.25) return // 75% chance to paint block
-        if (block.type == Material.AIR) return
+        if (block.type == Material.AIR || block.type == Material.LIGHT) return
         if (block.type == playerBrushesBiMap[player.uniqueId]) return // block already painted by same player
 
         // if the block has no contact with any air blocks, don't paint it (it's surrounded by other blocks)
