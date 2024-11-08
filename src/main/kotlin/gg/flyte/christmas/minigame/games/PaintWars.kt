@@ -194,10 +194,7 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
         // if the block has no contact with any air blocks, don't paint it (it's surrounded by other blocks)
         var canChange = false
         BlockFace.entries.forEach {
-            if (block.getRelative(it).type == Material.AIR) {
-                canChange = true
-                return@forEach
-            }
+            if (block.getRelative(it).type == Material.AIR) canChange = true
         }
         if (!canChange) return
 
