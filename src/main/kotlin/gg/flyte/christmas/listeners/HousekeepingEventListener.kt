@@ -226,6 +226,7 @@ class HousekeepingEventListener : Listener, PacketListener {
         event<InventoryClickEvent> {
             if (clickedInventory !is PlayerInventory) return@event
             isCancelled = slotType == InventoryType.SlotType.ARMOR
+
             if (currentItem?.type == Material.COMPASS) {
                 openSpectateMenu(whoClicked as Player) // NOTE: if other games use compasses, this method will need adjustment.
             }
