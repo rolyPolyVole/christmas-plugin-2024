@@ -206,11 +206,11 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
             scores[previousPlayerId]?.let { scores[previousPlayerId] = it - 1 }
         }
 
-        block.type = playerBrushesBiMap[player.uniqueId]!!
-
         // increment the score of current painter:
         scores[player.uniqueId] = scores.getOrDefault(player.uniqueId, 0) + 1
         if (!(changedBlocks.contains(block))) changedBlocks.add(block)
+
+        block.type = playerBrushesBiMap[player.uniqueId]!!
     }
 
     override fun onPlayerJoin(player: Player) {
