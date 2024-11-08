@@ -38,7 +38,6 @@ dependencies {
 
 tasks {
     shadowJar {
-        relocate("fr.mrmicky.fastboard", "gg.flyte.christmas.fastboard")
         minimize {
             exclude(dependency("org.jetbrains.kotlin:kotlin-reflect"))
         }
