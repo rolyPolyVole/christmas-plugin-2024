@@ -166,7 +166,7 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
     override fun endGame() {
         hasEnded = true
 
-        changedBlocks.forEach { it.type = Material.AIR }
+        changedBlocks.forEach { it.type = Material.WHITE_WOOL }
         playerBrushesBiMap.clear()
         changedBlocks.clear()
         for (entry in scores) eventController().addPoints(entry.key, entry.value)
