@@ -20,7 +20,7 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.3.61")
+    implementation(kotlin("reflect"))
     implementation("io.ktor:ktor-client-core:3.0.0")
     implementation("io.ktor:ktor-client-cio:3.0.0")
 
@@ -39,6 +39,9 @@ dependencies {
 tasks {
     shadowJar {
         relocate("fr.mrmicky.fastboard", "gg.flyte.christmas.fastboard")
+        minimize {
+            exclude(dependency("org.jetbrains.kotlin:kotlin-reflect"))
+        }
     }
 
     build {
