@@ -219,7 +219,7 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
     }
 
     override fun handleGameEvents() {
-        event<PlayerInteractEvent> {
+        listeners += event<PlayerInteractEvent> {
             if (hasEnded) return@event
 
             if (!hasItem()) return@event
@@ -231,11 +231,11 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
             }
         }
 
-        event<InventoryOpenEvent> {
+        listeners += event<InventoryOpenEvent> {
             if (inventory.type == InventoryType.SHULKER_BOX) isCancelled = true
         }
 
-        event<ProjectileHitEvent> {
+        listeners += event<ProjectileHitEvent> {
             if (hasEnded) return@event
 
             if (hitBlock == null) return@event
@@ -266,6 +266,6 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
             }
         }
 
-        event<InventoryClickEvent> { isCancelled = true }
+        listeners += event<InventoryClickEvent> { isCancelled = true }
     }
 }
