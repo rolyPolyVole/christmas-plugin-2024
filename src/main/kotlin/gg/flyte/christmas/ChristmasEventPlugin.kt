@@ -130,6 +130,7 @@ class ChristmasEventPlugin : JavaPlugin() {
             setGameRule(GameRule.DO_MOB_SPAWNING, false)
             setGameRule(GameRule.DO_WEATHER_CYCLE, false)
             setGameRule(GameRule.DO_FIRE_TICK, false)
+            setGameRule(GameRule.SPECTATORS_GENERATE_CHUNKS, true)
             setStorm(false)
             time = 6000
         }
