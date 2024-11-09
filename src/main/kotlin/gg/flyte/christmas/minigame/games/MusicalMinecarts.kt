@@ -261,7 +261,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                 }
 
                 addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20 * 4, 1, false, false, false))
-                //  TODO impl
+                //  TODO impl kill effect
                 delay(1) {
                     val randomSpecLocation = gameConfig.spectatorSpawnLocations.random()
                     itemDisplay.teleport(randomSpecLocation)
