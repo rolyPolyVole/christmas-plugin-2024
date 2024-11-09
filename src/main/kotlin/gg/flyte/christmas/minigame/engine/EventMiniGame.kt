@@ -11,9 +11,10 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEn
 import gg.flyte.christmas.ChristmasEventPlugin
 import gg.flyte.christmas.minigame.world.MapSinglePoint
 import gg.flyte.christmas.npc.WorldNPC
-import gg.flyte.christmas.visual.CameraSequence
 import gg.flyte.christmas.util.Util
 import gg.flyte.christmas.util.eventController
+import gg.flyte.christmas.visual.CameraSequence
+import gg.flyte.christmas.visual.CameraSlide
 import gg.flyte.twilight.event.TwilightListener
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.scheduler.TwilightRunnable
@@ -77,46 +78,48 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
      * functionality as the CameraSequence is running.
      */
     open fun startGameOverview() {
-        handleGameEvents()
+        CameraSlide(gameConfig) {
+            // send BEFORE textDisplay has rendered in.
+            val title = Title.title(
+                gameConfig.displayName,
+                Component.text("Instructions:", gameConfig.colour),
+                Title.Times.times(Duration.ofMillis(1250), Duration.ofMillis(3500), Duration.ofMillis(750))
+            )
 
-        // send BEFORE textDisplay has rendered in.
-        val title = Title.title(
-            gameConfig.displayName,
-            Component.text("Instructions:", gameConfig.colour),
-            Title.Times.times(Duration.ofMillis(1250), Duration.ofMillis(3500), Duration.ofMillis(750))
-        )
+            Util.handlePlayers(eventPlayerAction = { it.showTitle(title) })
 
-        Util.handlePlayers(eventPlayerAction = { it.showTitle(title) })
+            var displayComponent = Component.text("")
+                .append(Component.text("\n   ", null, TextDecoration.STRIKETHROUGH))
+                .append(Component.text("> "))
+                .append(gameConfig.displayName.decorate(TextDecoration.BOLD))
+                .append(Component.text("\n\n"))
+                .append(Component.text(gameConfig.instructions, gameConfig.colour))
+                .append(Component.text("\n"))
+                .color(gameConfig.colour)
 
-        var displayComponent = Component.text("")
-            .append(Component.text("\n   ", null, TextDecoration.STRIKETHROUGH))
-            .append(Component.text("> "))
-            .append(gameConfig.displayName.decorate(TextDecoration.BOLD))
-            .append(Component.text("\n\n"))
-            .append(Component.text(gameConfig.instructions, gameConfig.colour))
-            .append(Component.text("\n"))
-            .color(gameConfig.colour)
+            CameraSequence(gameConfig.overviewLocations, Bukkit.getOnlinePlayers(), displayComponent) {
+                // when sequence finished:
+                handleGameEvents()
 
-        CameraSequence(gameConfig.overviewLocations, Bukkit.getOnlinePlayers(), displayComponent) {
-            // when sequence finished:
-            Util.handlePlayers(
-                eventPlayerAction = {
-                    // if player was eliminated during the sequence (left server), don't prepare them.
-                    if (!(remainingPlayers().map { it.uniqueId }.contains(it.uniqueId))) return@handlePlayers
+                Util.handlePlayers(
+                    eventPlayerAction = {
+                        // if player was eliminated during the sequence (left server), don't prepare them.
+                        if (!(remainingPlayers().map { it.uniqueId }.contains(it.uniqueId))) return@handlePlayers
 
-                preparePlayer(it)
-                it.sendMessage(
-                    Component.text("\n------------------[INSTRUCTIONS]------------------\n", gameConfig.colour)
-                        .append(Component.text(gameConfig.instructions, NamedTextColor.WHITE))
-                        .append(Component.text("\n-------------------------------------------------\n", gameConfig.colour))
+                        preparePlayer(it)
+                        it.sendMessage(
+                            Component.text("\n------------------[INSTRUCTIONS]------------------\n", gameConfig.colour)
+                                .append(Component.text(gameConfig.instructions, NamedTextColor.WHITE))
+                                .append(Component.text("\n-------------------------------------------------\n", gameConfig.colour))
+                        )
+                    },
+                    optedOutAction = {
+                        it.teleport(gameConfig.spectatorSpawnLocations.random())
+                    }
                 )
-            },
-            optedOutAction = {
-                it.teleport(gameConfig.spectatorSpawnLocations.random())
-            }
-        )
 
-            startGame()
+                startGame()
+            }
         }
     }
 
@@ -175,105 +178,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
         eventController().sidebarManager.dataSupplier = eventController().points
         eventController().serialisePoints()
 
-        val npcs = mutableListOf<WorldNPC>()
-        val descendingColour = listOf("a", "c", "9")
-        var index = 0
-        formattedWinners.entries.take(1).forEach {
-            var uniqueId = it.key
-            var value = it.value
-            val displayName = "§${descendingColour[index]}${Bukkit.getPlayer(uniqueId)!!.name}"
-            var placeLocation = Util.getNPCSummaryLocation(index)
-            val animationTasks = mutableListOf<TwilightRunnable>()
-
-            WorldNPC.createFromUniqueId(displayName, uniqueId, placeLocation).also { npc ->
-                Bukkit.getOnlinePlayers().forEach { npc.spawnFor(it) }
-
-                placeLocation.world.spawn(placeLocation.add(0.0, 2.5, 0.0), TextDisplay::class.java).apply {
-                    text(Component.text(value, TextColor.color(255, 196, 255)))
-                    backgroundColor = Color.fromRGB(84, 72, 84)
-                    billboard = Display.Billboard.CENTER
-                }
-
-                animationTasks += repeatingTask(1) {
-                    val nearestItem = placeLocation.getNearbyEntitiesByType(ItemDisplay::class.java, 30.0).firstOrNull()
-                    if (nearestItem == null) {
-                        cancel()
-                        return@repeatingTask
-                    }
-
-                    val playersLocation = nearestItem.location
-
-                    val npcLocation = SpigotConversionUtil.toBukkitLocation(ChristmasEventPlugin.instance.serverWorld, npc.npc.location)
-                    if (npcLocation.distance(playersLocation) <= 25) {
-                        val lookVector = npcLocation.apply { setDirection(playersLocation.toVector().subtract(toVector())) }
-
-                        Bukkit.getOnlinePlayers().forEach {
-                            val playerManager = PacketEvents.getAPI().playerManager.getUser(it)
-                            playerManager.sendPacket(WrapperPlayServerEntityHeadLook(npc.npc.id, lookVector.yaw))
-                            playerManager.sendPacket(WrapperPlayServerEntityRotation(npc.npc.id, lookVector.yaw, lookVector.pitch, false))
-                        }
-                    }
-                } // NPC Look
-                animationTasks += repeatingTask(3) {
-                    delay((0..5).random()) {
-                        val packetToSend = when (Random.nextBoolean()) {
-                            true -> {
-                                WrapperPlayServerEntityAnimation(npc.npc.id, WrapperPlayServerEntityAnimation.EntityAnimationType.SWING_MAIN_ARM)
-                            }
-
-                            false -> {
-                                WrapperPlayServerEntityMetadata(
-                                    npc.npc.id, listOf(
-                                        EntityData(
-                                            6,
-                                            EntityDataTypes.ENTITY_POSE,
-                                            (if (Random.nextBoolean()) EntityPose.CROUCHING else EntityPose.STANDING)
-                                        )
-                                    )
-                                )
-                            }
-                        }
-
-                        Bukkit.getOnlinePlayers().forEach { PacketEvents.getAPI().playerManager.getUser(it).sendPacket(packetToSend) }
-                    }
-                } // NPC Animation
-
-                npcs.add(npc)
-            }
-
-            index++
-        } // Spawn NPCs
-        formattedWinners.clear()
-
-        // spawn NPCs for game winners:
-        val summaryLocations = listOf(
-            MapSinglePoint(605, 216, 488, -88.84488F, 3.8515968F),
-            MapSinglePoint(613, 216, 488, -88.84488F, 4.4180946F),
-            MapSinglePoint(627, 216, 488, -84.55551F, 7.250582F),
-            MapSinglePoint(639, 216, 491, 93.891174F, 23.59806F),
-            MapSinglePoint(641, 216, 497, 134.7605F, 17.609343F),
-            MapSinglePoint(634, 216, 500, -173.60687F, 15.424276F),
-            MapSinglePoint(626, 216, 500, -134.6789F, 13.482008F),
-            MapSinglePoint(622, 216, 493, -107.72839F, 14.53407F),
-            MapSinglePoint(621, 216, 484, -71.38977F, 13.158297F),
-            MapSinglePoint(622, 216, 478, -43.791748F, 12.187162F),
-            MapSinglePoint(622, 216, 477, -36.265015F, 12.025307F),
-            MapSinglePoint(625, 216, 481, -38.61206F, 12.591802F),
-            MapSinglePoint(627, 216, 485, -62.487F, 16.314486F),
-            MapSinglePoint(626, 216, 488, -87.98065F, 13.239224F)
-        ) // TODO put actual points when map is done.
-
-        CameraSequence(summaryLocations, Bukkit.getOnlinePlayers(), null, 8) {
-            Bukkit.getOnlinePlayers().forEach { loopedPlayer ->
-                loopedPlayer.gameMode = GameMode.ADVENTURE
-                loopedPlayer.inventory.clear()
-                loopedPlayer.teleport(ChristmasEventPlugin.instance.lobbySpawn)
-                eventController().sidebarManager.update(loopedPlayer)
-                npcs.forEach { it.despawnFor(loopedPlayer) }
-
-                // TODO remove textdisplays
-            }
-        }
+        showGameResults()
     }
 
     /**
@@ -344,6 +249,115 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
         return Util.handlePlayers().filter { !(eliminatedPlayers.contains(it.uniqueId)) }
     }
 
+    fun showGameResults() {
+        // slide to post-game podium.
+        CameraSlide(ChristmasEventPlugin.instance.lobbySpawn) {
+            // create podium NPCs
+            val npcs = mutableListOf<WorldNPC>()
+            val displays = mutableListOf<TextDisplay>()
+            val descendingColour = listOf("a", "c", "9")
+            var index = 0
+            formattedWinners.entries.take(1).forEach {
+                var uniqueId = it.key
+                var value = it.value
+                val displayName = "§${descendingColour[index]}${Bukkit.getPlayer(uniqueId)!!.name}"
+                var placeLocation = Util.getNPCSummaryLocation(index)
+                val animationTasks = mutableListOf<TwilightRunnable>()
+
+                WorldNPC.createFromUniqueId(displayName, uniqueId, placeLocation).also { npc ->
+                    Bukkit.getOnlinePlayers().forEach { npc.spawnFor(it) }
+
+                    placeLocation.world.spawn(placeLocation.add(0.0, 2.5, 0.0), TextDisplay::class.java).apply {
+                        text(Component.text(value, TextColor.color(255, 196, 255)))
+                        backgroundColor = Color.fromRGB(84, 72, 84)
+                        billboard = Display.Billboard.CENTER
+
+                        displays.add(this)
+                    }
+
+                    animationTasks += repeatingTask(1) {
+                        val nearestItem = placeLocation.getNearbyEntitiesByType(ItemDisplay::class.java, 30.0).firstOrNull()
+                        if (nearestItem == null) {
+                            cancel()
+                            return@repeatingTask
+                        }
+
+                        val playersLocation = nearestItem.location
+
+                        val npcLocation = SpigotConversionUtil.toBukkitLocation(ChristmasEventPlugin.instance.serverWorld, npc.npc.location)
+                        if (npcLocation.distance(playersLocation) <= 25) {
+                            val lookVector = npcLocation.apply { setDirection(playersLocation.toVector().subtract(toVector())) }
+
+                            Bukkit.getOnlinePlayers().forEach {
+                                val playerManager = PacketEvents.getAPI().playerManager.getUser(it)
+                                playerManager.sendPacket(WrapperPlayServerEntityHeadLook(npc.npc.id, lookVector.yaw))
+                                playerManager.sendPacket(WrapperPlayServerEntityRotation(npc.npc.id, lookVector.yaw, lookVector.pitch, false))
+                            }
+                        }
+                    } // NPC Look
+                    animationTasks += repeatingTask(3) {
+                        delay((0..5).random()) {
+                            val packetToSend = when (Random.nextBoolean()) {
+                                true -> {
+                                    WrapperPlayServerEntityAnimation(npc.npc.id, WrapperPlayServerEntityAnimation.EntityAnimationType.SWING_MAIN_ARM)
+                                }
+
+                                false -> {
+                                    WrapperPlayServerEntityMetadata(
+                                        npc.npc.id, listOf(
+                                            EntityData(
+                                                6,
+                                                EntityDataTypes.ENTITY_POSE,
+                                                (if (Random.nextBoolean()) EntityPose.CROUCHING else EntityPose.STANDING)
+                                            )
+                                        )
+                                    )
+                                }
+                            }
+
+                            Bukkit.getOnlinePlayers().forEach { PacketEvents.getAPI().playerManager.getUser(it).sendPacket(packetToSend) }
+                        }
+                    } // NPC Animation
+
+                    npcs.add(npc)
+                }
+
+                index++
+            } // Spawn NPCs
+            formattedWinners.clear()
+
+            // spawn NPCs for game winners:
+            val summaryLocations = listOf(
+                MapSinglePoint(605, 216, 488, -88.84488F, 3.8515968F),
+                MapSinglePoint(613, 216, 488, -88.84488F, 4.4180946F),
+                MapSinglePoint(627, 216, 488, -84.55551F, 7.250582F),
+                MapSinglePoint(639, 216, 491, 93.891174F, 23.59806F),
+                MapSinglePoint(641, 216, 497, 134.7605F, 17.609343F),
+                MapSinglePoint(634, 216, 500, -173.60687F, 15.424276F),
+                MapSinglePoint(626, 216, 500, -134.6789F, 13.482008F),
+                MapSinglePoint(622, 216, 493, -107.72839F, 14.53407F),
+                MapSinglePoint(621, 216, 484, -71.38977F, 13.158297F),
+                MapSinglePoint(622, 216, 478, -43.791748F, 12.187162F),
+                MapSinglePoint(622, 216, 477, -36.265015F, 12.025307F),
+                MapSinglePoint(625, 216, 481, -38.61206F, 12.591802F),
+                MapSinglePoint(627, 216, 485, -62.487F, 16.314486F),
+                MapSinglePoint(626, 216, 488, -87.98065F, 13.239224F)
+            ) // TODO<Map> put actual points when map is done.
+
+            // cinematic camera sequence
+            CameraSequence(summaryLocations, Bukkit.getOnlinePlayers(), null, 8) {
+                Bukkit.getOnlinePlayers().forEach { loopedPlayer ->
+                    loopedPlayer.gameMode = GameMode.ADVENTURE
+                    loopedPlayer.inventory.clear()
+                    loopedPlayer.teleport(ChristmasEventPlugin.instance.lobbySpawn)
+                    eventController().sidebarManager.update(loopedPlayer)
+                    npcs.forEach { it.despawnFor(loopedPlayer) }
+                    displays.forEach { it.remove() }
+                }
+            }
+        }
+    }
+
     /**
      * Used to distinguish between different reasons for elimination.
      *
@@ -352,7 +366,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
     enum class EliminationReason {
         // TODO change to boolean?
         /**
-         * Player left the game (left the server) OR player joined after the game started. (and canPlayAfterStart is false)
+         * Player left the game (left the server) OR player joined after the game started.
          */
         LEFT_GAME,
 
@@ -362,6 +376,4 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
         ELIMINATED,
     }
 }
-
-// TODO make sure currentGame is set to null when the game ends
 // TODO clear inventory contents after each game (because shit/compass might be in it)
