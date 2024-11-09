@@ -160,7 +160,7 @@ enum class GameConfig(
             MapSinglePoint(842, 125, 652, 139.14163F, 60.207817F),
         ),
 
-        listOf(), // TODO still fill in, cuz we have opted out players.
+        listOf(),
 
         listOf(
             MapSinglePoint(827, 90, 630, 90, 90),
@@ -298,3 +298,4 @@ enum class GameConfig(
     //endregion
 
 }
+// TODO fill in spectatorLocations for non-eliminating games as well.
