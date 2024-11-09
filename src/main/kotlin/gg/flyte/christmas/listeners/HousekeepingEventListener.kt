@@ -66,7 +66,7 @@ class HousekeepingEventListener : Listener, PacketListener {
 
         event<ServerListPingEvent> {
             // TODO finish sponsors
-            val footer = Component.text("       ")
+            val footer = text("       ")
                 .append(MiniMessage.miniMessage().deserialize("<gradient:#fffdb8:#ffffff>ᴄᴀʀʙᴏɴ.ʜᴏꜱᴛ</gradient>"))
                 .append(text(" • ", NamedTextColor.WHITE))
                 .append(text("ʙᴜɪʟᴛʙʏʙɪᴛ.ᴄᴏᴍ ", TextColor.color(72, 133, 190)))
