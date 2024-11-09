@@ -105,7 +105,7 @@ class ChristmasEventPlugin : JavaPlugin() {
         for (contributor in Util.getEventContributors()) {
             val uniqueId = contributor.uniqueId
             val contribution = contributor.contribution
-            val location = contributor.location // TODO configure pitch and yaw
+            val location = contributor.location
 
             var randomColour: String = listOf("4", "c", "6", "2", "a", "9").random()
             val displayName: String = "§$randomColour${MojangAPIUtil.requestPlayerName(uniqueId)}".colourise()
