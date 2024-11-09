@@ -179,7 +179,7 @@ enum class GameConfig(
         Component.text("ᴍᴜꜱɪᴄᴀʟ ᴍɪɴᴇᴄᴀʀᴛꜱ", TextColor.color(142, 0, 3)),
         Material.MINECART,
         TextColor.color(142, 0, 3),
-        " • Dance around the snowy platform until the christmas music stops.\n\n" + // TODO change snowy/icy depending on map lol
+        " • Dance around the platform until the christmas music stops.\n\n" +
                 " • Run to the nearest minecart and get inside before the timer ends.\n\n" +
                 " • If you fail to find a minecart before the timer ends, you will be ELIMINATED!\n\n" +
                 " • Do NOT click the minecarts until the music has stopped... or else you will be STUNNED!",
