@@ -258,6 +258,19 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                 val itemDisplay = world.spawn(location, ItemDisplay::class.java) {
                     it.setItemStack(ItemStack(Material.AIR))
                     it.teleportDuration = 59 // max (minecraft limitation)
+
+                    delay(1) {
+                        val randomSpecLocation = gameConfig.spectatorSpawnLocations.random()
+                        teleport(randomSpecLocation)
+                        addPassenger(player)
+                        player.hidePlayer()
+
+                        delay(59) {
+                            remove()
+                            player.teleport(randomSpecLocation)
+                            player.showPlayer()
+                        }
+                    }
                 }
 
                 addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20 * 4, 1, false, false, false))
