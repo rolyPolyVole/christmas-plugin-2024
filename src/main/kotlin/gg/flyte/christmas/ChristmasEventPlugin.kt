@@ -23,7 +23,6 @@ import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.GameRule
-import org.bukkit.Location
 import org.bukkit.World
 import org.bukkit.entity.Display
 import org.bukkit.entity.TextDisplay
