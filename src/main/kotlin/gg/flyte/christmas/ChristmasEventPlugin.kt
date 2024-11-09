@@ -37,7 +37,7 @@ import kotlin.reflect.full.primaryConstructor
 
 class ChristmasEventPlugin : JavaPlugin() {
     lateinit var serverWorld: World
-    lateinit var lobbySpawn: Location
+    lateinit var lobbySpawn: MapSinglePoint
     lateinit var scoreBoardTab: Scoreboard
     var cameraPlayer: UUID = UUID.fromString("a008c892-e7e1-48e1-8235-8aa389318b7a") // "devous" | Josh
     var eventController: EventController = EventController()
