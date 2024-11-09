@@ -54,6 +54,7 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.util.Vector
 import java.time.Duration
+import java.util.UUID
 import kotlin.math.ceil
 import kotlin.random.Random
 
@@ -72,7 +73,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
     private var isCountdownActive = false
     private var harder = false
     private var hasEnded = false
-    private var stunnedPlayers = mutableSetOf<Player>()
+    private var stunnedPlayers = mutableSetOf<UUID>()
     private var canEnter = false
 
     override fun startGameOverview() {
@@ -367,10 +368,12 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
             )
         )
 
-        stunnedPlayers.add(player)
+        stunnedPlayers.add(player.uniqueId)
 
         delay(10, TimeUnit.SECONDS) {
-            stunnedPlayers.remove(player)
+            stunnedPlayers.remove(player.uniqueId)
+
+            if (Bukkit.getPlayer(player.uniqueId) == null) return@delay
             player.removePotionEffect(PotionEffectType.SLOWNESS)
             player.removePotionEffect(PotionEffectType.BLINDNESS)
         }
@@ -499,7 +502,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                 return@event
             }
 
-            if (stunnedPlayers.contains(entered as Player)) {
+            if (stunnedPlayers.contains((entered as Player).uniqueId)) {
                 isCancelled = true
                 return@event
             }
