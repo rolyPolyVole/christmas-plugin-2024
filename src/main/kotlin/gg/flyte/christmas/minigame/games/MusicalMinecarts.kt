@@ -255,6 +255,8 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                     )
                 } // don't apply cosmetics if in camera sequence
 
+                addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20 * 4, 1, false, false, false))
+
                 val itemDisplay = world.spawn(location, ItemDisplay::class.java) {
                     it.setItemStack(ItemStack(Material.AIR))
                     it.teleportDuration = 59 // max (minecraft limitation)
