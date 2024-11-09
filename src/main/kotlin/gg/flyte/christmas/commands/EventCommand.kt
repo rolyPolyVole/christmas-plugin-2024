@@ -138,7 +138,13 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
                 }
 
                 modifyingGame = whoClicked.uniqueId
-                selectedIndex = (selectedIndex + 1) % availableGames.size // cycle around
+
+                if (clickType.name.lowercase().contains("left")) {
+                    selectedIndex = (selectedIndex + 1) % availableGames.size // cycle around
+                } else if (clickType.name.lowercase().contains("right")) {
+                    selectedIndex = (selectedIndex - 1 + availableGames.size) % availableGames.size // cycle around
+                }
+
                 updateRotatingItem(this)
                 this.itemStack.type = availableGames[selectedIndex].menuMaterial
 
