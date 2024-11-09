@@ -173,7 +173,7 @@ class CameraSequence(
                 players.forEach { player ->
                     player.gameMode = GameMode.SPECTATOR
                     player.teleport(itemDisplay!!.location)
-                    delay(7) { player.spectatorTarget = itemDisplay }
+                    delay(1) { player.spectatorTarget = itemDisplay }
                 }
             } else {
                 itemDisplay?.apply {
