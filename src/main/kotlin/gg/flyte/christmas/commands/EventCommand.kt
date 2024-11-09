@@ -115,7 +115,12 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
             eventController().sidebarManager.update()
         }
 
-        sender.sendMessage(Component.text("Loaded crash data! Your scoreboard should now show the most recent serialised data!", NamedTextColor.GREEN))
+        sender.sendMessage(
+            Component.text(
+                "Loaded crash data! Your scoreboard should now show the most recent serialised data!",
+                NamedTextColor.GREEN
+            )
+        )
     }
 
     private fun setGameSwitcher(): MenuItem {
