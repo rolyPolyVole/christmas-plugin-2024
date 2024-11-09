@@ -283,7 +283,6 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                 formattedWinners.put(player.uniqueId, roundNumber.toString())
                 endGame()
             }
-
             2 -> formattedWinners.put(player.uniqueId, roundNumber.toString())
             3 -> formattedWinners.put(player.uniqueId, roundNumber.toString())
         }
