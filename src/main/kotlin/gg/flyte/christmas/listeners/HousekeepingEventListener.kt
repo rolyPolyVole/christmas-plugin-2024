@@ -18,8 +18,8 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEn
 import dev.shreyasayyengar.menuapi.menu.MenuItem
 import dev.shreyasayyengar.menuapi.menu.StandardMenu
 import gg.flyte.christmas.ChristmasEventPlugin
-import gg.flyte.christmas.visual.CameraSequence
 import gg.flyte.christmas.util.eventController
+import gg.flyte.christmas.visual.CameraSequence
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.hidePlayer
 import gg.flyte.twilight.extension.playSound
