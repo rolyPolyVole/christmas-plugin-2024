@@ -22,9 +22,9 @@ class CameraSequence(
     private val players: Collection<Player>,
     private val component: Component?,
     teleportDuration: Int = 15,
+    timelineSeparation: Int = 30,
     private val onComplete: (() -> Unit)? = null
 ) {
-    private val timelineSeparation = 30
 
     companion object {
         val ACTIVE_CAMERAS = mutableSetOf<UUID>()
