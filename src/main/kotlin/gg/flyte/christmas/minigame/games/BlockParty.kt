@@ -308,7 +308,6 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                 formattedWinners.put(player.uniqueId, roundNumber.toString())
                 endGame()
             }
-
             2 -> formattedWinners.put(player.uniqueId, roundNumber.toString())
             3 -> formattedWinners.put(player.uniqueId, roundNumber.toString())
         }
