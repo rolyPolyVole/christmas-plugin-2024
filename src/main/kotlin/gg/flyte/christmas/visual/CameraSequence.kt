@@ -1,4 +1,4 @@
-package gg.flyte.christmas.util
+package gg.flyte.christmas.visual
 
 import gg.flyte.christmas.ChristmasEventPlugin
 import gg.flyte.christmas.minigame.world.MapSinglePoint
