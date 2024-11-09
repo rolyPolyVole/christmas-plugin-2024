@@ -1,7 +1,8 @@
-package gg.flyte.christmas.util
+package gg.flyte.christmas.visual
 
 import com.google.common.base.Preconditions
 import fr.mrmicky.fastboard.adventure.FastBoard
+import gg.flyte.christmas.util.eventController
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor

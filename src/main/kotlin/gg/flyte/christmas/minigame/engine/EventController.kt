@@ -4,7 +4,7 @@ import com.xxmicloxx.NoteBlockAPI.model.Playlist
 import com.xxmicloxx.NoteBlockAPI.model.SoundCategory
 import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer
 import gg.flyte.christmas.ChristmasEventPlugin
-import gg.flyte.christmas.util.SidebarManager
+import gg.flyte.christmas.visual.SidebarManager
 import gg.flyte.christmas.util.SongReference
 import gg.flyte.christmas.util.Util
 import gg.flyte.twilight.extension.playSound
