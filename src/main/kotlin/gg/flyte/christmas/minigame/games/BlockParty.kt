@@ -611,5 +611,3 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         DOUBLE_JUMP("Double Jump")
     }
 }
-
-// TODO figure out system for consistent iventory events (drop item, inventory click etc.).
