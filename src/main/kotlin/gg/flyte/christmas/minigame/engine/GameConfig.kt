@@ -20,6 +20,7 @@ enum class GameConfig(
     val colour: TextColor,
     val instructions: String,
     val minPlayers: Int,
+    val centrePoint: MapSinglePoint,
     val spawnPoints: List<MapRegion>,
     val overviewLocations: List<MapSinglePoint>,
     val spectatorSpawnLocations: List<MapSinglePoint>,
@@ -36,6 +37,7 @@ enum class GameConfig(
                 " • Run and stand on the colour which has been chosen (check hotbar) before the timer ends.\n\n" +
                 " • After the timer, the map will clear all blocks except the chosen colour blocks. To win, survive the most rounds!",
         1,
+        MapSinglePoint(615.5, 180.0, 800.5, 0F, 90F),
         listOf(
             MapRegion(
                 MapSinglePoint(624, 111, 808),
@@ -94,7 +96,7 @@ enum class GameConfig(
                 " • Knock other players off the map with your knockback stick. Avoid falling off yourself!\n\n" +
                 " • The player stood in the centre of the map for the longest time, wins!",
         1,
-
+        MapSinglePoint(833.5, 180.0, 615.5, 90F, 90F),
         listOf(
             MapRegion(
                 MapSinglePoint(826.5, 88, 680.5, 180, 0),
@@ -182,6 +184,7 @@ enum class GameConfig(
                 " • If you fail to find a minecart before the timer ends, you will be ELIMINATED!\n\n" +
                 " • Do NOT click the minecarts until the music has stopped... or else you will be STUNNED!",
         1,
+        MapSinglePoint(615.5, 180.0, 800.5, 0F, 90F),
         listOf(MapRegion.single(MapSinglePoint(553, 203, 593))),
         listOf(
             MapSinglePoint(535, 212, 612, -134.63545F, 36.587585F),
@@ -226,6 +229,7 @@ enum class GameConfig(
                 " • You can shoot over other player's blocks to reduce their score!\n\n" +
                 " • To win, cover the most amount of the map with your block/colour!",
         1,
+        MapSinglePoint(1550, 93, 437, 180, 0),
         listOf(
             MapRegion.single(MapSinglePoint(1529, 82, 410)),
             MapRegion.single(MapSinglePoint(1524, 81, 455)),
