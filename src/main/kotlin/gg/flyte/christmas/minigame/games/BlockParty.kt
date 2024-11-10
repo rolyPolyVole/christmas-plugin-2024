@@ -178,10 +178,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         }
 
         val timerBar: BossBar = BossBar.bossBar(
-            "<game_colour><b>Time left: $secondsForRound".style(),
-            1.0f,
-            BossBar.Color.RED,
-            BossBar.Overlay.PROGRESS
+            "<game_colour><b>Time left: $secondsForRound".style(), 1.0f, BossBar.Color.RED, BossBar.Overlay.PROGRESS
         )
 
         currentBossBar = timerBar

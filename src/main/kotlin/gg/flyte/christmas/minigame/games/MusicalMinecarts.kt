@@ -168,10 +168,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         remainingPlayers().forEach { it.playSound(Sound.BLOCK_NOTE_BLOCK_BASEDRUM) }
 
         val timerBar: BossBar = BossBar.bossBar(
-            "<game_colour><b>Time left: $secondsForRound".style(),
-            1.0f,
-            BossBar.Color.RED,
-            BossBar.Overlay.PROGRESS
+            "<game_colour><b>Time left: $secondsForRound".style(), 1.0f, BossBar.Color.RED, BossBar.Overlay.PROGRESS
         )
 
         currentBossBar = timerBar
@@ -277,7 +274,10 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         val winner = Bukkit.getOnlinePlayers().random() // TODO for testing purposes
         eventController().points.put(winner.uniqueId, eventController().points[winner.uniqueId]!! + 15)
 
-        Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) {it.hideBossBar(if (currentBossBar != null) currentBossBar!! else return@runAction)}
+        Util.runAction(
+            PlayerType.PARTICIPANT,
+            PlayerType.OPTED_OUT
+        ) { it.hideBossBar(if (currentBossBar != null) currentBossBar!! else return@runAction) }
         doWinAnimation(winner)
     }
 
