@@ -4,7 +4,9 @@ import com.google.common.base.Preconditions
 import gg.flyte.christmas.ChristmasEventPlugin
 import gg.flyte.christmas.minigame.world.MapSinglePoint
 import org.bukkit.Bukkit
+import org.bukkit.Material
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import java.util.UUID
 
 object Util {
@@ -77,6 +79,23 @@ object Util {
             2 -> return MapSinglePoint(633, 213, 494, 90, 0)
             else -> {
                 throw IllegalStateException("Leaderboard only supports positions between 0 and 2")
+            }
+        }
+    }
+
+    /**
+     * Applies a Christmas hat to an ItemStack with a random custom model data.
+     *
+     * @param modelData The custom model data to apply to the ItemStack.
+     * @return The corresponding modelled ItemStack.
+     */
+    fun applyChristmasHat(): ItemStack {
+        val randomPair = listOf(Pair(1, "<red>"), Pair(2, "<blue>"), Pair(3, "<green>")).random()
+
+        return ItemStack(Material.LEATHER).apply {
+            itemMeta = itemMeta.apply {
+                displayName("${randomPair.second}Christmas Hat".style())
+                setCustomModelData(randomPair.first)
             }
         }
     }

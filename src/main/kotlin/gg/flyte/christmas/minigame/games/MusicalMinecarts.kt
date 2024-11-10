@@ -15,6 +15,7 @@ import gg.flyte.christmas.util.SongReference
 import gg.flyte.christmas.util.Util
 import gg.flyte.christmas.util.colourise
 import gg.flyte.christmas.util.eventController
+import gg.flyte.christmas.util.formatInventory
 import gg.flyte.christmas.util.style
 import gg.flyte.christmas.util.title
 import gg.flyte.christmas.util.titleTimes
@@ -99,7 +100,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
     }
 
     override fun preparePlayer(player: Player) {
-        player.inventory.clear()
+        player.formatInventory()
         player.gameMode = GameMode.ADVENTURE
         player.teleport(gameConfig.spawnPoints.random().randomLocation())
     }
@@ -234,11 +235,11 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
         Util.handlePlayers(
             eventPlayerAction = {
-                it.sendMessage("<red>${player.name} <grey>has been eliminated!")
+                it.sendMessage("<red>${player.name} <grey>has been eliminated!".style())
 
             },
             optedOutAction = {
-                it.sendMessage("<red>${player.name} <grey>has been eliminated!")
+                it.sendMessage("<red>${player.name} <grey>has been eliminated!".style())
             }
         )
 

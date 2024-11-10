@@ -7,6 +7,7 @@ import gg.flyte.christmas.minigame.world.MapRegion
 import gg.flyte.christmas.minigame.world.MapSinglePoint
 import gg.flyte.christmas.util.Util
 import gg.flyte.christmas.util.eventController
+import gg.flyte.christmas.util.formatInventory
 import gg.flyte.christmas.util.style
 import gg.flyte.christmas.util.title
 import gg.flyte.christmas.util.titleTimes
@@ -43,7 +44,7 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
     }
 
     override fun preparePlayer(player: Player) {
-        player.inventory.clear()
+        player.formatInventory()
         player.gameMode = GameMode.ADVENTURE
         player.teleport(gameConfig.spawnPoints.random().randomLocation())
 

@@ -19,8 +19,8 @@ import dev.shreyasayyengar.menuapi.menu.MenuItem
 import dev.shreyasayyengar.menuapi.menu.StandardMenu
 import gg.flyte.christmas.ChristmasEventPlugin
 import gg.flyte.christmas.util.eventController
+import gg.flyte.christmas.util.formatInventory
 import gg.flyte.christmas.util.style
-import gg.flyte.christmas.util.title
 import gg.flyte.christmas.visual.CameraSequence
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.hidePlayer
@@ -53,7 +53,6 @@ import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerSwapHandItemsEvent
 import org.bukkit.event.server.ServerListPingEvent
-import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.PlayerInventory
 import kotlin.apply
 import kotlin.math.ceil
@@ -97,16 +96,6 @@ class HousekeepingEventListener : Listener, PacketListener {
         }
 
         event<PlayerJoinEvent>(priority = EventPriority.LOWEST) {
-            fun applyChristmasHat(modelData: Int): ItemStack {
-                return ItemStack(Material.LEATHER).apply {
-                    val randomColour = listOf("<red>", "<green>", "<blue>").random()
-                    itemMeta = itemMeta.apply {
-                        displayName("${randomColour}Christmas Hat".style())
-                        setCustomModelData(modelData)
-                    }
-                }
-            }
-
             fun applyTag(player: Player) {
                 player.scoreboard = ChristmasEventPlugin.instance.scoreBoardTab
                 ChristmasEventPlugin.instance.scoreBoardTab.getTeam(if (player.isOp) "a. staff" else "b. player")?.addEntry(player.name)
@@ -114,7 +103,6 @@ class HousekeepingEventListener : Listener, PacketListener {
 
             joinMessage(null)
 
-            player.title("<dark_red>ᴡᴇʟᴄᴏᴍᴇ".style(), "<game_colour>ᴛᴏ ᴛʜᴇ ᴄʜʀɪꜱᴛᴍᴀꜱ ᴇᴠᴇɴᴛ".style())
             player.apply {
 //                TODO change URL/configure pack (uncomment when works)
 //                async {
@@ -125,11 +113,8 @@ class HousekeepingEventListener : Listener, PacketListener {
 //                }
 
                 gameMode = GameMode.ADVENTURE
-
                 playSound(Sound.ENTITY_PLAYER_LEVELUP)
-
-                inventory.clear()
-                inventory.helmet = applyChristmasHat((1..3).random())
+                formatInventory()
 
                 eventController().onPlayerJoin(this)
                 eventController().songPlayer?.addPlayer(this)

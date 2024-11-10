@@ -13,6 +13,7 @@ import gg.flyte.christmas.minigame.world.MapSinglePoint
 import gg.flyte.christmas.npc.WorldNPC
 import gg.flyte.christmas.util.Util
 import gg.flyte.christmas.util.eventController
+import gg.flyte.christmas.util.formatInventory
 import gg.flyte.christmas.util.style
 import gg.flyte.christmas.util.title
 import gg.flyte.christmas.util.titleTimes
@@ -346,7 +347,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
             CameraSequence(summaryLocations, Bukkit.getOnlinePlayers(), null, 8) {
                 Bukkit.getOnlinePlayers().forEach { loopedPlayer ->
                     loopedPlayer.gameMode = GameMode.ADVENTURE
-                    loopedPlayer.inventory.clear()
+                    loopedPlayer.formatInventory()
                     loopedPlayer.teleport(ChristmasEventPlugin.instance.lobbySpawn)
                     eventController().sidebarManager.update(loopedPlayer)
                     npcs.forEach { it.despawnFor(loopedPlayer) }

@@ -4,6 +4,7 @@ import com.google.common.collect.HashBiMap
 import gg.flyte.christmas.minigame.engine.EventMiniGame
 import gg.flyte.christmas.minigame.engine.GameConfig
 import gg.flyte.christmas.util.eventController
+import gg.flyte.christmas.util.formatInventory
 import gg.flyte.christmas.util.style
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.scheduler.repeatingTask
@@ -119,7 +120,7 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
 
     override fun preparePlayer(player: Player) {
         player.gameMode = GameMode.ADVENTURE
-        player.inventory.clear()
+        player.formatInventory()
         player.teleport(gameConfig.spawnPoints.random().randomLocation())
 
         ItemStack(Material.BRUSH).apply {

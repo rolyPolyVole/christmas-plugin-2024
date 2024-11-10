@@ -1,5 +1,6 @@
 package gg.flyte.christmas.minigame.engine
 
+import gg.flyte.christmas.minigame.games.BaubleTag
 import gg.flyte.christmas.minigame.games.BlockParty
 import gg.flyte.christmas.minigame.games.KingHill
 import gg.flyte.christmas.minigame.games.MusicalMinecarts
