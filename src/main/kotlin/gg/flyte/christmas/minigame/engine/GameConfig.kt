@@ -217,8 +217,6 @@ enum class GameConfig(
     //region PAINT_WARS
     PAINT_WARS(
         PaintWars::class,
-        Component.text("Paint Wars", TextColor.color(67, 122, 21)),
-        Component.text("ᴘᴀɪɴᴛ ᴡᴀʀꜱ", TextColor.color(67, 122, 21)),
         "<colour:#549c19>Paint Wars".style(),
         "<colour:#549c19>ᴘᴀɪɴᴛ ᴡᴀʀꜱ".style(),
         Material.BRUSH,
