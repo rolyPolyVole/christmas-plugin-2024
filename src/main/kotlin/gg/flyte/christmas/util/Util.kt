@@ -37,7 +37,7 @@ object Util {
             val isOptOut = eventController().optOut.contains(player.uniqueId)
 
             when {
-                PlayerType.CAMERA in types && isCameraPlayer -> {
+                PlayerType.PARTICIPANT in types && !isCameraPlayer && !isOptOut -> {
                     action(player)
                     true
                 }
@@ -47,7 +47,7 @@ object Util {
                     true
                 }
 
-                PlayerType.PARTICIPANT in types && !isCameraPlayer && !isOptOut -> {
+                PlayerType.CAMERA in types && isCameraPlayer -> {
                     action(player)
                     true
                 }
