@@ -13,7 +13,27 @@ import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import java.time.Duration
 
-fun String.asComponent() = LegacyComponentSerializer.legacyAmpersand().deserialize(this)
+fun eventController() = ChristmasEventPlugin.instance.eventController
+
+var miniMessage = MiniMessage.builder().build()
+fun String.style(vararg placeholders: Component): Component {
+    val components = placeholders.mapIndexed { index, component -> Placeholder.component(index.toString(), component) }.toTypedArray()
+
+    val colourResolver = try {
+        eventController().currentGame?.gameConfig?.colour?.let {
+            Placeholder.styling("game_colour", it)
+        } ?: Placeholder.styling("game_colour", NamedTextColor.WHITE)
+    } catch (_: Exception) {
+        Placeholder.styling("game_colour", NamedTextColor.WHITE)
+    }
+
+    return miniMessage.deserialize(
+        this,
+        *components,
+        TagResolver.standard(),
+        colourResolver
+    )
+}
 
 fun String.colourise(): String {
     val pattern = Regex("#[a-fA-F0-9]{6}")
