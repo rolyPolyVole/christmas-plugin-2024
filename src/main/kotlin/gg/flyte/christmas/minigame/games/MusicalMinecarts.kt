@@ -8,6 +8,7 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSe
 import gg.flyte.christmas.ChristmasEventPlugin
 import gg.flyte.christmas.minigame.engine.EventMiniGame
 import gg.flyte.christmas.minigame.engine.GameConfig
+import gg.flyte.christmas.minigame.engine.PlayerType
 import gg.flyte.christmas.minigame.world.MapRegion
 import gg.flyte.christmas.minigame.world.MapSinglePoint
 import gg.flyte.christmas.npc.WorldNPC
@@ -30,8 +31,6 @@ import gg.flyte.twilight.time.TimeUnit
 import io.github.retrooper.packetevents.util.SpigotConversionUtil
 import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
-import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
@@ -109,10 +108,10 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         overviewTasks.forEach { it.cancel() }
         minecarts.forEach { it.remove() }.also { minecarts.clear() }
 
-        simpleCountdown { newRound() }
-        Util.handlePlayers(eventPlayerAction = {
-            it.sendMessage("<game_colour>Remember, do NOT click the minecarts before the music has STOPPED... you will be stunned!".style())
-        })
+        simpleCountdown {
+            newRound()
+            Util.runAction(PlayerType.PARTICIPANT) { it.sendMessage("<game_colour>Remember, do NOT click the minecarts BEFORE the music has STOPPED... you will be stunned!".style()) }
+        }
     }
 
     private fun newRound() {
@@ -127,17 +126,13 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
             remainingPlayers().size == 20 && !harder -> {
                 harder = true
 
-                Util.handlePlayers(
-                    eventPlayerAction = {
-                        it.title("<game_colour>Hard Mode!".style(), Component.empty())
-                        it.sendMessage("<red><b>The minecarts will only spawn when the music STOPS!".style())
-                        it.playSound(Sound.ENTITY_ENDER_DRAGON_GROWL)
-                    },
-                    optedOutAction = {
-                        it.sendMessage("<game_colour>The game is getting harder!".style())
-                        it.playSound(Sound.ENTITY_ENDER_DRAGON_GROWL)
-                    }
-                )
+                Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.playSound(Sound.ENTITY_ENDER_DRAGON_GROWL) }
+                Util.runAction(PlayerType.PARTICIPANT) {
+                    it.title("<game_colour>Hard Mode!".style(), Component.empty())
+                    it.sendMessage("<red><b>The minecarts will only spawn when the music STOPS!".style())
+                    it.playSound(Sound.ENTITY_ENDER_DRAGON_GROWL)
+                }
+                Util.runAction(PlayerType.OPTED_OUT) { it.sendMessage("<game_colour>The game is getting harder!".style()) }
             }
         }
 
@@ -181,10 +176,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
         currentBossBar = timerBar
 
-        Util.handlePlayers(
-            eventPlayerAction = { it.showBossBar(timerBar) },
-            optedOutAction = { it.showBossBar(timerBar) } // all can see ticker
-        )
+        Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.hideBossBar(timerBar) }
 
         val totalTicks = secondsForRound * 20
         var remainingTicks = totalTicks
@@ -213,7 +205,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
             if (remainingTicks <= 0) {
                 this.cancel()
 
-                Util.handlePlayers(eventPlayerAction = { it.hideBossBar(timerBar) }, optedOutAction = { it.hideBossBar(timerBar) })
+                Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.hideBossBar(timerBar) }
                 bossBarTask = null
                 currentBossBar = null
             } else {
@@ -233,25 +225,14 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
     override fun eliminate(player: Player, reason: EliminationReason) {
         if (currentBossBar != null) player.hideBossBar(currentBossBar!!)
 
-        Util.handlePlayers(
-            eventPlayerAction = {
-                it.sendMessage("<red>${player.name} <grey>has been eliminated!".style())
-
-            },
-            optedOutAction = {
-                it.sendMessage("<red>${player.name} <grey>has been eliminated!".style())
-            }
-        )
+        Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.sendMessage("<red>${player.name} <grey>has been eliminated!".style()) }
 
         player.apply {
             if (allowFlight) allowFlight = false // if had double-jump
 
             if (reason == EliminationReason.ELIMINATED) {
                 if (gameMode != GameMode.SPECTATOR) {
-                    Util.handlePlayers(
-                        eventPlayerAction = { it.playSound(Sound.ENTITY_ITEM_BREAK) },
-                        optedOutAction = { it.playSound(Sound.ENTITY_ITEM_BREAK) }
-                    )
+                    Util.runAction(PlayerType.PARTICIPANT, PlayerType.PARTICIPANT) { it.playSound(Sound.ENTITY_ITEM_BREAK) }
                 } // don't apply cosmetics if in camera sequence
 
                 addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20 * 4, 1, false, false, false))
@@ -296,14 +277,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         val winner = Bukkit.getOnlinePlayers().random() // TODO for testing purposes
         eventController().points.put(winner.uniqueId, eventController().points[winner.uniqueId]!! + 15)
 
-        Util.handlePlayers(
-            eventPlayerAction = {
-                it.hideBossBar(if (currentBossBar != null) currentBossBar!! else return@handlePlayers)
-            },
-            optedOutAction = {
-                it.hideBossBar(if (currentBossBar != null) currentBossBar!! else return@handlePlayers)
-            },
-        )
+        Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) {it.hideBossBar(if (currentBossBar != null) currentBossBar!! else return@runAction)}
         doWinAnimation(winner)
     }
 
@@ -311,14 +285,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         val numCarts = if (remainingPlayers().size == 2) 1 else ceil(remainingPlayers().size * 2 / 3.0).toInt() // ceil condition fails at 2 players
         repeat(numCarts) { summonMinecart() }
 
-        Util.handlePlayers(
-            eventPlayerAction = {
-                it.playSound(Sound.ENTITY_ITEM_PICKUP)
-            },
-            optedOutAction = {
-                it.playSound(Sound.ENTITY_ITEM_PICKUP)
-            }
-        )
+        Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.playSound(Sound.ENTITY_ITEM_PICKUP) }
     }
 
     private fun powerUp() {
@@ -342,16 +309,11 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
             }
 
             val notification = "<game_colour><b>>> A mysterious power-up has spawned on the floor! <<".style()
-            Util.handlePlayers(
-                eventPlayerAction = {
-                    it.sendMessage(notification)
-                    it.sendMessage("<grey>Find the beacon on the map to unlock it!".style())
-                    it.playSound(Sound.BLOCK_NOTE_BLOCK_PLING)
-                },
-                optedOutAction = {
-                    it.sendMessage(notification)
-                }
-            )
+            Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.sendMessage(notification) }
+            Util.runAction(PlayerType.PARTICIPANT) {
+                it.sendMessage("<grey>Find the beacon on the map to unlock it!".style())
+                it.playSound(Sound.BLOCK_NOTE_BLOCK_PLING)
+            }
         }
     }
 
@@ -516,24 +478,14 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                 clickedBlock?.type = Material.AIR
                 var randomPowerUp = PowerUp.entries.random()
 
-                player.sendMessage(
-                    Component.text("You've found a ${randomPowerUp.displayName} power-up!")
-                        .color(NamedTextColor.GREEN)
-                        .decorate(TextDecoration.BOLD)
-                )
-
-                Util.handlePlayers(
-                    eventPlayerAction = {
-                        if (it == player) {
-                            it.sendMessage("<green><b>You've found a ${randomPowerUp.displayName} power-up!".style())
-                        } else {
-                            it.sendMessage("<green><b>>> ${player.displayName()} has found a {${randomPowerUp.displayName} power-up! <<")
-                        }
-                    },
-                    optedOutAction = {
+                Util.runAction(PlayerType.PARTICIPANT) {
+                    if (it == player) {
+                        it.sendMessage("<green><b>You've found a ${randomPowerUp.displayName} power-up!".style())
+                    } else {
                         it.sendMessage("<green><b>>> ${player.displayName()} has found a {${randomPowerUp.displayName} power-up! <<")
                     }
-                )
+                }
+                Util.runAction(PlayerType.OPTED_OUT) { it.sendMessage("<green><b>>> ${player.displayName()} has found a {${randomPowerUp.displayName} power-up! <<") }
 
                 when (randomPowerUp) {
                     PowerUp.ENDER_PEARL -> player.inventory.setItem(0, ItemStack(Material.ENDER_PEARL, 1))

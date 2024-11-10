@@ -3,6 +3,7 @@ package gg.flyte.christmas.minigame.games
 import gg.flyte.christmas.ChristmasEventPlugin
 import gg.flyte.christmas.minigame.engine.EventMiniGame
 import gg.flyte.christmas.minigame.engine.GameConfig
+import gg.flyte.christmas.minigame.engine.PlayerType
 import gg.flyte.christmas.minigame.world.MapRegion
 import gg.flyte.christmas.minigame.world.MapSinglePoint
 import gg.flyte.christmas.util.Util
@@ -62,22 +63,21 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
     override fun startGame() {
         simpleCountdown {
             pvpEnabled = true
-            Util.handlePlayers(eventPlayerAction = {
+            Util.runAction(PlayerType.PARTICIPANT) {
                 it.title(
                     Component.empty(), "<game_colour>PVP Enabled!".style(),
                     titleTimes(Duration.ZERO, Duration.ofSeconds(2), Duration.ofMillis(300))
                 )
-            })
+            }
 
             tasks += repeatingTask(1, TimeUnit.SECONDS) {
-                Util.handlePlayers(eventPlayerAction = {
+                Util.runAction(PlayerType.PARTICIPANT) {
                     if (hillRegion.contains(it.location)) {
                         timeOnHill[it.uniqueId] = timeOnHill[it.uniqueId]!! + 1
                         it.playSound(Sound.ENTITY_ITEM_PICKUP)
                         it.sendMessage("<green>+1 second".style())
                     }
-                })
-
+                }
                 gameTime--
 
                 if (gameTime == 0) {
@@ -96,7 +96,7 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
     }
 
     override fun endGame() {
-        Util.handlePlayers(eventPlayerAction = { it.teleport(gameConfig.spawnPoints.random().randomLocation()) })
+        Util.runAction(PlayerType.PARTICIPANT) { it.teleport(gameConfig.spawnPoints.random().randomLocation()) }
         for (entry in timeOnHill) eventController().addPoints(entry.key, entry.value)
 
         val (first) = timeOnHill.entries

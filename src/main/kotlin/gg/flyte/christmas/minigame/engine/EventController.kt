@@ -86,22 +86,13 @@ class EventController() {
                 }
 
                 else -> {
-                    val times = Title.Times.times(Duration.ZERO, Duration.ofMillis(1100), Duration.ZERO)
-
-                    Util.handlePlayers(
-                        eventPlayerAction = {
-                            countdownMap[seconds]?.let { number ->
-                                it.showTitle(Title.title(number, Component.empty(), times))
-                                it.playSound(Sound.UI_BUTTON_CLICK)
-                            }
-                        },
-                        optedOutAction = {
-                            countdownMap[seconds]?.let { titleText ->
-                                it.showTitle(Title.title(titleText, Component.empty(), times))
-                                it.playSound(Sound.UI_BUTTON_CLICK)
-                            }
+                    val times = titleTimes(Duration.ZERO, Duration.ofMillis(1100), Duration.ZERO)
+                    Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) {
+                        countdownMap[seconds]?.let { number ->
+                            it.showTitle(Title.title(number, Component.empty(), times))
+                            it.playSound(Sound.UI_BUTTON_CLICK)
                         }
-                    )
+                    }
                     seconds--
                 }
             }
@@ -113,7 +104,7 @@ class EventController() {
      * through [GameConfig.minPlayers].
      */
     private fun enoughPlayers(): Boolean {
-        return Util.handlePlayers().size >= currentGame!!.gameConfig.minPlayers
+        return Util.runAction(PlayerType.PARTICIPANT) {}.size >= currentGame!!.gameConfig.minPlayers
     }
 
     fun onPlayerJoin(player: Player) {
@@ -142,24 +133,13 @@ class EventController() {
                     countdownTask?.cancel()
                     currentGame!!.state = GameState.WAITING_FOR_PLAYERS
 
-                    Util.handlePlayers(
-                        eventPlayerAction = {
-                            it.showTitle(
-                                Title.title(
-                                    "<dark_red>⦅x⦆".style(), "<red>Waiting for more players...".style(),
-                                    titleTimes(Duration.ZERO, Duration.ofSeconds(5), Duration.ofSeconds(1))
-                                )
-                            )
-                            it.playSound(Sound.BLOCK_NOTE_BLOCK_BASS)
-                        },
-                        optedOutAction = {
-                            it.title(
-                                "<dark_red>⦅x⦆".style(), "<red>Waiting for more players...".style(),
-                                titleTimes(Duration.ZERO, Duration.ofSeconds(5), Duration.ofSeconds(1))
-                            )
-                            it.playSound(Sound.BLOCK_NOTE_BLOCK_BASS)
-                        }
-                    )
+                    Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) {
+                        it.title(
+                            "<dark_red>⦅x⦆".style(), "<red>Waiting for more players...".style(),
+                            titleTimes(Duration.ZERO, Duration.ofSeconds(5), Duration.ofSeconds(1))
+                        )
+                        it.playSound(Sound.BLOCK_NOTE_BLOCK_BASS)
+                    }
                 }
             }
 

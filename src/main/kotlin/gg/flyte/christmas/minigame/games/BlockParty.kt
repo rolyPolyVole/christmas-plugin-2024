@@ -11,6 +11,7 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEn
 import dev.shreyasayyengar.menuapi.menu.MenuItem
 import gg.flyte.christmas.minigame.engine.EventMiniGame
 import gg.flyte.christmas.minigame.engine.GameConfig
+import gg.flyte.christmas.minigame.engine.PlayerType
 import gg.flyte.christmas.minigame.world.MapRegion
 import gg.flyte.christmas.minigame.world.MapSinglePoint
 import gg.flyte.christmas.npc.WorldNPC
@@ -128,17 +129,13 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                 harder = true
                 roundNumber = 8 // hard round needs more time to find safe squares first.
 
-                Util.handlePlayers(
-                    eventPlayerAction = {
-                        it.title("<game_colour>Hard Mode!".style(), Component.empty())
-                        it.sendMessage("<red><b>The floor will now change right before the timer starts... stay quick!".style())
-                        it.playSound(Sound.ENTITY_ENDER_DRAGON_GROWL)
-                    },
-                    optedOutAction = {
-                        it.sendMessage("<game_colour>The game is getting harder!".style())
-                        it.playSound(Sound.ENTITY_ENDER_DRAGON_GROWL)
-                    }
-                )
+                Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.playSound(Sound.ENTITY_ENDER_DRAGON_GROWL) }
+                Util.runAction(PlayerType.PARTICIPANT) {
+                    it.title("<game_colour>Hard Mode!".style(), Component.empty())
+                    it.sendMessage("<red><b>The floor will now change right before the timer starts... stay quick!".style())
+                    it.playSound(Sound.ENTITY_ENDER_DRAGON_GROWL)
+                }
+                Util.runAction(PlayerType.OPTED_OUT) { it.sendMessage("<game_colour>The game is getting harder!".style()) }
             }
         }
 
@@ -189,10 +186,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
         currentBossBar = timerBar
 
-        Util.handlePlayers(
-            eventPlayerAction = { it.showBossBar(timerBar) },
-            optedOutAction = { it.showBossBar(timerBar) } // all can see ticker
-        )
+        Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.hideBossBar(timerBar) }
 
         val totalTicks = secondsForRound * 20
         var remainingTicks = totalTicks
@@ -232,7 +226,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
             if (remainingTicks <= 0) {
                 this.cancel()
 
-                Util.handlePlayers(eventPlayerAction = { it.hideBossBar(timerBar) }, optedOutAction = { it.hideBossBar(timerBar) })
+                Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.hideBossBar(timerBar) }
                 bossBarTask = null
                 currentBossBar = null
             } else {
@@ -252,14 +246,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
     override fun eliminate(player: Player, reason: EliminationReason) {
         if (currentBossBar != null) player.hideBossBar(currentBossBar!!)
 
-        Util.handlePlayers(
-            eventPlayerAction = {
-                it.sendMessage("<red>${player.name} <grey>has been eliminated!".style())
-            },
-            optedOutAction = {
-                it.sendMessage("<red>${player.name} <grey>has been eliminated!".style())
-            }
-        )
+        Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.sendMessage("<red>${player.name} <grey>has been eliminated!".style()) }
 
         player.apply {
             if (allowFlight) allowFlight = false // if had double-jump
@@ -312,14 +299,10 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         val winner = Bukkit.getOnlinePlayers().random() // TODO change back
         eventController().addPoints(winner.uniqueId, 15)
 
-        Util.handlePlayers(
-            eventPlayerAction = {
-                it.hideBossBar(if (currentBossBar != null) currentBossBar!! else return@handlePlayers)
-            },
-            optedOutAction = {
-                it.hideBossBar(if (currentBossBar != null) currentBossBar!! else return@handlePlayers)
-            },
-        )
+        Util.runAction(
+            PlayerType.PARTICIPANT,
+            PlayerType.OPTED_OUT
+        ) { it.hideBossBar(if (currentBossBar != null) currentBossBar!! else return@runAction) }
         doWinAnimation(winner)
     }
 
@@ -342,17 +325,12 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
         bombedSquares.forEach { it.block.type = selectedMaterial } // if colour bombs used, change those squares to safe.
 
-        Util.handlePlayers(
-            eventPlayerAction = {
-                it.playSound(Sound.BLOCK_BEACON_ACTIVATE)
-                for (itemStack in it.inventory.storageContents) {
-                    if (itemStack?.type == selectedMaterial) itemStack.type = Material.AIR // ensure no power-up items are removed
-                }
-            },
-            optedOutAction = {
-                it.playSound(Sound.BLOCK_BEACON_ACTIVATE)
+        Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.playSound(Sound.BLOCK_BEACON_ACTIVATE) }
+        Util.runAction(PlayerType.PARTICIPANT) {
+            for (itemStack in it.inventory.storageContents) {
+                if (itemStack?.type == selectedMaterial) itemStack.type = Material.AIR // ensure no power-up items are removed
             }
-        )
+        }
     }
 
     private fun handlePowerUp() {
@@ -377,16 +355,12 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
 
             val notification = "<game_colour><b>>> A mysterious power-up has spawned on the floor! <<".style()
-            Util.handlePlayers(
-                eventPlayerAction = {
-                    it.sendMessage(notification)
-                    it.sendMessage("<grey>Find the beacon on the map to unlock it!".style())
-                    it.playSound(Sound.BLOCK_NOTE_BLOCK_PLING)
-                },
-                optedOutAction = {
-                    it.sendMessage(notification)
-                }
-            )
+            Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.sendMessage(notification) }
+            Util.runAction(PlayerType.PARTICIPANT) {
+                it.sendMessage(notification)
+                it.sendMessage("<grey>Find the beacon on the map to unlock it!".style())
+                it.playSound(Sound.BLOCK_NOTE_BLOCK_PLING)
+            }
         }
     }
 
@@ -473,18 +447,14 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                 clickedBlock?.type = Material.AIR
                 var randomPowerUp = PowerUp.entries.random()
 
-                Util.handlePlayers(
-                    eventPlayerAction = {
-                        if (it == player) {
-                            it.sendMessage("<green><b>You've found a ${randomPowerUp.displayName} power-up!".style())
-                        } else {
-                            it.sendMessage("<green><b>>> ${player.displayName()} has found a {${randomPowerUp.displayName} power-up! <<")
-                        }
-                    },
-                    optedOutAction = {
+                Util.runAction(PlayerType.PARTICIPANT) {
+                    if (it == player) {
+                        it.sendMessage("<green><b>You've found a ${randomPowerUp.displayName} power-up!".style())
+                    } else {
                         it.sendMessage("<green><b>>> ${player.displayName()} has found a {${randomPowerUp.displayName} power-up! <<")
                     }
-                )
+                }
+                Util.runAction(PlayerType.OPTED_OUT) { it.sendMessage("<green><b>>> ${player.displayName()} has found a {${randomPowerUp.displayName} power-up! <<") }
 
                 when (randomPowerUp) {
                     PowerUp.ENDER_PEARL -> player.inventory.setItem(0, ItemStack(Material.ENDER_PEARL, 1))

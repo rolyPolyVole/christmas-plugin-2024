@@ -80,12 +80,12 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
     open fun startGameOverview() {
         CameraSlide(gameConfig) {
             // send BEFORE textDisplay has rendered in.
-            Util.handlePlayers(eventPlayerAction = {
+            Util.runAction(PlayerType.PARTICIPANT) {
                 it.title(
                     gameConfig.displayName, "<game_colour>Instructions:".style(),
                     titleTimes(Duration.ofMillis(1250), Duration.ofMillis(3500), Duration.ofMillis(750))
                 )
-            })
+            }
 
             var displayComponent = Component.empty()
                 .append("<st>\n   ".style())
@@ -100,22 +100,18 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
                 // when sequence finished:
                 handleGameEvents()
 
-                Util.handlePlayers(
-                    eventPlayerAction = {
-                        // if player was eliminated during the sequence (left server), don't prepare them.
-                        if (!(remainingPlayers().map { it.uniqueId }.contains(it.uniqueId))) return@handlePlayers
+                Util.runAction(PlayerType.PARTICIPANT) {
+                    // if player was eliminated during the sequence (left server), don't prepare them.
+                    if (!(remainingPlayers().map { it.uniqueId }.contains(it.uniqueId))) return@runAction
 
-                        preparePlayer(it)
-                        it.sendMessage(
-                            "<game_colour>\n------------------[INSTRUCTIONS]------------------\n".style()
-                                .append("<white>${gameConfig.instructions}".style())
-                                .append("<game_colour>\n-------------------------------------------------\n".style())
-                        )
-                    },
-                    optedOutAction = {
-                        it.teleport(gameConfig.spectatorSpawnLocations.random())
-                    }
-                )
+                    preparePlayer(it)
+                    it.sendMessage(
+                        "<game_colour>\n------------------[INSTRUCTIONS]------------------\n".style()
+                            .append("<white>${gameConfig.instructions}".style())
+                            .append("<game_colour>\n-------------------------------------------------\n".style())
+                    )
+                }
+                Util.runAction(PlayerType.OPTED_OUT) { it.teleport(gameConfig.spectatorSpawnLocations.random()) }
 
                 startGame()
             }
@@ -229,12 +225,12 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
                 else -> {
                     val times = titleTimes(Duration.ZERO, Duration.ofMillis(1100), Duration.ZERO)
 
-                    Util.handlePlayers(eventPlayerAction = {
+                    Util.runAction(PlayerType.PARTICIPANT) {
                         eventController().countdownMap[seconds]?.let { titleText ->
                             it.title(titleText, Component.empty(), times)
                             it.playSound(Sound.UI_BUTTON_CLICK)
                         }
-                    })
+                    }
                     seconds--
                 }
             }
@@ -245,7 +241,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
      * @return A list of players who have not been eliminated from the game.
      */
     fun remainingPlayers(): List<Player> {
-        return Util.handlePlayers().filter { !(eliminatedPlayers.contains(it.uniqueId)) }
+        return Util.runAction(PlayerType.PARTICIPANT) {}.filter { !(eliminatedPlayers.contains(it.uniqueId)) }
     }
 
     fun showGameResults() {

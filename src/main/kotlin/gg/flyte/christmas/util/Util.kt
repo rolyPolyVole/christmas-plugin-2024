@@ -2,6 +2,7 @@ package gg.flyte.christmas.util
 
 import com.google.common.base.Preconditions
 import gg.flyte.christmas.ChristmasEventPlugin
+import gg.flyte.christmas.minigame.engine.PlayerType
 import gg.flyte.christmas.minigame.world.MapSinglePoint
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -23,40 +24,35 @@ object Util {
     }
 
     /**
-     * Handles players based on their status in the event.
+     * Handles players based on their type in the event.
      *
-     * @param cameraEntityAction The action to perform on the camera player.
-     * @param optedOutAction The action to perform on players who have opted out.
-     * @param eventPlayerAction The action to perform on players who are participating in the event.
+     * @param types The types of players to handle.
+     * @param action The action to perform on the player if they match the given types.
      *
-     * @return A collection of players who are **participating** in the event. (excludes camera player and opted out players)
+     * @return A collection of players who match the given player type.
      */
-    fun handlePlayers(
-        cameraEntityAction: ((Player) -> Unit)? = null,
-        optedOutAction: ((Player) -> Unit)? = null,
-        eventPlayerAction: ((Player) -> Unit)? = null
-    ): Collection<Player> {
-        val instance = ChristmasEventPlugin.instance
-
+    fun runAction(vararg types: PlayerType, action: (Player) -> Unit): Collection<Player> {
         return Bukkit.getOnlinePlayers().filter { player ->
-            val isCameraPlayer = player.uniqueId == instance.cameraPlayer
+            val isCameraPlayer = player.uniqueId == ChristmasEventPlugin.instance.cameraPlayer
             val isOptOut = eventController().optOut.contains(player.uniqueId)
 
             when {
-                isCameraPlayer -> {
-                    cameraEntityAction?.invoke(player)
-                    false
-                }
-
-                isOptOut -> {
-                    optedOutAction?.invoke(player)
-                    false
-                }
-
-                else -> {
-                    eventPlayerAction?.invoke(player)
+                PlayerType.CAMERA in types && isCameraPlayer -> {
+                    action(player)
                     true
                 }
+
+                PlayerType.OPTED_OUT in types && isOptOut -> {
+                    action(player)
+                    true
+                }
+
+                PlayerType.PARTICIPANT in types && !isCameraPlayer && !isOptOut -> {
+                    action(player)
+                    true
+                }
+
+                else -> false
             }
         }
     }
@@ -72,7 +68,6 @@ object Util {
     // TODO write in actual locations when map is finished.
     fun getNPCSummaryLocation(position: Int): MapSinglePoint {
         Preconditions.checkArgument(position in 0..2, "Leaderboard only supports positions between 0 and 2")
-
         return when (position) {
             0 -> return MapSinglePoint(633, 216, 489, 90, 0)
             1 -> return MapSinglePoint(633, 214, 484, 90, 0)
@@ -98,5 +93,7 @@ object Util {
                 setCustomModelData(randomPair.first)
             }
         }
+
+        runAction(PlayerType.PARTICIPANT, PlayerType.CAMERA) {}
     }
 }
