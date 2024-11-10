@@ -219,8 +219,10 @@ enum class GameConfig(
         PaintWars::class,
         Component.text("Paint Wars", TextColor.color(67, 122, 21)),
         Component.text("ᴘᴀɪɴᴛ ᴡᴀʀꜱ", TextColor.color(67, 122, 21)),
+        "<colour:#549c19>Paint Wars".style(),
+        "<colour:#549c19>ᴘᴀɪɴᴛ ᴡᴀʀꜱ".style(),
         Material.BRUSH,
-        TextColor.color(67, 122, 21),
+        TextColor.color(84, 156, 25),
         " • Use your Paint Gun to shoot blocks around the map into your chosen block.\n\n" +
                 " • You can shoot over other player's blocks to reduce their score!\n\n" +
                 " • To win, cover the most amount of the map with your block/colour!",
