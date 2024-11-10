@@ -21,8 +21,10 @@ import java.net.URL
 class DonationListener(private val campaignId: String) {
     private val url: URL = URI.create("https://v5api.tiltify.com/api/public/campaigns/$campaignId/donations").toURL()
     private val processedDonations = mutableSetOf<String>()
-    
-    init { fetchDonations() }
+
+    init {
+        fetchDonations()
+    }
 
     /**
      * Continuously fetches donation data for a specified campaign at a 10-second interval.
