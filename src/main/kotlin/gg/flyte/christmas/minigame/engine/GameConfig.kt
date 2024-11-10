@@ -32,6 +32,8 @@ enum class GameConfig(
         BlockParty::class,
         "<colour:#e05c0b>Block Party".style(),
         "<colour:#e05c0b>ʙʟᴏᴄᴋ ᴘᴀʀᴛʏ".style(),
+        "<colour:#e05c6f>Block Party".style(),
+        "<colour:#e05c6f>ʙʟᴏᴄᴋ ᴘᴀʀᴛʏ".style(),
         Material.MAGENTA_GLAZED_TERRACOTTA,
         TextColor.color(224, 92, 111),
         " • Dance around the colourful floor until the christmas music stops.\n\n" +

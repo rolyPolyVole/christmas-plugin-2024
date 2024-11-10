@@ -253,10 +253,10 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
         Util.handlePlayers(
             eventPlayerAction = {
-                it.sendMessage("<red>${player.name} <grey>has been eliminated!")
+                it.sendMessage("<red>${player.name} <grey>has been eliminated!".style())
             },
             optedOutAction = {
-                it.sendMessage("<red>${player.name} <grey>has been eliminated!")
+                it.sendMessage("<red>${player.name} <grey>has been eliminated!".style())
             }
         )
 
