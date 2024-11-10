@@ -17,7 +17,6 @@ import java.io.InputStream
 private fun parse(fileName: String): Song {
     @Throws(IOException::class)
     fun copyInputStreamToFile(inputStream: InputStream, file: File) {
-        // append = false
         FileOutputStream(file, false).use { outputStream ->
             val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
             var bytesRead: Int
