@@ -30,8 +30,6 @@ enum class GameConfig(
     //region BLOCK_PARTY
     BLOCK_PARTY(
         BlockParty::class,
-        "<colour:#e05c0b>Block Party".style(),
-        "<colour:#e05c0b>ʙʟᴏᴄᴋ ᴘᴀʀᴛʏ".style(),
         "<colour:#e05c6f>Block Party".style(),
         "<colour:#e05c6f>ʙʟᴏᴄᴋ ᴘᴀʀᴛʏ".style(),
         Material.MAGENTA_GLAZED_TERRACOTTA,
