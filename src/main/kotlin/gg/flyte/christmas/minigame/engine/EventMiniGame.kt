@@ -13,6 +13,9 @@ import gg.flyte.christmas.minigame.world.MapSinglePoint
 import gg.flyte.christmas.npc.WorldNPC
 import gg.flyte.christmas.util.Util
 import gg.flyte.christmas.util.eventController
+import gg.flyte.christmas.util.style
+import gg.flyte.christmas.util.title
+import gg.flyte.christmas.util.titleTimes
 import gg.flyte.christmas.visual.CameraSequence
 import gg.flyte.christmas.visual.CameraSlide
 import gg.flyte.twilight.event.TwilightListener
@@ -23,10 +26,6 @@ import gg.flyte.twilight.scheduler.repeatingTask
 import gg.flyte.twilight.time.TimeUnit
 import io.github.retrooper.packetevents.util.SpigotConversionUtil
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
-import net.kyori.adventure.text.format.TextColor
-import net.kyori.adventure.text.format.TextDecoration
-import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.GameMode
@@ -80,21 +79,20 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
     open fun startGameOverview() {
         CameraSlide(gameConfig) {
             // send BEFORE textDisplay has rendered in.
-            val title = Title.title(
-                gameConfig.displayName,
-                Component.text("Instructions:", gameConfig.colour),
-                Title.Times.times(Duration.ofMillis(1250), Duration.ofMillis(3500), Duration.ofMillis(750))
-            )
+            Util.handlePlayers(eventPlayerAction = {
+                it.title(
+                    gameConfig.displayName, "<game_colour>Instructions:".style(),
+                    titleTimes(Duration.ofMillis(1250), Duration.ofMillis(3500), Duration.ofMillis(750))
+                )
+            })
 
-            Util.handlePlayers(eventPlayerAction = { it.showTitle(title) })
-
-            var displayComponent = Component.text("")
-                .append(Component.text("\n   ", null, TextDecoration.STRIKETHROUGH))
-                .append(Component.text("> "))
-                .append(gameConfig.displayName.decorate(TextDecoration.BOLD))
-                .append(Component.text("\n\n"))
-                .append(Component.text(gameConfig.instructions, gameConfig.colour))
-                .append(Component.text("\n"))
+            var displayComponent = Component.empty()
+                .append("<st>\n   ".style())
+                .append("> ".style())
+                .append("<b>${gameConfig.displayName}".style())
+                .append("\n\n".style())
+                .append(gameConfig.instructions.style())
+                .append("\n".style())
                 .color(gameConfig.colour)
 
             CameraSequence(gameConfig.overviewLocations, Bukkit.getOnlinePlayers(), displayComponent) {
@@ -108,9 +106,9 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
 
                         preparePlayer(it)
                         it.sendMessage(
-                            Component.text("\n------------------[INSTRUCTIONS]------------------\n", gameConfig.colour)
-                                .append(Component.text(gameConfig.instructions, NamedTextColor.WHITE))
-                                .append(Component.text("\n-------------------------------------------------\n", gameConfig.colour))
+                            "<game_colour>\n------------------[INSTRUCTIONS]------------------\n".style()
+                                .append("<white>${gameConfig.instructions}".style())
+                                .append("<game_colour>\n-------------------------------------------------\n".style())
                         )
                     },
                     optedOutAction = {
@@ -155,9 +153,9 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
             // spectate item
             ItemStack(Material.COMPASS).apply {
                 itemMeta = itemMeta.apply {
-                    displayName(Component.text("Spectate", NamedTextColor.WHITE))
+                    displayName("<white>Spectate".style())
                     editMeta {
-                        lore(listOf(Component.text("Click to Spectate!", NamedTextColor.GRAY)))
+                        lore(listOf("<grey>Click to Spectate!".style()))
                     }
                 }
             }.also { player.inventory.setItem(8, it) }
@@ -228,11 +226,11 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
                 }
 
                 else -> {
-                    val times = Title.Times.times(Duration.ZERO, Duration.ofMillis(1100), Duration.ZERO)
+                    val times = titleTimes(Duration.ZERO, Duration.ofMillis(1100), Duration.ZERO)
 
                     Util.handlePlayers(eventPlayerAction = {
                         eventController().countdownMap[seconds]?.let { titleText ->
-                            it.showTitle(Title.title(titleText, Component.text(""), times))
+                            it.title(titleText, Component.empty(), times)
                             it.playSound(Sound.UI_BUTTON_CLICK)
                         }
                     })
@@ -268,7 +266,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
                     Bukkit.getOnlinePlayers().forEach { npc.spawnFor(it) }
 
                     placeLocation.world.spawn(placeLocation.add(0.0, 2.5, 0.0), TextDisplay::class.java).apply {
-                        text(Component.text(value, TextColor.color(255, 196, 255)))
+                        text("<colour:#ffc4ff>$value".style())
                         backgroundColor = Color.fromRGB(84, 72, 84)
                         billboard = Display.Billboard.CENTER
 
@@ -376,4 +374,3 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
         ELIMINATED,
     }
 }
-// TODO clear inventory contents after each game (because shit/compass might be in it)

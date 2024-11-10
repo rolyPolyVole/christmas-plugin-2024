@@ -18,6 +18,8 @@ import gg.flyte.christmas.util.SongReference
 import gg.flyte.christmas.util.Util
 import gg.flyte.christmas.util.colourise
 import gg.flyte.christmas.util.eventController
+import gg.flyte.christmas.util.style
+import gg.flyte.christmas.util.title
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.hidePlayer
 import gg.flyte.twilight.extension.playSound
@@ -29,8 +31,6 @@ import gg.flyte.twilight.time.TimeUnit
 import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
-import net.kyori.adventure.text.format.TextDecoration
-import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
@@ -129,18 +129,12 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
                 Util.handlePlayers(
                     eventPlayerAction = {
-                        it.showTitle(Title.title(Component.text("Hard Mode!", gameConfig.colour), Component.text("")))
-                        it.sendMessage(
-                            Component.text(
-                                "The floor will now change right before the timer starts... stay quick!",
-                                NamedTextColor.RED,
-                                TextDecoration.BOLD
-                            )
-                        )
+                        it.title("<game_colour>Hard Mode!".style(), Component.empty())
+                        it.sendMessage("<red><b>The floor will now change right before the timer starts... stay quick!".style())
                         it.playSound(Sound.ENTITY_ENDER_DRAGON_GROWL)
                     },
                     optedOutAction = {
-                        it.sendMessage(Component.text("The game is getting harder!", gameConfig.colour))
+                        it.sendMessage("<game_colour>The game is getting harder!".style())
                         it.playSound(Sound.ENTITY_ENDER_DRAGON_GROWL)
                     }
                 )
@@ -186,7 +180,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         }
 
         val timerBar: BossBar = BossBar.bossBar(
-            Component.text("Time left: $secondsForRound", gameConfig.colour).decorate(TextDecoration.BOLD),
+            "<game_colour><b>Time left: $secondsForRound".style(),
             1.0f,
             BossBar.Color.RED,
             BossBar.Overlay.PROGRESS
@@ -245,7 +239,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                 timerBar.progress(progress.toFloat())
 
                 val secondsRemaining = ceil(remainingTicks / 20.0).toInt()
-                timerBar.name(Component.text("Time left: $secondsRemaining", gameConfig.colour).decorate(TextDecoration.BOLD))
+                timerBar.name("<game_colour><b>Time left: $secondsRemaining".style())
                 remainingTicks--
             }
         }
@@ -259,14 +253,10 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
         Util.handlePlayers(
             eventPlayerAction = {
-                val eliminatedMessage = player.displayName().color(NamedTextColor.RED)
-                    .append(Component.text(" has been eliminated!").color(NamedTextColor.GRAY))
-                it.sendMessage(eliminatedMessage)
+                it.sendMessage("<red>${player.name} <grey>has been eliminated!")
             },
             optedOutAction = {
-                val eliminatedMessage = player.displayName().color(NamedTextColor.RED)
-                    .append(Component.text(" has been eliminated!").color(NamedTextColor.GRAY))
-                it.sendMessage(eliminatedMessage)
+                it.sendMessage("<red>${player.name} <grey>has been eliminated!")
             }
         )
 
@@ -308,6 +298,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                 formattedWinners.put(player.uniqueId, roundNumber.toString())
                 endGame()
             }
+
             2 -> formattedWinners.put(player.uniqueId, roundNumber.toString())
             3 -> formattedWinners.put(player.uniqueId, roundNumber.toString())
         }
@@ -384,14 +375,11 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
             }
 
 
-            val notification = Component.text(">> A mysterious power-up has spawned on the floor! <<")
-                .color(gameConfig.colour)
-                .decorate(TextDecoration.BOLD)
-
+            val notification = "<game_colour><b>>> A mysterious power-up has spawned on the floor! <<".style()
             Util.handlePlayers(
                 eventPlayerAction = {
                     it.sendMessage(notification)
-                    it.sendMessage(Component.text("Find the beacon on the map to unlock it!", NamedTextColor.GRAY))
+                    it.sendMessage("<grey>Find the beacon on the map to unlock it!".style())
                     it.playSound(Sound.BLOCK_NOTE_BLOCK_PLING)
                 },
                 optedOutAction = {
@@ -484,28 +472,16 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                 clickedBlock?.type = Material.AIR
                 var randomPowerUp = PowerUp.entries.random()
 
-                player.sendMessage(
-                    Component.text("You've found a ${randomPowerUp.displayName} power-up!")
-                        .color(NamedTextColor.GREEN)
-                        .decorate(TextDecoration.BOLD)
-                )
-
                 Util.handlePlayers(
                     eventPlayerAction = {
-                        if (it != player) {
-                            it.sendMessage(
-                                Component.text(">> ${player.displayName()} has found a {${randomPowerUp.displayName} power-up! <<")
-                                    .color(NamedTextColor.GREEN)
-                                    .decorate(TextDecoration.BOLD)
-                            )
+                        if (it == player) {
+                            it.sendMessage("<green><b>You've found a ${randomPowerUp.displayName} power-up!".style())
+                        } else {
+                            it.sendMessage("<green><b>>> ${player.displayName()} has found a {${randomPowerUp.displayName} power-up! <<")
                         }
                     },
                     optedOutAction = {
-                        it.sendMessage(
-                            Component.text(">> ${player.displayName()} has found a {${randomPowerUp.displayName} power-up! <<")
-                                .color(NamedTextColor.GREEN)
-                                .decorate(TextDecoration.BOLD)
-                        )
+                        it.sendMessage("<green><b>>> ${player.displayName()} has found a {${randomPowerUp.displayName} power-up! <<")
                     }
                 )
 
@@ -572,16 +548,12 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                         var eventPlayer = player // prevent shadowing
                         remainingPlayers().random().apply {
                             velocity = this.location.direction.multiply(2).add(Vector(0.0, 1.5, 0.0))
-                            sendMessage(Component.text("You've been pushed by a power-up!").color(gameConfig.colour))
-                            eventPlayer.sendMessage(
-                                Component.text("You've pushed a random player ($name) with the power-up!", gameConfig.colour)
-                            )
+                            sendMessage("<game_colour>You've been pushed by a power-up!".style())
+                            eventPlayer.sendMessage("<game_colour>You've pushed a random player ($name) with the power-up!".style())
                         }
                     }
 
-                    PowerUp.DOUBLE_JUMP -> {
-                        player.allowFlight = true
-                    }
+                    PowerUp.DOUBLE_JUMP -> player.allowFlight = true
                 }
             }
         }

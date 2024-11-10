@@ -41,7 +41,6 @@ class CameraSequence(
                 location.pitch.toFloat()
             )
         }
-
         SequenceTask(generateSmoothPath(controlPoints), teleportDuration).runTaskTimer(ChristmasEventPlugin.instance, 0, 1)
     }
 

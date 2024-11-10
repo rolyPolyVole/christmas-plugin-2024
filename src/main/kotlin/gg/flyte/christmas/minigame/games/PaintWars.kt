@@ -4,13 +4,11 @@ import com.google.common.collect.HashBiMap
 import gg.flyte.christmas.minigame.engine.EventMiniGame
 import gg.flyte.christmas.minigame.engine.GameConfig
 import gg.flyte.christmas.util.eventController
+import gg.flyte.christmas.util.style
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.scheduler.repeatingTask
 import gg.flyte.twilight.time.TimeUnit
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.Component.text
-import net.kyori.adventure.text.format.NamedTextColor
-import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Location
@@ -126,8 +124,8 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
 
         ItemStack(Material.BRUSH).apply {
             itemMeta = itemMeta.apply {
-                displayName(text("Paint Brush", gameConfig.colour, TextDecoration.BOLD))
-                lore(listOf(text("Use this to paint the map!", NamedTextColor.GRAY)))
+                displayName("<game_colour><b>Paint Brush".style())
+                lore(listOf("<grey>Use this to paint the map!".style()))
             }
         }.apply { player.inventory.setItem(0, this) }
 
@@ -178,10 +176,8 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
     }
 
     private fun updateScoreboard() {
-        val timeComponent = Component.text("ᴛɪᴍᴇ ʟᴇғᴛ: ", NamedTextColor.AQUA)
-            .append(text(gameTime.toString(), NamedTextColor.RED, TextDecoration.BOLD))
-
-        Bukkit.getOnlinePlayers().forEach { eventController().sidebarManager.updateLines(it, listOf(Component.empty(), timeComponent)) }
+        val timeLeft = "<aqua>ᴛɪᴍᴇ ʟᴇғᴛ: <red><b>${gameTime}".style()
+        Bukkit.getOnlinePlayers().forEach { eventController().sidebarManager.updateLines(it, listOf(Component.empty(), timeLeft)) }
     }
 
     fun tryUpdateBlock(block: Block, player: Player, overrideRandom: Boolean) {

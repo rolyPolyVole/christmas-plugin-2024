@@ -15,6 +15,9 @@ import gg.flyte.christmas.util.SongReference
 import gg.flyte.christmas.util.Util
 import gg.flyte.christmas.util.colourise
 import gg.flyte.christmas.util.eventController
+import gg.flyte.christmas.util.style
+import gg.flyte.christmas.util.title
+import gg.flyte.christmas.util.titleTimes
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.hidePlayer
 import gg.flyte.twilight.extension.playSound
@@ -28,7 +31,6 @@ import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
-import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
@@ -108,9 +110,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
         simpleCountdown { newRound() }
         Util.handlePlayers(eventPlayerAction = {
-            it.sendMessage(
-                Component.text("Remember, do NOT click the minecarts before the music has STOPPED... you will be stunned!", gameConfig.colour)
-            )
+            it.sendMessage("<game_colour>Remember, do NOT click the minecarts before the music has STOPPED... you will be stunned!".style())
         })
     }
 
@@ -128,12 +128,12 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
                 Util.handlePlayers(
                     eventPlayerAction = {
-                        it.showTitle(Title.title(Component.text("Hard Mode!", gameConfig.colour), Component.text("")))
-                        it.sendMessage(Component.text("The minecarts will only spawn when the music STOPS!", NamedTextColor.RED, TextDecoration.BOLD))
+                        it.title("<game_colour>Hard Mode!".style(), Component.empty())
+                        it.sendMessage("<red><b>The minecarts will only spawn when the music STOPS!".style())
                         it.playSound(Sound.ENTITY_ENDER_DRAGON_GROWL)
                     },
                     optedOutAction = {
-                        it.sendMessage(Component.text("The game is getting harder!", gameConfig.colour))
+                        it.sendMessage("<game_colour>The game is getting harder!".style())
                         it.playSound(Sound.ENTITY_ENDER_DRAGON_GROWL)
                     }
                 )
@@ -172,7 +172,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         remainingPlayers().forEach { it.playSound(Sound.BLOCK_NOTE_BLOCK_BASEDRUM) }
 
         val timerBar: BossBar = BossBar.bossBar(
-            Component.text("Time left: $secondsForRound", gameConfig.colour).decorate(TextDecoration.BOLD),
+            "<game_colour><b>Time left: $secondsForRound".style(),
             1.0f,
             BossBar.Color.RED,
             BossBar.Overlay.PROGRESS
@@ -220,7 +220,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                 timerBar.progress(progress.toFloat())
 
                 val secondsRemaining = ceil(remainingTicks / 20.0).toInt()
-                timerBar.name(Component.text("Time left: $secondsRemaining", gameConfig.colour).decorate(TextDecoration.BOLD))
+                timerBar.name("<game_colour><b>Time left: $secondsRemaining".style())
                 remainingTicks--
             }
         }
@@ -234,14 +234,11 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
         Util.handlePlayers(
             eventPlayerAction = {
-                val eliminatedMessage = player.displayName().color(NamedTextColor.RED)
-                    .append(Component.text(" has been eliminated!").color(NamedTextColor.GRAY))
-                it.sendMessage(eliminatedMessage)
+                it.sendMessage("<red>${player.name} <grey>has been eliminated!")
+
             },
             optedOutAction = {
-                val eliminatedMessage = player.displayName().color(NamedTextColor.RED)
-                    .append(Component.text(" has been eliminated!").color(NamedTextColor.GRAY))
-                it.sendMessage(eliminatedMessage)
+                it.sendMessage("<red>${player.name} <grey>has been eliminated!")
             }
         )
 
@@ -258,7 +255,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
                 addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20 * 4, 1, false, false, false))
 
-                val itemDisplay = world.spawn(location, ItemDisplay::class.java) {
+                world.spawn(location, ItemDisplay::class.java) {
                     it.setItemStack(ItemStack(Material.AIR))
                     it.teleportDuration = 59 // max (minecraft limitation)
 
@@ -284,6 +281,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                 formattedWinners.put(player.uniqueId, roundNumber.toString())
                 endGame()
             }
+
             2 -> formattedWinners.put(player.uniqueId, roundNumber.toString())
             3 -> formattedWinners.put(player.uniqueId, roundNumber.toString())
         }
@@ -342,11 +340,11 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                 it.detonate()
             }
 
-            val notification = Component.text(">> A mysterious power-up has spawned on the floor! <<", gameConfig.colour, TextDecoration.BOLD)
+            val notification = "<game_colour><b>>> A mysterious power-up has spawned on the floor! <<".style()
             Util.handlePlayers(
                 eventPlayerAction = {
                     it.sendMessage(notification)
-                    it.sendMessage(Component.text("Find the beacon on the map to unlock it!", NamedTextColor.GRAY))
+                    it.sendMessage("<grey>Find the beacon on the map to unlock it!".style())
                     it.playSound(Sound.BLOCK_NOTE_BLOCK_PLING)
                 },
                 optedOutAction = {
@@ -360,12 +358,9 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, Integer.MAX_VALUE, 25, false, false, false))
         player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 1, false, false, false))
         player.playSound(Sound.ENTITY_ITEM_BREAK)
-        player.showTitle(
-            Title.title(
-                Component.text("Stunned! Too early!", NamedTextColor.RED),
-                Component.text("The music has not stopped...", NamedTextColor.GOLD),
-                Title.Times.times(Duration.ZERO, Duration.ofSeconds(10), Duration.ofMillis(250))
-            )
+        player.title(
+            "<red>Stunned! Too early!".style(), "<gold>The music has not stopped...".style(),
+            titleTimes(Duration.ZERO, Duration.ofSeconds(10), Duration.ofMillis(250))
         )
 
         stunnedPlayers.add(player.uniqueId)
@@ -391,12 +386,14 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         val worldNPCs = mutableListOf<WorldNPC>()
         val animationTasks = mutableListOf<TwilightRunnable>()
         val poweredRails = mapOf(
+            // TODO<Map> reconfigure when complete
             MapRegion(MapSinglePoint(547, 203, 599), MapSinglePoint(563, 203, 599)) to Pair(Shape.EAST_WEST, "left"),
             MapRegion(MapSinglePoint(547, 203, 588), MapSinglePoint(563, 203, 588)) to Pair(Shape.EAST_WEST, "right"),
             MapRegion(MapSinglePoint(564, 203, 589), MapSinglePoint(564, 203, 598)) to Pair(Shape.NORTH_SOUTH, "right"),
             MapRegion(MapSinglePoint(546, 203, 589), MapSinglePoint(546, 203, 598)) to Pair(Shape.NORTH_SOUTH, "left")
         )
         val connectorRails = mapOf(
+            // TODO<Map> reconfigure when complete
             MapSinglePoint(546, 203, 599) to Shape.NORTH_EAST,
             MapSinglePoint(564, 203, 599) to Shape.NORTH_WEST,
             MapSinglePoint(564, 203, 588) to Shape.SOUTH_WEST,
@@ -526,20 +523,14 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
                 Util.handlePlayers(
                     eventPlayerAction = {
-                        if (it != player) {
-                            it.sendMessage(
-                                Component.text(">> ${player.displayName()} has found a {${randomPowerUp.displayName} power-up! <<")
-                                    .color(NamedTextColor.GREEN)
-                                    .decorate(TextDecoration.BOLD)
-                            )
+                        if (it == player) {
+                            it.sendMessage("<green><b>You've found a ${randomPowerUp.displayName} power-up!".style())
+                        } else {
+                            it.sendMessage("<green><b>>> ${player.displayName()} has found a {${randomPowerUp.displayName} power-up! <<")
                         }
                     },
                     optedOutAction = {
-                        it.sendMessage(
-                            Component.text(">> ${player.displayName()} has found a {${randomPowerUp.displayName} power-up! <<")
-                                .color(NamedTextColor.GREEN)
-                                .decorate(TextDecoration.BOLD)
-                        )
+                        it.sendMessage("<green><b>>> ${player.displayName()} has found a {${randomPowerUp.displayName} power-up! <<")
                     }
                 )
 
@@ -559,19 +550,17 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                     PowerUp.PUSH_SELF -> player.velocity = player.location.direction.multiply(2).add(Vector(0.0, 1.5, 0.0))
 
                     PowerUp.PUSH_RANDOM -> {
+                        var eventPlayer = player // prevent shadowing
                         remainingPlayers().random().apply {
                             velocity = this.location.direction.multiply(2).add(Vector(0.0, 1.5, 0.0))
-                            sendMessage(Component.text("You've been pushed by a power-up!").color(gameConfig.colour))
+                            sendMessage("<game_colour>You've been pushed by a power-up!".style())
+                            eventPlayer.sendMessage("<game_colour>You've pushed a random player ($name) with the power-up!".style())
                         }
                     }
 
-                    PowerUp.DOUBLE_JUMP -> {
-                        player.allowFlight = true
-                    }
+                    PowerUp.DOUBLE_JUMP -> player.allowFlight = true
 
-                    PowerUp.EXTRA_CART -> {
-                        player.inventory.addItem(ItemStack(Material.MINECART, 1))
-                    }
+                    PowerUp.EXTRA_CART -> player.inventory.addItem(ItemStack(Material.MINECART, 1))
                 }
             }
 

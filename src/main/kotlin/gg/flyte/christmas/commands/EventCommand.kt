@@ -6,6 +6,7 @@ import gg.flyte.christmas.ChristmasEventPlugin
 import gg.flyte.christmas.minigame.engine.GameConfig
 import gg.flyte.christmas.util.colourise
 import gg.flyte.christmas.util.eventController
+import gg.flyte.christmas.util.style
 import gg.flyte.christmas.util.toLegacyString
 import gg.flyte.twilight.extension.playSound
 import net.kyori.adventure.text.Component
@@ -79,10 +80,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
             modifyingGame = null
             eventController().setMiniGame(availableGames[selectedIndex])
             eventController().sidebarManager.update()
-            whoClosed.sendMessage(
-                Component.text("Selected game: ", NamedTextColor.GRAY)
-                    .append(availableGames[selectedIndex].displayName.color(availableGames[selectedIndex].colour))
-            )
+            whoClosed.sendMessage("<grey>Selected game: <0>".style(availableGames[selectedIndex].displayName))
             whoClosed.playSound(Sound.UI_BUTTON_CLICK)
         }
     }
@@ -97,10 +95,10 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
     fun optOut(sender: Player) {
         var remove = eventController().optOut.remove(sender.uniqueId)
         if (remove) {
-            sender.sendMessage(Component.text("You have opted back into the event!", NamedTextColor.GREEN))
+            sender.sendMessage("<green>You have opted back into the event!".style())
         } else {
             eventController().optOut.add(sender.uniqueId)
-            sender.sendMessage(Component.text("You have opted out of the event!", NamedTextColor.RED))
+            sender.sendMessage("<red>You have opted out of the event!".style())
         }
 
         sender.playSound(Sound.UI_BUTTON_CLICK)
@@ -114,13 +112,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
             eventController().points[UUID.fromString(it)] = ChristmasEventPlugin.instance.config.getInt("points.$it")
             eventController().sidebarManager.update()
         }
-
-        sender.sendMessage(
-            Component.text(
-                "Loaded crash data! Your scoreboard should now show the most recent serialised data!",
-                NamedTextColor.GREEN
-            )
-        )
+        sender.sendMessage("<green>Loaded crash data! Your scoreboard should now show the most recent serialised data!".style())
     }
 
     private fun setGameSwitcher(): MenuItem {
@@ -132,7 +124,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
 
                 if (modifyingGame != null && modifyingGame != whoClicked.uniqueId) {
                     whoClicked.closeInventory()
-                    whoClicked.sendMessage(Component.text("Someone else is currently modifying the game!", NamedTextColor.RED))
+                    whoClicked.sendMessage("<red>Someone else is currently modifying the game!".style())
                     whoClicked.playSound(Sound.ENTITY_VILLAGER_NO)
                     return@onClick
                 }
@@ -189,7 +181,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
                 whoClicked.closeInventory()
                 if (eventController().currentGame == null) {
                     whoClicked.playSound(Sound.ENTITY_VILLAGER_NO)
-                    whoClicked.sendMessage(Component.text("No game is currently selected!", NamedTextColor.RED))
+                    whoClicked.sendMessage("<red>No game has been selected!".style())
                     return@onClick
                 }
 

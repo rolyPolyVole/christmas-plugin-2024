@@ -6,6 +6,7 @@ import gg.flyte.christmas.minigame.games.MusicalMinecarts
 import gg.flyte.christmas.minigame.games.PaintWars
 import gg.flyte.christmas.minigame.world.MapRegion
 import gg.flyte.christmas.minigame.world.MapSinglePoint
+import gg.flyte.christmas.util.style
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
 import org.bukkit.Material
@@ -29,8 +30,8 @@ enum class GameConfig(
     //region BLOCK_PARTY
     BLOCK_PARTY(
         BlockParty::class,
-        Component.text("Block Party", TextColor.color(224, 92, 111)),
-        Component.text("ʙʟᴏᴄᴋ ᴘᴀʀᴛʏ", TextColor.color(224, 92, 111)),
+        "<colour:#e05c0b>Block Party".style(),
+        "<colour:#e05c0b>ʙʟᴏᴄᴋ ᴘᴀʀᴛʏ".style(),
         Material.MAGENTA_GLAZED_TERRACOTTA,
         TextColor.color(224, 92, 111),
         " • Dance around the colourful floor until the christmas music stops.\n\n" +
@@ -87,11 +88,10 @@ enum class GameConfig(
     //region KING_OF_THE_HILL
     KING_OF_THE_HILL(
         KingHill::class,
-        Component.text("King of the Hill").color(TextColor.color(247, 1, 35)),
-        Component.text("ᴋɪɴɢ ᴏғ ᴛʜᴇ ʜɪʟʟ").color(TextColor.color(247, 1, 35)),
+        "<colour:#f70123>King of the Hill".style(),
+        "<colour:#f70123>ᴋɪɴɢ ᴏғ ᴛʜᴇ ʜɪʟʟ".style(),
         Material.STICK,
         TextColor.color(247, 1, 35),
-
         " • Be the King of The Hill! Stand in the centre of the map to gain points every second.\n\n" +
                 " • Knock other players off the map with your knockback stick. Avoid falling off yourself!\n\n" +
                 " • The player stood in the centre of the map for the longest time, wins!",
@@ -129,7 +129,6 @@ enum class GameConfig(
                 MapSinglePoint(857.5, 85, 656.5, 135, 0)
             )
         ),
-
         listOf(
             MapSinglePoint(827, 88, 587, 179.57143F, 74.42298F),
             MapSinglePoint(827, 88, 594, 179.85931F, 67.05221F),
@@ -159,9 +158,7 @@ enum class GameConfig(
             MapSinglePoint(845, 124, 648, 131.03406F, 57.888565F),
             MapSinglePoint(842, 125, 652, 139.14163F, 60.207817F),
         ),
-
         listOf(),
-
         listOf(
             MapSinglePoint(827, 90, 630, 90, 90),
             MapSinglePoint(847, 93, 664, 150, 25),
@@ -175,8 +172,8 @@ enum class GameConfig(
     //region MUSICAL_MINECARTS 142, 0, 3
     MUSICAL_MINECARTS(
         MusicalMinecarts::class,
-        Component.text("Musical Minecarts", TextColor.color(142, 0, 3)),
-        Component.text("ᴍᴜꜱɪᴄᴀʟ ᴍɪɴᴇᴄᴀʀᴛꜱ", TextColor.color(142, 0, 3)),
+        "<colour:#8e0003>Musical Minecarts".style(),
+        "<colour:#8e0003>ᴍᴜꜱɪᴄᴀʟ ᴍɪɴᴇᴄᴀʀᴛꜱ".style(),
         Material.MINECART,
         TextColor.color(142, 0, 3),
         " • Dance around the platform until the christmas music stops.\n\n" +
@@ -208,7 +205,6 @@ enum class GameConfig(
             MapSinglePoint(554, 206, 594, -89.83353F, 88.219635F),
             MapSinglePoint(554, 204, 594, -88.70047F, 88.381485F)
         ),
-
         listOf(MapSinglePoint(554, 204, 594, -88.70047F, 88.381485F)),
         listOf(MapSinglePoint(554, 204, 594, -88.70047F, 88.381485F)),
     ),

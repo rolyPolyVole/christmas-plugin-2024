@@ -7,15 +7,15 @@ import gg.flyte.christmas.minigame.world.MapRegion
 import gg.flyte.christmas.minigame.world.MapSinglePoint
 import gg.flyte.christmas.util.Util
 import gg.flyte.christmas.util.eventController
+import gg.flyte.christmas.util.style
+import gg.flyte.christmas.util.title
+import gg.flyte.christmas.util.titleTimes
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.scheduler.delay
 import gg.flyte.twilight.scheduler.repeatingTask
 import gg.flyte.twilight.time.TimeUnit
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
-import net.kyori.adventure.text.format.TextDecoration
-import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Material
@@ -62,13 +62,10 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
         simpleCountdown {
             pvpEnabled = true
             Util.handlePlayers(eventPlayerAction = {
-                val title = Title.title(
-                    Component.text(""),
-                    Component.text("PVP Enabled!", gameConfig.colour),
-                    Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofMillis(300))
+                it.title(
+                    Component.empty(), "<game_colour>PVP Enabled!".style(),
+                    titleTimes(Duration.ZERO, Duration.ofSeconds(2), Duration.ofMillis(300))
                 )
-
-                it.showTitle(title)
             })
 
             tasks += repeatingTask(1, TimeUnit.SECONDS) {
@@ -76,7 +73,7 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
                     if (hillRegion.contains(it.location)) {
                         timeOnHill[it.uniqueId] = timeOnHill[it.uniqueId]!! + 1
                         it.playSound(Sound.ENTITY_ITEM_PICKUP)
-                        it.sendMessage(Component.text("+1 second", NamedTextColor.GREEN))
+                        it.sendMessage("<green>+1 second".style())
                     }
                 })
 
@@ -139,10 +136,8 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
     }
 
     private fun updateScoreboard() {
-        val timeComponent = Component.text("ᴛɪᴍᴇ ʟᴇғᴛ: ", NamedTextColor.AQUA)
-            .append(Component.text(gameTime.toString(), NamedTextColor.RED, TextDecoration.BOLD))
-
-        Bukkit.getOnlinePlayers().forEach { eventController().sidebarManager.updateLines(it, listOf(Component.empty(), timeComponent)) }
+        val timeLeft = "<aqua>ᴛɪᴍᴇ ʟᴇғᴛ: <red><b>${gameTime}".style()
+        Bukkit.getOnlinePlayers().forEach { eventController().sidebarManager.updateLines(it, listOf(Component.empty(), timeLeft)) }
     }
 
     override fun handleGameEvents() {

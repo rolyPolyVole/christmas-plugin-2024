@@ -19,22 +19,20 @@ import dev.shreyasayyengar.menuapi.menu.MenuItem
 import dev.shreyasayyengar.menuapi.menu.StandardMenu
 import gg.flyte.christmas.ChristmasEventPlugin
 import gg.flyte.christmas.util.eventController
+import gg.flyte.christmas.util.style
+import gg.flyte.christmas.util.title
 import gg.flyte.christmas.visual.CameraSequence
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.hidePlayer
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.extension.showPlayer
-import gg.flyte.twilight.extension.toComponent
 import gg.flyte.twilight.scheduler.delay
 import io.github.retrooper.packetevents.util.SpigotConversionUtil
 import io.papermc.paper.chat.ChatRenderer
 import io.papermc.paper.event.player.AsyncChatEvent
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.Component.text
-import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor
-import net.kyori.adventure.text.format.TextDecoration
-import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Material
@@ -72,11 +70,11 @@ class HousekeepingEventListener : Listener, PacketListener {
                 .append(text("ʙᴜɪʟᴛʙʏʙɪᴛ.ᴄᴏᴍ ", TextColor.color(72, 133, 190)))
 
             val motd = Component.empty()
-                .append(text("        ||||||  ", NamedTextColor.WHITE, TextDecoration.BOLD, TextDecoration.OBFUSCATED))
-                .append("<gradient:#F396E1:#FFFFFF>ꜰʟʏᴛ</gradient><gradient:#FFFFFF:#FFFFFF>ᴇ</gradient> ".toComponent())
-                .append("<gradient:#51F651:#FAEDCB>ᴄʜʀɪsᴛᴍ</gradient><gradient:#FAEDCB:#D12020>ᴀs ᴇᴠ</gradient><gradient:#D12020:#D12020>ᴇɴᴛ</gradient>".toComponent())
-                .append(text("  ||||||", NamedTextColor.WHITE, TextDecoration.BOLD, TextDecoration.OBFUSCATED))
-                .append(text("\n"))
+                .append("<b><obf><white>        ||||||  ".style())
+                .append("<gradient:#F396E1:#FFFFFF>ꜰʟʏᴛ</gradient><gradient:#FFFFFF:#FFFFFF>ᴇ</gradient> ".style())
+                .append("<gradient:#51F651:#FAEDCB>ᴄʜʀɪsᴛᴍ</gradient><gradient:#FAEDCB:#D12020>ᴀs ᴇᴠ</gradient><gradient:#D12020:#D12020>ᴇɴᴛ</gradient>".style())
+                .append("<b><obf><white>  ||||||".style())
+                .append("\n".style())
                 .append(footer)
 
             motd(motd)
@@ -86,26 +84,21 @@ class HousekeepingEventListener : Listener, PacketListener {
             renderer(ChatRenderer.viewerUnaware { player, displayName, message ->
                 val finalRender = text()
 
-                if (player.isOp) finalRender.append(text("ѕᴛᴀꜰꜰ ", NamedTextColor.RED, TextDecoration.BOLD))
+                if (player.isOp) finalRender.append("<red><b>ѕᴛᴀꜰꜰ ".style())
 
                 finalRender.append(text(player.name, TextColor.color(209, 209, 209)))
-                    .append(text(" » ", NamedTextColor.GRAY))
-                    .append(text(signedMessage().message(), NamedTextColor.WHITE))
+                    .append("<grey> » ".style())
+                    .append("<white> ${signedMessage().message()}".style())
                     .build()
             })
         }
 
         event<PlayerJoinEvent>(priority = EventPriority.LOWEST) {
             fun applyChristmasHat(modelData: Int): ItemStack {
-                val map = mapOf(
-                    1 to NamedTextColor.RED,
-                    2 to NamedTextColor.GREEN,
-                    3 to NamedTextColor.BLUE
-                )
-
                 return ItemStack(Material.LEATHER).apply {
+                    val randomColour = listOf("<red>", "<green>", "<blue>").random()
                     itemMeta = itemMeta.apply {
-                        displayName(text("Christmas Hat", map[modelData]))
+                        displayName("${randomColour}Christmas Hat".style())
                         setCustomModelData(modelData)
                     }
                 }
@@ -118,6 +111,7 @@ class HousekeepingEventListener : Listener, PacketListener {
 
             joinMessage(null)
 
+            player.title("<dark_red>ᴡᴇʟᴄᴏᴍᴇ".style(), "<game_colour>ᴛᴏ ᴛʜᴇ ᴄʜʀɪꜱᴛᴍᴀꜱ ᴇᴠᴇɴᴛ".style())
             player.apply {
 //                TODO change URL/configure pack (uncomment when works)
 //                async {
@@ -142,20 +136,20 @@ class HousekeepingEventListener : Listener, PacketListener {
             }
 
             val header = text()
-                .append(text("❆ ", TextColor.color(255, 161, 161)))
-                .append(text("ᴄʜʀɪsᴛᴍᴀs ᴄʜᴀʀɪᴛʏ ᴇᴠᴇɴᴛ", TextColor.color(170, 230, 135)))
-                .append(text(" ❆", TextColor.color(255, 161, 161)))
-                .append(text("\n"))
-                .append(text("\n(${Bukkit.getOnlinePlayers().size} ᴘʟᴀʏᴇʀꜱ)", NamedTextColor.GRAY))
+                .append("<colour:#ffa1a1≥❆ ".style())
+                .append("<colour:#aae687>ᴄʜʀɪsᴛᴍᴀs ᴄʜᴀʀɪᴛʏ ᴇᴠᴇɴᴛ".style())
+                .append("<colour:#ffa1a1≥❆ ".style())
+                .append("\n".style())
+                .append("<grey>\n(${Bukkit.getOnlinePlayers().size} ᴘʟᴀʏᴇʀꜱ)".style())
 
             // TODO finish sponsors
-            val footer = Component.text("\nꜰʟʏᴛᴇ.ɢɢ/ᴅᴏɴᴀᴛᴇ\n\n", NamedTextColor.LIGHT_PURPLE)
-                .append(MiniMessage.miniMessage().deserialize(" <gradient:#ff80e8:#ffffff>ꜰʟʏᴛᴇ.ɢɢ</gradient>"))
-                .append(text(" • ", NamedTextColor.WHITE))
-                .append(MiniMessage.miniMessage().deserialize("<gradient:#fffdb8:#ffffff>ᴄᴀʀʙᴏɴ.ʜᴏꜱᴛ</gradient>"))
-                .append(text(" • ", NamedTextColor.WHITE))
-                .append(text("ʙᴜɪʟᴛʙʏʙɪᴛ.ᴄᴏᴍ ", TextColor.color(72, 133, 190)))
-                .append(text("\n"))
+            val footer = "<light_purple>\nꜰʟʏᴛᴇ.ɢɢ/ᴅᴏɴᴀᴛᴇ\n\n".style()
+                .append(" <gradient:#ff80e8:#ffffff>ꜰʟʏᴛᴇ.ɢɢ</gradient>".style())
+                .append("<white> • ".style())
+                .append("<gradient:#fffdb8:#ffffff>ᴄᴀʀʙᴏɴ.ʜᴏꜱᴛ</gradient>".style())
+                .append("<white> • ".style())
+                .append("<colour:#4885be>ʙᴜɪʟᴛʙʏʙɪᴛ.ᴄᴏᴍ ".style())
+                .append("\n".style())
             Bukkit.getOnlinePlayers().forEach { it.sendPlayerListHeaderAndFooter(header, footer) }
 
             eventController().points.putIfAbsent(player.uniqueId, 0)

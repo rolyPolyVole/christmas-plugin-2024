@@ -4,16 +4,18 @@ import com.xxmicloxx.NoteBlockAPI.model.Playlist
 import com.xxmicloxx.NoteBlockAPI.model.SoundCategory
 import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer
 import gg.flyte.christmas.ChristmasEventPlugin
-import gg.flyte.christmas.visual.SidebarManager
 import gg.flyte.christmas.util.SongReference
 import gg.flyte.christmas.util.Util
+import gg.flyte.christmas.util.style
+import gg.flyte.christmas.util.title
+import gg.flyte.christmas.util.titleTimes
+import gg.flyte.christmas.visual.SidebarManager
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.scheduler.TwilightRunnable
 import gg.flyte.twilight.scheduler.delay
 import gg.flyte.twilight.scheduler.repeatingTask
 import gg.flyte.twilight.time.TimeUnit
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
 import org.bukkit.Sound
@@ -30,11 +32,11 @@ class EventController() {
     var currentGame: EventMiniGame? = null
     var countdownTask: TwilightRunnable? = null
     val countdownMap = mapOf(
-        5 to Component.text("➎", NamedTextColor.GREEN),
-        4 to Component.text("➍", NamedTextColor.GOLD),
-        3 to Component.text("➌", NamedTextColor.GOLD),
-        2 to Component.text("➋", NamedTextColor.RED),
-        1 to Component.text("➊", NamedTextColor.DARK_RED)
+        5 to "<green>➎".style(),
+        4 to "<gold>➍".style(),
+        3 to "<gold>➌".style(),
+        2 to "<red>➋".style(),
+        1 to "<dark_red>➊".style()
     )
     val optOut = mutableSetOf<UUID>()
     var songPlayer: RadioSongPlayer? = null
@@ -89,8 +91,8 @@ class EventController() {
 
                     Util.handlePlayers(
                         eventPlayerAction = {
-                            countdownMap[seconds]?.let { titleText ->
-                                it.showTitle(Title.title(titleText, Component.empty(), times))
+                            countdownMap[seconds]?.let { number ->
+                                it.showTitle(Title.title(number, Component.empty(), times))
                                 it.playSound(Sound.UI_BUTTON_CLICK)
                             }
                         },
@@ -145,21 +147,16 @@ class EventController() {
                         eventPlayerAction = {
                             it.showTitle(
                                 Title.title(
-                                    Component.text("⦅x⦆", NamedTextColor.DARK_RED),
-                                    Component.text("Waiting for more players...", NamedTextColor.RED),
-                                    Title.Times.times(Duration.ZERO, Duration.ofSeconds(5), Duration.ofSeconds(1))
+                                    "<dark_red>⦅x⦆".style(), "<red>Waiting for more players...".style(),
+                                    titleTimes(Duration.ZERO, Duration.ofSeconds(5), Duration.ofSeconds(1))
                                 )
                             )
-
                             it.playSound(Sound.BLOCK_NOTE_BLOCK_BASS)
                         },
                         optedOutAction = {
-                            it.showTitle(
-                                Title.title(
-                                    Component.text("⦅x⦆", NamedTextColor.DARK_RED),
-                                    Component.text("Waiting for more players...", NamedTextColor.RED),
-                                    Title.Times.times(Duration.ZERO, Duration.ofSeconds(5), Duration.ofSeconds(1))
-                                )
+                            it.title(
+                                "<dark_red>⦅x⦆".style(), "<red>Waiting for more players...".style(),
+                                titleTimes(Duration.ZERO, Duration.ofSeconds(5), Duration.ofSeconds(1))
                             )
                             it.playSound(Sound.BLOCK_NOTE_BLOCK_BASS)
                         }
