@@ -59,5 +59,3 @@ fun Component.toLegacyString(): String = LegacyComponentSerializer.legacyAmpersa
 fun Player.title(title: Component, subtitle: Component, times: Times? = null) = this.showTitle(Title.title(title, subtitle, times))
 
 fun titleTimes(fadeIn: Duration, stay: Duration, fadeOut: Duration): Times = Times.times(fadeIn, stay, fadeOut)
-
-fun eventController() = ChristmasEventPlugin.instance.eventController
