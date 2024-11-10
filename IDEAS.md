@@ -15,6 +15,9 @@
       will love this)
 - A firework spawns above everyone after a donation is made.
 - "Chaos" donations -> drop TNT in a spleef game, for example.
+- Donations progress somehow.
+- Custom hats to donators (and/or contributors)
+- find out what other textures spaceniklas has made and what they can be used for
 
 ## Game Specific:
 
