@@ -142,13 +142,18 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
     }
 
     override fun handleGameEvents() {
-        listeners += event<EntityDamageByEntityEvent> {
-            if (entity is Player && damager is Player) {
-                if (!pvpEnabled) {
-                    isCancelled = true
-                    (damager as Player).playSound(Sound.BLOCK_NOTE_BLOCK_BASS)
-                }
+        listeners += event<EntityDamageEvent>(priority = EventPriority.HIGHEST) {
+            if (cause == EntityDamageEvent.DamageCause.FALL) return@event // already cancelled by lower priority [HousekeepingEventListener]
+
+            entity as? Player ?: return@event
+            val damager = (this as? EntityDamageByEntityEvent)?.damager as? Player ?: return@event
+
+            if (!pvpEnabled) {
+                isCancelled = true
+                damager.playSound(Sound.BLOCK_NOTE_BLOCK_BASS)
             }
+
+            damage = 0.0
         }
 
         listeners += event<PlayerMoveEvent> {
