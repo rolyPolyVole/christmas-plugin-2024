@@ -23,9 +23,7 @@ import gg.flyte.christmas.util.formatInventory
 import gg.flyte.christmas.util.style
 import gg.flyte.christmas.visual.CameraSequence
 import gg.flyte.twilight.event.event
-import gg.flyte.twilight.extension.hidePlayer
 import gg.flyte.twilight.extension.playSound
-import gg.flyte.twilight.extension.showPlayer
 import gg.flyte.twilight.scheduler.delay
 import io.github.retrooper.packetevents.util.SpigotConversionUtil
 import io.papermc.paper.chat.ChatRenderer
@@ -155,7 +153,7 @@ class HousekeepingEventListener : Listener, PacketListener {
             val npcLocations = worldNPCs.map { SpigotConversionUtil.toBukkitLocation(ChristmasEventPlugin.instance.serverWorld, it.npc.location) }
 
             // hide player if near any NPC (they obstruct view)
-            if (npcLocations.any { it.distance(playerLocation) < 3 }) player.hidePlayer() else player.showPlayer()
+            if (npcLocations.any { it.distance(playerLocation) < 3 }) player.isVisibleByDefault = false else if (!player.isVisibleByDefault) player.isVisibleByDefault = true
 
             // make NPCs look at player if within range
             worldNPCs.forEach { npc ->
