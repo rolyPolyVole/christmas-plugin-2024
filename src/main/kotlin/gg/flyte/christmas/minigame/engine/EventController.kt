@@ -32,6 +32,7 @@ class EventController() {
     var currentGame: EventMiniGame? = null
     var countdownTask: TwilightRunnable? = null
     val countdownMap = mapOf(
+        10 to "<green>➓".style(),
         5 to "<green>➎".style(),
         4 to "<gold>➍".style(),
         3 to "<gold>➌".style(),
