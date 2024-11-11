@@ -57,7 +57,6 @@ class SidebarManager {
 
     private fun currentGameLine() = "<aqua>ɢᴀᴍᴇ<grey>: <0>".style(eventController().currentGame?.gameConfig?.smallDisplayName ?: "<grey>ɴᴏɴᴇ".style())
 
-
     private fun getComponentForPositionAt(position: Int, player: Player): Component {
         Preconditions.checkArgument(position in 0..2, "Position must be between 0 and 2")
 
