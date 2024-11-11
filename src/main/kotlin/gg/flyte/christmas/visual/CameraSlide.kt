@@ -17,6 +17,8 @@ class CameraSlide(slideTo: MapSinglePoint, onComplete: (() -> Unit)? = null) {
     constructor(gameConfig: GameConfig, onComplete: (() -> Unit)?) : this(gameConfig.centrePoint, onComplete)
 
     init {
+        var hasCompleted = false // TODO document this
+
         Bukkit.getOnlinePlayers().forEach { loopedPlayer ->
             loopedPlayer.world.spawn(loopedPlayer.location, ItemDisplay::class.java) {
                 it.setItemStack(ItemStack(Material.AIR))
@@ -25,7 +27,14 @@ class CameraSlide(slideTo: MapSinglePoint, onComplete: (() -> Unit)? = null) {
                 delay(1) {
                     loopedPlayer.gameMode = GameMode.SPECTATOR
                     loopedPlayer.spectatorTarget = it
-                    SlideCameraTask(it, slideTo, onComplete).runTaskTimer(ChristmasEventPlugin.instance, 0, 1)
+
+                    // Call `onComplete` only once
+                    SlideCameraTask(it, slideTo) {
+                        if (!hasCompleted) {
+                            onComplete?.invoke()
+                            hasCompleted = true // Mark as called to prevent further executions
+                        }
+                    }.runTaskTimer(ChristmasEventPlugin.instance, 0, 1)
                 }
             }
         }
