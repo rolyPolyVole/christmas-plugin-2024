@@ -14,6 +14,7 @@ import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.Particle
 import org.bukkit.Sound
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
@@ -203,6 +204,12 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
         if (!(changedBlocks.contains(block))) changedBlocks.add(block)
 
         block.type = playerBrushesBiMap[player.uniqueId]!!
+
+        if (!overrideRandom) {
+            repeat(10) {
+                block.world.spawnParticle(Particle.BLOCK, block.location.add(0.5, 0.3, 0.5), 10, 0.5, 0.5, 0.5, block.type.createBlockData())
+            }
+        }
     }
 
     override fun onPlayerJoin(player: Player) {
