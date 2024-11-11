@@ -124,19 +124,18 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         roundNumber++
         if (secondsForRound > 2) secondsForRound--
 
-        when {
-            roundNumber == 12 && !harder -> {
-                harder = true
-                roundNumber = 8 // hard round needs more time to find safe squares first.
+        // hard round needs more time to find safe squares first.
+        if (roundNumber == 12 && !harder) {
+            harder = true
+            roundNumber = 10 // hard round needs more time to find safe squares first.
 
-                Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.playSound(Sound.ENTITY_ENDER_DRAGON_GROWL) }
-                Util.runAction(PlayerType.PARTICIPANT) {
-                    it.title("<game_colour>Hard Mode!".style(), Component.empty())
-                    it.sendMessage("<red><b>The floor will now change right before the timer starts... stay quick!".style())
-                    it.playSound(Sound.ENTITY_ENDER_DRAGON_GROWL)
-                }
-                Util.runAction(PlayerType.OPTED_OUT) { it.sendMessage("<game_colour>The game is getting harder!".style()) }
+            Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.playSound(Sound.ENTITY_ENDER_DRAGON_GROWL) }
+            Util.runAction(PlayerType.PARTICIPANT) {
+                it.title("<game_colour>Hard Mode!".style(), Component.empty())
+                it.sendMessage("<red><b>The floor will now change right before the timer starts... stay quick!".style())
+                it.playSound(Sound.ENTITY_ENDER_DRAGON_GROWL)
             }
+            Util.runAction(PlayerType.OPTED_OUT) { it.sendMessage("<game_colour>The game is getting harder!".style()) }
         }
 
         // let song play for a few rounds
