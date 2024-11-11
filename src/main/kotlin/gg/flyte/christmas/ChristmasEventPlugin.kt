@@ -12,14 +12,11 @@ import gg.flyte.christmas.minigame.engine.GameConfig
 import gg.flyte.christmas.minigame.world.MapSinglePoint
 import gg.flyte.christmas.npc.WorldNPC
 import gg.flyte.christmas.util.Util
-import gg.flyte.christmas.util.colourise
 import gg.flyte.christmas.util.eventController
+import gg.flyte.christmas.util.style
 import gg.flyte.twilight.twilight
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder
-import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
-import net.kyori.adventure.text.format.TextColor
-import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.GameRule
@@ -106,17 +103,25 @@ class ChristmasEventPlugin : JavaPlugin() {
             val contribution = contributor.contribution
             val location = contributor.location
 
-            var randomColour: String = listOf("4", "c", "6", "2", "a", "9").random()
-            val displayName: String = "§$randomColour${MojangAPIUtil.requestPlayerName(uniqueId)}".colourise()
+            var randomColour = mapOf(
+                "<dark_red>" to "4",
+                "<red>" to "c",
+                "<gold>" to "6",
+                "<dark_green>" to "2",
+                "<green>" to "a",
+                "<blue>" to "9",
+            ).entries.random()
+
+            val displayName: String = "§${randomColour.value}${MojangAPIUtil.requestPlayerName(uniqueId)}"
 
             var createFromName = WorldNPC.createFromUniqueId(displayName, uniqueId, location).also { worldNPCs += it }
-            createFromName.npc.prefixName = Component.text("§$randomColour§kW ")
-            createFromName.npc.suffixName = Component.text(" §$randomColour§kW")
+            createFromName.npc.prefixName = "${randomColour.key}<obf>W ".style()
+            createFromName.npc.suffixName = " ${randomColour.key}<obf>W".style()
 
             Bukkit.getOnlinePlayers().forEach { createFromName.spawnFor(it) }
 
             location.world.spawn(location.clone().add(0.0, 2.5, 0.0), TextDisplay::class.java).apply {
-                text(Component.text(contribution, TextColor.color(255, 196, 255)))
+                text("<colour:#ffc4ff>$contribution".style())
                 backgroundColor = Color.fromRGB(84, 72, 84)
                 billboard = Display.Billboard.CENTER
             }
@@ -140,7 +145,7 @@ class ChristmasEventPlugin : JavaPlugin() {
                 setOption(Option.COLLISION_RULE, Team.OptionStatus.NEVER)
                 setOption(Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS)
                 color(NamedTextColor.GRAY)
-                prefix(Component.text("ѕᴛᴀꜰꜰ ", NamedTextColor.RED, TextDecoration.BOLD))
+                prefix("<red><b>ѕᴛᴀꜰꜰ ".style())
             }
 
             registerNewTeam("b. player").apply {

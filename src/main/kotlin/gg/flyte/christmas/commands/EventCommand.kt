@@ -9,8 +9,6 @@ import gg.flyte.christmas.util.eventController
 import gg.flyte.christmas.util.style
 import gg.flyte.christmas.util.toLegacyString
 import gg.flyte.twilight.extension.playSound
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -45,7 +43,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
             .closeWhenClicked(true)
             .onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
                 Bukkit.getOnlinePlayers().forEach { it.teleport(whoClicked) }
-                whoClicked.sendMessage(Component.text("Teleported all players to you!", NamedTextColor.GREEN))
+                whoClicked.sendMessage("<green>Teleported all players to you!".style())
                 whoClicked.playSound(Sound.ENTITY_ENDERMAN_TELEPORT)
             }
         )
@@ -63,12 +61,12 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
             .onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
                 if (eventController().currentGame == null) {
                     whoClicked.playSound(Sound.ENTITY_VILLAGER_NO)
-                    whoClicked.sendMessage(Component.text("No game is currently running!", NamedTextColor.RED))
+                    whoClicked.sendMessage("<red>No game is currently running!".style())
                     return@onClick
                 }
 
                 eventController().currentGame!!.endGame()
-                whoClicked.sendMessage(Component.text("Game terminated!", NamedTextColor.RED))
+                whoClicked.sendMessage("<red>Game terminated!".style())
                 whoClicked.playSound(Sound.ENTITY_GENERIC_EXPLODE)
                 eventController().sidebarManager.update()
             }
@@ -187,7 +185,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
 
                 eventController().prepareStart()
                 whoClicked.playSound(Sound.ENTITY_PLAYER_LEVELUP)
-                whoClicked.sendMessage(Component.text("Game starting! Please wait...", NamedTextColor.GREEN))
+                whoClicked.sendMessage("<green>Game starting! Please wait...".style())
 
                 selectedIndex = -1
                 menu.setItem(13, setGameSwitcher())

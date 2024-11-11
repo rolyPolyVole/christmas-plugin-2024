@@ -3,10 +3,8 @@ package gg.flyte.christmas.visual
 import com.google.common.base.Preconditions
 import fr.mrmicky.fastboard.adventure.FastBoard
 import gg.flyte.christmas.util.eventController
+import gg.flyte.christmas.util.style
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
-import net.kyori.adventure.text.format.TextColor
-import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.UUID
@@ -15,17 +13,11 @@ class SidebarManager {
     private val boardRegistry = mutableMapOf<UUID, FastBoard>()
     var dataSupplier = mutableMapOf<UUID, Int>()
 
-    private val placeDefaultComponent = mapOf(
-        0 to createPlaceComponent("➊", TextColor.color(255, 203, 26)),
-        1 to createPlaceComponent("➋", TextColor.color(208, 208, 208)),
-        2 to createPlaceComponent("➌", TextColor.color(163, 147, 65))
-    )
-
     fun update() = Bukkit.getOnlinePlayers().forEach { update(it) }
 
     fun update(player: Player) {
         val board = boardRegistry.getOrPut(player.uniqueId) { FastBoard(player) }
-        board.updateTitle(Component.text("ᴄʜʀɪsᴛᴍᴀs ᴇᴠᴇɴᴛ", NamedTextColor.RED, TextDecoration.BOLD))
+        board.updateTitle("<red><b>ᴄʜʀɪsᴛᴍᴀs ᴇᴠᴇɴᴛ".style())
         updateLines(player)
     }
 
@@ -33,18 +25,10 @@ class SidebarManager {
         boardRegistry.remove(player.uniqueId)?.delete()
     }
 
-    private fun createPlaceComponent(symbol: String, color: TextColor): Component {
-        return Component.text()
-            .color(color)
-            .append(Component.text(symbol))
-            .append(Component.text(": ", NamedTextColor.GRAY))
-            .build()
-    }
-
     fun updateLines(player: Player, addExtra: List<Component>? = null) {
         val board = boardRegistry[player.uniqueId] ?: return
 
-        val lines = mutableListOf<Component>(
+        val lines = mutableListOf(
             currentGameLine(),
             Component.empty(),
             getComponentForPositionAt(0, player),
@@ -55,16 +39,8 @@ class SidebarManager {
         if (!isTop3(player)) {
             lines += listOf(
                 Component.empty(),
-                Component.text("ʏᴏᴜʀ sᴄᴏʀᴇ", TextColor.color(178, 255, 171)).append(Component.text(": ", NamedTextColor.GRAY)),
-                Component.text()
-                    .append(
-                        Component.text(
-                            "${getPlacementByUUID(player.uniqueId)}.",
-                            NamedTextColor.GRAY
-                        )
-                    )
-                    .append(Component.text(" ʏᴏᴜ", TextColor.color(235, 173, 255), TextDecoration.BOLD))
-                    .build()
+                "<colour:#b2ffab>ʏᴏᴜʀ sᴄᴏʀᴇ<grey>: ".style(),
+                "<grey>${getPlacementByUUID(player.uniqueId)}. <colour:#ebadff><b>ʏᴏᴜ <reset><grey>(${dataSupplier[player.uniqueId]})".style()
             )
         }
 
@@ -72,44 +48,33 @@ class SidebarManager {
 
         lines += listOf(
             Component.empty(),
-            Component.text("ꜰʟʏᴛᴇ.ɢɢ/ᴅᴏɴᴀᴛᴇ", NamedTextColor.LIGHT_PURPLE)
+            "<light_purple>ꜰʟʏᴛᴇ.ɢɢ/ᴅᴏɴᴀᴛᴇ".style()
         )
 
         board.lines.clear()
         board.updateLines(lines)
     }
 
-    private fun currentGameLine(): Component {
-        val gameName = eventController().currentGame?.gameConfig?.smallDisplayName ?: Component.text("ɴᴏɴᴇ", NamedTextColor.GRAY)
+    private fun currentGameLine() = "<aqua>ɢᴀᴍᴇ<grey>: <0>".style(eventController().currentGame?.gameConfig?.smallDisplayName ?: "<grey>ɴᴏɴᴇ".style())
 
-        return Component.text()
-            .append(Component.text("ɢᴀᴍᴇ", NamedTextColor.AQUA))
-            .append(Component.text(": ", NamedTextColor.GRAY))
-            .append(gameName)
-            .build()
-    }
 
     private fun getComponentForPositionAt(position: Int, player: Player): Component {
         Preconditions.checkArgument(position in 0..2, "Position must be between 0 and 2")
 
+        val placeDefaultComponent = mapOf(
+            0 to "<colour:#ffcb1a>➊<grey>:",
+            1 to "<colour:#d0d0d0>➋<grey>:",
+            2 to "<color:#a39341>➌<grey>:"
+        )
+
         val uniqueIdAtPosition = getUUIDByPlacement(position)
-        val base = Component.text().append(placeDefaultComponent[position]!!)
-
-        return when (uniqueIdAtPosition) {
-            null -> base.append(Component.text("ɴᴏɴᴇ", NamedTextColor.WHITE)).build()
-
-            player.uniqueId ->
-                base.append(Component.text("ʏᴏᴜ", TextColor.color(235, 173, 255), TextDecoration.BOLD))
-                    .append(Component.text(" (${dataSupplier[player.uniqueId]})", TextColor.color(252, 179, 179)))
-                    .build()
-
-            else -> {
-                val playerName = Bukkit.getOfflinePlayer(uniqueIdAtPosition).name ?: "Unknown"
-                base.append(Component.text(playerName, TextColor.color(245, 214, 255)))
-                    .append(Component.text(" (${dataSupplier[uniqueIdAtPosition]})", TextColor.color(252, 179, 179)))
-                    .build()
-            }
+        val nameComponent = when (uniqueIdAtPosition) {
+            player.uniqueId -> "<colour:#ebadff><b>ʏᴏᴜ <reset><colour:#fcb3b3>(${dataSupplier[player.uniqueId]})".style()
+            null -> "<white>ɴᴏɴᴇ".style()
+            else -> "<colour:#f5d6ff>${Bukkit.getOfflinePlayer(uniqueIdAtPosition).name ?: "Unknown"} <reset><colour:#fcb3b3>(${dataSupplier[uniqueIdAtPosition]})".style()
         }
+
+        return "${placeDefaultComponent[position]!!} <0>".style(nameComponent)
     }
 
     private fun isTop3(player: Player): Boolean = (0..2).any { getUUIDByPlacement(it) == player.uniqueId }

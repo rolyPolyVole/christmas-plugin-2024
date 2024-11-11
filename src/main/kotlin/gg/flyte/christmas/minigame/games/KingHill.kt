@@ -51,7 +51,7 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
 
         var stick = ItemStack(Material.STICK).apply {
             itemMeta = itemMeta.apply {
-                displayName(Component.text("Knockback Stick!", gameConfig.colour))
+                displayName("<game_colour>Knockback Stick!".style())
             }
 
             addUnsafeEnchantment(Enchantment.KNOCKBACK, 5)

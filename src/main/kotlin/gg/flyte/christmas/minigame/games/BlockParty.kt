@@ -183,7 +183,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
         currentBossBar = timerBar
 
-        Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.hideBossBar(timerBar) }
+        Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.showBossBar(timerBar) }
 
         val totalTicks = secondsForRound * 20
         var remainingTicks = totalTicks

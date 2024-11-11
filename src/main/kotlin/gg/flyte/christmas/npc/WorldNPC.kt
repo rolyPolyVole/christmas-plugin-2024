@@ -8,9 +8,10 @@ import com.github.retrooper.packetevents.protocol.player.TextureProperty
 import com.github.retrooper.packetevents.protocol.player.UserProfile
 import com.github.retrooper.packetevents.util.MojangAPIUtil
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityMetadata
+import gg.flyte.christmas.minigame.world.MapSinglePoint
+import gg.flyte.christmas.util.style
 import io.github.retrooper.packetevents.util.SpigotConversionUtil
 import io.github.retrooper.packetevents.util.SpigotReflectionUtil
-import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.Player
@@ -23,7 +24,7 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
 
     private val userProfile: UserProfile = UserProfile(UUID.randomUUID(), displayName, textureProperties)
     private var id: Int = SpigotReflectionUtil.generateEntityId()
-    private val tablistName = Component.text("NPC-$id")
+    private val tablistName = "NPC-$id".style()
     val npc: NPC = NPC(userProfile, id, tablistName)
 
     /**
