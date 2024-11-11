@@ -345,10 +345,11 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
                     loopedPlayer.gameMode = GameMode.ADVENTURE
                     loopedPlayer.formatInventory()
                     loopedPlayer.teleport(ChristmasEventPlugin.instance.lobbySpawn)
-                    eventController().sidebarManager.update(loopedPlayer)
                     npcs.forEach { it.despawnFor(loopedPlayer) }
                     displays.forEach { it.remove() }
                 }
+
+                eventController().sidebarManager.update()
             }
         }
     }

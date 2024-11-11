@@ -13,12 +13,12 @@ class SidebarManager {
     private val boardRegistry = mutableMapOf<UUID, FastBoard>()
     var dataSupplier = mutableMapOf<UUID, Int>()
 
-    fun update() = Bukkit.getOnlinePlayers().forEach { update(it) }
-
-    fun update(player: Player) {
-        val board = boardRegistry.getOrPut(player.uniqueId) { FastBoard(player) }
-        board.updateTitle("<red><b>ᴄʜʀɪsᴛᴍᴀs ᴇᴠᴇɴᴛ".style())
-        updateLines(player)
+    fun update() {
+        Bukkit.getOnlinePlayers().forEach {
+            val board = boardRegistry.getOrPut(it.uniqueId) { FastBoard(it) }
+            board.updateTitle("<red><b>ᴄʜʀɪsᴛᴍᴀs ᴇᴠᴇɴᴛ".style())
+            updateLines(it)
+        }
     }
 
     fun remove(player: Player) {
