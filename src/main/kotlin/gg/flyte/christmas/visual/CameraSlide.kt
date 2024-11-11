@@ -23,6 +23,7 @@ class CameraSlide(slideTo: MapSinglePoint, onComplete: (() -> Unit)? = null) {
             loopedPlayer.world.spawn(loopedPlayer.location, ItemDisplay::class.java) {
                 it.setItemStack(ItemStack(Material.AIR))
                 it.teleportDuration = 5
+                CameraSequence.ACTIVE_CAMERAS.add(it.uniqueId)
 
                 delay(1) {
                     loopedPlayer.gameMode = GameMode.SPECTATOR
@@ -102,6 +103,7 @@ class CameraSlide(slideTo: MapSinglePoint, onComplete: (() -> Unit)? = null) {
                     cancel()
                     onComplete?.invoke()
                     itemDisplay.remove()
+                    CameraSequence.ACTIVE_CAMERAS.remove(itemDisplay.uniqueId)
                 }
             }
         }
