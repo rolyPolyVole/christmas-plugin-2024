@@ -115,7 +115,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
 
     private fun setGameSwitcher(): MenuItem {
         val menuItem = MenuItem(Material.STRUCTURE_VOID).apply {
-            setName("&2&lSelect Game:".colourise())
+            setName("&b&lSelect Game:".colourise())
             updateRotatingItem(this) // initial lore setup
             onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
                 inventoryClickEvent.isCancelled = true
@@ -135,8 +135,9 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
                     selectedIndex = (selectedIndex - 1 + availableGames.size) % availableGames.size // cycle around
                 }
 
+                this.itemStack = availableGames[selectedIndex].menuItem
+                setName("&b&lSelect Game:".colourise())
                 updateRotatingItem(this)
-                this.itemStack.type = availableGames[selectedIndex].menuMaterial
 
                 menu.setItem(13, this)
                 whoClicked.playSound(Sound.UI_BUTTON_CLICK)
@@ -152,7 +153,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
         for (index in availableGames.indices) {
             val game = availableGames[index]
             val loreLine = if (index == selectedIndex) {
-                "&c&l> ${PlainTextComponentSerializer.plainText().serialize(game.displayName)}".colourise()
+                "&c&l» ${"<bold><0>".style(game.displayName).toLegacyString()}".colourise()
             } else {
                 "&7${PlainTextComponentSerializer.plainText().serialize(game.displayName)}".colourise()
             }

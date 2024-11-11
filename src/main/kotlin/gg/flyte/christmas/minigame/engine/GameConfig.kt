@@ -1,5 +1,6 @@
 package gg.flyte.christmas.minigame.engine
 
+import dev.shreyasayyengar.menuapi.menu.MenuItem
 import gg.flyte.christmas.minigame.games.BaubleTag
 import gg.flyte.christmas.minigame.games.BlockParty
 import gg.flyte.christmas.minigame.games.KingHill
@@ -11,6 +12,7 @@ import gg.flyte.christmas.util.style
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
 import org.bukkit.Material
+import org.bukkit.inventory.ItemStack
 import kotlin.collections.listOf
 import kotlin.reflect.KClass
 
@@ -18,7 +20,7 @@ enum class GameConfig(
     val gameClass: KClass<out EventMiniGame>,
     val displayName: Component,
     val smallDisplayName: Component,
-    val menuMaterial: Material,
+    val menuItem: ItemStack,
     val colour: TextColor,
     val instructions: String,
     val minPlayers: Int,
@@ -33,7 +35,7 @@ enum class GameConfig(
         BlockParty::class,
         "<colour:#e05c6f>Block Party".style(),
         "<colour:#e05c6f>ʙʟᴏᴄᴋ ᴘᴀʀᴛʏ".style(),
-        Material.MAGENTA_GLAZED_TERRACOTTA,
+        ItemStack(Material.MAGENTA_GLAZED_TERRACOTTA),
         TextColor.color(224, 92, 111),
         " • Dance around the colourful floor until the christmas music stops.\n\n" +
                 " • Run and stand on the colour which has been chosen (check hotbar) before the timer ends.\n\n" +
@@ -91,7 +93,7 @@ enum class GameConfig(
         KingHill::class,
         "<colour:#f70123>King of the Hill".style(),
         "<colour:#f70123>ᴋɪɴɢ ᴏғ ᴛʜᴇ ʜɪʟʟ".style(),
-        Material.STICK,
+        ItemStack(Material.STICK),
         TextColor.color(247, 1, 35),
         " • Be the King of The Hill! Stand in the centre of the map to gain points every second.\n\n" +
                 " • Knock other players off the map with your knockback stick. Avoid falling off yourself!\n\n" +
@@ -175,7 +177,7 @@ enum class GameConfig(
         MusicalMinecarts::class,
         "<colour:#8e0003>Musical Minecarts".style(),
         "<colour:#8e0003>ᴍᴜꜱɪᴄᴀʟ ᴍɪɴᴇᴄᴀʀᴛꜱ".style(),
-        Material.MINECART,
+        ItemStack(Material.MINECART),
         TextColor.color(142, 0, 3),
         " • Dance around the platform until the christmas music stops.\n\n" +
                 " • Run to the nearest minecart and get inside before the timer ends.\n\n" +
@@ -220,7 +222,7 @@ enum class GameConfig(
         PaintWars::class,
         "<colour:#549c19>Paint Wars".style(),
         "<colour:#549c19>ᴘᴀɪɴᴛ ᴡᴀʀꜱ".style(),
-        Material.BRUSH,
+        ItemStack(Material.BRUSH),
         TextColor.color(84, 156, 25),
         " • Use your Paint Gun to shoot blocks around the map into your chosen block.\n\n" +
                 " • You can shoot over other player's blocks to reduce their score!\n\n" +
