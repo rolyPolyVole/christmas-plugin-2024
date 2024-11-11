@@ -80,7 +80,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
     open fun startGameOverview() {
         CameraSlide(gameConfig) {
             // send BEFORE textDisplay has rendered in.
-            Util.runAction(PlayerType.PARTICIPANT) {
+            Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) {
                 it.title(
                     gameConfig.displayName, "<game_colour>Instructions:".style(),
                     titleTimes(Duration.ofMillis(1250), Duration.ofMillis(3500), Duration.ofMillis(750))
