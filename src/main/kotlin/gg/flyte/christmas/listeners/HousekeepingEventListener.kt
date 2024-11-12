@@ -193,7 +193,7 @@ class HousekeepingEventListener : Listener, PacketListener {
         event<PlayerSwapHandItemsEvent> { isCancelled = true }
 
         event<PlayerInteractEvent> {
-            if (item?.type == Material.COMPASS) {
+            if (item?.type == Material.RECOVERY_COMPASS) {
                 openSpectateMenu(player)
             } // NOTE: if other games use compasses, this method will need adjustment.
         }
@@ -222,7 +222,7 @@ class HousekeepingEventListener : Listener, PacketListener {
             if (clickedInventory !is PlayerInventory) return@event
             isCancelled = slotType == InventoryType.SlotType.ARMOR
 
-            if (currentItem?.type == Material.COMPASS) {
+            if (currentItem?.type == Material.RECOVERY_COMPASS) {
                 openSpectateMenu(whoClicked as Player) // NOTE: if other games use compasses, this method will need adjustment.
             }
         }

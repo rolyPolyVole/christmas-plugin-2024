@@ -148,7 +148,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
             player.teleport(gameConfig.spectatorSpawnLocations.random())
         } else {
             // spectate item
-            ItemStack(Material.COMPASS).apply {
+            ItemStack(Material.RECOVERY_COMPASS).apply {
                 itemMeta = itemMeta.apply {
                     displayName("<white>Spectate".style())
                     editMeta {
