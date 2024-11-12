@@ -30,6 +30,50 @@ enum class GameConfig(
     val spectatorSpawnLocations: List<MapSinglePoint>,
     val spectatorCameraLocations: List<MapSinglePoint>,
 ) {
+    //region AVALANCHE
+    //endregion
+
+    //region BAUBLE_TAG 174, 211, 216
+    BAUBLE_TAG(
+        BaubleTag::class,
+        "<colour:#aed3d8>Bauble Tag".style(),
+        "<colour:#aed3d8>ʙᴀᴜʙʟᴇ ᴛᴀɢ".style(),
+        MenuItem(Material.PLAYER_HEAD).setSkullTexture("1e3ad039e903e30f90daa68cebfc5cee72b5ed84d6044382409c67f374d1732b").itemStack,
+        TextColor.color(174, 211, 216),
+        " • Run away from the players with baubles on their head.\n\n" +
+                " • If you are tagged, you will become the new bauble holder.\n\n" +
+                " • The baubles will shatter at the end of each round.\n\n" +
+                " • To win, survive the most rounds!",
+        2,
+        MapSinglePoint(535, 212, 612), // TODO
+        listOf(MapRegion.single(MapSinglePoint(553, 203, 593))),
+        listOf(
+            MapSinglePoint(535, 212, 612, -134.63545F, 36.587585F),
+            MapSinglePoint(535, 212, 609, -128.16087F, 37.477802F),
+            MapSinglePoint(536, 212, 598, -107.6864F, 42.090744F),
+            MapSinglePoint(536, 212, 589, -81.384834F, 44.35675F),
+            MapSinglePoint(538, 212, 580, -58.80621F, 43.871178F),
+            MapSinglePoint(542, 212, 574, -30.723955F, 40.553097F),
+            MapSinglePoint(548, 212, 569, -26.5966F, 40.22938F),
+            MapSinglePoint(556, 212, 566, -2.6418605F, 38.772663F),
+            MapSinglePoint(564, 212, 569, 25.683008F, 39.339165F),
+            MapSinglePoint(572, 212, 573, 42.354305F, 39.66288F),
+            MapSinglePoint(576, 212, 581, 63.07208F, 40.067524F),
+            MapSinglePoint(576, 212, 591, 83.627594F, 41.443314F),
+            MapSinglePoint(576, 212, 600, 102.32168F, 41.362385F),
+            MapSinglePoint(574, 212, 608, 122.87687F, 42.738174F),
+            MapSinglePoint(567, 212, 613, 136.55391F, 45.408825F),
+            MapSinglePoint(557, 212, 609, 168.43948F, 53.74449F),
+            MapSinglePoint(554, 212, 597, -128.1127F, 75.918816F),
+            MapSinglePoint(554, 212, 594, -89.91446F, 88.057785F),
+            MapSinglePoint(554, 206, 594, -89.83353F, 88.219635F),
+            MapSinglePoint(554, 204, 594, -88.70047F, 88.381485F)
+        ),
+        listOf(MapSinglePoint(554, 204, 594, -88.70047F, 88.381485F)),
+        listOf(MapSinglePoint(554, 204, 594, -88.70047F, 88.381485F)),
+    ),
+    //endregion
+
     //region BLOCK_PARTY
     BLOCK_PARTY(
         BlockParty::class,
