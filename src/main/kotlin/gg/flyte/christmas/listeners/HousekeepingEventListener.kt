@@ -1,6 +1,7 @@
 package gg.flyte.christmas.listeners
 
 import com.destroystokyo.paper.event.player.PlayerStopSpectatingEntityEvent
+import com.destroystokyo.paper.event.server.PaperServerListPingEvent
 import com.github.retrooper.packetevents.PacketEvents
 import com.github.retrooper.packetevents.event.PacketListener
 import com.github.retrooper.packetevents.event.PacketListenerPriority
@@ -18,9 +19,11 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEn
 import dev.shreyasayyengar.menuapi.menu.MenuItem
 import dev.shreyasayyengar.menuapi.menu.StandardMenu
 import gg.flyte.christmas.ChristmasEventPlugin
+import gg.flyte.christmas.util.colourise
 import gg.flyte.christmas.util.eventController
 import gg.flyte.christmas.util.formatInventory
 import gg.flyte.christmas.util.style
+import gg.flyte.christmas.util.toLegacyString
 import gg.flyte.christmas.visual.CameraSequence
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.playSound
@@ -50,8 +53,8 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerSwapHandItemsEvent
-import org.bukkit.event.server.ServerListPingEvent
 import org.bukkit.inventory.PlayerInventory
+import java.util.UUID
 import kotlin.apply
 import kotlin.math.ceil
 
@@ -59,7 +62,7 @@ class HousekeepingEventListener : Listener, PacketListener {
     init {
         PacketEvents.getAPI().eventManager.registerListener(this, PacketListenerPriority.NORMAL)
 
-        event<ServerListPingEvent> {
+        event<PaperServerListPingEvent> {
             // TODO finish sponsors
             val footer = text("       ")
                 .append(MiniMessage.miniMessage().deserialize("<gradient:#fffdb8:#ffffff>ᴄᴀʀʙᴏɴ.ʜᴏꜱᴛ</gradient>"))
@@ -67,7 +70,7 @@ class HousekeepingEventListener : Listener, PacketListener {
                 .append(text("ʙᴜɪʟᴛʙʏʙɪᴛ.ᴄᴏᴍ ", TextColor.color(72, 133, 190)))
                 .append("<gradient:#fffdb8:#ffffff>ᴄᴀʀʙᴏɴ.ʜᴏꜱᴛ</gradient>".style())
                 .append("<white> • ".style())
-                .append("<colour:#4885be>ʙᴜɪʟᴛʙʏʙɪᴛ.ᴄᴏᴍ ".style())
+                .append("<colour:#4885be>ʙᴜɪʟᴛʙʏʙɪᴛ.ᴄᴏᴍ".style())
 
             val motd = Component.empty()
                 .append("<b><obf><white>        ||||||  ".style())
@@ -78,6 +81,18 @@ class HousekeepingEventListener : Listener, PacketListener {
                 .append(footer)
 
             motd(motd)
+            this.maxPlayers = 1
+            this.numPlayers = 1
+            listOf(
+                "<st><grey>        <reset> ❆ <bold><light_purple>ꜰʟʏᴛᴇ.ɢɢ <red>ᴄʜʀɪsᴛᴍᴀs <green>ᴇᴠᴇɴᴛ <reset><white>❆ <reset><st><grey>         ".style(),
+                "  <bold><light_purple>ꜰʟʏᴛᴇ.ɢɢ <grey>• <yellow>ᴄᴀʀʙᴏɴ.ʜᴏꜱᴛ <grey>• <blue>ʙᴜɪʟᴛʙʏʙɪᴛ.ᴄᴏᴍ".style(),
+                "".style(),
+                "".style(),
+                "            <gold>Join <green><b>now <reset><yellow>to play <aqua>x-mas minigames".style(),
+                "              <gold>and support <red>[charity name]".style() // TODO fill charity name and centre
+            ).forEach {
+                this.listedPlayers.add(PaperServerListPingEvent.ListedPlayerInfo(it.toLegacyString().colourise(), UUID.randomUUID()))
+            }
         }
 
         event<AsyncChatEvent> {
