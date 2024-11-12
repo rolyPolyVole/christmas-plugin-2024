@@ -116,7 +116,7 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
     private val playerBrushesBiMap = HashBiMap.create<UUID, Material>()
     private val changedBlocks = mutableListOf<Block>()
     private val scores = mutableMapOf<UUID, Int>()
-    private var hasEnded = false
+    private var hasEnded = true
     private var materialIndex = 0;
 
     override fun preparePlayer(player: Player) {
@@ -145,15 +145,17 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
     override fun startGame() {
         eventController().sidebarManager.dataSupplier = scores
 
-        tasks += repeatingTask(1, TimeUnit.SECONDS) {
-            gameTime--
+        simpleCountdown {
+            tasks += repeatingTask(1, TimeUnit.SECONDS) {
+                gameTime--
 
-            if (gameTime == 0) {
-                cancel()
-                endGame()
+                if (gameTime == 0) {
+                    cancel()
+                    endGame()
+                }
+
+                updateScoreboard()
             }
-
-            updateScoreboard()
         }
     }
 
