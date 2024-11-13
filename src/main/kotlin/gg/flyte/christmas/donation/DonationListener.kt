@@ -36,8 +36,7 @@ class DonationListener(private val campaignId: String) {
         GlobalScope.launch {
             while (isActive) {
                 try {
-                    val donationsData = requestJson()
-                    donationHandler(donationsData)
+                    submitDataToEventFactory(requestDonationDataAsJson())
                 } catch (e: Exception) {
                     ChristmasEventPlugin.instance.logger.severe("Failed to fetch donations: ${e.message}")
                 }
@@ -53,7 +52,7 @@ class DonationListener(private val campaignId: String) {
      * @throws IOException If an input or output exception occurred while reading from the connection stream.
      */
     @Throws(IOException::class)
-    private fun requestJson(): JsonObject {
+    private fun requestDonationDataAsJson(): JsonObject {
         val conn = url.openConnection() as HttpURLConnection
         conn.requestMethod = "GET"
         conn.setRequestProperty("Authorization", "Bearer $accessToken")
@@ -72,7 +71,7 @@ class DonationListener(private val campaignId: String) {
      * Handles the donation data received by processing each donation and fires a [DonateEvent] for each unique donation.
      * @param donationsData A JsonObject containing an array of donation data.
      */
-    private fun donationHandler(donationsData: JsonObject) {
+    private fun submitDataToEventFactory(donationsData: JsonObject) {
         val dataArray = donationsData.getAsJsonArray("data")
         dataArray.forEach { donationElement ->
             val donation = donationElement.asJsonObject
@@ -84,6 +83,7 @@ class DonationListener(private val campaignId: String) {
                 val time = donation.get("completed_at")?.asString ?: ""
                 val value = amount.get("value")?.asString ?: ""
                 val currency = amount.get("currency")?.asString ?: "USD"
+
                 Bukkit.getPluginManager().callEvent(DonateEvent(donorName, comment, time, value, currency, donationId))
             }
         }
