@@ -125,8 +125,7 @@ class EventController() {
     fun onPlayerQuit(player: Player) {
         sidebarManager.remove(player)
 
-        if (currentGame == null) return
-        when (currentGame!!.state) {
+        when (currentGame?.state) {
 
             GameState.COUNTDOWN -> {
                 if (!enoughPlayers()) {
@@ -157,7 +156,7 @@ class EventController() {
      * @param avoid The song to avoid playing, if any.
      */
     fun startPlaylist(avoid: SongReference? = null) {
-        if (songPlayer != null) songPlayer!!.destroy()
+        songPlayer?.destroy()
 
         songPlayer = RadioSongPlayer(Playlist(*SongReference.entries.map { it.song }.toTypedArray()), SoundCategory.RECORDS)
         songPlayer!!.isRandom = true
