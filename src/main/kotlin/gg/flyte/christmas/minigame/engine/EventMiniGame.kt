@@ -56,7 +56,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
     protected val tasks = mutableListOf<TwilightRunnable?>()
     protected val formattedWinners = linkedMapOf<UUID, String>()
     val spectateEntities = mutableMapOf<Int, Entity>()
-    lateinit var state: GameState
+    var state: GameState = GameState.IDLE
 
     /**
      * Initialises the game's spectator entities, which are used to allow players to spectate the game.

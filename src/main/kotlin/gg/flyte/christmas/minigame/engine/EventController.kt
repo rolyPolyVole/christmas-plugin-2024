@@ -52,7 +52,6 @@ class EventController() {
      */
     fun setMiniGame(gameConfig: GameConfig) {
         currentGame = gameConfig.gameClass.primaryConstructor?.call()
-        currentGame!!.state = GameState.IDLE
     }
 
     /**
