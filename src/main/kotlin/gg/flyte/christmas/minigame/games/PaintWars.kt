@@ -214,11 +214,6 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
         }
     }
 
-    override fun onPlayerJoin(player: Player) {
-        super.onPlayerJoin(player)
-        preparePlayer(player)
-    }
-
     override fun handleGameEvents() {
         listeners += event<PlayerInteractEvent> {
             if (hasEnded) return@event

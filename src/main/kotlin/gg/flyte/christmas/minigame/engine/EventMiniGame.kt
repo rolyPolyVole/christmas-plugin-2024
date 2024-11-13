@@ -144,7 +144,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
         player.inventory.storageContents = arrayOf()
         player.inventory.setItemInOffHand(null)
 
-        if (reason == EliminationReason.LEFT_GAME) {
+        if (reason == EliminationReason.EXPIRED_SESSION) {
             player.teleport(gameConfig.spectatorSpawnLocations.random())
         } else {
             // spectate item
@@ -190,21 +190,29 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
     abstract fun handleGameEvents()
 
     /**
-     * Handles player joining the game.
+     * Handles the provided player reference (directly from [org.bukkit.event.player.PlayerJoinEvent]) when they join **this** game.
+     *
+     * **Note**: If implementing classes wish for joining players to participate in the game (even if it has already started),
+     * they should set its [GameConfig.eliminateOnLeave] to `false`. If `false` [preparePlayer] will be called to set up the player
+     * to integrate into the game.
+     *
+     * @param player The player who has joined the game.
      */
-    open fun onPlayerJoin(player: Player) {
-        if (eliminatedPlayers.contains(player.uniqueId)) return // game logic has already handled their elim
-
-        if (state == GameState.LIVE) {
-            eliminate(player, EliminationReason.LEFT_GAME)
-        }
+    fun onPlayerJoin(player: Player) {
+        if (eliminatedPlayers.contains(player.uniqueId)) return  // game logic has already handled their elimination.
+        else preparePlayer(player)
     }
 
     /**
-     * Eliminates the player from the game upon quitting.
+     * Handles the provided player reference (directly from [org.bukkit.event.player.PlayerQuitEvent]) when they leave **this** game.
+     *
+     * The player will internally be marked eliminated if the current game's configuration specifies that players should be eliminated
+     * @see [GameConfig.eliminateOnLeave]
      */
-    fun onPlayerQuit(player: Player) {
-        eliminate(player, EliminationReason.LEFT_GAME)
+    fun onPlayerQuit(player: Player) = {
+        if (state == GameState.LIVE) {
+            if (gameConfig.eliminateOnLeave) eliminate(player, EliminationReason.EXPIRED_SESSION)
+        }
     }
 
     /**
@@ -360,11 +368,14 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
      * Cosmetic effects can only be applied if the eliminated player is still on the server.
      */
     enum class EliminationReason {
-        // TODO change to boolean?
         /**
-         * Player left the game (left the server) OR player joined after the game started.
+         * The player's session is considered to be 'expired' and is subsequently eliminated.
+         *
+         * This is can be because:
+         * 1. The player disconnected from the server during an active game.
+         * 2. The player re-joined the server while a game was in progess **AND** [GameConfig.eliminateOnLeave] is `true`.
          */
-        LEFT_GAME,
+        EXPIRED_SESSION,
 
         /**
          * Player was terrible and was eliminated by game logic.

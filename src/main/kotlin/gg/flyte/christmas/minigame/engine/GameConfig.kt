@@ -29,6 +29,7 @@ enum class GameConfig(
     val overviewLocations: List<MapSinglePoint>,
     val spectatorSpawnLocations: List<MapSinglePoint>,
     val spectatorCameraLocations: List<MapSinglePoint>,
+    val eliminateOnLeave: Boolean = true,
 ) {
     //region AVALANCHE
     //endregion
@@ -213,6 +214,7 @@ enum class GameConfig(
             MapSinglePoint(840, 93, 595, 22, 25),
             MapSinglePoint(809, 93, 596, -27, 25)
         ),
+        false
     ),
     //endregion
 
@@ -344,6 +346,7 @@ enum class GameConfig(
             MapSinglePoint(1623, 136, 406, 64, 33),
             MapSinglePoint(1558, 98, 416, -8, 26)
         ),
+        false
     )
     //endregion
 

@@ -111,14 +111,14 @@ class EventController() {
         if (currentGame == null) {
             player.teleport(ChristmasEventPlugin.instance.lobbySpawn)
         } else {
-            currentGame!!.onPlayerJoin(player)
-
             if (currentGame!!.state == GameState.WAITING_FOR_PLAYERS) {
                 if (enoughPlayers()) {
                     currentGame!!.state = GameState.COUNTDOWN
                     countdown()
                 }
             }
+
+            if (currentGame!!.state == GameState.LIVE) currentGame!!.onPlayerJoin(player)
         }
     }
 

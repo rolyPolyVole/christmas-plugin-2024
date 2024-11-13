@@ -165,9 +165,4 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
             }
         }
     }
-
-    override fun onPlayerJoin(player: Player) {
-        super.onPlayerJoin(player)
-        preparePlayer(player)
-    }
 }
