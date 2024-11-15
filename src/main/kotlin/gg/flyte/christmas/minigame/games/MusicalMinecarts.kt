@@ -417,7 +417,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         }
 
         delay(20, TimeUnit.SECONDS) {
-            worldNPCs.forEach { it.despawnForAll()}
+            worldNPCs.forEach { it.despawnForAll() }
             minecarts.forEach { it.remove() }
             droppedItems.forEach { it.remove() }
             animationTasks.forEach { it.cancel() }
