@@ -66,10 +66,8 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
             3 to MapSinglePoint(535, 105, 504, -90, 0)
         )
 
-        /**
-         * TODO
-         */
-        fun setLeaderBoardNPC(position: Int, player: Player) {
+        // TODO add text display with total points
+        fun refreshLeaderboard(position: Int, uniqueId: UUID) {
             // remove existing leader, if any, and spawn new leader
             for (player in Bukkit.getOnlinePlayers()) leaderBoardNPCs[position]?.despawnFor(player)
             worldNPCs.remove(leaderBoardNPCs[position])
