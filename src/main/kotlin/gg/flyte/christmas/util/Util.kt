@@ -98,7 +98,7 @@ object Util {
     /**
      * Fills the arena circle (at centre point x: 616, z: 800, radius = 28) with snow blocks at a given level.
      */
-    fun fillArenaWithSnow(atLevel: Int, material: Material): List<MapSinglePoint> {
+    fun fillArena(atLevel: Int, material: Material): List<MapSinglePoint> {
         val locations = mutableListOf<MapSinglePoint>()
 
         val world = ChristmasEventPlugin.instance.serverWorld
