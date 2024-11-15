@@ -37,7 +37,7 @@ enum class GameConfig(
                 " • Run and stand under shelter as the snowballs fall from the sky.\n\n" +
                 " • If you are hit by a falling snowball, you will be eliminated!",
         1,
-        MapSinglePoint(535, 212, 612), // TODO<Map>
+        MapSinglePoint(616.5, 140.0, 800.5, 0F, 90F),
         listOf(MapRegion.single(MapSinglePoint(553, 203, 593))),
         listOf(
             MapSinglePoint(535, 212, 612, -134.63545F, 36.587585F),
