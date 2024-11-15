@@ -60,9 +60,11 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
     companion object {
         private val worldNPCs: MutableSet<WorldNPC> = HashSet()
         private val leaderBoardNPCs = HashMap<Int, WorldNPC>()
-        private val leaderboardPositionToLocation = HashMap<Int, Location>().apply {
-            // TODO mark 1st, 2nd, 3rd, etc. lb positions to corresponding locations on the map.
-        }
+        private val leaderboardPositionToLocation = mapOf(
+            1 to MapSinglePoint(535, 104, 500, -90, 0),
+            2 to MapSinglePoint(535, 105, 508, -90, 0),
+            3 to MapSinglePoint(535, 105, 504, -90, 0)
+        )
 
         /**
          * TODO
