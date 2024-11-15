@@ -45,7 +45,7 @@ import kotlin.random.Random
 @Suppress("DuplicatedCode") // nature of this game is very similar to other music-controlled games.
 class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
     private var overviewTasks = mutableListOf<TwilightRunnable>()
-    private var floorBlocks = Util.fillArenaWithSnow(112, Material.SNOW_BLOCK)
+    private var floorBlocks = Util.fillArenaWithSnow(110, Material.SNOW_BLOCK)
     private var roundNumber = 0
     private var minecarts = mutableListOf<Minecart>()
     private var secondsForRound = 12
@@ -422,7 +422,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
             poweredRails.keys.flatMap { it.toSingleBlockLocations() }.forEach { it.block.type = Material.AIR }
             connectorRails.keys.forEach { it.block.type = Material.AIR }
 
-            Util.fillArenaWithSnow(112, Material.AIR)
+            Util.fillArenaWithSnow(110, Material.AIR)
             super.endGame()
         }
     }
