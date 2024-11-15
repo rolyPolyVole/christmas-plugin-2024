@@ -225,7 +225,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                         player.hidePlayer()
 
                         delay(59) {
-                            remove()
+                            it.remove()
                             player.teleport(randomSpecLocation)
                             player.showPlayer()
                         }
