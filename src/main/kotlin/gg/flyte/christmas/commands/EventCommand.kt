@@ -175,7 +175,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
         for (index in availableGames.indices) {
             val game = availableGames[index]
             val loreLine = if (index == selectedIndex) {
-                "<red><bold>» <0>".style(game.displayName).toLegacyString().colourise()
+                "<white><bold>» <0>".style(game.displayName).toLegacyString().colourise()
             } else game.displayName.toLegacyString().colourise()
 
             lore.add(loreLine)
