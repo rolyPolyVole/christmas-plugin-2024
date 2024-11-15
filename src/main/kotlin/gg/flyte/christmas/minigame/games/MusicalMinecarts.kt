@@ -109,7 +109,10 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
                 Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.playSound(Sound.ENTITY_ENDER_DRAGON_GROWL) }
                 Util.runAction(PlayerType.PARTICIPANT) {
-                    it.title("<game_colour>Hard Mode!".style(), Component.empty())
+                    it.title(
+                        "<game_colour>Hard Mode!".style(), Component.empty(),
+                        titleTimes(Duration.ofMillis(300), Duration.ofSeconds(3), Duration.ofMillis(300))
+                    )
                     it.sendMessage("<red><b>The minecarts will only spawn when the music STOPS!".style())
                 }
                 Util.runAction(PlayerType.OPTED_OUT) { it.sendMessage("<game_colour>The game is getting harder!".style()) }

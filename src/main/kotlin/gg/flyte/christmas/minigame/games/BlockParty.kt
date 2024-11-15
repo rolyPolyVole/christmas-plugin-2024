@@ -119,7 +119,10 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
             Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.playSound(Sound.ENTITY_ENDER_DRAGON_GROWL) }
             Util.runAction(PlayerType.PARTICIPANT) {
-                it.title("<game_colour>Hard Mode!".style(), Component.empty())
+                it.title(
+                    "<game_colour>Hard Mode!".style(), Component.empty(),
+                    titleTimes(Duration.ofMillis(300), Duration.ofSeconds(3), Duration.ofMillis(300))
+                )
                 it.sendMessage("<red><b>The floor will now change right before the timer starts... stay quick!".style())
             }
             Util.runAction(PlayerType.OPTED_OUT) { it.sendMessage("<game_colour>The game is getting harder!".style()) }
