@@ -209,7 +209,7 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
 
     override fun handleGameEvents() {
         listeners += event<EntityDamageEvent>(priority = EventPriority.HIGHEST) {
-            val damaged = entity as? Player ?: return@event
+            entity as? Player ?: return@event
             val damager = (this as? EntityDamageByEntityEvent)?.damager as? Player ?: return@event
 
             if (remainingPlayers().contains(damager)) isCancelled = true
