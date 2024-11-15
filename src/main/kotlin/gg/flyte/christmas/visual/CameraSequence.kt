@@ -110,7 +110,7 @@ class CameraSequence(
     }
 
     private inner class SequenceTask(private var interpolatedPath: Map<Int, Point>, private val teleportDuration: Int) : BukkitRunnable() {
-        private var currentTick = 0;
+        private var currentTick = 0
         private var itemDisplay: ItemDisplay? = null
         private var textDisplay: TextDisplay? = null
 

@@ -112,7 +112,7 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
     private val changedBlocks = mutableListOf<Block>()
     private val scores = mutableMapOf<UUID, Int>()
     private var hasEnded = true
-    private var materialIndex = 0;
+    private var materialIndex = 0
 
     override fun preparePlayer(player: Player) {
         player.gameMode = GameMode.ADVENTURE
