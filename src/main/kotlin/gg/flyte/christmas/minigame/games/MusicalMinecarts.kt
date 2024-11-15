@@ -102,7 +102,6 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         if (secondsForRound > 2) secondsForRound--
 
         minecarts.forEach { it.remove() }.also { minecarts.clear() }
-        println("Attmepting to remove minecarts...")
 
         when {
             remainingPlayers().size == 20 && !harder -> {
@@ -157,7 +156,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         var remainingTicks = totalTicks
 
         // game logic timer
-        gameLogicTask = repeatingTask(5, 5) { // TODO check if period can be brought down to 1
+        gameLogicTask = repeatingTask(5, 5) {
             if (remainingTicks <= 0) {
                 this.cancel()
                 gameLogicTask = null
