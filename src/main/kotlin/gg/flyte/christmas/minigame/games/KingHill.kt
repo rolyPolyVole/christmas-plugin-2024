@@ -6,12 +6,7 @@ import gg.flyte.christmas.minigame.engine.GameConfig
 import gg.flyte.christmas.minigame.engine.PlayerType
 import gg.flyte.christmas.minigame.world.MapRegion
 import gg.flyte.christmas.minigame.world.MapSinglePoint
-import gg.flyte.christmas.util.Util
-import gg.flyte.christmas.util.eventController
-import gg.flyte.christmas.util.formatInventory
-import gg.flyte.christmas.util.style
-import gg.flyte.christmas.util.title
-import gg.flyte.christmas.util.titleTimes
+import gg.flyte.christmas.util.*
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.scheduler.delay
@@ -32,7 +27,7 @@ import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
 import java.time.Duration
-import java.util.UUID
+import java.util.*
 
 class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
     private var hillRegion = MapRegion(MapSinglePoint(824, 85, 633), MapSinglePoint(830, 88, 627))
@@ -161,7 +156,7 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
         listeners += event<PlayerMoveEvent> {
             if (player.location.blockY < respawnBelow) {
                 player.teleport(gameConfig.spawnPoints.random().randomLocation())
-                player.playSound(Sound.ENTITY_PLAYER_HURT)
+                player.playSound(Sound.ENTITY_PLAYER_TELEPORT)
             }
         }
     }
