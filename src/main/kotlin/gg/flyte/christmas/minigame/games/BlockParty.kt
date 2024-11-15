@@ -69,7 +69,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
     private var roundNumber = 0
     private var harder = false
     private var powerUpLocation: MapSinglePoint? = null
-    private var secondsForRound = 10 // TODO check if actually starting a 9
+    private var secondsForRound = 10
     private var safeBlocks = mutableListOf<MapSinglePoint>()
     private var bombedSquares = mutableListOf<MapSinglePoint>()
     private var currentBossBar: BossBar? = null
