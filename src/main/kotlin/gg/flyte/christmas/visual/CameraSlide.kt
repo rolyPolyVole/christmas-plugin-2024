@@ -17,7 +17,7 @@ class CameraSlide(slideTo: MapSinglePoint, onComplete: (() -> Unit)? = null) {
     constructor(gameConfig: GameConfig, onComplete: (() -> Unit)?) : this(gameConfig.centrePoint, onComplete)
 
     init {
-        var hasCompleted = false // TODO document this
+        var hasCompleted = false // don't run onComplete for every online player
 
         Bukkit.getOnlinePlayers().forEach { loopedPlayer ->
             loopedPlayer.world.spawn(loopedPlayer.location, ItemDisplay::class.java) {
