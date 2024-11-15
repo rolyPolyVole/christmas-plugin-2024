@@ -54,9 +54,6 @@ class HousekeepingEventListener : Listener, PacketListener {
         event<PaperServerListPingEvent> {
             // TODO finish sponsors
             val footer = text("       ")
-                .append(MiniMessage.miniMessage().deserialize("<gradient:#fffdb8:#ffffff>ᴄᴀʀʙᴏɴ.ʜᴏꜱᴛ</gradient>"))
-                .append(text(" • ", NamedTextColor.WHITE))
-                .append(text("ʙᴜɪʟᴛʙʏʙɪᴛ.ᴄᴏᴍ ", TextColor.color(72, 133, 190)))
                 .append("<gradient:#fffdb8:#ffffff>ᴄᴀʀʙᴏɴ.ʜᴏꜱᴛ</gradient>".style())
                 .append("<white> • ".style())
                 .append("<colour:#4885be>ʙᴜɪʟᴛʙʏʙɪᴛ.ᴄᴏᴍ".style())
