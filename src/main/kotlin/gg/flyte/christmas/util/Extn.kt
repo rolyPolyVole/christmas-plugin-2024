@@ -1,6 +1,9 @@
 package gg.flyte.christmas.util
 
+import com.github.retrooper.packetevents.PacketEvents
+import com.github.retrooper.packetevents.wrapper.PacketWrapper
 import gg.flyte.christmas.ChristmasEventPlugin
+import io.github.retrooper.packetevents.util.SpigotConversionUtil
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.minimessage.MiniMessage
@@ -64,3 +67,21 @@ fun Player.formatInventory() {
     this.inventory.clear()
     this.equipment.helmet = Util.applyChristmasHat()
 }
+
+fun com.github.retrooper.packetevents.protocol.world.Location.bukkit(): org.bukkit.Location {
+    return SpigotConversionUtil.toBukkitLocation(ChristmasEventPlugin.instance.serverWorld, this)
+}
+
+fun org.bukkit.Location.packetObj(): com.github.retrooper.packetevents.protocol.world.Location {
+    return SpigotConversionUtil.fromBukkitLocation(this)
+}
+
+fun com.github.retrooper.packetevents.protocol.item.ItemStack.bukkit(): org.bukkit.inventory.ItemStack {
+    return SpigotConversionUtil.toBukkitItemStack(this)
+}
+
+fun org.bukkit.inventory.ItemStack.packetObj(): com.github.retrooper.packetevents.protocol.item.ItemStack {
+    return SpigotConversionUtil.fromBukkitItemStack(this)
+}
+
+fun PacketWrapper<*>.sendPacket(player: Player) = PacketEvents.getAPI().playerManager.sendPacket(player, this)

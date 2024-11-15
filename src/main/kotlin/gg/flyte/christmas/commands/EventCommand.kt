@@ -9,7 +9,6 @@ import gg.flyte.christmas.util.eventController
 import gg.flyte.christmas.util.style
 import gg.flyte.christmas.util.toLegacyString
 import gg.flyte.twilight.extension.playSound
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -18,8 +17,11 @@ import org.bukkit.entity.Player
 import revxrsal.commands.annotation.Command
 import revxrsal.commands.annotation.Subcommand
 import revxrsal.commands.bukkit.annotation.CommandPermission
-import java.util.UUID
+import java.util.*
 
+/**
+ * Miscellaneous commands to manage the event.
+ */
 @Suppress("unused") // power of lamp!
 @Command("event")
 class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".colourise(), 54)) {
@@ -30,46 +32,49 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
     init {
         menu.setItem(13, setGameSwitcher())
 
-        menu.setItem(21, MenuItem(Material.PAINTING)
-            .setName("&cTake a Screenie!".colourise())
-            .setEnchantmentGlint(true)
-            .closeWhenClicked(true)
-            .onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
-                // TODO!
-            }
-        )
-        menu.setItem(23, MenuItem(Material.ENDER_PEARL)
-            .setName("&cTeleport Everyone to Me!".colourise())
-            .closeWhenClicked(true)
-            .onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
-                Bukkit.getOnlinePlayers().forEach { it.teleport(whoClicked) }
-                whoClicked.sendMessage("<green>Teleported all players to you!".style())
-                whoClicked.playSound(Sound.ENTITY_ENDERMAN_TELEPORT)
-            }
-        )
-
-        menu.setItem(42, MenuItem(Material.RED_CONCRETE)
-            .setName(
-                "&cKill Current Game: " + (eventController().currentGame?.gameConfig?.displayName
-                    ?: "None".colourise())
-            )
-            .setLore(
-                "",
-                "&cThis will force quit the current game".colourise(),
-                "&cand teleport all players back to the lobby.".colourise(),
-            )
-            .onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
-                if (eventController().currentGame == null) {
-                    whoClicked.playSound(Sound.ENTITY_VILLAGER_NO)
-                    whoClicked.sendMessage("<red>No game is currently running!".style())
-                    return@onClick
+        menu.setItem(
+            21, MenuItem(Material.PAINTING)
+                .setName("&cTake a Screenie!".colourise())
+                .setEnchantmentGlint(true)
+                .closeWhenClicked(true)
+                .onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
+                    // TODO!
                 }
+        )
+        menu.setItem(
+            23, MenuItem(Material.ENDER_PEARL)
+                .setName("&cTeleport Everyone to Me!".colourise())
+                .closeWhenClicked(true)
+                .onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
+                    Bukkit.getOnlinePlayers().forEach { it.teleport(whoClicked) }
+                    whoClicked.sendMessage("<green>Teleported all players to you!".style())
+                    whoClicked.playSound(Sound.ENTITY_ENDERMAN_TELEPORT)
+                }
+        )
 
-                eventController().currentGame!!.endGame()
-                whoClicked.sendMessage("<red>Game terminated!".style())
-                whoClicked.playSound(Sound.ENTITY_GENERIC_EXPLODE)
-                eventController().sidebarManager.update()
-            }
+        menu.setItem(
+            42, MenuItem(Material.RED_CONCRETE)
+                .setName(
+                    "&cKill Current Game: " + (eventController().currentGame?.gameConfig?.displayName
+                        ?: "None".colourise())
+                )
+                .setLore(
+                    "",
+                    "&cThis will force quit the current game".colourise(),
+                    "&cand teleport all players back to the lobby.".colourise(),
+                )
+                .onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
+                    if (eventController().currentGame == null) {
+                        whoClicked.playSound(Sound.ENTITY_VILLAGER_NO)
+                        whoClicked.sendMessage("<red>No game is currently running!".style())
+                        return@onClick
+                    }
+
+                    eventController().currentGame!!.endGame()
+                    whoClicked.sendMessage("<red>Game terminated!".style())
+                    whoClicked.playSound(Sound.ENTITY_GENERIC_EXPLODE)
+                    eventController().sidebarManager.update()
+                }
         )
 
         menu.onClose { whoClosed, inventory, event ->
@@ -83,11 +88,23 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
         }
     }
 
+    /**
+     * Opens the event panel for the player, provided that they have the
+     * permission `event.panel`.
+     *
+     * @param sender The player who executed the command.
+     */
     @CommandPermission("event.panel")
-    fun handleCommand(sender: Player) {
-        menu.open(true, sender)
-    }
+    fun handleCommand(sender: Player) = menu.open(true, sender)
 
+    /**
+     * Opt out of the event, or opt back in if the player is already opted out.
+     *
+     * Players who opt out will not be marked as an active player when minigames start,
+     * and instead will teleport them to a viewing area immediately.
+     *
+     * @param sender The player who executed the command.
+     */
     @Subcommand("optout")
     @CommandPermission("event.optout")
     fun optOut(sender: Player) {
@@ -102,6 +119,11 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
         sender.playSound(Sound.UI_BUTTON_CLICK)
     }
 
+    /**
+     * Loads the most recent points data from the `config.yml`.
+     *
+     * @param sender The player who executed the command.
+     */
     @Subcommand("DANGER-load-crash")
     @CommandPermission("event.loadcrash")
     fun loadCrash(sender: CommandSender) {
@@ -153,10 +175,8 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
         for (index in availableGames.indices) {
             val game = availableGames[index]
             val loreLine = if (index == selectedIndex) {
-                "&c&l» ${"<bold><0>".style(game.displayName).toLegacyString()}".colourise()
-            } else {
-                "&7${PlainTextComponentSerializer.plainText().serialize(game.displayName)}".colourise()
-            }
+                "<red><bold>» <0>".style(game.displayName).toLegacyString().colourise()
+            } else game.displayName.toLegacyString().colourise()
 
             lore.add(loreLine)
         }
@@ -165,33 +185,34 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
 
         if (selectedIndex == -1) return
 
-        menu.setItem(38, MenuItem(Material.LIME_CONCRETE)
-            .setName(availableGames[selectedIndex].displayName.toLegacyString().colourise())
-            .setLore(
-                "",
-                "&aThis will begin the countdown".colourise(),
-                "&cimmediately &aand prepare the players".colourise(),
-                "",
-                "&eIf you do not want to start".colourise(),
-                "&eyet, simply exit this menu. ".colourise(),
-                "&eThe game has already been set.".colourise()
-            )
-            .onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
-                whoClicked.closeInventory()
-                if (eventController().currentGame == null) {
-                    whoClicked.playSound(Sound.ENTITY_VILLAGER_NO)
-                    whoClicked.sendMessage("<red>No game has been selected!".style())
-                    return@onClick
+        menu.setItem(
+            38, MenuItem(Material.LIME_CONCRETE)
+                .setName(availableGames[selectedIndex].displayName.toLegacyString().colourise())
+                .setLore(
+                    "",
+                    "&aThis will begin the countdown".colourise(),
+                    "&cimmediately &aand prepare the players".colourise(),
+                    "",
+                    "&eIf you do not want to start".colourise(),
+                    "&eyet, simply exit this menu. ".colourise(),
+                    "&eThe game has already been set.".colourise()
+                )
+                .onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
+                    whoClicked.closeInventory()
+                    if (eventController().currentGame == null) {
+                        whoClicked.playSound(Sound.ENTITY_VILLAGER_NO)
+                        whoClicked.sendMessage("<red>No game has been selected!".style())
+                        return@onClick
+                    }
+
+                    eventController().prepareStart()
+                    whoClicked.playSound(Sound.ENTITY_PLAYER_LEVELUP)
+                    whoClicked.sendMessage("<green>Game starting! Please wait...".style())
+
+                    selectedIndex = -1
+                    menu.setItem(13, setGameSwitcher())
+                    menu.removeItem(38)
                 }
-
-                eventController().prepareStart()
-                whoClicked.playSound(Sound.ENTITY_PLAYER_LEVELUP)
-                whoClicked.sendMessage("<green>Game starting! Please wait...".style())
-
-                selectedIndex = -1
-                menu.setItem(13, setGameSwitcher())
-                menu.removeItem(38)
-            }
         )
     }
 }

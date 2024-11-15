@@ -8,7 +8,8 @@ import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import java.util.UUID
+import java.util.*
+import kotlin.math.sqrt
 
 object Util {
     data class Contributor(val uniqueId: UUID, val contribution: String, val location: MapSinglePoint)
@@ -65,13 +66,12 @@ object Util {
      *
      * @throws IllegalArgumentException If the position is not between 0 and 2.
      */
-    // TODO write in actual locations when map is finished.
     fun getNPCSummaryLocation(position: Int): MapSinglePoint {
         Preconditions.checkArgument(position in 0..2, "Leaderboard only supports positions between 0 and 2")
         return when (position) {
-            0 -> return MapSinglePoint(633, 216, 489, 90, 0)
-            1 -> return MapSinglePoint(633, 214, 484, 90, 0)
-            2 -> return MapSinglePoint(633, 213, 494, 90, 0)
+            0 -> return MapSinglePoint(525.5, 215, 548.5)
+            1 -> return MapSinglePoint(517.5, 211, 543.5)
+            2 -> return MapSinglePoint(533.5, 211, 494.5)
             else -> {
                 throw IllegalStateException("Leaderboard only supports positions between 0 and 2")
             }
@@ -95,5 +95,33 @@ object Util {
         }
 
         runAction(PlayerType.PARTICIPANT, PlayerType.CAMERA) {}
+    }
+
+    /**
+     * Fills the arena circle (at centre point x: 616, z: 800, radius = 28) with snow blocks at a given level.
+     */
+    fun fillArenaWithSnow(atLevel: Int, material: Material): List<MapSinglePoint> {
+        val locations = mutableListOf<MapSinglePoint>()
+
+        val world = ChristmasEventPlugin.instance.serverWorld
+        val centreX = 616
+        val centreZ = 800
+        val radius = 28
+
+        for (x in -radius..radius) {
+            for (z in -radius..radius) {
+                val distance = sqrt((x * x + z * z).toDouble())
+                if (distance <= radius) {
+                    val block = world.getBlockAt(centreX + x, atLevel, centreZ + z)
+
+                    if (block.type != Material.CRIMSON_PLANKS) {
+                        block.type = material
+                        locations.add(MapSinglePoint(block.x, block.y, block.z))
+                    }
+                }
+            }
+        }
+
+        return locations
     }
 }

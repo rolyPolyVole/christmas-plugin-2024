@@ -19,16 +19,11 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEn
 import dev.shreyasayyengar.menuapi.menu.MenuItem
 import dev.shreyasayyengar.menuapi.menu.StandardMenu
 import gg.flyte.christmas.ChristmasEventPlugin
-import gg.flyte.christmas.util.colourise
-import gg.flyte.christmas.util.eventController
-import gg.flyte.christmas.util.formatInventory
-import gg.flyte.christmas.util.style
-import gg.flyte.christmas.util.toLegacyString
+import gg.flyte.christmas.util.*
 import gg.flyte.christmas.visual.CameraSequence
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.scheduler.delay
-import io.github.retrooper.packetevents.util.SpigotConversionUtil
 import io.papermc.paper.chat.ChatRenderer
 import io.papermc.paper.event.player.AsyncChatEvent
 import net.kyori.adventure.text.Component
@@ -47,15 +42,9 @@ import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.event.inventory.InventoryType
-import org.bukkit.event.player.PlayerDropItemEvent
-import org.bukkit.event.player.PlayerInteractEvent
-import org.bukkit.event.player.PlayerJoinEvent
-import org.bukkit.event.player.PlayerMoveEvent
-import org.bukkit.event.player.PlayerQuitEvent
-import org.bukkit.event.player.PlayerSwapHandItemsEvent
+import org.bukkit.event.player.*
 import org.bukkit.inventory.PlayerInventory
-import java.util.UUID
-import kotlin.apply
+import java.util.*
 import kotlin.math.ceil
 
 class HousekeepingEventListener : Listener, PacketListener {
@@ -165,19 +154,19 @@ class HousekeepingEventListener : Listener, PacketListener {
         event<PlayerMoveEvent> {
             val worldNPCs = ChristmasEventPlugin.instance.worldNPCs
             val playerLocation = player.location
-            val npcLocations = worldNPCs.map { SpigotConversionUtil.toBukkitLocation(ChristmasEventPlugin.instance.serverWorld, it.npc.location) }
+            val npcLocations = worldNPCs.map { it.npc.location.bukkit() }
 
             // hide player if near any NPC (they obstruct view)
-            if (npcLocations.any { it.distance(playerLocation) < 3 }) player.isVisibleByDefault = false else if (!player.isVisibleByDefault) player.isVisibleByDefault = true
+            if (npcLocations.any { it.distance(playerLocation) < 3 }) player.isVisibleByDefault =
+                false else if (!player.isVisibleByDefault) player.isVisibleByDefault = true
 
             // make NPCs look at player if within range
             worldNPCs.forEach { npc ->
-                val npcLocation = SpigotConversionUtil.toBukkitLocation(ChristmasEventPlugin.instance.serverWorld, npc.npc.location)
+                val npcLocation = npc.npc.location.bukkit()
                 if (npcLocation.distance(playerLocation) <= 25) {
                     val lookVector = npcLocation.apply { setDirection(playerLocation.toVector().subtract(toVector())) }
-                    val playerManager = PacketEvents.getAPI().playerManager.getUser(player)
-                    playerManager.sendPacket(WrapperPlayServerEntityHeadLook(npc.npc.id, lookVector.yaw))
-                    playerManager.sendPacket(WrapperPlayServerEntityRotation(npc.npc.id, lookVector.yaw, lookVector.pitch, false))
+                    WrapperPlayServerEntityHeadLook(npc.npc.id, lookVector.yaw).sendPacket(player)
+                    WrapperPlayServerEntityRotation(npc.npc.id, lookVector.yaw, lookVector.pitch, false).sendPacket(player)
                 }
             }
         }
@@ -229,7 +218,7 @@ class HousekeepingEventListener : Listener, PacketListener {
 
         event<EntityCombustEvent> { if (entity is Player) isCancelled = true }
 
-        event<EntityDamageEvent>(priority = EventPriority.LOWEST) { isCancelled = true }
+        event<EntityDamageEvent>(priority = EventPriority.LOWEST) { isCancelled = false }
     }
 
     override fun onPacketReceive(event: PacketReceiveEvent) {

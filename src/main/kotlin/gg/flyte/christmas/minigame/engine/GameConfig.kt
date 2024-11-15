@@ -1,11 +1,7 @@
 package gg.flyte.christmas.minigame.engine
 
 import dev.shreyasayyengar.menuapi.menu.MenuItem
-import gg.flyte.christmas.minigame.games.BaubleTag
-import gg.flyte.christmas.minigame.games.BlockParty
-import gg.flyte.christmas.minigame.games.KingHill
-import gg.flyte.christmas.minigame.games.MusicalMinecarts
-import gg.flyte.christmas.minigame.games.PaintWars
+import gg.flyte.christmas.minigame.games.*
 import gg.flyte.christmas.minigame.world.MapRegion
 import gg.flyte.christmas.minigame.world.MapSinglePoint
 import gg.flyte.christmas.util.style
@@ -13,7 +9,6 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
-import kotlin.collections.listOf
 import kotlin.reflect.KClass
 
 enum class GameConfig(
@@ -32,6 +27,43 @@ enum class GameConfig(
     val eliminateOnLeave: Boolean = true,
 ) {
     //region AVALANCHE
+    AVALANCHE(
+        Avalanche::class,
+        "<colour:#33ff8b>Avalanche".style(),
+        "<colour:#33ff8b>ᴀᴠᴀʟᴀɴᴄʜᴇ".style(),
+        ItemStack(Material.SNOWBALL),
+        TextColor.fromHexString("#33ff8b")!!,
+        " • Dance around the icy platform until the christmas music stop.\n\n" +
+                " • Run and stand under shelter as the snowballs fall from the sky.\n\n" +
+                " • If you are hit by a falling snowball, you will be eliminated!",
+        1,
+        MapSinglePoint(535, 212, 612), // TODO<Map>
+        listOf(MapRegion.single(MapSinglePoint(553, 203, 593))),
+        listOf(
+            MapSinglePoint(535, 212, 612, -134.63545F, 36.587585F),
+            MapSinglePoint(535, 212, 609, -128.16087F, 37.477802F),
+            MapSinglePoint(536, 212, 598, -107.6864F, 42.090744F),
+            MapSinglePoint(536, 212, 589, -81.384834F, 44.35675F),
+            MapSinglePoint(538, 212, 580, -58.80621F, 43.871178F),
+            MapSinglePoint(542, 212, 574, -30.723955F, 40.553097F),
+            MapSinglePoint(548, 212, 569, -26.5966F, 40.22938F),
+            MapSinglePoint(556, 212, 566, -2.6418605F, 38.772663F),
+            MapSinglePoint(564, 212, 569, 25.683008F, 39.339165F),
+            MapSinglePoint(572, 212, 573, 42.354305F, 39.66288F),
+            MapSinglePoint(576, 212, 581, 63.07208F, 40.067524F),
+            MapSinglePoint(576, 212, 591, 83.627594F, 41.443314F),
+            MapSinglePoint(576, 212, 600, 102.32168F, 41.362385F),
+            MapSinglePoint(574, 212, 608, 122.87687F, 42.738174F),
+            MapSinglePoint(567, 212, 613, 136.55391F, 45.408825F),
+            MapSinglePoint(557, 212, 609, 168.43948F, 53.74449F),
+            MapSinglePoint(554, 212, 597, -128.1127F, 75.918816F),
+            MapSinglePoint(554, 212, 594, -89.91446F, 88.057785F),
+            MapSinglePoint(554, 206, 594, -89.83353F, 88.219635F),
+            MapSinglePoint(554, 204, 594, -88.70047F, 88.381485F)
+        ),
+        listOf(MapSinglePoint(554, 204, 594, -88.70047F, 88.381485F)),
+        listOf(MapSinglePoint(554, 204, 594, -88.70047F, 88.381485F)),
+    ),
     //endregion
 
     //region BAUBLE_TAG 174, 211, 216
@@ -40,13 +72,13 @@ enum class GameConfig(
         "<colour:#aed3d8>Bauble Tag".style(),
         "<colour:#aed3d8>ʙᴀᴜʙʟᴇ ᴛᴀɢ".style(),
         MenuItem(Material.PLAYER_HEAD).setSkullTexture("1e3ad039e903e30f90daa68cebfc5cee72b5ed84d6044382409c67f374d1732b").itemStack,
-        TextColor.color(174, 211, 216),
+        TextColor.fromHexString("#aed3d8")!!,
         " • Run away from the players with baubles on their head.\n\n" +
                 " • If you are tagged, you will become the new bauble holder.\n\n" +
                 " • The baubles will shatter at the end of each round.\n\n" +
                 " • To win, survive the most rounds!",
         2,
-        MapSinglePoint(535, 212, 612), // TODO
+        MapSinglePoint(535, 212, 612), // TODO<Map>
         listOf(MapRegion.single(MapSinglePoint(553, 203, 593))),
         listOf(
             MapSinglePoint(535, 212, 612, -134.63545F, 36.587585F),
@@ -81,12 +113,12 @@ enum class GameConfig(
         "<colour:#e05c6f>Block Party".style(),
         "<colour:#e05c6f>ʙʟᴏᴄᴋ ᴘᴀʀᴛʏ".style(),
         ItemStack(Material.MAGENTA_GLAZED_TERRACOTTA),
-        TextColor.color(224, 92, 111),
+        TextColor.fromHexString("#e05c6f")!!,
         " • Dance around the colourful floor until the christmas music stops.\n\n" +
                 " • Run and stand on the colour which has been chosen (check hotbar) before the timer ends.\n\n" +
                 " • After the timer, the map will clear all blocks except the chosen colour blocks. To win, survive the most rounds!",
         1,
-        MapSinglePoint(615.5, 180.0, 800.5, 0F, 90F),
+        MapSinglePoint(616.5, 140.0, 800.5, 0F, 90F),
         listOf(
             MapRegion(
                 MapSinglePoint(624, 111, 808),
@@ -139,12 +171,12 @@ enum class GameConfig(
         "<colour:#f70123>King of the Hill".style(),
         "<colour:#f70123>ᴋɪɴɢ ᴏғ ᴛʜᴇ ʜɪʟʟ".style(),
         ItemStack(Material.STICK),
-        TextColor.color(247, 1, 35),
+        TextColor.fromHexString("#f70123")!!,
         " • Be the King of The Hill! Stand in the centre of the map to gain points every second.\n\n" +
                 " • Knock other players off the map with your knockback stick. Avoid falling off yourself!\n\n" +
                 " • The player stood in the centre of the map for the longest time, wins!",
         1,
-        MapSinglePoint(833.5, 180.0, 615.5, 90F, 90F),
+        MapSinglePoint(827.5, 111, 630.5, -90F, 90F),
         listOf(
             MapRegion(
                 MapSinglePoint(826.5, 88, 680.5, 180, 0),
@@ -206,7 +238,9 @@ enum class GameConfig(
             MapSinglePoint(845, 124, 648, 131.03406F, 57.888565F),
             MapSinglePoint(842, 125, 652, 139.14163F, 60.207817F),
         ),
-        listOf(),
+        listOf(
+            MapSinglePoint(810.5, 106, 604.5, -32, 32)
+        ),
         listOf(
             MapSinglePoint(827, 90, 630, 90, 90),
             MapSinglePoint(847, 93, 664, 150, 25),
@@ -224,44 +258,59 @@ enum class GameConfig(
         "<colour:#8e0003>Musical Minecarts".style(),
         "<colour:#8e0003>ᴍᴜꜱɪᴄᴀʟ ᴍɪɴᴇᴄᴀʀᴛꜱ".style(),
         ItemStack(Material.MINECART),
-        TextColor.color(142, 0, 3),
+        TextColor.fromHexString("#8e0003")!!,
         " • Dance around the platform until the christmas music stops.\n\n" +
                 " • Run to the nearest minecart and get inside before the timer ends.\n\n" +
                 " • If you fail to find a minecart before the timer ends, you will be ELIMINATED!\n\n" +
                 " • Do NOT click the minecarts until the music has stopped... or else you will be STUNNED!",
         1,
-        MapSinglePoint(615.5, 180.0, 800.5, 0F, 90F),
-        listOf(MapRegion.single(MapSinglePoint(553, 203, 593))),
+        MapSinglePoint(616.5, 140.0, 800.5, 0F, 90F),
         listOf(
-            MapSinglePoint(535, 212, 612, -134.63545F, 36.587585F),
-            MapSinglePoint(535, 212, 609, -128.16087F, 37.477802F),
-            MapSinglePoint(536, 212, 598, -107.6864F, 42.090744F),
-            MapSinglePoint(536, 212, 589, -81.384834F, 44.35675F),
-            MapSinglePoint(538, 212, 580, -58.80621F, 43.871178F),
-            MapSinglePoint(542, 212, 574, -30.723955F, 40.553097F),
-            MapSinglePoint(548, 212, 569, -26.5966F, 40.22938F),
-            MapSinglePoint(556, 212, 566, -2.6418605F, 38.772663F),
-            MapSinglePoint(564, 212, 569, 25.683008F, 39.339165F),
-            MapSinglePoint(572, 212, 573, 42.354305F, 39.66288F),
-            MapSinglePoint(576, 212, 581, 63.07208F, 40.067524F),
-            MapSinglePoint(576, 212, 591, 83.627594F, 41.443314F),
-            MapSinglePoint(576, 212, 600, 102.32168F, 41.362385F),
-            MapSinglePoint(574, 212, 608, 122.87687F, 42.738174F),
-            MapSinglePoint(567, 212, 613, 136.55391F, 45.408825F),
-            MapSinglePoint(557, 212, 609, 168.43948F, 53.74449F),
-            MapSinglePoint(554, 212, 597, -128.1127F, 75.918816F),
-            MapSinglePoint(554, 212, 594, -89.91446F, 88.057785F),
-            MapSinglePoint(554, 206, 594, -89.83353F, 88.219635F),
-            MapSinglePoint(554, 204, 594, -88.70047F, 88.381485F)
+            MapRegion(MapSinglePoint(597, 113, 819), MapSinglePoint(635, 113, 781))
         ),
-        listOf(MapSinglePoint(554, 204, 594, -88.70047F, 88.381485F)),
-        listOf(MapSinglePoint(554, 204, 594, -88.70047F, 88.381485F)),
+        listOf(
+            MapSinglePoint(581, 122, 805, -111.17755F, 32.429695F),
+            MapSinglePoint(591, 122, 799, -94.262634F, 44.97366F),
+            MapSinglePoint(595, 122, 792, -67.55487F, 50.719604F),
+            MapSinglePoint(603, 122, 785, -45.5412F, 54.28047F),
+            MapSinglePoint(617, 122, 786, 0.7520752F, 58.326912F),
+            MapSinglePoint(629, 122, 793, 35.310303F, 60.754776F),
+            MapSinglePoint(631, 122, 806, 87.59271F, 64.39655F),
+            MapSinglePoint(623, 122, 817, 126.925964F, 64.63933F),
+            MapSinglePoint(609, 122, 820, 179.69403F, 60.431057F),
+            MapSinglePoint(604, 122, 811, -142.9961F, 59.864555F),
+            MapSinglePoint(608, 116, 797, -89.015564F, 50.7196F),
+            MapSinglePoint(618, 115, 788, -11.158569F, 42.950436F),
+            MapSinglePoint(623, 115, 794, 38.534058F, 44.73087F),
+            MapSinglePoint(619, 115, 804, 103.84668F, 41.089073F),
+            MapSinglePoint(607, 115, 803, 140.50916F, 39.95607F),
+            MapSinglePoint(601, 115, 793, -132.65015F, 36.47613F),
+            MapSinglePoint(608, 115, 786, -54.22644F, 34.938484F),
+            MapSinglePoint(617, 116, 790, 7.7679443F, 48.12988F),
+            MapSinglePoint(620, 122, 792, 38.19861F, 61.078487F),
+            MapSinglePoint(621, 126, 793, 53.575928F, 67.63352F),
+        ),
+        listOf(
+            MapSinglePoint(645.5, 112, 799.5, 90, 0),
+            MapSinglePoint(636.5, 113, 820.5, 135, 0),
+            MapSinglePoint(616.5, 112, 829.5, -180, 0),
+            MapSinglePoint(596.5, 113, 820.5, -135, 0),
+            MapSinglePoint(587.5, 112, 800.5, -90, 0),
+            MapSinglePoint(596.5, 113, 780.5, -45, 0),
+            MapSinglePoint(616.5, 112, 771.5, 0, 0),
+            MapSinglePoint(636.5, 113, 780.5, 45, 0)
+        ),
+        listOf(
+            MapSinglePoint(616.5, 118, 819.5, 180, 35),
+            MapSinglePoint(597.5, 118, 800.5, -90, 35),
+            MapSinglePoint(616.5, 118, 781.5, 0, 35),
+            MapSinglePoint(635.5, 118, 800.5, 90, 35)
+        )
     ),
     //endregion
 
-//    MUSICAL_MINECARTS, // 142, 0, 3
-//    SLED_RACING, // 24, 48, 15
-//    SPLEEF, // 64, 86, 40
+    //region PAINT_BALL 0, 135, 72
+    //endregion
 
     //region PAINT_WARS
     PAINT_WARS(
@@ -269,86 +318,81 @@ enum class GameConfig(
         "<colour:#549c19>Paint Wars".style(),
         "<colour:#549c19>ᴘᴀɪɴᴛ ᴡᴀʀꜱ".style(),
         ItemStack(Material.BRUSH),
-        TextColor.color(84, 156, 25),
+        TextColor.fromHexString("#549c19")!!,
         " • Use your Paint Gun to shoot blocks around the map into your chosen block.\n\n" +
                 " • You can shoot over other player's blocks to reduce their score!\n\n" +
                 " • To win, cover the most amount of the map with your block/colour!",
         1,
-        MapSinglePoint(1550, 93, 437, 180, 0),
+        MapSinglePoint(622.5, 98, -150.5, 180, 90),
         listOf(
-            MapRegion.single(MapSinglePoint(1529, 82, 410)),
-            MapRegion.single(MapSinglePoint(1524, 81, 455)),
-            MapRegion.single(MapSinglePoint(1567, 82, 418)),
-            MapRegion.single(MapSinglePoint(1557, 83, 401)),
-            MapRegion.single(MapSinglePoint(1558, 84, 502)),
-            MapRegion.single(MapSinglePoint(1593, 74, 481)),
-            MapRegion.single(MapSinglePoint(1496, 78, 419)),
-            MapRegion.single(MapSinglePoint(1475, 83, 448)),
-            MapRegion.single(MapSinglePoint(1559, 85, 520)),
-            MapRegion.single(MapSinglePoint(1583, 78, 468)),
-            MapRegion.single(MapSinglePoint(1567, 81, 427)),
-            MapRegion.single(MapSinglePoint(1555, 88, 381)),
-            MapRegion.single(MapSinglePoint(1551, 87, 522)),
-            MapRegion.single(MapSinglePoint(1526, 88, 501)),
-            MapRegion.single(MapSinglePoint(1639, 77, 472)),
-            MapRegion.single(MapSinglePoint(1623, 80, 518)),
-            MapRegion.single(MapSinglePoint(1518, 81, 412)),
-            MapRegion.single(MapSinglePoint(1558, 81, 461)),
-            MapRegion.single(MapSinglePoint(1607, 74, 479)),
-            MapRegion.single(MapSinglePoint(1574, 83, 512))
+            MapRegion.single(MapSinglePoint(630, 94, -208, 10.461055F, 8.056724F)),
+            MapRegion.single(MapSinglePoint(652, 94, -192, 47.526287F, 9.432502F)),
+            MapRegion.single(MapSinglePoint(684, 93, -179, 65.33065F, 7.5712233F)),
+            MapRegion.single(MapSinglePoint(654, 91, -163, 51.485233F, 12.211981F)),
+            MapRegion.single(MapSinglePoint(673, 88, -139, 119.86949F, -7.129863F)),
+            MapRegion.single(MapSinglePoint(670, 93, -121, 128.20517F, 6.3042083F)),
+            MapRegion.single(MapSinglePoint(630, 94, -108, 174.73938F, 8.246563F)),
+            MapRegion.single(MapSinglePoint(606, 104, -83, -163.81433F, 16.339424F)),
+            MapRegion.single(MapSinglePoint(573, 102, -96, -132.90025F, 14.397221F)),
+            MapRegion.single(MapSinglePoint(548, 116, -127, -128.69142F, 16.744123F)),
+            MapRegion.single(MapSinglePoint(535, 94, -147, -102.38962F, 4.8477216F)),
+            MapRegion.single(MapSinglePoint(634, 91, -152, -87.49902F, 7.0329227F)),
+            MapRegion.single(MapSinglePoint(617, 91, -144, 47.328888F, 5.2525268F)),
+            MapRegion.single(MapSinglePoint(592, 100, -256, -36.994843F, -1.9498547F)),
+            MapRegion.single(MapSinglePoint(621, 94, -196, -8.994965F, 21.6811F))
         ),
         listOf(
-            MapSinglePoint(1500, 164, 549, -157.2309F, 41.443565F),
-            MapSinglePoint(1501, 160, 545, -159.65887F, 40.310562F),
-            MapSinglePoint(1508, 138, 525, -161.68219F, 36.749695F),
-            MapSinglePoint(1518, 115, 497, -165.1623F, 35.940407F),
-            MapSinglePoint(1521, 93, 485, -154.39825F, 28.333118F),
-            MapSinglePoint(1523, 85, 479, -156.5025F, 17.48867F),
-            MapSinglePoint(1526, 85, 472, -151.48468F, 17.48867F),
-            MapSinglePoint(1526, 85, 464, -147.59991F, 16.922169F),
-            MapSinglePoint(1525, 85, 456, -139.66852F, 16.598454F),
-            MapSinglePoint(1524, 85, 448, -129.87567F, 16.598454F),
-            MapSinglePoint(1521, 85, 441, -112.55609F, 16.274738F),
-            MapSinglePoint(1523, 85, 434, -96.9361F, 16.679382F),
-            MapSinglePoint(1527, 85, 427, -86.57672F, 18.297958F),
-            MapSinglePoint(1533, 85, 422, -77.67413F, 19.916534F),
-            MapSinglePoint(1540, 85, 417, -65.21051F, 20.806751F),
-            MapSinglePoint(1548, 85, 414, -52.018494F, 20.806751F),
-            MapSinglePoint(1556, 85, 413, -37.04596F, 20.078392F),
-            MapSinglePoint(1564, 85, 414, -22.720886F, 19.107246F),
-            MapSinglePoint(1571, 85, 417, -7.1818237F, 18.055172F),
-            MapSinglePoint(1578, 85, 422, 9.32843F, 15.951024F),
-            MapSinglePoint(1583, 85, 428, 25.353088F, 13.927828F),
-            MapSinglePoint(1586, 85, 436, 42.591736F, 10.3670025F),
-            MapSinglePoint(1585, 86, 444, 48.418884F, 10.44793F),
-            MapSinglePoint(1581, 91, 450, 47.36676F, 11.257209F),
-            MapSinglePoint(1576, 91, 456, 45.262512F, 12.471127F),
-            MapSinglePoint(1570, 91, 461, 43.562927F, 13.765972F),
-            MapSinglePoint(1562, 91, 464, 34.903137F, 17.164955F),
-            MapSinglePoint(1555, 91, 464, 9.490356F, 23.720188F),
-            MapSinglePoint(1548, 91, 462, -79.53168F, 33.51256F),
-            MapSinglePoint(1543, 91, 465, -128.89948F, 28.575905F),
-            MapSinglePoint(1539, 91, 472, -148.8089F, 25.257824F),
-            MapSinglePoint(1536, 91, 479, -157.87335F, 22.344387F),
+            MapSinglePoint(574, 180, -28, -164.78236F, 45.797764F),
+            MapSinglePoint(581, 159, -51, -164.6205F, 45.878693F),
+            MapSinglePoint(591, 127, -90, -164.45863F, 46.12148F),
+            MapSinglePoint(604, 97, -136, -166.40102F, 40.861107F),
+            MapSinglePoint(609, 97, -155, -160.16922F, 30.906864F),
+            MapSinglePoint(613, 97, -165, -134.02844F, 24.513489F),
+            MapSinglePoint(619, 97, -172, -108.37331F, 19.495903F),
+            MapSinglePoint(626, 97, -174, -84.17459F, 17.553612F),
+            MapSinglePoint(634, 97, -173, -62.646515F, 17.877327F),
+            MapSinglePoint(641, 97, -170, -55.848175F, 17.63454F),
+            MapSinglePoint(647, 97, -166, -30.273499F, 16.177822F),
+            MapSinglePoint(652, 97, -159, -8.98822F, 15.44947F),
+            MapSinglePoint(653, 97, -151, 10.840271F, 14.721119F),
+            MapSinglePoint(652, 97, -144, 40.056915F, 11.888644F),
+            MapSinglePoint(647, 97, -137, 58.914215F, 12.212356F),
+            MapSinglePoint(641, 97, -133, 74.53418F, 12.131428F),
+            MapSinglePoint(633, 97, -130, 92.09656F, 12.697923F),
+            MapSinglePoint(625, 97, -130, 109.335205F, 13.669057F),
+            MapSinglePoint(618, 97, -132, 126.25012F, 13.992768F),
+            MapSinglePoint(610, 97, -133, 150.93454F, 14.802047F),
+            MapSinglePoint(602, 97, -135, 178.9372F, 13.426273F),
+            MapSinglePoint(596, 97, -140, -164.22882F, 13.102562F),
+            MapSinglePoint(589, 97, -144, -146.18085F, 12.940706F),
+            MapSinglePoint(582, 97, -149, -128.53754F, 11.7267885F),
+            MapSinglePoint(577, 97, -155, -108.385315F, 10.836582F),
+            MapSinglePoint(571, 97, -160, -93.574646F, 11.241221F),
+            MapSinglePoint(565, 97, -166, -77.06439F, 10.755654F),
+            MapSinglePoint(560, 98, -173, -68.32367F, 11.7267885F),
+            MapSinglePoint(561, 103, -180, -59.906677F, 16.25875F),
+            MapSinglePoint(564, 109, -187, -52.29901F, 21.600052F),
+            MapSinglePoint(569, 114, -193, -47.92865F, 26.698566F),
+            MapSinglePoint(574, 120, -199, -44.20575F, 29.450146F),
+            MapSinglePoint(580, 126, -205, -40.15912F, 30.987793F),
+            MapSinglePoint(586, 131, -210, -34.412903F, 32.282654F),
+            MapSinglePoint(593, 137, -215, -29.556946F, 33.33473F)
         ),
         listOf(
-            MapSinglePoint(1578, 113, 546, 151, 18.2),
+            MapSinglePoint(621, 200, -234, 0, 90)
         ),
         listOf(
-            MapSinglePoint(1578, 113, 546, 151, 18.2),
-            MapSinglePoint(1494, 118, 501, -125, 38),
-            MapSinglePoint(1489, 92, 412, -68, 27),
-            MapSinglePoint(1577, 140, 354, 16, 43),
-            MapSinglePoint(1600, 86, 505, 139, -6),
-            MapSinglePoint(1571, 96, 427, 85, 9),
-            MapSinglePoint(1548, 86, 444, 24.5, 5.5),
-            MapSinglePoint(1600, 171, 502, 137, 25),
-            MapSinglePoint(1623, 136, 406, 64, 33),
-            MapSinglePoint(1558, 98, 416, -8, 26)
+            MapSinglePoint(655, 107, -141, 108.178734F, 30.104355F)
         ),
         false
     )
     //endregion
 
+    //region SLED_RACING, // 24, 48, 15
+    //endregion
+
+    //region SPLEEF, // 64, 86, 40
+    //endregion
 }
-// TODO fill in spectatorLocations for non-eliminating games as well.
+// Potential Colour: f7b2b2
+// TODO<Final> fix all "minPlayers" to be the actual appropriate amount.

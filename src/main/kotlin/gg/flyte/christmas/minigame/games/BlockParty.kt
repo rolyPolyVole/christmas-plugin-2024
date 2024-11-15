@@ -1,6 +1,5 @@
 package gg.flyte.christmas.minigame.games
 
-import com.github.retrooper.packetevents.PacketEvents
 import com.github.retrooper.packetevents.protocol.entity.data.EntityData
 import com.github.retrooper.packetevents.protocol.entity.data.EntityDataTypes
 import com.github.retrooper.packetevents.protocol.entity.pose.EntityPose
@@ -15,13 +14,7 @@ import gg.flyte.christmas.minigame.engine.PlayerType
 import gg.flyte.christmas.minigame.world.MapRegion
 import gg.flyte.christmas.minigame.world.MapSinglePoint
 import gg.flyte.christmas.npc.WorldNPC
-import gg.flyte.christmas.util.SongReference
-import gg.flyte.christmas.util.Util
-import gg.flyte.christmas.util.colourise
-import gg.flyte.christmas.util.eventController
-import gg.flyte.christmas.util.formatInventory
-import gg.flyte.christmas.util.style
-import gg.flyte.christmas.util.title
+import gg.flyte.christmas.util.*
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.hidePlayer
 import gg.flyte.twilight.extension.playSound
@@ -33,12 +26,7 @@ import gg.flyte.twilight.time.TimeUnit
 import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
-import org.bukkit.Bukkit
-import org.bukkit.Color
-import org.bukkit.FireworkEffect
-import org.bukkit.GameMode
-import org.bukkit.Material
-import org.bukkit.Sound
+import org.bukkit.*
 import org.bukkit.entity.Firework
 import org.bukkit.entity.ItemDisplay
 import org.bukkit.entity.Player
@@ -81,7 +69,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
     private var roundNumber = 0
     private var harder = false
     private var powerUpLocation: MapSinglePoint? = null
-    private var secondsForRound = 10
+    private var secondsForRound = 10 // TODO check if actually starting a 9
     private var safeBlocks = mutableListOf<MapSinglePoint>()
     private var bombedSquares = mutableListOf<MapSinglePoint>()
     private var currentBossBar: BossBar? = null
@@ -133,7 +121,6 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
             Util.runAction(PlayerType.PARTICIPANT) {
                 it.title("<game_colour>Hard Mode!".style(), Component.empty())
                 it.sendMessage("<red><b>The floor will now change right before the timer starts... stay quick!".style())
-                it.playSound(Sound.ENTITY_ENDER_DRAGON_GROWL)
             }
             Util.runAction(PlayerType.OPTED_OUT) { it.sendMessage("<game_colour>The game is getting harder!".style()) }
         }
@@ -164,7 +151,6 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         if (harder) newFloor(false) // hard mode changes floor right before countdown starts
 
         eventController().songPlayer?.isPlaying = false
-        remainingPlayers().forEach { it.playSound(Sound.BLOCK_NOTE_BLOCK_BASEDRUM) }
 
         // hint players with the material they need to stand on
         val itemStack = MenuItem(ItemStack(selectedMaterial)).itemStack.apply {
@@ -178,9 +164,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
         val timerBar: BossBar = BossBar.bossBar(
             "<game_colour><b>Time left: $secondsForRound".style(), 1.0f, BossBar.Color.RED, BossBar.Overlay.PROGRESS
-        )
-
-        currentBossBar = timerBar
+        ).also { currentBossBar = it }
 
         Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.showBossBar(timerBar) }
 
@@ -278,7 +262,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         // hard mode starts at round 12 but dials back to round 8 for adjusted time.
         val roundNumber = if (harder) roundNumber + 12 else roundNumber
         when (remainingPlayers().size) {
-            0 -> {
+            0 -> { // TODO CHANGE TO 1
                 formattedWinners.put(player.uniqueId, roundNumber.toString())
                 endGame()
             }
@@ -374,25 +358,26 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
             var randomColour: String = listOf("4", "c", "6", "2", "a", "9").random()
             val displayName: String = "§$randomColour${player.name}".colourise()
 
-            val npc = WorldNPC.createFromLive(displayName, player, location).also { worldNPCs.add(it) }
+            val npc = WorldNPC.createFromLive(displayName, player, location).also {
+                worldNPCs.add(it)
+                it.spawnForAll()
+            }
 
             Bukkit.getOnlinePlayers().forEach { loopedPlayer ->
-                npc.spawnFor(loopedPlayer)
-
                 animationTasks += repeatingTask((3..5).random(), (1..3).random()) {
-                    val packet: PacketWrapper<*>
+                    val packetToSend: PacketWrapper<*>
 
                     if (Random.nextBoolean()) {
-                        packet = WrapperPlayServerEntityAnimation(
+                        packetToSend = WrapperPlayServerEntityAnimation(
                             npc.npc.id,
                             if (Random.nextBoolean()) WrapperPlayServerEntityAnimation.EntityAnimationType.SWING_MAIN_ARM else WrapperPlayServerEntityAnimation.EntityAnimationType.SWING_OFF_HAND
                         )
                     } else {
                         val pose = if (Random.nextBoolean()) EntityPose.STANDING else EntityPose.CROUCHING
-                        packet = WrapperPlayServerEntityMetadata(npc.npc.id, listOf(EntityData(6, EntityDataTypes.ENTITY_POSE, pose)))
+                        packetToSend = WrapperPlayServerEntityMetadata(npc.npc.id, listOf(EntityData(6, EntityDataTypes.ENTITY_POSE, pose)))
                     }
 
-                    if (loopedPlayer != null) PacketEvents.getAPI().playerManager.getUser(loopedPlayer).sendPacket(packet)
+                    if (loopedPlayer != null) packetToSend.sendPacket(player)
                 } // NPC Crouching & Swinging
 
                 var jumpIndex = 0;
@@ -413,17 +398,19 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                     )
                     if (jumpIndex == yUpdates.size) jumpIndex = 0 // jump again!
 
-                    val packet = WrapperPlayServerEntityRelativeMove(npc.npc.id, 0.0, (yUpdates[jumpIndex]), 0.0, true)
-                    if (loopedPlayer != null) PacketEvents.getAPI().playerManager.getUser(loopedPlayer).sendPacket(packet)
+                    val packetToSend = WrapperPlayServerEntityRelativeMove(npc.npc.id, 0.0, (yUpdates[jumpIndex]), 0.0, true)
+                    if (loopedPlayer != null) packetToSend.sendPacket(loopedPlayer)
 
                     jumpIndex++
                 } // NPC Jumping
+            }
 
-                delay(15, TimeUnit.SECONDS) {
-                    worldNPCs.forEach { it.despawnFor(loopedPlayer) }
-                    animationTasks.forEach { it.cancel() }
-                    super.endGame()
-                }
+            delay(15, TimeUnit.SECONDS) {
+                worldNPCs.forEach { it.despawnForAll() }
+                animationTasks.forEach { it.cancel() }
+                groupedSquares.forEach { it.toSingleBlockLocations().forEach { it.block.type = Material.AIR } }
+
+                super.endGame()
             }
         }
     }

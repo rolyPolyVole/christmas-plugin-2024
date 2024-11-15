@@ -9,13 +9,14 @@ import com.github.retrooper.packetevents.protocol.player.UserProfile
 import com.github.retrooper.packetevents.util.MojangAPIUtil
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityMetadata
 import gg.flyte.christmas.minigame.world.MapSinglePoint
+import gg.flyte.christmas.util.packetObj
+import gg.flyte.christmas.util.sendPacket
 import gg.flyte.christmas.util.style
-import io.github.retrooper.packetevents.util.SpigotConversionUtil
 import io.github.retrooper.packetevents.util.SpigotReflectionUtil
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.Player
-import java.util.UUID
+import java.util.*
 
 /**
  * Wrapper for a Packet-based ServerPlayer (NPC) through PacketEvent's [NPC] implementation.
@@ -31,18 +32,29 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
      * Spawns this NPC for the given player via packets
      */
     fun spawnFor(player: Player) {
-        val user = PacketEvents.getAPI().playerManager.getUser(player)
+        this.npc.location = location.packetObj()
+        this.npc.spawn(PacketEvents.getAPI().playerManager.getUser(player).channel)
+        WrapperPlayServerEntityMetadata(id, listOf(EntityData(17, EntityDataTypes.BYTE, 127.toByte()))).sendPacket(player)
+    }
 
-        this.npc.location = SpigotConversionUtil.fromBukkitLocation(location)
-        this.npc.spawn(user.channel)
-        user.sendPacket(WrapperPlayServerEntityMetadata(id, listOf(EntityData(17, EntityDataTypes.BYTE, 127.toByte()))))
+    /**
+     * Spawns this NPC for all players via packets
+     */
+    fun spawnForAll() {
+        for (player in Bukkit.getOnlinePlayers()) spawnFor(player)
     }
 
     /**
      * Despawns this NPC for the given player via packets
      */
-    fun despawnFor(player: Player) {
-        this.npc.despawn(PacketEvents.getAPI().playerManager.getUser(player).channel)
+    fun despawnFor(player: Player) = this.npc.despawn(PacketEvents.getAPI().playerManager.getUser(player).channel)
+
+
+    /**
+     * Despawns this NPC for all players via packets
+     */
+    fun despawnForAll() {
+        for (player in Bukkit.getOnlinePlayers()) despawnFor(player)
     }
 
     companion object {
@@ -60,7 +72,7 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
             for (player in Bukkit.getOnlinePlayers()) leaderBoardNPCs[position]?.despawnFor(player)
             worldNPCs.remove(leaderBoardNPCs[position])
 
-            leaderBoardNPCs[position] = createFromLive("lol", player, leaderboardPositionToLocation[position]!!)
+            leaderBoardNPCs[position] = createFromUniqueId("lol", uniqueId, leaderboardPositionToLocation[position]!!)
             for (player in Bukkit.getOnlinePlayers()) leaderBoardNPCs[position]?.spawnFor(player)
         }
 

@@ -1,6 +1,5 @@
 package gg.flyte.christmas.minigame.engine
 
-import com.github.retrooper.packetevents.PacketEvents
 import com.github.retrooper.packetevents.protocol.entity.data.EntityData
 import com.github.retrooper.packetevents.protocol.entity.data.EntityDataTypes
 import com.github.retrooper.packetevents.protocol.entity.pose.EntityPose
@@ -11,12 +10,7 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEn
 import gg.flyte.christmas.ChristmasEventPlugin
 import gg.flyte.christmas.minigame.world.MapSinglePoint
 import gg.flyte.christmas.npc.WorldNPC
-import gg.flyte.christmas.util.Util
-import gg.flyte.christmas.util.eventController
-import gg.flyte.christmas.util.formatInventory
-import gg.flyte.christmas.util.style
-import gg.flyte.christmas.util.title
-import gg.flyte.christmas.util.titleTimes
+import gg.flyte.christmas.util.*
 import gg.flyte.christmas.visual.CameraSequence
 import gg.flyte.christmas.visual.CameraSlide
 import gg.flyte.twilight.event.TwilightListener
@@ -25,21 +19,12 @@ import gg.flyte.twilight.scheduler.TwilightRunnable
 import gg.flyte.twilight.scheduler.delay
 import gg.flyte.twilight.scheduler.repeatingTask
 import gg.flyte.twilight.time.TimeUnit
-import io.github.retrooper.packetevents.util.SpigotConversionUtil
 import net.kyori.adventure.text.Component
-import org.bukkit.Bukkit
-import org.bukkit.Color
-import org.bukkit.GameMode
-import org.bukkit.Material
-import org.bukkit.Sound
-import org.bukkit.entity.Display
-import org.bukkit.entity.Entity
-import org.bukkit.entity.ItemDisplay
-import org.bukkit.entity.Player
-import org.bukkit.entity.TextDisplay
+import org.bukkit.*
+import org.bukkit.entity.*
 import org.bukkit.inventory.ItemStack
 import java.time.Duration
-import java.util.UUID
+import java.util.*
 import kotlin.random.Random
 
 /**
@@ -254,7 +239,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
 
     fun showGameResults() {
         // slide to post-game podium.
-        CameraSlide(ChristmasEventPlugin.instance.lobbySpawn) {
+        CameraSlide(MapSinglePoint(519, 131, 559, -144.63538F, -76.47707F)) {
             // create podium NPCs
             val npcs = mutableListOf<WorldNPC>()
             val displays = mutableListOf<TextDisplay>()
@@ -268,7 +253,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
                 val animationTasks = mutableListOf<TwilightRunnable>()
 
                 WorldNPC.createFromUniqueId(displayName, uniqueId, placeLocation).also { npc ->
-                    Bukkit.getOnlinePlayers().forEach { npc.spawnFor(it) }
+                    npc.spawnForAll()
 
                     placeLocation.world.spawn(placeLocation.add(0.0, 2.5, 0.0), TextDisplay::class.java).apply {
                         text("<colour:#ffc4ff>$value".style())
@@ -279,22 +264,21 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
                     }
 
                     animationTasks += repeatingTask(1) {
-                        val nearestItem = placeLocation.getNearbyEntitiesByType(ItemDisplay::class.java, 30.0).firstOrNull()
+                        val nearestItem = placeLocation.getNearbyEntitiesByType(Player::class.java, 200.0).firstOrNull()
                         if (nearestItem == null) {
                             cancel()
                             return@repeatingTask
                         }
 
-                        val playersLocation = nearestItem.location
+                        val playersLocation = nearestItem.location.clone().subtract(0.0, 1.0, 0.0)
 
-                        val npcLocation = SpigotConversionUtil.toBukkitLocation(ChristmasEventPlugin.instance.serverWorld, npc.npc.location)
+                        val npcLocation = npc.npc.location.bukkit()
                         if (npcLocation.distance(playersLocation) <= 25) {
                             val lookVector = npcLocation.apply { setDirection(playersLocation.toVector().subtract(toVector())) }
 
                             Bukkit.getOnlinePlayers().forEach {
-                                val playerManager = PacketEvents.getAPI().playerManager.getUser(it)
-                                playerManager.sendPacket(WrapperPlayServerEntityHeadLook(npc.npc.id, lookVector.yaw))
-                                playerManager.sendPacket(WrapperPlayServerEntityRotation(npc.npc.id, lookVector.yaw, lookVector.pitch, false))
+                                WrapperPlayServerEntityHeadLook(npc.npc.id, lookVector.yaw).sendPacket(it)
+                                WrapperPlayServerEntityRotation(npc.npc.id, lookVector.yaw, lookVector.pitch, false).sendPacket(it)
                             }
                         }
                     } // NPC Look
@@ -318,7 +302,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
                                 }
                             }
 
-                            Bukkit.getOnlinePlayers().forEach { PacketEvents.getAPI().playerManager.getUser(it).sendPacket(packetToSend) }
+                            Bukkit.getOnlinePlayers().forEach { packetToSend.sendPacket(it) }
                         }
                     } // NPC Animation
 
@@ -329,25 +313,32 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
             } // Spawn NPCs
             formattedWinners.clear()
 
-            // spawn NPCs for game winners:
-            val summaryLocations = listOf(
-                MapSinglePoint(605, 216, 488, -88.84488F, 3.8515968F),
-                MapSinglePoint(613, 216, 488, -88.84488F, 4.4180946F),
-                MapSinglePoint(627, 216, 488, -84.55551F, 7.250582F),
-                MapSinglePoint(639, 216, 491, 93.891174F, 23.59806F),
-                MapSinglePoint(641, 216, 497, 134.7605F, 17.609343F),
-                MapSinglePoint(634, 216, 500, -173.60687F, 15.424276F),
-                MapSinglePoint(626, 216, 500, -134.6789F, 13.482008F),
-                MapSinglePoint(622, 216, 493, -107.72839F, 14.53407F),
-                MapSinglePoint(621, 216, 484, -71.38977F, 13.158297F),
-                MapSinglePoint(622, 216, 478, -43.791748F, 12.187162F),
-                MapSinglePoint(622, 216, 477, -36.265015F, 12.025307F),
-                MapSinglePoint(625, 216, 481, -38.61206F, 12.591802F),
-                MapSinglePoint(627, 216, 485, -62.487F, 16.314486F),
-                MapSinglePoint(626, 216, 488, -87.98065F, 13.239224F)
-            ) // TODO<Map> put actual points when map is done.
-
             // cinematic camera sequence
+            val summaryLocations = listOf(
+                MapSinglePoint(519, 131, 559, -144.63538F, -76.47707F),
+                MapSinglePoint(519, 144, 559, -144.63538F, -76.47707F),
+                MapSinglePoint(519, 162, 559, -136.78506F, -68.62731F),
+                MapSinglePoint(519, 184, 559, -106.76083F, -49.52825F),
+                MapSinglePoint(519, 201, 559, -92.1124F, -32.856964F),
+                MapSinglePoint(523, 207, 559, -95.1069F, -10.844507F),
+                MapSinglePoint(527, 212, 559, -101.17685F, 14.971579F),
+                MapSinglePoint(529, 213, 559, -121.2471F, 26.220592F),
+                MapSinglePoint(532, 213, 562, -165.83867F, 25.330376F),
+                MapSinglePoint(537, 213, 558, 103.11706F, 24.278307F),
+                MapSinglePoint(538, 209, 552, 51.32303F, 20.07004F),
+                MapSinglePoint(529, 199, 540, 45.658024F, 16.023605F),
+                MapSinglePoint(521, 209, 539, 37.32238F, 14.971543F),
+                MapSinglePoint(517, 214, 539, 6.1650276F, 26.867983F),
+                MapSinglePoint(512, 214, 540, -64.32342F, 30.26696F),
+                MapSinglePoint(509, 211, 546, -112.96126F, 14.485972F),
+                MapSinglePoint(512, 212, 552, -130.92738F, 12.300918F),
+                MapSinglePoint(517, 217, 555, -134.73099F, 14.243189F),
+                MapSinglePoint(521, 217, 552, -132.38396F, 10.520491F),
+                MapSinglePoint(523, 217, 551, -134.4072F, 13.676693F),
+                MapSinglePoint(523, 217.5, 551, -133.59787F, 18.45147F),
+                MapSinglePoint(515, 217, 558, -135.37837F, 8.416364F),
+            )
+
             CameraSequence(summaryLocations, Bukkit.getOnlinePlayers(), null, 8) {
                 Bukkit.getOnlinePlayers().forEach { loopedPlayer ->
                     loopedPlayer.gameMode = GameMode.ADVENTURE

@@ -15,7 +15,7 @@ import org.bukkit.entity.TextDisplay
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.util.Vector
-import java.util.UUID
+import java.util.*
 
 class CameraSequence(
     locations: List<MapSinglePoint>,
@@ -172,7 +172,7 @@ class CameraSequence(
                 players.forEach { player ->
                     player.gameMode = GameMode.SPECTATOR
                     player.teleport(itemDisplay!!.location)
-                    delay(1) { player.spectatorTarget = itemDisplay } // TODO see if delay is sufficient
+                    delay(1) { player.spectatorTarget = itemDisplay }
                 }
             } else {
                 itemDisplay?.apply {

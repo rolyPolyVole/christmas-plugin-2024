@@ -76,7 +76,7 @@ class EventController() {
      * countdown task if there are not enough players to start the game.
      */
     private fun countdown() {
-        var seconds = 10
+        var seconds = 3 // TODO change back to 10
         countdownTask = repeatingTask(1, TimeUnit.SECONDS) {
             when (seconds) {
                 0 -> {

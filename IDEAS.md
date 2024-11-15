@@ -2,8 +2,7 @@
 
 ## General:
 
-- After each minigame, commence win animation where all players spectate a camera that cinematically shows the top 3-5 winners (as NPCs) over the
-  void, with text and sponsors in the background.
+- After each minigame, commence win animation with text and sponsors in the background.
 - Leaderboard section in the Lobby.
 - Contributors section in the Lobby
 - Add a sled slide in the lobby + carousel for static entertainment while giveaways/game selection is happening.
@@ -13,10 +12,7 @@
 - Staff Utils Menu:
     - Teleport all players to a “screenie” location. player’s movement is locked and facing forward to facilitate an easy event screenie. (ik stephen
       will love this)
-- A firework spawns above everyone after a donation is made.
-- "Chaos" donations -> drop TNT in a spleef game, for example.
-- Donations progress somehow.
-- Custom hats to donators (and/or contributors)
+
 - find out what other textures spaceniklas has made and what they can be used for
 
 ## Game Specific:
@@ -29,7 +25,7 @@
 
 - Illuminate blocks with red/green glow to show clear path
 - disable two players in one boat
-- Fix interacting bug with boats to respawn at spawn point.
+- Fix interacting bug with boats to respawn at spawn point. (have them sneak out)
 
 ### Spleef:
 
@@ -43,15 +39,22 @@
 - Disable fucking explosives and lava.
 - Autogive players decorations so that their first thought is not to desecrate the tree!
 
-Questions:
+## Donations:
 
-- are we capping player limit?
+- Christmas tree that grows with each donation
+- Custom hats to donators (and/or contributors)
+- Donations progress bar somehow.
+- "Chaos" donations -> drop TNT in a spleef game, for example.
+- A firework spawns above everyone after a donation is made.
+- Top Donators NPCs in game
+- Donation broadcasts in the chat
+
 
 ## Stream:
 
-- Drumroll while rolling givaway?
+- Drumroll while rolling givaway?H
 
-Playtest Considerations:
+Play-test Considerations:
 
 - Joining & Leaving at various times in the event (overviews, midgame, ending, etc)
 - Making sure opted out players are consistently left out of games.

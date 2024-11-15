@@ -28,7 +28,7 @@ import org.bukkit.scoreboard.Scoreboard
 import org.bukkit.scoreboard.Team
 import org.bukkit.scoreboard.Team.Option
 import revxrsal.commands.bukkit.BukkitLamp
-import java.util.UUID
+import java.util.*
 import kotlin.reflect.full.primaryConstructor
 
 class ChristmasEventPlugin : JavaPlugin() {
@@ -112,13 +112,12 @@ class ChristmasEventPlugin : JavaPlugin() {
                 "<blue>" to "9",
             ).entries.random()
 
-            val displayName: String = "§${randomColour.value}${MojangAPIUtil.requestPlayerName(uniqueId)}"
+            val displayName = "§${randomColour.value}${MojangAPIUtil.requestPlayerName(uniqueId)}"
 
-            var createFromName = WorldNPC.createFromUniqueId(displayName, uniqueId, location).also { worldNPCs += it }
-            createFromName.npc.prefixName = "${randomColour.key}<obf>W ".style()
-            createFromName.npc.suffixName = " ${randomColour.key}<obf>W".style()
-
-            Bukkit.getOnlinePlayers().forEach { createFromName.spawnFor(it) }
+            var contributorNPC = WorldNPC.createFromUniqueId(displayName, uniqueId, location).also { worldNPCs += it }
+            contributorNPC.npc.prefixName = "${randomColour.key}<obf>W ".style()
+            contributorNPC.npc.suffixName = " ${randomColour.key}<obf>W".style()
+            contributorNPC.spawnForAll()
 
             location.world.spawn(location.clone().add(0.0, 2.5, 0.0), TextDisplay::class.java).apply {
                 text("<colour:#ffc4ff>$contribution".style())
@@ -147,7 +146,6 @@ class ChristmasEventPlugin : JavaPlugin() {
                 color(NamedTextColor.GRAY)
                 prefix("<red><b>ѕᴛᴀꜰꜰ ".style())
             }
-
             registerNewTeam("b. player").apply {
                 color(NamedTextColor.GRAY)
                 setOption(Option.COLLISION_RULE, Team.OptionStatus.NEVER)
@@ -155,7 +153,7 @@ class ChristmasEventPlugin : JavaPlugin() {
             }
         }
 
-        lobbySpawn = MapSinglePoint(559.5, 105, 554.5, 180, 0)
+        lobbySpawn = MapSinglePoint(559.5, 103, 518.5, 135, 0)
 
         GameConfig.entries.forEach { it.gameClass.primaryConstructor } // preload/cache classes for reflection
         eventController().startPlaylist()

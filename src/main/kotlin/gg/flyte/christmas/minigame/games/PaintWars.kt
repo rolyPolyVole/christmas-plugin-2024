@@ -10,12 +10,7 @@ import gg.flyte.twilight.event.event
 import gg.flyte.twilight.scheduler.repeatingTask
 import gg.flyte.twilight.time.TimeUnit
 import net.kyori.adventure.text.Component
-import org.bukkit.Bukkit
-import org.bukkit.GameMode
-import org.bukkit.Location
-import org.bukkit.Material
-import org.bukkit.Particle
-import org.bukkit.Sound
+import org.bukkit.*
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
@@ -26,7 +21,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.event.inventory.InventoryType
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
-import java.util.UUID
+import java.util.*
 import kotlin.random.Random
 
 class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
@@ -146,6 +141,7 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
         eventController().sidebarManager.dataSupplier = scores
 
         simpleCountdown {
+            hasEnded = false
             tasks += repeatingTask(1, TimeUnit.SECONDS) {
                 gameTime--
 
@@ -265,3 +261,4 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
         listeners += event<InventoryClickEvent> { isCancelled = true }
     }
 }
+// TODO<Map> redo overview locations and make all LIGHT blocks one block higher.

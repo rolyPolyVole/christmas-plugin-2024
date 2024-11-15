@@ -33,19 +33,39 @@ data class MapSinglePoint(
  *
  * @see MapSinglePoint
  */
-data class MapRegion(val minPoint: MapSinglePoint, val maxPoint: MapSinglePoint) {
+class MapRegion {
+    val minPoint: MapSinglePoint
+    val maxPoint: MapSinglePoint
 
     companion object {
         fun single(point: MapSinglePoint): MapRegion = MapRegion(point, point)
+    }
+
+    constructor(minPoint: MapSinglePoint, maxPoint: MapSinglePoint) {
+        this.minPoint = MapSinglePoint(
+            x = minOf(minPoint.x.toDouble(), maxPoint.x.toDouble()),
+            y = minOf(minPoint.y.toDouble(), maxPoint.y.toDouble()),
+            z = minOf(minPoint.z.toDouble(), maxPoint.z.toDouble()),
+            yaw = minPoint.yaw,  // You can decide how to handle yaw and pitch
+            pitch = minPoint.pitch
+        )
+
+        this.maxPoint = MapSinglePoint(
+            x = maxOf(minPoint.x.toDouble(), maxPoint.x.toDouble()),
+            y = maxOf(minPoint.y.toDouble(), maxPoint.y.toDouble()),
+            z = maxOf(minPoint.z.toDouble(), maxPoint.z.toDouble()),
+            yaw = maxPoint.yaw,
+            pitch = maxPoint.pitch
+        )
     }
 
     /**
      * Checks if a location is within the region
      */
     fun contains(location: Location): Boolean {
-        return location.x in minOf(minPoint.x.toDouble(), maxPoint.x.toDouble())..maxOf(minPoint.x.toDouble(), maxPoint.x.toDouble()) &&
-                location.y in minOf(minPoint.y.toDouble(), maxPoint.y.toDouble())..maxOf(minPoint.y.toDouble(), maxPoint.y.toDouble()) &&
-                location.z in minOf(minPoint.z.toDouble(), maxPoint.z.toDouble())..maxOf(minPoint.z.toDouble(), maxPoint.z.toDouble())
+        return location.x in minPoint.x.toDouble()..maxPoint.x.toDouble() &&
+                location.y in minPoint.y.toDouble()..maxPoint.y.toDouble() &&
+                location.z in minPoint.z.toDouble()..maxPoint.z.toDouble()
     }
 
     /**
