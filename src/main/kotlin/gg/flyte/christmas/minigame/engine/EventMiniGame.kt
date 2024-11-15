@@ -362,7 +362,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
         /**
          * The player's session is considered to be 'expired' and is subsequently eliminated.
          *
-         * This is can be because:
+         * This can be because:
          * 1. The player disconnected from the server during an active game.
          * 2. The player re-joined the server while a game was in progess **AND** [GameConfig.eliminateOnLeave] is `true`.
          */

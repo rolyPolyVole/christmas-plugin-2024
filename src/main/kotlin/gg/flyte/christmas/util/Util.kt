@@ -80,8 +80,6 @@ object Util {
 
     /**
      * Applies a Christmas hat to an ItemStack with a random custom model data.
-     *
-     * @param modelData The custom model data to apply to the ItemStack.
      * @return The corresponding modelled ItemStack.
      */
     fun applyChristmasHat(): ItemStack {
