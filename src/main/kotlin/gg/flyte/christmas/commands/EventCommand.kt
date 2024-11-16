@@ -52,30 +52,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
                 }
         )
 
-        menu.setItem(
-            42, MenuItem(Material.RED_CONCRETE)
-                .setName(
-                    "&cKill Current Game: " + (eventController().currentGame?.gameConfig?.displayName
-                        ?: "None".colourise())
-                )
-                .setLore(
-                    "",
-                    "&cThis will force quit the current game".colourise(),
-                    "&cand teleport all players back to the lobby.".colourise(),
-                )
-                .onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
-                    if (eventController().currentGame == null) {
-                        whoClicked.playSound(Sound.ENTITY_VILLAGER_NO)
-                        whoClicked.sendMessage("<red>No game is currently running!".style())
-                        return@onClick
-                    }
-
-                    eventController().currentGame!!.endGame()
-                    whoClicked.sendMessage("<red>Game terminated!".style())
-                    whoClicked.playSound(Sound.ENTITY_GENERIC_EXPLODE)
-                    eventController().sidebarManager.update()
-                }
-        )
+        menu.setItem(42, setEndGameButton())
 
         menu.onClose { whoClosed, inventory, event ->
             if (whoClosed.uniqueId != modifyingGame) return@onClose // not the one who interacted with the game switcher
@@ -95,7 +72,10 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
      * @param sender The player who executed the command.
      */
     @CommandPermission("event.panel")
-    fun handleCommand(sender: Player) = menu.open(true, sender)
+    fun openEventPanel(sender: Player) {
+        menu.setItem(42, setEndGameButton())
+        menu.open(true, sender)
+    }
 
     /**
      * Opt out of the event, or opt back in if the player is already opted out.
@@ -169,13 +149,38 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
         return menuItem
     }
 
+    private fun setEndGameButton(): MenuItem {
+        return MenuItem(Material.RED_CONCRETE)
+            .setName(
+                "<red>Kill Current Game: <0>".style(eventController().currentGame?.gameConfig?.displayName ?: "None".style()).toLegacyString()
+                    .colourise()
+            )
+            .setLore(
+                "",
+                "&cThis will force quit the current game".colourise(),
+                "&cand teleport all players back to the lobby.".colourise(),
+            )
+            .onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
+                if (eventController().currentGame == null) {
+                    whoClicked.playSound(Sound.ENTITY_VILLAGER_NO)
+                    whoClicked.sendMessage("<red>No game is currently running!".style())
+                    return@onClick
+                }
+
+                eventController().currentGame!!.endGame()
+                whoClicked.sendMessage("<red>Game terminated!".style())
+                whoClicked.playSound(Sound.ENTITY_GENERIC_EXPLODE)
+                eventController().sidebarManager.update()
+            }
+    }
+
     private fun updateRotatingItem(menuItem: MenuItem) {
         val lore = mutableListOf<String>()
 
         for (index in availableGames.indices) {
             val game = availableGames[index]
             val loreLine = if (index == selectedIndex) {
-                "<white><bold>» <0>".style(game.displayName).toLegacyString().colourise()
+                "<white><bold>» <0> <white><bold>«".style(game.displayName).toLegacyString().colourise()
             } else game.displayName.toLegacyString().colourise()
 
             lore.add(loreLine)
