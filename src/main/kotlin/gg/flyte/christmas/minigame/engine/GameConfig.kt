@@ -107,7 +107,7 @@ enum class GameConfig(
                 " • The baubles will shatter at the end of each round.\n\n" +
                 " • To win, survive the most rounds!",
         2,
-        MapSinglePoint(181.5, 200.0, 300.5, -135, 90), // TODO<Map>
+        MapSinglePoint(181.5, 140.0, 300.5, -135, 90),
         listOf(
             MapRegion.single(MapSinglePoint(193, 80, 193, 0, 0)),
             MapRegion.single(MapSinglePoint(207, 82, 221, 0, 0)),
