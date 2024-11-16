@@ -22,13 +22,10 @@ var miniMessage = MiniMessage.builder().build()
 fun String.style(vararg placeholders: Component): Component {
     val components = placeholders.mapIndexed { index, component -> Placeholder.component(index.toString(), component) }.toTypedArray()
 
-    val colourResolver = try {
+    val colourResolver =
         eventController().currentGame?.gameConfig?.colour?.let {
             Placeholder.styling("game_colour", it)
         } ?: Placeholder.styling("game_colour", NamedTextColor.WHITE)
-    } catch (_: Exception) {
-        Placeholder.styling("game_colour", NamedTextColor.WHITE)
-    }
 
     return miniMessage.deserialize(
         this,
