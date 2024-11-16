@@ -202,7 +202,7 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
     private fun getPointer(): ItemStack {
         return ItemStack(Material.COMPASS).apply {
             itemMeta = (itemMeta as CompassMeta).apply {
-                displayName("<reset><game_colour><b>Player Pointer".style())
+                displayName("<!i><b><game_colour>Player Pointer".style())
             }
         }
     }
