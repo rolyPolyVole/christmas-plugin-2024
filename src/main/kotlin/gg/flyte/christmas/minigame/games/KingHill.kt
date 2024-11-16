@@ -140,7 +140,9 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
 
     override fun handleGameEvents() {
         listeners += event<EntityDamageEvent>(priority = EventPriority.HIGHEST) {
-            if (cause == EntityDamageEvent.DamageCause.FALL) return@event // already cancelled by lower priority [HousekeepingEventListener]
+            // return@event -> already cancelled by lower priority [HousekeepingEventListener]
+
+            if (cause == EntityDamageEvent.DamageCause.FALL) return@event
 
             entity as? Player ?: return@event
             val damager = (this as? EntityDamageByEntityEvent)?.damager as? Player ?: return@event

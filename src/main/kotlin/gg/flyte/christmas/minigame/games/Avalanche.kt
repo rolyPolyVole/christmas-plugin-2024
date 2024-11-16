@@ -302,6 +302,8 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
 
     override fun handleGameEvents() {
         listeners += event<EntityDamageEvent>(priority = EventPriority.HIGHEST) {
+            // return@event -> already cancelled by lower priority [HousekeepingEventListener]
+
             entity as? Player ?: return@event
             (this as? EntityDamageByEntityEvent)?.damager as? Player ?: return@event
 
