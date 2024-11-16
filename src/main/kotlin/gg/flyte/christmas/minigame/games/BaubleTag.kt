@@ -128,7 +128,7 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
     }
 
     override fun endGame() {
-        tasks.forEach { it?.cancel() }
+        eventController().addPoints(remainingPlayers().first().uniqueId, 15)
         super.endGame()
     }
 

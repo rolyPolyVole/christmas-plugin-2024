@@ -253,6 +253,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 //        val winner = remainingPlayers().first()
         val winner = Bukkit.getOnlinePlayers().random() // TODO for testing purposes
         eventController().points.put(winner.uniqueId, eventController().points[winner.uniqueId]!! + 15)
+        eventController().addPoints(winner.uniqueId, 15)
 
         Util.runAction(
             PlayerType.PARTICIPANT,

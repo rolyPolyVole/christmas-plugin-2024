@@ -256,6 +256,7 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
         val winnerNPCs = mutableListOf<WorldNPC>()
 //        val winnerPlayer = remainingPlayers().first()
         val winnerPlayer = Bukkit.getOnlinePlayers().first() // TODO CAHGNE BACK
+        eventController().addPoints(winnerPlayer.uniqueId, 15)
 
         tasks += repeatingTask(10) {
             repeat(10) {
