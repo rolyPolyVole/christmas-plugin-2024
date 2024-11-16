@@ -215,7 +215,7 @@ class HousekeepingEventListener : Listener, PacketListener {
 
         event<EntityCombustEvent> { if (entity is Player) isCancelled = true }
 
-        event<EntityDamageEvent>(priority = EventPriority.LOWEST) { isCancelled = false }
+        event<EntityDamageEvent>(priority = EventPriority.LOWEST) { isCancelled = true }
     }
 
     override fun onPacketReceive(event: PacketReceiveEvent) {
