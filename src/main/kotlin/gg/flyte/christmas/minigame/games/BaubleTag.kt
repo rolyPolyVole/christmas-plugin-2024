@@ -16,13 +16,7 @@ import gg.flyte.twilight.scheduler.delay
 import gg.flyte.twilight.scheduler.repeatingTask
 import gg.flyte.twilight.time.TimeUnit
 import net.kyori.adventure.text.Component
-import org.bukkit.Bukkit
-import org.bukkit.Color
-import org.bukkit.FireworkEffect
-import org.bukkit.GameMode
-import org.bukkit.Material
-import org.bukkit.Particle
-import org.bukkit.Sound
+import org.bukkit.*
 import org.bukkit.entity.Firework
 import org.bukkit.entity.Player
 import org.bukkit.event.EventPriority
@@ -33,7 +27,7 @@ import org.bukkit.inventory.meta.CompassMeta
 import org.bukkit.inventory.meta.SkullMeta
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
-import java.util.UUID
+import java.util.*
 
 class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
     private val baubleTextureURLs = listOf(
@@ -43,12 +37,12 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
         "e258b0b460dee9e67b59f69808caa5db4665969b4b30af43d0e086a133645318",
         "e040b03876580350dbf81333aea696a6d2f3f7d5156fb0ce25771283df609a9f"
     )
-    private val regroupPoint = MapSinglePoint(553, 203, 593) // TODO<Map> fill once map complete
+    private val regroupPoint = MapSinglePoint(205, 70, 317)
     private val taggedPlayers = mutableListOf<UUID>()
     private var regroup = false
     private var secondsForRound = 60
     private var roundNumber = 0
-    lateinit var baubleForRound: ItemStack
+    private lateinit var baubleForRound: ItemStack
     private var actionBarTasks = mutableMapOf<UUID, TwilightRunnable>()
 
     override fun preparePlayer(player: Player) {
@@ -70,14 +64,11 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
         actionBarTasks.entries.forEach { it.value.cancel() }
 
         val remaining = remainingPlayers()
-        val newTaggers = if (remaining.size <= 2) {
-            listOf(remaining.random())
-        } else {
-            remaining.shuffled().take((remaining.size * 0.3).toInt().coerceAtLeast(1))
-        }
+        val newTaggers =
+            if (remaining.size <= 2) listOf(remaining.random()) else remaining.shuffled().take((remaining.size * 0.3).toInt().coerceAtLeast(1))
+
         newTaggers.forEach { tagPlayer(it) }
 
-        // if only 30% players remain, regroup them
         if (remainingPlayers().size <= 10) regroup = true
 
         if (regroup) remainingPlayers().forEach { it.teleport(regroupPoint) }
