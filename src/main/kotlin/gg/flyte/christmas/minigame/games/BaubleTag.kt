@@ -212,10 +212,11 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
             entity as? Player ?: return@event
             val damager = (this as? EntityDamageByEntityEvent)?.damager as? Player ?: return@event
 
-            if (remainingPlayers().contains(damager)) isCancelled = true
-
-            isCancelled = false
-            damage = 0.0
+            // allows an actual hit to go happen
+            if (remainingPlayers().contains(damager)) {
+                isCancelled = false
+                damage = 0.0
+            }
 
             if (taggedPlayers.contains(damager.uniqueId)) tagPlayer(entity as Player, damager)
         }
