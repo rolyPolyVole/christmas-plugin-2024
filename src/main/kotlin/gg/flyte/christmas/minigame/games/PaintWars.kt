@@ -155,10 +155,6 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
         }
     }
 
-    override fun eliminate(player: Player, reason: EliminationReason) {
-        // super.eliminate(player, reason) | Note: this game does not eliminate players, remove call to super
-    }
-
     override fun endGame() {
         started = false
 

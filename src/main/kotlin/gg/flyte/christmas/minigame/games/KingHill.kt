@@ -88,10 +88,6 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
         }
     }
 
-    override fun eliminate(player: Player, reason: EliminationReason) {
-        // super.eliminate(player, reason) | Note: this game does not eliminate players, remove call to super
-    }
-
     override fun endGame() {
         Util.runAction(PlayerType.PARTICIPANT) { it.teleport(gameConfig.spawnPoints.random().randomLocation()) }
         for (entry in timeOnHill) eventController().addPoints(entry.key, entry.value)
