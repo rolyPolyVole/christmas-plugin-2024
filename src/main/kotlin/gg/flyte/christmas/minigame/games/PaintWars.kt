@@ -200,7 +200,6 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
         scores[player.uniqueId] = scores.getOrDefault(player.uniqueId, 0) + 1
 
         if (!(changedBlocks.contains(block))) changedBlocks.add(block)
-
         block.type = playerBrushesBiMap[player.uniqueId]!!
 
         if (!overrideRandom) {
