@@ -12,7 +12,6 @@ import gg.flyte.twilight.scheduler.delay
 import gg.flyte.twilight.scheduler.repeatingTask
 import gg.flyte.twilight.time.TimeUnit
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
 import org.bukkit.Sound
 import org.bukkit.entity.Player
@@ -82,10 +81,9 @@ class EventController() {
                 }
 
                 else -> {
-                    val times = titleTimes(Duration.ZERO, Duration.ofMillis(1100), Duration.ZERO)
                     Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) {
                         countdownMap[seconds]?.let { number ->
-                            it.showTitle(Title.title(number, Component.empty(), times))
+                            it.title(number, Component.empty(), titleTimes(Duration.ZERO, Duration.ofMillis(1100), Duration.ZERO))
                             it.playSound(Sound.UI_BUTTON_CLICK)
                         }
                     }
