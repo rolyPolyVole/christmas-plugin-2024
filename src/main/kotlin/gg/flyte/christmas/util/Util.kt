@@ -87,7 +87,7 @@ object Util {
 
         return ItemStack(Material.LEATHER).apply {
             itemMeta = itemMeta.apply {
-                displayName("${randomPair.second}Christmas Hat".style())
+                displayName("<!i>${randomPair.second}Christmas Hat".style())
                 setCustomModelData(randomPair.first)
             }
         }

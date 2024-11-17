@@ -135,7 +135,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
             // spectate item
             ItemStack(Material.RECOVERY_COMPASS).apply {
                 itemMeta = itemMeta.apply {
-                    displayName("<white>Spectate".style())
+                    displayName("<!i><white>Spectate".style())
                     editMeta {
                         lore(listOf("<grey>Click to Spectate!".style()))
                     }

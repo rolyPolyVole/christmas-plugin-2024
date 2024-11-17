@@ -185,7 +185,7 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
     private fun randomBaubleItem(): ItemStack {
         return MenuItem(ItemStack(Material.PLAYER_HEAD).apply {
             (itemMeta as SkullMeta).apply {
-                displayName("<game_colour><b>Bauble".style())
+                displayName("<!i><game_colour><b>Bauble".style())
             }
         }).setSkullTexture(baubleTextureURLs.random()).itemStack
     }

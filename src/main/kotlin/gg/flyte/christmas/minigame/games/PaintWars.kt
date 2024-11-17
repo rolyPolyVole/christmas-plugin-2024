@@ -121,7 +121,7 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
 
         ItemStack(Material.BRUSH).apply {
             itemMeta = itemMeta.apply {
-                displayName("<game_colour><b>Paint Brush".style())
+                displayName("<!i><game_colour><b>Paint Brush".style())
                 lore(listOf("<grey>Use this to paint the map!".style()))
             }
         }.apply { player.inventory.setItem(0, this) }
