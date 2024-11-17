@@ -119,6 +119,9 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
         player.formatInventory()
         player.teleport(gameConfig.spawnPoints.random().randomLocation())
 
+        scores[player.uniqueId] = 0
+
+        // TODO test if displayName is italic
         ItemStack(Material.BRUSH).apply {
             itemMeta = itemMeta.apply {
                 displayName("<!i><game_colour><b>Paint Brush".style())
