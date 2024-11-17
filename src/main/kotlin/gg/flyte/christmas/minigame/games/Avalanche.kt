@@ -232,6 +232,7 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
 
         super.eliminate(player, reason)
 
+        val value = "$roundNumber Round${if (roundNumber > 1) "s" else ""}"
         when (remainingPlayers().size) {
             0 -> { // TODO CHANGE TO 1
                 formattedWinners.put(player.uniqueId, value)
