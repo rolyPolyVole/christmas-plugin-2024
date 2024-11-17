@@ -264,15 +264,15 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         super.eliminate(player, reason)
 
         // hard mode starts at round 12 but dials back to round 8 for adjusted time.
-        val roundNumber = if (harder) roundNumber + 12 else roundNumber
+        val value = "${if (harder) roundNumber + 12 else roundNumber} round${if (roundNumber > 1) "s" else ""}"
         when (remainingPlayers().size) {
             0 -> { // TODO CHANGE TO 1
-                formattedWinners.put(player.uniqueId, roundNumber.toString())
+                formattedWinners.put(player.uniqueId, value)
                 endGame()
             }
 
-            2 -> formattedWinners.put(player.uniqueId, roundNumber.toString())
-            3 -> formattedWinners.put(player.uniqueId, roundNumber.toString())
+            2 -> formattedWinners.put(player.uniqueId, value)
+            3 -> formattedWinners.put(player.uniqueId, value)
         }
     }
 

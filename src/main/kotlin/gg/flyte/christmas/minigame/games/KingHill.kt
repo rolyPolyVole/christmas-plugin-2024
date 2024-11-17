@@ -95,7 +95,7 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
         val (first) = timeOnHill.entries
             .sortedByDescending { it.value }
             .take(1)
-            .also { it.forEach { formattedWinners.put(it.key, it.value.toString() + " seconds") } }
+            .also { it.forEach { formattedWinners.put(it.key, it.value.toString() + " second${if (it.value > 1) "s" else ""}") } }
 
         var yaw = 0F
         ChristmasEventPlugin.instance.serverWorld.spawn(MapSinglePoint(827.5, 105, 630.5, 0, 0), ItemDisplay::class.java) {
