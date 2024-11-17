@@ -111,7 +111,7 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
     private val playerBrushesBiMap = HashBiMap.create<UUID, Material>()
     private val changedBlocks = mutableListOf<Block>()
     private val scores = mutableMapOf<UUID, Int>()
-    private var hasEnded = true
+    private var started = false
     private var materialIndex = 0
 
     override fun preparePlayer(player: Player) {
@@ -141,7 +141,7 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
         eventController().sidebarManager.dataSupplier = scores
 
         simpleCountdown {
-            hasEnded = false
+            started = true
             tasks += repeatingTask(1, TimeUnit.SECONDS) {
                 gameTime--
 
@@ -160,7 +160,7 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
     }
 
     override fun endGame() {
-        hasEnded = true
+        started = false
 
         changedBlocks.forEach { it.type = Material.WHITE_WOOL }
         playerBrushesBiMap.clear()
@@ -212,7 +212,7 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
 
     override fun handleGameEvents() {
         listeners += event<PlayerInteractEvent> {
-            if (hasEnded) return@event
+            if (!started) return@event
 
             if (!hasItem()) return@event
             if (item!!.type != Material.BRUSH) return@event
@@ -228,7 +228,7 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
         }
 
         listeners += event<ProjectileHitEvent> {
-            if (hasEnded) return@event
+            if (!started) return@event
 
             if (hitBlock == null) return@event
             // if hit block was white wool, or any paintable block
