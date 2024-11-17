@@ -215,14 +215,10 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
             if (item!!.type != Material.BRUSH) return@event
             if (!(action.name.lowercase().contains("right"))) return@event
 
-            player.launchProjectile(Snowball::class.java).apply {
-                item = ItemStack(playerBrushesBiMap[player.uniqueId]!!)
-            }
+            player.launchProjectile(Snowball::class.java).apply { item = ItemStack(playerBrushesBiMap[player.uniqueId]!!) }
         }
 
-        listeners += event<InventoryOpenEvent> {
-            if (inventory.type == InventoryType.SHULKER_BOX) isCancelled = true
-        }
+        listeners += event<InventoryOpenEvent> { if (inventory.type == InventoryType.SHULKER_BOX) isCancelled = true }
 
         listeners += event<ProjectileHitEvent> {
             if (!started) return@event
