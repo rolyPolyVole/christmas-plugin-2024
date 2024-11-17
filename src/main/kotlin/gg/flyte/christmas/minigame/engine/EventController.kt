@@ -4,11 +4,7 @@ import com.xxmicloxx.NoteBlockAPI.model.Playlist
 import com.xxmicloxx.NoteBlockAPI.model.SoundCategory
 import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer
 import gg.flyte.christmas.ChristmasEventPlugin
-import gg.flyte.christmas.util.SongReference
-import gg.flyte.christmas.util.Util
-import gg.flyte.christmas.util.style
-import gg.flyte.christmas.util.title
-import gg.flyte.christmas.util.titleTimes
+import gg.flyte.christmas.util.*
 import gg.flyte.christmas.visual.SidebarManager
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.scheduler.TwilightRunnable
@@ -21,7 +17,7 @@ import org.bukkit.Bukkit
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import java.time.Duration
-import java.util.UUID
+import java.util.*
 import kotlin.reflect.full.primaryConstructor
 
 /**
@@ -188,9 +184,7 @@ class EventController() {
         return sorted.indexOfFirst { it.key == uuid } + 1
     }
 
-    fun addPoints(uuid: UUID, amount: Int) {
-        points[uuid] = points.getOrDefault(uuid, 0) + amount // will never default to zero. PlayerJoinEvent puts 0 points
-    }
+    fun addPoints(uuid: UUID, amount: Int) = points[uuid]!!.plus(amount)
 
     fun serialisePoints() {
         ChristmasEventPlugin.instance.config.set("points", null)
