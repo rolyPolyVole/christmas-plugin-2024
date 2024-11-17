@@ -192,10 +192,13 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
         if (!canChange) return
 
         // decrement the score of previous painter:
-        playerBrushesBiMap.inverse()[block.type]?.let { previousPlayerId -> scores[previousPlayerId]!!.minus(1) }
+        playerBrushesBiMap.inverse()[block.type]?.let { previousPlayerId ->
+            scores[previousPlayerId]!!.also { scores[previousPlayerId] = it - 1 }
+        }
 
         // increment the score of current painter:
-        scores[player.uniqueId]!!.plus(1)
+        scores[player.uniqueId] = scores.getOrDefault(player.uniqueId, 0) + 1
+
         if (!(changedBlocks.contains(block))) changedBlocks.add(block)
 
         block.type = playerBrushesBiMap[player.uniqueId]!!
