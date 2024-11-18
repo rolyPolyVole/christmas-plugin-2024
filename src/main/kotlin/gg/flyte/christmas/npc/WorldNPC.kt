@@ -1,6 +1,7 @@
 package gg.flyte.christmas.npc
 
 import com.github.retrooper.packetevents.PacketEvents
+import com.github.retrooper.packetevents.protocol.attribute.Attributes
 import com.github.retrooper.packetevents.protocol.entity.data.EntityData
 import com.github.retrooper.packetevents.protocol.entity.data.EntityDataTypes
 import com.github.retrooper.packetevents.protocol.npc.NPC
@@ -8,7 +9,10 @@ import com.github.retrooper.packetevents.protocol.player.TextureProperty
 import com.github.retrooper.packetevents.protocol.player.UserProfile
 import com.github.retrooper.packetevents.util.MojangAPIUtil
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityMetadata
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerUpdateAttributes
+import gg.flyte.christmas.ChristmasEventPlugin
 import gg.flyte.christmas.minigame.world.MapSinglePoint
+import gg.flyte.christmas.util.eventController
 import gg.flyte.christmas.util.packetObj
 import gg.flyte.christmas.util.sendPacket
 import gg.flyte.christmas.util.style
@@ -26,6 +30,7 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
     private val userProfile: UserProfile = UserProfile(UUID.randomUUID(), displayName, textureProperties)
     private var id: Int = SpigotReflectionUtil.generateEntityId()
     private val tablistName = "NPC-$id".style()
+    var scale = 0.5
     val npc: NPC = NPC(userProfile, id, tablistName)
 
     /**
@@ -34,7 +39,19 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
     fun spawnFor(player: Player) {
         this.npc.location = location.packetObj()
         this.npc.spawn(PacketEvents.getAPI().playerManager.getUser(player).channel)
+
+        // skin packet
         WrapperPlayServerEntityMetadata(id, listOf(EntityData(17, EntityDataTypes.BYTE, 127.toByte()))).sendPacket(player)
+
+        // scale packet (if needed)
+        val modifier = WrapperPlayServerUpdateAttributes.PropertyModifier(
+            Attributes.GENERIC_SCALE.name,
+            scale,
+            WrapperPlayServerUpdateAttributes.PropertyModifier.Operation.ADDITION
+        )
+        var property = WrapperPlayServerUpdateAttributes.Property(Attributes.GENERIC_SCALE, scale, listOf(modifier))
+        WrapperPlayServerUpdateAttributes(id, listOf(property)).sendPacket(player)
+
     }
 
     /**
@@ -61,19 +78,43 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
         private val worldNPCs: MutableSet<WorldNPC> = HashSet()
         private val leaderBoardNPCs = HashMap<Int, WorldNPC>()
         private val leaderboardPositionToLocation = mapOf(
-            1 to MapSinglePoint(535, 104, 500, -90, 0),
-            2 to MapSinglePoint(535, 105, 508, -90, 0),
-            3 to MapSinglePoint(535, 105, 504, -90, 0)
+            0 to MapSinglePoint(535.5, 108.3, 503.5, -90, 0), // 2.5
+            1 to MapSinglePoint(535.5, 106.55, 507.5, -90, 0), // 2.0
+            2 to MapSinglePoint(535.5, 105, 499.5, -90, 0) // 1.5
         )
 
-        // TODO add text display with total points
-        fun refreshLeaderboard(position: Int, uniqueId: UUID) {
-            // remove existing leader, if any, and spawn new leader
-            for (player in Bukkit.getOnlinePlayers()) leaderBoardNPCs[position]?.despawnFor(player)
-            worldNPCs.remove(leaderBoardNPCs[position])
+        // TODO add text display with total points (and name?)
+        fun refreshLeaderboard() {
+            eventController().points.entries
+                .sortedByDescending { it.value }
+                .take(3)
+                .forEachIndexed { index, (uniqueId, points) ->
+                    println(index)
 
-            leaderBoardNPCs[position] = createFromUniqueId("lol", uniqueId, leaderboardPositionToLocation[position]!!)
-            for (player in Bukkit.getOnlinePlayers()) leaderBoardNPCs[position]?.spawnFor(player)
+                    // remove existing leader, if any, and spawn new leader
+                    leaderBoardNPCs[index].apply {
+                        worldNPCs.remove(this)
+                        ChristmasEventPlugin.instance.worldNPCs.remove(this)
+                        leaderBoardNPCs[index]?.despawnForAll()
+                    }
+
+                    worldNPCs.remove(leaderBoardNPCs[index])
+                    ChristmasEventPlugin.instance.worldNPCs.remove(leaderBoardNPCs[index])
+
+                    leaderBoardNPCs[index] = createFromUniqueId("", uniqueId, leaderboardPositionToLocation[index]!!).apply {
+                        this.scale = when (index) {
+                            0 -> 2.5
+                            1 -> 2.0
+                            2 -> 1.5
+                            else -> 1.0
+                        }
+
+                        worldNPCs += this
+                        ChristmasEventPlugin.instance.worldNPCs += this
+                    }
+
+                    leaderBoardNPCs[index]?.spawnForAll()
+                }
         }
 
         /**

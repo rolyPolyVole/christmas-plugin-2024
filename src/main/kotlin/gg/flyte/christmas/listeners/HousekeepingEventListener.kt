@@ -19,6 +19,7 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEn
 import dev.shreyasayyengar.menuapi.menu.MenuItem
 import dev.shreyasayyengar.menuapi.menu.StandardMenu
 import gg.flyte.christmas.ChristmasEventPlugin
+import gg.flyte.christmas.npc.WorldNPC
 import gg.flyte.christmas.util.*
 import gg.flyte.christmas.visual.CameraSequence
 import gg.flyte.twilight.event.event
@@ -141,6 +142,8 @@ class HousekeepingEventListener : Listener, PacketListener {
 
             eventController().points.putIfAbsent(player.uniqueId, 0)
             eventController().sidebarManager.update()
+
+            WorldNPC.refreshLeaderboard()
         }
 
         event<PlayerQuitEvent> {
@@ -161,7 +164,18 @@ class HousekeepingEventListener : Listener, PacketListener {
             worldNPCs.forEach { npc ->
                 val npcLocation = npc.npc.location.bukkit()
                 if (npcLocation.distance(playerLocation) <= 25) {
-                    val lookVector = npcLocation.apply { setDirection(playerLocation.toVector().subtract(toVector())) }
+                    var location = player.location.apply {
+
+                        // since the NPCs are scaled, the look vector is not exact at eye level; this corrects it
+                        when (npc.scale) {
+                            1.5 -> add(0.0, -4.0, 0.0)
+                            2.0 -> add(0.0, -5.0, 0.0)
+                            2.5 -> add(0.0, -6.5, 0.0)
+                            else -> add(0.0, 1.0, 0.0)
+                        }
+                    }
+
+                    val lookVector = npcLocation.apply { setDirection(location.toVector().subtract(toVector())) }
                     WrapperPlayServerEntityHeadLook(npc.npc.id, lookVector.yaw).sendPacket(player)
                     WrapperPlayServerEntityRotation(npc.npc.id, lookVector.yaw, lookVector.pitch, false).sendPacket(player)
                 }

@@ -125,6 +125,8 @@ class ChristmasEventPlugin : JavaPlugin() {
                 billboard = Display.Billboard.CENTER
             }
         }
+
+        WorldNPC.refreshLeaderboard()
     }
 
     private fun fixData() {
