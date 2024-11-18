@@ -60,6 +60,8 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
     private var canEnter = false
 
     override fun startGameOverview() {
+        super.startGameOverview()
+
         repeat(25) {
             summonMinecart().also {
                 overviewTasks += repeatingTask((0..8).random(), (2..6).random()) {
@@ -75,8 +77,6 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                 }
             }
         }
-
-        super.startGameOverview()
     }
 
     override fun preparePlayer(player: Player) {
