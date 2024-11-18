@@ -239,7 +239,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
 
     fun showGameResults() {
         // slide to post-game podium.
-        CameraSlide(MapSinglePoint(519, 131, 559, -144.63538F, -76.47707F)) {
+        CameraSlide(MapSinglePoint(519, 131, 559, 0, 0)) {
             // create podium NPCs
             val npcs = mutableListOf<WorldNPC>()
             val displays = mutableListOf<TextDisplay>()
