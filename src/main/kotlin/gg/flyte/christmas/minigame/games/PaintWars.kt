@@ -168,7 +168,7 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
 
         scores.entries
             .sortedByDescending { it.value }
-            .take(1)
+            .take(3)
             .also { it.forEach { formattedWinners.put(it.key, "${it.value} block${if (it.value > 1) "s" else ""}") } }
 
         super.endGame()

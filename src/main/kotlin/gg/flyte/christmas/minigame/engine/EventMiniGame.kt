@@ -344,6 +344,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
                     loopedPlayer.gameMode = GameMode.ADVENTURE
                     loopedPlayer.formatInventory()
                     loopedPlayer.teleport(ChristmasEventPlugin.instance.lobbySpawn)
+                    loopedPlayer.clearActivePotionEffects()
                     npcs.forEach { it.despawnFor(loopedPlayer) }
                     displays.forEach { it.remove() }
                 }

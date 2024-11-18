@@ -94,7 +94,7 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
 
         val (first) = timeOnHill.entries
             .sortedByDescending { it.value }
-            .take(1)
+            .take(3)
             .also { it.forEach { formattedWinners.put(it.key, it.value.toString() + " second${if (it.value > 1) "s" else ""}") } }
 
         var yaw = 0F
