@@ -245,7 +245,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
             val displays = mutableListOf<TextDisplay>()
             val descendingColour = listOf("a", "c", "9")
             var index = 0
-            formattedWinners.entries.take(1).forEach {
+            formattedWinners.entries.take(3).forEach {
                 var uniqueId = it.key
                 var value = it.value
                 val displayName = "§${descendingColour[index]}${Bukkit.getPlayer(uniqueId)!!.name}"
