@@ -423,8 +423,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
         listeners += event<PlayerMoveEvent> {
             if (player.location.blockY < eliminateBelow) {
-                if (eliminatedPlayers.contains(player.uniqueId)) return@event
-                eliminate(player, EliminationReason.ELIMINATED)
+                if (remainingPlayers().contains(player)) eliminate(player, EliminationReason.ELIMINATED)
             }
         }
 
