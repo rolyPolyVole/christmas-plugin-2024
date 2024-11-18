@@ -509,13 +509,70 @@ enum class GameConfig(
             MapSinglePoint(655, 107, -141, 108.178734F, 30.104355F)
         ),
         false
-    )
+    ),
     //endregion
 
     //region SLED_RACING, #80ffea
     //endregion
 
-    //region SPLEEF, #ffc642
+    //region SPLEEF
+    SPLEEF(
+        Spleef::class,
+        "<colour:#ffc642>Spleef".style(),
+        "<colour:#ffc642>ꜱᴘʟᴇᴇꜰ".style(),
+        ItemStack(Material.DIAMOND_SHOVEL),
+        TextColor.fromHexString("#ffc642")!!,
+        " • Destroy the snow blocks under other players to eliminate them.\n\n" +
+                " • Avoid falling into the lava by jumping over holes in the ground.\n\n" +
+                " • To win, be the last player standing on the map!",
+        2,
+        MapSinglePoint(616.5, 140.0, 800.5, 0F, 90F),
+        listOf(
+            MapRegion(MapSinglePoint(597, 113, 819), MapSinglePoint(635, 113, 781))
+        ),
+        listOf(
+            MapSinglePoint(624, 30, 791, 53.888947F, 88.462425F),
+            MapSinglePoint(624, 62, 791, 53.888947F, 67.17887F),
+            MapSinglePoint(624, 80, 791, 54.860138F, 57.95312F),
+            MapSinglePoint(624, 82, 791, 56.397858F, 49.536526F),
+            MapSinglePoint(624, 88, 791, 57.207184F, 42.819435F),
+            MapSinglePoint(624, 93, 791, 59.31143F, 33.75541F),
+            MapSinglePoint(624, 99, 791, 60.120758F, 28.98061F),
+            MapSinglePoint(624, 105, 791, 59.635162F, 23.55838F),
+            MapSinglePoint(624, 110, 791, 57.854645F, 13.685094F),
+            MapSinglePoint(625, 116, 792, 63.681793F, 15.384578F),
+            MapSinglePoint(628, 121, 798, 75.25516F, 25.257872F),
+            MapSinglePoint(630, 121, 806, 90.87515F, 27.44295F),
+            MapSinglePoint(630, 121, 813, 114.183044F, 28.980597F),
+            MapSinglePoint(627, 121, 821, 136.11444F, 30.1136F),
+            MapSinglePoint(621, 121, 825, 157.23659F, 31.651247F),
+            MapSinglePoint(614, 121, 823, 176.49736F, 31.084745F),
+            MapSinglePoint(608, 121, 818, -164.80821F, 31.084745F),
+            MapSinglePoint(604, 121, 811, -139.72075F, 30.841959F),
+            MapSinglePoint(604, 117, 805, -132.518F, 26.14809F),
+            MapSinglePoint(610, 114, 802, -144.0911F, 14.57532F),
+        ),
+        listOf(
+            MapSinglePoint(645.5, 112, 799.5, 90, 0),
+            MapSinglePoint(636.5, 113, 820.5, 135, 0),
+            MapSinglePoint(616.5, 112, 829.5, -180, 0),
+            MapSinglePoint(596.5, 113, 820.5, -135, 0),
+            MapSinglePoint(587.5, 112, 800.5, -90, 0),
+            MapSinglePoint(596.5, 113, 780.5, -45, 0),
+            MapSinglePoint(616.5, 112, 771.5, 0, 0),
+            MapSinglePoint(636.5, 113, 780.5, 45, 0)
+        ),
+        listOf(
+            MapSinglePoint(635.5, 118, 800.5, 90, 35),
+            MapSinglePoint(635.5, 107, 800.5, 90, 35),
+            MapSinglePoint(635.5, 100, 800.5, 90, 35),
+            MapSinglePoint(635.5, 94, 800.5, 90, 35),
+            MapSinglePoint(635.5, 89, 800.5, 90, 35),
+            MapSinglePoint(635.5, 83, 800.5, 90, 35),
+            MapSinglePoint(635.5, 77, 800.5, 90, 35),
+            MapSinglePoint(635.5, 77, 800.5, 90, 35),
+        ),
+    )
     //endregion
 }
 // Potential Colour: f7b2b2
