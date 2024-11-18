@@ -121,7 +121,6 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
 
         scores[player.uniqueId] = 0
 
-        // TODO test if displayName is italic
         ItemStack(Material.BRUSH).apply {
             itemMeta = itemMeta.apply {
                 displayName("<!i><game_colour><b>Paint Brush".style())
