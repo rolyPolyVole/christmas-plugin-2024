@@ -36,7 +36,7 @@ enum class GameConfig(
         " • Dance around the icy platform until the christmas music stops.\n\n" +
                 " • Run and stand under shelter as the snowballs fall from the sky.\n\n" +
                 " • If you are hit by a falling snowball, you will be eliminated!",
-        1,
+        2,
         MapSinglePoint(616.5, 140.0, 800.5, 0F, 90F),
         listOf(
             MapRegion(
@@ -174,7 +174,7 @@ enum class GameConfig(
         " • Dance around the colourful floor until the christmas music stops.\n\n" +
                 " • Run and stand on the colour which has been chosen (check hotbar) before the timer ends.\n\n" +
                 " • After the timer, the map will clear all blocks except the chosen colour blocks. To win, survive the most rounds!",
-        1,
+        2,
         MapSinglePoint(616.5, 140.0, 800.5, 0F, 90F),
         listOf(
             MapRegion(
@@ -320,7 +320,7 @@ enum class GameConfig(
                 " • Run to the nearest minecart and get inside before the timer ends.\n\n" +
                 " • If you fail to find a minecart before the timer ends, you will be ELIMINATED!\n\n" +
                 " • Do NOT click the minecarts until the music has stopped... or else you will be STUNNED!",
-        1,
+        2,
         MapSinglePoint(616.5, 140.0, 800.5, 0F, 90F),
         listOf(
             MapRegion(MapSinglePoint(597, 113, 819), MapSinglePoint(635, 113, 781))
@@ -376,7 +376,7 @@ enum class GameConfig(
         " • Shoot other players with your paintball gun to get a point.\n\n" +
                 " • Avoid being shot by other players to survive the longest.\n\n" +
                 " • To win, hit the most players and get the most points!",
-        1,
+        2,
         MapSinglePoint(181.5, 140.0, 300.5, -135, 90),
         listOf(
             MapRegion.single(MapSinglePoint(193, 80, 193, 0, 0)),
