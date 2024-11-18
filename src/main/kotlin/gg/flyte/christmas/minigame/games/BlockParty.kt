@@ -96,8 +96,6 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                 }
             }
         }
-
-        super.startGameOverview()
     }
 
     override fun preparePlayer(player: Player) {
