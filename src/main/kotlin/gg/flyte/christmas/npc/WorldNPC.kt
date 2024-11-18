@@ -89,8 +89,6 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
                 .sortedByDescending { it.value }
                 .take(3)
                 .forEachIndexed { index, (uniqueId, points) ->
-                    println(index)
-
                     // remove existing leader, if any, and spawn new leader
                     leaderBoardNPCs[index].apply {
                         worldNPCs.remove(this)
