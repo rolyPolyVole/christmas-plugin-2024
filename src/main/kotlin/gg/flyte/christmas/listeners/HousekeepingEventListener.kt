@@ -23,7 +23,9 @@ import gg.flyte.christmas.npc.WorldNPC
 import gg.flyte.christmas.util.*
 import gg.flyte.christmas.visual.CameraSequence
 import gg.flyte.twilight.event.event
+import gg.flyte.twilight.extension.RemoteFile
 import gg.flyte.twilight.extension.playSound
+import gg.flyte.twilight.scheduler.async
 import gg.flyte.twilight.scheduler.delay
 import io.papermc.paper.chat.ChatRenderer
 import io.papermc.paper.event.player.AsyncChatEvent
@@ -104,13 +106,11 @@ class HousekeepingEventListener : Listener, PacketListener {
             joinMessage(null)
 
             player.apply {
-//                TODO change URL/configure pack (uncomment when works)
-//                async {
-//                    RemoteFile("https://github.com/flytegg/ls-christmas-rp/releases/latest/download/RP.zip").apply {
-//                    println("RP Hash = $hash")
-//                    setResourcePack(url, hash, true)
-//                    }
-//                }
+                async {
+                    RemoteFile("https://github.com/shreyasayyengar/flyte-christmas-resource-pack/releases/latest/download/RP.zip").apply {
+                        setResourcePack(this.url, this.hash, true)
+                    }
+                }
 
                 gameMode = GameMode.ADVENTURE
                 playSound(Sound.ENTITY_PLAYER_LEVELUP)
@@ -182,11 +182,15 @@ class HousekeepingEventListener : Listener, PacketListener {
             }
         }
 
-        // TODO uncomment when pack works
-//        event<PlayerResourcePackStatusEvent> {
-//            if (status == PlayerResourcePackStatusEvent.Status.ACCEPTED || status == PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED) return@event
-//            player.kick("&cYou &f&nmust&c accept the resource pack to play on this server!".asComponent())
-//        }
+        event<PlayerResourcePackStatusEvent> {
+            var goodStatus = listOf(
+                PlayerResourcePackStatusEvent.Status.ACCEPTED,
+                PlayerResourcePackStatusEvent.Status.DOWNLOADED,
+                PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED
+            )
+
+            if (!goodStatus.contains(status)) player.kick("<red>You <white><u>must<reset> <red>accept the resource pack to play on this server!".style())
+        }
 
         event<PlayerDropItemEvent> { isCancelled = true }
 
