@@ -134,7 +134,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
                 if (clickType.name.lowercase().contains("left")) {
                     selectedIndex = (selectedIndex + 1) % availableGames.size // cycle around
                 } else if (clickType.name.lowercase().contains("right")) {
-                    selectedIndex = (selectedIndex - 1 + availableGames.size) % availableGames.size // cycle around
+                    selectedIndex = if (selectedIndex == -1 || selectedIndex == 0) availableGames.size - 1 else selectedIndex - 1
                 }
 
                 this.itemStack = availableGames[selectedIndex].menuItem
