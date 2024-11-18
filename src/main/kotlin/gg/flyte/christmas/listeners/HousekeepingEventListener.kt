@@ -171,7 +171,7 @@ class HousekeepingEventListener : Listener, PacketListener {
                             1.5 -> add(0.0, -4.0, 0.0)
                             2.0 -> add(0.0, -5.0, 0.0)
                             2.5 -> add(0.0, -6.5, 0.0)
-                            else -> add(0.0, 1.0, 0.0)
+                            else -> add(0.0, 0.0, 0.0)
                         }
                     }
 
