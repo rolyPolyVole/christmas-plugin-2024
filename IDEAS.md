@@ -58,4 +58,5 @@ Play-test Considerations:
 
 - Joining & Leaving at various times in the event (overviews, midgame, ending, etc)
 - Making sure opted out players are consistently left out of games.
+    - have playtesters be opted out, players, and also have camera entity to spectate.
 - Join the server as we do map overview. (separate)
