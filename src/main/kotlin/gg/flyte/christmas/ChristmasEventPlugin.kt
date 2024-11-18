@@ -57,7 +57,7 @@ class ChristmasEventPlugin : JavaPlugin() {
         registerEvents()
         registerPacketAPI()
         handleDonations()
-        loadContributorNPCs()
+        loadNPCs()
     }
 
     override fun onDisable() {
@@ -97,7 +97,7 @@ class ChristmasEventPlugin : JavaPlugin() {
         DonationListener(config.getString("donations.campaignId") ?: throw IllegalArgumentException("campaignId cannot be empty"))
     }
 
-    private fun loadContributorNPCs() {
+    private fun loadNPCs() {
         for (contributor in Util.getEventContributors()) {
             val uniqueId = contributor.uniqueId
             val contribution = contributor.contribution
