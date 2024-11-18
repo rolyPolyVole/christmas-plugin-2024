@@ -59,4 +59,3 @@ Play-test Considerations:
 - Joining & Leaving at various times in the event (overviews, midgame, ending, etc)
 - Making sure opted out players are consistently left out of games.
 - Join the server as we do map overview. (separate)
-- Do we want name above head?
