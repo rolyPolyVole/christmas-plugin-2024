@@ -95,7 +95,7 @@ enum class GameConfig(
     ),
     //endregion
 
-    //region BAUBLE_TAG 174, 211, 216
+    //region BAUBLE_TAG
     BAUBLE_TAG(
         BaubleTag::class,
         "<colour:#aed3d8>Bauble Tag".style(),
@@ -309,13 +309,13 @@ enum class GameConfig(
     ),
     //endregion
 
-    //region MUSICAL_MINECARTS 142, 0, 3
+    //region MUSICAL_MINECARTS
     MUSICAL_MINECARTS(
         MusicalMinecarts::class,
-        "<colour:#8e0003>Musical Minecarts".style(),
-        "<colour:#8e0003>ᴍᴜꜱɪᴄᴀʟ ᴍɪɴᴇᴄᴀʀᴛꜱ".style(),
+        "<colour:#a1a4ff>Musical Minecarts".style(),
+        "<colour:#a1a4ff>ᴍᴜꜱɪᴄᴀʟ ᴍɪɴᴇᴄᴀʀᴛꜱ".style(),
         ItemStack(Material.MINECART),
-        TextColor.fromHexString("#8e0003")!!,
+        TextColor.fromHexString("#a1a4ff")!!,
         " • Dance around the platform until the christmas music stops.\n\n" +
                 " • Run to the nearest minecart and get inside before the timer ends.\n\n" +
                 " • If you fail to find a minecart before the timer ends, you will be ELIMINATED!\n\n" +
@@ -371,11 +371,12 @@ enum class GameConfig(
 
     //region PAINT_WARS
     PAINT_WARS(
-        PaintWars::class,
-        "<colour:#549c19>Paint Wars".style(),
-        "<colour:#549c19>ᴘᴀɪɴᴛ ᴡᴀʀꜱ".style(),
+        PaintWars::
+        class,
+        "<colour:#75e01d>Paint Wars".style(),
+        "<colour:#75e01d>ᴘᴀɪɴᴛ ᴡᴀʀꜱ".style(),
         ItemStack(Material.BRUSH),
-        TextColor.fromHexString("#549c19")!!,
+        TextColor.fromHexString("#75e01d")!!,
         " • Use your Paint Gun to shoot blocks around the map into your chosen block.\n\n" +
                 " • You can shoot over other player's blocks to reduce their score!\n\n" +
                 " • To win, cover the most amount of the map with your block/colour!",
@@ -445,10 +446,10 @@ enum class GameConfig(
     )
     //endregion
 
-    //region SLED_RACING, // 24, 48, 15
+    //region SLED_RACING, #80ffea
     //endregion
 
-    //region SPLEEF, // 64, 86, 40
+    //region SPLEEF, #ffc642
     //endregion
 }
 // Potential Colour: f7b2b2
