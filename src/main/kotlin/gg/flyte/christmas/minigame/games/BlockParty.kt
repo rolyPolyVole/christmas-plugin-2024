@@ -228,11 +228,10 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
     }
 
     override fun eliminate(player: Player, reason: EliminationReason) {
-        if (currentBossBar != null) player.hideBossBar(currentBossBar!!)
-
         Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.sendMessage("<red>${player.name} <grey>has been eliminated!".style()) }
 
         player.apply {
+            hideBossBar(currentBossBar!!)
             if (allowFlight) allowFlight = false // if had double-jump
 
             if (reason == EliminationReason.ELIMINATED) {
