@@ -366,7 +366,73 @@ enum class GameConfig(
     ),
     //endregion
 
-    //region PAINT_BALL 0, 135, 72
+    //region PAINTBALL
+    PAINTBALL(
+        Paintball::class,
+        "<colour:#89bdf5>Paintball".style(),
+        "<colour:#89bdf5>ᴘᴀɪɴᴛʙᴀʟʟ".style(),
+        ItemStack(Material.HEART_OF_THE_SEA),
+        TextColor.fromHexString("#89bdf5")!!,
+        " • Shoot other players with your paintball gun to get a point.\n\n" +
+                " • Avoid being shot by other players to survive the longest.\n\n" +
+                " • To win, hit the most players and get the most points!",
+        1,
+        MapSinglePoint(181.5, 140.0, 300.5, -135, 90),
+        listOf(
+            MapRegion.single(MapSinglePoint(193, 80, 193, 0, 0)),
+            MapRegion.single(MapSinglePoint(207, 82, 221, 0, 0)),
+            MapRegion.single(MapSinglePoint(206, 80, 251, 0, 0)),
+            MapRegion.single(MapSinglePoint(188, 76, 262, 0, 0)),
+            MapRegion.single(MapSinglePoint(191, 72, 290, 0, 0)),
+            MapRegion.single(MapSinglePoint(209, 71, 295, 0, 0)),
+            MapRegion.single(MapSinglePoint(229, 73, 300, 0, 0)),
+            MapRegion.single(MapSinglePoint(250, 76, 294, 0, 0)),
+            MapRegion.single(MapSinglePoint(265, 78, 304, 0, 0)),
+            MapRegion.single(MapSinglePoint(271, 76, 319, 0, 0)),
+            MapRegion.single(MapSinglePoint(277, 75, 334, 0, 0)),
+            MapRegion.single(MapSinglePoint(285, 75, 350, 0, 0)),
+            MapRegion.single(MapSinglePoint(298, 75, 370, 0, 0)),
+            MapRegion.single(MapSinglePoint(291, 75, 383, 0, 0)),
+            MapRegion.single(MapSinglePoint(281, 75, 398, 0, 0)),
+            MapRegion.single(MapSinglePoint(262, 75, 403, 0, 0)),
+            MapRegion.single(MapSinglePoint(249, 77, 415, 0, 0)),
+            MapRegion.single(MapSinglePoint(233, 79, 422, 0, 0)),
+            MapRegion.single(MapSinglePoint(211, 81, 428, 0, 0)),
+            MapRegion.single(MapSinglePoint(201, 77, 407, 0, 0)),
+            MapRegion.single(MapSinglePoint(194, 76, 394, 0, 0)),
+            MapRegion.single(MapSinglePoint(201, 74, 378, 0, 0)),
+            MapRegion.single(MapSinglePoint(206, 72, 364, 0, 0)),
+            MapRegion.single(MapSinglePoint(208, 71, 347, 0, 0)),
+            MapRegion.single(MapSinglePoint(199, 71, 333, 0, 0)),
+            MapRegion.single(MapSinglePoint(172, 73, 298, 0, 0)),
+            MapRegion.single(MapSinglePoint(143, 79, 279, 0, 0)),
+            MapRegion.single(MapSinglePoint(141, 77, 244, 0, 0)),
+            MapRegion.single(MapSinglePoint(97, 89, 254, 0, 0)),
+            MapRegion.single(MapSinglePoint(114, 86, 215, 0, 0))
+        ),
+        listOf(
+            MapSinglePoint(173, 99, 307, 175.59639F, 24.933584F),
+            MapSinglePoint(172, 93, 293, 172.44003F, 21.049002F),
+            MapSinglePoint(172, 88, 278, 150.75089F, 10.609256F),
+            MapSinglePoint(166, 86, 264, 148.64664F, 3.6494362F),
+            MapSinglePoint(156, 86, 252, -178.25386F, 1.3834488F),
+            MapSinglePoint(147, 88, 239, -110.35533F, 3.8112924F),
+            MapSinglePoint(151, 93, 226, -85.26666F, 10.4474F),
+            MapSinglePoint(161, 99, 215, -74.25983F, 10.932967F),
+            MapSinglePoint(175, 105, 206, -61.796204F, 15.060287F),
+            MapSinglePoint(190, 109, 204, -24.243927F, 27.28051F),
+            MapSinglePoint(198, 105, 214, -11.05191F, 30.517662F),
+            MapSinglePoint(202, 100, 229, -11.132843F, 25.25729F),
+            MapSinglePoint(206, 94, 245, -13.479889F, 19.349497F),
+            MapSinglePoint(209, 88, 260, -12.2659F, 17.73092F),
+            MapSinglePoint(213, 83, 276, -16.474396F, 14.493787F),
+            MapSinglePoint(218, 77, 292, -21.168488F, 12.065951F),
+            MapSinglePoint(223, 73, 307, -24.32486F, 4.2968564F)
+        ),
+        listOf(),
+        listOf(),
+        false
+    ),
     //endregion
 
     //region PAINT_WARS
