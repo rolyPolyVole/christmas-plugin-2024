@@ -233,7 +233,18 @@ class HousekeepingEventListener : Listener, PacketListener {
 
         event<EntityCombustEvent> { if (entity is Player) isCancelled = true }
 
-        event<EntityDamageEvent>(priority = EventPriority.LOWEST) { isCancelled = true }
+        event<EntityDamageEvent>(priority = EventPriority.LOWEST) {
+            isCancelled = true
+
+            entity as? Player ?: return@event // damaged entity
+            (this as? EntityDamageByEntityEvent)?.damager as? Snowball ?: return@event // damager
+            damage = Double.MIN_VALUE
+            isCancelled = false
+        }
+
+        event<CraftItemEvent> { isCancelled = true }
+
+        event<PrepareItemCraftEvent> { inventory.result = null }
     }
 
     override fun onPacketReceive(event: PacketReceiveEvent) {
