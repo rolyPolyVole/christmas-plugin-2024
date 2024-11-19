@@ -7,7 +7,7 @@ import gg.flyte.christmas.util.style
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import java.util.UUID
+import java.util.*
 
 class SidebarManager {
     private val boardRegistry = mutableMapOf<UUID, FastBoard>()
@@ -63,7 +63,7 @@ class SidebarManager {
         val placeDefaultComponent = mapOf(
             0 to "<colour:#ffcb1a>➊<grey>:",
             1 to "<colour:#d0d0d0>➋<grey>:",
-            2 to "<color:#a39341>➌<grey>:"
+            2 to "<colour:#a39341>➌<grey>:"
         )
 
         val uniqueIdAtPosition = getUUIDByPlacement(position)
