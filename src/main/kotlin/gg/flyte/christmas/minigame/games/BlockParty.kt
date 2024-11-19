@@ -528,7 +528,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         val displayName: String,
     ) {
         ENDER_PEARL("Ender Pearl"),
-        COLOR_BOMB("Color Bomb"),
+        COLOR_BOMB("Colour Bomb"),
         JUMP_BOOST("Jump Boost"),
         FISHING_ROD("Fishing Rod"),
         SLOWNESS("Slowness"),

@@ -37,14 +37,14 @@ import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Player
+import org.bukkit.entity.Snowball
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityCombustEvent
+import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.FoodLevelChangeEvent
-import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.inventory.InventoryOpenEvent
-import org.bukkit.event.inventory.InventoryType
+import org.bukkit.event.inventory.*
 import org.bukkit.event.player.*
 import org.bukkit.inventory.PlayerInventory
 import java.util.*
@@ -143,7 +143,7 @@ class HousekeepingEventListener : Listener, PacketListener {
             eventController().points.putIfAbsent(player.uniqueId, 0)
             eventController().sidebarManager.update()
 
-            WorldNPC.refreshLeaderboard()
+            WorldNPC.refreshPodium()
         }
 
         event<PlayerQuitEvent> {

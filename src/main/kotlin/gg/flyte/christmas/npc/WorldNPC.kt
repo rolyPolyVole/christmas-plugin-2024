@@ -19,7 +19,11 @@ import gg.flyte.christmas.util.style
 import io.github.retrooper.packetevents.util.SpigotReflectionUtil
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.NamespacedKey
+import org.bukkit.entity.Display
 import org.bukkit.entity.Player
+import org.bukkit.entity.TextDisplay
+import org.bukkit.persistence.PersistentDataType
 import java.util.*
 
 /**
@@ -82,9 +86,25 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
             1 to MapSinglePoint(535.5, 106.55, 507.5, -90, 0), // 2.0
             2 to MapSinglePoint(535.5, 105, 499.5, -90, 0) // 1.5
         )
+        private val leaderboardPositionToNamePlateLocation = mapOf(
+            0 to MapSinglePoint(537.5, 107.35, 503.55, -90, 0),
+            1 to MapSinglePoint(537.5, 105.65, 507.55, -90, 0),
+            2 to MapSinglePoint(537.5, 104.25, 499.55, -90, 0)
+        )
+        private val placeDefaultComponent = mapOf(
+            0 to "<colour:#ffcb1a>➊",
+            1 to "<colour:#d0d0d0>➋",
+            2 to "<colour:#a39341>➌"
+        )
 
         // TODO add text display with total points (and name?)
-        fun refreshLeaderboard() {
+        fun refreshPodium() {
+            ChristmasEventPlugin.instance.serverWorld.entities.forEach {
+                if (it.persistentDataContainer.has(NamespacedKey("christmas", "placeholder"), PersistentDataType.BOOLEAN)) {
+                    it.remove()
+                }
+            }
+
             eventController().points.entries
                 .sortedByDescending { it.value }
                 .take(3)
@@ -110,8 +130,15 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
                         worldNPCs += this
                         ChristmasEventPlugin.instance.worldNPCs += this
                     }
-
                     leaderBoardNPCs[index]?.spawnForAll()
+
+                    ChristmasEventPlugin.instance.serverWorld.spawn(leaderboardPositionToNamePlateLocation[index]!!, TextDisplay::class.java) {
+                        it.text("${placeDefaultComponent[index]!!} ${Bukkit.getOfflinePlayer(uniqueId).name}\nᴘᴏɪɴᴛs: $points".style())
+                        it.transformation = it.transformation.apply { this.scale.mul(1.5F) }
+                        it.isSeeThrough = false
+                        it.billboard = Display.Billboard.FIXED
+                        it.persistentDataContainer.set(NamespacedKey("christmas", "placeholder"), PersistentDataType.BOOLEAN, true)
+                    }
                 }
         }
 

@@ -17,12 +17,11 @@ import gg.flyte.christmas.util.style
 import gg.flyte.twilight.twilight
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder
 import net.kyori.adventure.text.format.NamedTextColor
-import org.bukkit.Bukkit
-import org.bukkit.Color
-import org.bukkit.GameRule
-import org.bukkit.World
+import org.bukkit.*
 import org.bukkit.entity.Display
+import org.bukkit.entity.ItemDisplay
 import org.bukkit.entity.TextDisplay
+import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scoreboard.Scoreboard
 import org.bukkit.scoreboard.Team
@@ -52,7 +51,7 @@ class ChristmasEventPlugin : JavaPlugin() {
 
         initDependencies()
         createConfig()
-        fixData()
+        configureWorld()
         registerCommands()
         registerEvents()
         registerPacketAPI()
@@ -126,10 +125,20 @@ class ChristmasEventPlugin : JavaPlugin() {
             }
         }
 
-        WorldNPC.refreshLeaderboard()
+        serverWorld.spawn(MapSinglePoint(535.5, 121, 503.5, -90, 0), TextDisplay::class.java) {
+            it.text("<gold>ᴇᴠᴇɴᴛ\nʟᴇᴀᴅᴇʀʙᴏᴀʀᴅ".style())
+            it.transformation = it.transformation.apply {
+                this.scale.mul(10F)
+            }
+            it.billboard = Display.Billboard.CENTER
+            it.isDefaultBackground = false
+            it.backgroundColor = Color.fromRGB(94, 68, 23)
+        }
+
+        WorldNPC.refreshPodium()
     }
 
-    private fun fixData() {
+    private fun configureWorld() {
         serverWorld = Bukkit.getWorld("world")!!.apply {
             setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false)
             setGameRule(GameRule.DO_MOB_SPAWNING, false)
@@ -138,6 +147,16 @@ class ChristmasEventPlugin : JavaPlugin() {
             setGameRule(GameRule.SPECTATORS_GENERATE_CHUNKS, true)
             setStorm(false)
             time = 6000
+
+            // Create Podium
+            var podiumModel = ItemStack(Material.PAPER).apply {
+                itemMeta = itemMeta?.apply { setCustomModelData(2) }
+            }
+            spawn(Location(this, 535.5, 105.0, 503.5), ItemDisplay::class.java) {
+                it.setItemStack(podiumModel)
+                it.transformation = it.transformation.apply { this.scale.mul(4F) }
+            }
+
         }
 
         // player list displays entries by alphabetical order of the team they have entries with
