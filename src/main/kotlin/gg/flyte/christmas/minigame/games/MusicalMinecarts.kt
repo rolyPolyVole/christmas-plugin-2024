@@ -203,7 +203,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.sendMessage("<red>${player.name} <grey>has been eliminated!".style()) }
 
         player.apply {
-            hideBossBar(currentBossBar!!)
+            currentBossBar?.let { hideBossBar(it) }
             if (allowFlight) allowFlight = false // if had double-jump
 
             if (reason == EliminationReason.ELIMINATED) {
