@@ -157,7 +157,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
         eventController().currentGame = null
         eventController().sidebarManager.dataSupplier = eventController().points
         eventController().serialisePoints()
-
+        WorldNPC.refreshPodium()
         showGameResults()
     }
 
