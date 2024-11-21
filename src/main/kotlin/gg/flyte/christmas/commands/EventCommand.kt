@@ -37,7 +37,8 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
                 .setEnchantmentGlint(true)
                 .closeWhenClicked(true)
                 .onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
-                    // TODO!
+                    // TODO
+                    whoClicked.sendMessage("<red>Coming soon!".style())
                 }
         )
         menu.setItem(
