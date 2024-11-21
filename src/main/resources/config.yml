@@ -10,11 +10,12 @@
 contributors:
   - "<69e8f7d5-11f9-4818-a3bb-7f237df32949><Event Host><544.5, 101, 455.5>" # stephen
   - "<01dabd56-eb00-4823-8e65-87d2e138db97><Production & Plugin\nDeveloper><542.5, 101, 456.5>" # shreyas
-  - "<a008c892-e7e1-48e1-8235-8aa389318b7a><Map Builder><546.5, 101, 456.5>" # josh
-  # dombongo <540.5, 101, 457.5>
+  - "<a008c892-e7e1-48e1-8235-8aa389318b7a><Map Builder\nCamera Feed><546.5, 101, 456.5>" # josh
+  - "<141a2dd1-b4e7-4b77-b071-210590b49a45><Map Builder><540.5, 101, 457.5>" # dombongo
   - "<efc6c6c6-15db-4dbc-a7ae-17a0e57cf69b><Cinematics\nConsultant><548.5, 101, 457.5>" # larky
-  - "<c4ad9786-2f63-4c47-8854-6985f13ccff2><Plugin Contributor><538.5, 101, 458.5>" # Kolja
-  - "<4f8cc0a1-80c6-4e37-8c99-9645ad60836d><Plugin Contributor><536.5, 101, 458.5>" # Penguin
+  - "<c4ad9786-2f63-4c47-8854-6985f13ccff2><Plugin Contributor><538.5, 101, 458.5>" # kolja
+  - "<4f8cc0a1-80c6-4e37-8c99-9645ad60836d><Plugin Contributor><550.5, 101, 458.5>" # penguin
+  - "<9cd72c16-b422-4a48-b3ad-1541ee942b86><Resource Pack Designer><536.5, 101, 459.5>" # spaceniklas
 
 # Donation Auth
 donations:
