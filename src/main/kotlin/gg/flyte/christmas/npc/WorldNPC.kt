@@ -97,7 +97,6 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
             2 to "<colour:#a39341>➌"
         )
 
-        // TODO add text display with total points (and name?)
         fun refreshPodium() {
             ChristmasEventPlugin.instance.serverWorld.entities.forEach {
                 if (it.persistentDataContainer.has(NamespacedKey("christmas", "placeholder"), PersistentDataType.BOOLEAN)) {
