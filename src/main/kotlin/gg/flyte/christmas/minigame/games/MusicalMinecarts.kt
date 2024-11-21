@@ -328,18 +328,16 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         val worldNPCs = mutableListOf<WorldNPC>()
         val animationTasks = mutableListOf<TwilightRunnable>()
         val poweredRails = mapOf(
-            // TODO<Map> reconfigure when complete
-            MapRegion(MapSinglePoint(547, 203, 599), MapSinglePoint(563, 203, 599)) to Pair(Shape.EAST_WEST, "left"),
-            MapRegion(MapSinglePoint(547, 203, 588), MapSinglePoint(563, 203, 588)) to Pair(Shape.EAST_WEST, "right"),
-            MapRegion(MapSinglePoint(564, 203, 589), MapSinglePoint(564, 203, 598)) to Pair(Shape.NORTH_SOUTH, "right"),
-            MapRegion(MapSinglePoint(546, 203, 589), MapSinglePoint(546, 203, 598)) to Pair(Shape.NORTH_SOUTH, "left")
+            MapRegion(MapSinglePoint(606, 111, 811), MapSinglePoint(626, 111, 811)) to Pair(Shape.EAST_WEST, "left"),
+            MapRegion(MapSinglePoint(606, 111, 789), MapSinglePoint(626, 111, 789)) to Pair(Shape.EAST_WEST, "right"),
+            MapRegion(MapSinglePoint(627, 111, 790), MapSinglePoint(627, 111, 810)) to Pair(Shape.NORTH_SOUTH, "right"),
+            MapRegion(MapSinglePoint(605, 111, 790), MapSinglePoint(605, 111, 810)) to Pair(Shape.NORTH_SOUTH, "left")
         )
         val connectorRails = mapOf(
-            // TODO<Map> reconfigure when complete
-            MapSinglePoint(546, 203, 599) to Shape.NORTH_EAST,
-            MapSinglePoint(564, 203, 599) to Shape.NORTH_WEST,
-            MapSinglePoint(564, 203, 588) to Shape.SOUTH_WEST,
-            MapSinglePoint(546, 203, 588) to Shape.SOUTH_EAST
+            MapSinglePoint(605, 111, 811) to Shape.NORTH_EAST,
+            MapSinglePoint(627, 111, 811) to Shape.NORTH_WEST,
+            MapSinglePoint(627, 111, 789) to Shape.SOUTH_WEST,
+            MapSinglePoint(605, 111, 789) to Shape.SOUTH_EAST
         )
         val droppedItems = mutableListOf<Item>()
 
