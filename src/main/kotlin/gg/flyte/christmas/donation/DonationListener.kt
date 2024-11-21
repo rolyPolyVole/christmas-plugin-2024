@@ -5,11 +5,7 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import gg.flyte.christmas.ChristmasEventPlugin
 import gg.flyte.christmas.donation.RefreshToken.Companion.accessToken
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.io.IOException
 import org.bukkit.Bukkit
 import java.io.BufferedReader
@@ -17,6 +13,7 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URI
 import java.net.URL
+import kotlin.Throws
 
 class DonationListener(private val campaignId: String) {
     private val url: URL = URI.create("https://v5api.tiltify.com/api/public/campaigns/$campaignId/donations").toURL()
