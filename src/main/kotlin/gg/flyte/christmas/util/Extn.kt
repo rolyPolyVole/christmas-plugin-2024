@@ -78,7 +78,7 @@ fun Player.formatInventory() {
         return ItemStack(Material.LEATHER).apply {
             itemMeta = itemMeta.apply {
                 displayName("<!i>${hatData.second}Christmas Hat".style())
-                setCustomModelData(4)
+                setCustomModelData(hatData.first)
             }
         }
     }
