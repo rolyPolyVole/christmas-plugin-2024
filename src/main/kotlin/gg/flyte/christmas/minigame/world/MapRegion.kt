@@ -46,7 +46,7 @@ class MapRegion {
             x = minOf(minPoint.x.toDouble(), maxPoint.x.toDouble()),
             y = minOf(minPoint.y.toDouble(), maxPoint.y.toDouble()),
             z = minOf(minPoint.z.toDouble(), maxPoint.z.toDouble()),
-            yaw = minPoint.yaw,  // You can decide how to handle yaw and pitch
+            yaw = minPoint.yaw,
             pitch = minPoint.pitch
         )
 

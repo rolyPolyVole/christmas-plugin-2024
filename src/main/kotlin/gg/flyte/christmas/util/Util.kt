@@ -11,8 +11,15 @@ import java.util.*
 import kotlin.math.sqrt
 
 object Util {
+    /**
+     * Wrapper class for contributors to the event.
+     */
     data class Contributor(val uniqueId: UUID, val contribution: String, val location: MapSinglePoint)
 
+    /**
+     * Gets the contributors to the event from the `config.yml` file.
+     * @return A list of contributors to the event.
+     */
     fun getEventContributors(): List<Contributor> {
         val config = ChristmasEventPlugin.instance.config
 
@@ -78,7 +85,9 @@ object Util {
     }
 
     /**
-     * Fills the arena circle (at centre point x: 616, z: 800, radius = 28) with snow blocks at a given level.
+     * Fills the arena circle (at centre point x: 616, z: 800, radius = 28) with a given material.
+     * @param atLevel The level at which to fill the arena.
+     * @param material The material to fill the arena with.
      */
     fun fillArena(atLevel: Int, material: Material): List<MapSinglePoint> {
         val locations = mutableListOf<MapSinglePoint>()

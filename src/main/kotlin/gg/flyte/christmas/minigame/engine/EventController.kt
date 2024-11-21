@@ -116,6 +116,11 @@ class EventController() {
         return Util.runAction(PlayerType.PARTICIPANT) {}.size >= currentGame!!.gameConfig.minPlayers
     }
 
+    /**
+     * Handles the player joining the server.
+     *
+     * @param player The player that joined the server.
+     */
     fun onPlayerJoin(player: Player) {
         if (currentGame == null) {
             player.teleport(ChristmasEventPlugin.instance.lobbySpawn)
@@ -131,6 +136,10 @@ class EventController() {
         }
     }
 
+    /**
+     * Handles the player quitting the server, and potential implications depending on the current game state.
+     * @param player The player that quit the server.
+     */
     fun onPlayerQuit(player: Player) {
         sidebarManager.remove(player)
 
@@ -184,23 +193,19 @@ class EventController() {
         Bukkit.getOnlinePlayers().forEach(songPlayer!!::addPlayer)
     }
 
-    // get the player at the position of the input (1st, 2nd, 3rd)
-    fun getUUIDByPlacement(index: Int): UUID? {
-        // if the index is out of bounds, return an empty string
-        if (index >= points.size) return null
-        return points.entries.sortedByDescending { it.value }[index].key
-    }
-
-    // get the place of the player
-    fun getPlacementByUUID(uuid: UUID): Int {
-        val sorted = points.entries.sortedByDescending { it.value }
-        return sorted.indexOfFirst { it.key == uuid } + 1
-    }
-
+    /**
+     * Adds points to the player with the provided UUID.
+     *
+     * @param uuid The UUID of the player to add points to.
+     * @param amount The amount of points to add.
+     */
     fun addPoints(uuid: UUID, amount: Int) {
         points[uuid] = points.getOrDefault(uuid, 0) + amount // will never default to zero. PlayerJoinEvent puts 0 points
     }
 
+    /**
+     * Serialises the points to the `config.yml` file. Called after each game ends.
+     */
     fun serialisePoints() {
         ChristmasEventPlugin.instance.config.set("points", null)
         points.forEach { (uuid, points) -> ChristmasEventPlugin.instance.config.set("points.$uuid", points) }
@@ -208,6 +213,14 @@ class EventController() {
         ChristmasEventPlugin.instance.saveConfig()
     }
 
+    /**
+     * Parses a [DonateEvent] and handles UI and game-related elements. Each implementation of
+     * [EventMiniGame] will have different actions depending on the tier of the donation.
+     *
+     * @param event The donation event to handle.
+     * @see DonationTier
+     * @see EventMiniGame.handleDonation
+     */
     fun handleDonation(event: DonateEvent) {
         if (event.value == null) return // no clue why this would happen, but just in case
 

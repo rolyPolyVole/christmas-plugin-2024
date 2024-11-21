@@ -13,6 +13,9 @@ import org.bukkit.entity.ItemDisplay
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
 
+/**
+ * @see gg.flyte.christmas.visual.CameraSequence
+ */
 class CameraSlide(slideTo: MapSinglePoint, onComplete: (() -> Unit)? = null) {
     constructor(gameConfig: GameConfig, onComplete: (() -> Unit)?) : this(gameConfig.centrePoint, onComplete)
 

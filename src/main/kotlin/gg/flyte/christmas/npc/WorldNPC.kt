@@ -39,6 +39,7 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
 
     /**
      * Spawns this NPC for the given player via packets
+     * @param player the player to spawn the NPC for
      */
     fun spawnFor(player: Player) {
         this.npc.location = location.packetObj()
@@ -67,9 +68,9 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
 
     /**
      * Despawns this NPC for the given player via packets
+     * @param player the player to despawn the NPC for
      */
     fun despawnFor(player: Player) = this.npc.despawn(PacketEvents.getAPI().playerManager.getUser(player).channel)
-
 
     /**
      * Despawns this NPC for all players via packets
@@ -97,6 +98,9 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
             2 to "<colour:#a39341>➌"
         )
 
+        /**
+         * Refreshes the podium with the current top 3 players in the event.
+         */
         fun refreshPodium() {
             ChristmasEventPlugin.instance.serverWorld.entities.forEach {
                 if (it.persistentDataContainer.has(NamespacedKey("christmas", "placeholder"), PersistentDataType.BOOLEAN)) {
@@ -143,6 +147,10 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
 
         /**
          * Creates a new [WorldNPC] modelled from an existing [Player] reference.
+         * @param displayName the display name of the NPC
+         * @param modelAfter the player to model the NPC after
+         * @param location the location to spawn the NPC at
+         * @return the newly created [WorldNPC] instance
          */
         fun createFromLive(displayName: String, modelAfter: Player, location: Location): WorldNPC {
             val textureProperties = PacketEvents.getAPI().playerManager.getUser(modelAfter).profile.textureProperties
@@ -151,6 +159,10 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
 
         /**
          * Creates a new [WorldNPC] modelled from a [UUID] reference.
+         * @param displayName the display name of the NPC
+         * @param modelAfter the player to model the NPC after
+         * @param location the location to spawn the NPC at
+         * @return the newly created [WorldNPC] instance
          */
         fun createFromUniqueId(displayName: String, modelAfter: UUID, location: Location): WorldNPC {
             // fetch texture properties from Mojang using player name

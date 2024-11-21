@@ -51,6 +51,10 @@ import org.bukkit.inventory.PlayerInventory
 import java.util.*
 import kotlin.math.ceil
 
+/**
+ * This class is responsible for handling all the housekeeping events that are not directly related to any instance
+ * of a game. This includes handling player joins, quits, chat messages, resource pack status, and more.
+ */
 class HousekeepingEventListener : Listener, PacketListener {
     init {
         PacketEvents.getAPI().eventManager.registerListener(this, PacketListenerPriority.NORMAL)

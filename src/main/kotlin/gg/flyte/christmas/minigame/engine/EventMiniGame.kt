@@ -175,6 +175,11 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
      */
     abstract fun handleGameEvents()
 
+    /**
+     * Runs a particular action depending on a donation tier
+     * @param tier The donation tier to handle
+     * @see [DonationTier]
+     */
     open fun handleDonation(tier: DonationTier) {}
 
     /**
@@ -240,6 +245,9 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
         return Util.runAction(PlayerType.PARTICIPANT) {}.filter { !(eliminatedPlayers.contains(it.uniqueId)) }
     }
 
+    /**
+     * Renders a cinematic sequence of the game results with the temporary podium NPCs.
+     */
     fun showGameResults() {
         // slide to post-game podium.
         CameraSlide(MapSinglePoint(519, 131, 559, 0, 0)) {

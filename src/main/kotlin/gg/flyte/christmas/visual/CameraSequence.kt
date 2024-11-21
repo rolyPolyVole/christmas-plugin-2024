@@ -17,6 +17,9 @@ import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.util.Vector
 import java.util.*
 
+/**
+ * I'd honestly recommend not touching this class unless you're very familiar with the Bukkit API.
+ */
 class CameraSequence(
     locations: List<MapSinglePoint>,
     private val players: Collection<Player>,

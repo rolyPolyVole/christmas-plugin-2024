@@ -7,6 +7,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
+import kotlin.Throws
 
 /**
  * Converts a file path to a NoteblockAPI [Song] object.
@@ -32,6 +33,9 @@ private fun parse(fileName: String): Song {
     return NBSDecoder.parse(file)
 }
 
+/**
+ * An enum class containing all the songs that can be played. Stored in /resources/music.
+ */
 enum class SongReference(val title: String, val song: Song) {
     ALL_I_WANT_FOR_CHRISTMAS_IS_YOU("All I Want For Christmas Is You", parse("ALL_I_WANT_FOR_CHRISTMAS_IS_YOU.nbs")),
     CAROL_OF_THE_BELLS("Carol Of The Bells", parse("CAROL_OF_THE_BELLS.nbs")),

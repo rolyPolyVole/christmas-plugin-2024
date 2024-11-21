@@ -15,6 +15,9 @@ import java.net.URI
 import java.net.URL
 import kotlin.Throws
 
+/**
+ * A listener that continuously fetches donation data from the Tiltify API and fires a [DonateEvent] for each unique donation.
+ */
 class DonationListener(private val campaignId: String) {
     private val url: URL = URI.create("https://v5api.tiltify.com/api/public/campaigns/$campaignId/donations").toURL()
     private val processedDonations = mutableSetOf<String>()
