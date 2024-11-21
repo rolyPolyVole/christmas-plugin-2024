@@ -63,7 +63,9 @@ class HousekeepingEventListener : Listener, PacketListener {
             // TODO finish sponsors
             val footer = text("       ")
                 .append("<gradient:#fffdb8:#ffffff>ᴄᴀʀʙᴏɴ.ʜᴏꜱᴛ</gradient>".style())
-                .append("<white> • ".style())
+                .append("<grey> • ".style())
+                .append("<gradient:#FF1285:#FA0000>ᴊᴇᴛʙʀ</gradient><gradient:#FA0000:#FF6921>ᴀɪɴs</gradient>".style())
+                .append("<grey> • ".style())
                 .append("<colour:#4885be>ʙᴜɪʟᴛʙʏʙɪᴛ.ᴄᴏᴍ".style())
 
             val motd = Component.empty()
@@ -140,9 +142,11 @@ class HousekeepingEventListener : Listener, PacketListener {
             // TODO finish sponsors
             val footer = "<light_purple>\nꜰʟʏᴛᴇ.ɢɢ/ᴅᴏɴᴀᴛᴇ\n\n".style()
                 .append(" <gradient:#ff80e8:#ffffff>ꜰʟʏᴛᴇ.ɢɢ</gradient>".style())
-                .append("<white> • ".style())
+                .append("<grey> • ".style())
                 .append("<gradient:#fffdb8:#ffffff>ᴄᴀʀʙᴏɴ.ʜᴏꜱᴛ</gradient>".style())
-                .append("<white> • ".style())
+                .append("<grey> • ".style())
+                .append("<gradient:#FF1285:#FA0000>ᴊᴇᴛʙʀ</gradient><gradient:#FA0000:#FF6921>ᴀɪɴs</gradient>".style())
+                .append("<grey> • ".style())
                 .append("<colour:#4885be>ʙᴜɪʟᴛʙʏʙɪᴛ.ᴄᴏᴍ ".style())
                 .append("\n".style())
             Bukkit.getOnlinePlayers().forEach { it.sendPlayerListHeaderAndFooter(header, footer) }
