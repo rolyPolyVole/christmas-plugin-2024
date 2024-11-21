@@ -182,7 +182,7 @@ class EventController() {
         return sorted.indexOfFirst { it.key == uuid } + 1
     }
 
-    fun addPoints(uuid: UUID, amount: Int) = {
+    fun addPoints(uuid: UUID, amount: Int) {
         points[uuid] = points.getOrDefault(uuid, 0) + amount // will never default to zero. PlayerJoinEvent puts 0 points
     }
 
