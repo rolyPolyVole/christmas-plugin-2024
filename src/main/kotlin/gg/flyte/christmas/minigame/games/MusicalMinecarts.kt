@@ -388,7 +388,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
                     Bukkit.getOnlinePlayers().forEach { loopedPlayer ->
                         val passengerPacket = WrapperPlayServerSetPassengers(minecart.entityId, intArrayOf(npc.npc.id))
-                        delay(1) { passengerPacket.sendPacket(player) }
+                        delay(2) { passengerPacket.sendPacket(player) }
 
                         animationTasks += repeatingTask((2..10).random(), (1..6).random()) {
                             WrapperPlayServerEntityAnimation(
@@ -403,7 +403,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                         } // NPC swing
 
                         var yaw = 0
-                        animationTasks += repeatingTask((2..10).random(), 4) {
+                        animationTasks += repeatingTask((5..25).random(), 4) {
                             WrapperPlayServerEntityHeadLook(npc.npc.id, yaw.toFloat()).sendPacket(loopedPlayer)
                             WrapperPlayServerEntityRotation(npc.npc.id, yaw.toFloat(), 0F, true).sendPacket(loopedPlayer)
                             yaw += 10
