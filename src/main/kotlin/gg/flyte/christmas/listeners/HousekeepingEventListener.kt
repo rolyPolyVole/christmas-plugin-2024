@@ -79,6 +79,7 @@ class HousekeepingEventListener : Listener, PacketListener {
             motd(motd)
             this.maxPlayers = 1
             this.numPlayers = 1
+            this.listedPlayers.clear()
             listOf(
                 "<st><grey>        <reset> ❆ <bold><light_purple>ꜰʟʏᴛᴇ.ɢɢ <red>ᴄʜʀɪsᴛᴍᴀs <green>ᴇᴠᴇɴᴛ <reset><white>❆ <reset><st><grey>         ".style(),
                 "  <bold><light_purple>ꜰʟʏᴛᴇ.ɢɢ <grey>• <yellow>ᴄᴀʀʙᴏɴ.ʜᴏꜱᴛ <grey>• <blue>ʙᴜɪʟᴛʙʏʙɪᴛ.ᴄᴏᴍ".style(),
