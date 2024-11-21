@@ -45,7 +45,7 @@ class EventController() {
     var songPlayer: RadioSongPlayer? = null
     val sidebarManager = SidebarManager().also { it.dataSupplier = points }
     val donors = mutableSetOf<UUID>()
-    var totalDonations: Int = 0
+    var totalDonations = 0
     var donationGoal = 2000
     var donationBossBar = BossBar.bossBar(
         "<b><gradient:#7EC1EF:#FA62A3>Donation Goal:</gradient></b> <white><b>$<#7EC1EF>${totalDonations}<grey>/<#FA62A3>${donationGoal}".style(),
@@ -222,14 +222,20 @@ class EventController() {
      * @see EventMiniGame.handleDonation
      */
     fun handleDonation(event: DonateEvent) {
-        if (event.value == null) return // no clue why this would happen, but just in case
-
         fun updateBossBar() {
             donationBossBar.name(
                 "<b><gradient:#7EC1EF:#FA62A3>Donation Goal:</gradient></b> <white><b>$<#7EC1EF>${totalDonations}<grey>/<#FA62A3>${donationGoal}".style()
             )
-            donationBossBar.progress((totalDonations / donationGoal).toFloat())
+            var progress = (totalDonations.toFloat() / donationGoal)
+            donationBossBar.progress(progress)
         }
+
+        if (event.value == null) return // no clue why this would happen, but just in case
+        var value = event.value.toDouble()
+        if (value < 0) return // no negative donations (don't think this is possible)
+
+        totalDonations += value.toInt()
+        updateBossBar()
 
         Bukkit.getOnlinePlayers().forEach {
             // spawn firework
@@ -254,11 +260,6 @@ class EventController() {
             it.sendMessage("<grey><gradient:#A3ADFF:#00FFF4>DONATION MADE ––> Thank you,</gradient><#FF72A6> $charitableDonor<gradient:#00FFF4:#00FFF4>, <gradient:#00FFF4:#A3ADFF>for donating $numberValue $currency.</gradient>".style())
         }
 
-        var toDouble = event.value.toDouble()
-
-        totalDonations += toDouble.toInt()
-        updateBossBar()
-
-        currentGame?.handleDonation(DonationTier.getTier(toDouble))
+        currentGame?.handleDonation(DonationTier.getTier(value))
     }
 }
