@@ -77,11 +77,11 @@ class DonationListener(private val campaignId: String) {
             val donation = donationElement.asJsonObject
             val donationId = donation.get("id").asString
             if (processedDonations.add(donationId)) {
-                val donorName = donation.get("donor_name")?.asString ?: "Anonymous"
-                val comment = donation.get("donor_comment")?.asString ?: ""
+                val donorName = donation.get("donor_name")?.asString
+                val comment = donation.get("donor_comment")?.asString
                 val amount = donation.getAsJsonObject("amount")
-                val time = donation.get("completed_at")?.asString ?: ""
-                val value = amount.get("value")?.asString ?: ""
+                val time = donation.get("completed_at")?.asString
+                val value = amount.get("value")?.asString
                 val currency = amount.get("currency")?.asString ?: "USD"
 
                 Bukkit.getPluginManager().callEvent(DonateEvent(donorName, comment, time, value, currency, donationId))

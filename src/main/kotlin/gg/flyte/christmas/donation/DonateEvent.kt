@@ -13,7 +13,7 @@ import org.bukkit.event.HandlerList
  * @property currency The currency in which the donation was made.
  * @property donationId The unique identifier of the donation.
  */
-class DonateEvent(val donorName: String, val comment: String, val time: String, val value: String, val currency: String, val donationId: String): Event() {
+class DonateEvent(val donorName: String?, val comment: String?, val time: String?, val value: String?, val currency: String, val donationId: String): Event() {
     private val handlerList = HandlerList()
 
     override fun getHandlers(): HandlerList {
