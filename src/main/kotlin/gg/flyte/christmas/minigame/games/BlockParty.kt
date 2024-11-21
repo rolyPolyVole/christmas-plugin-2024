@@ -520,6 +520,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
             player.isFlying = false
 
             player.velocity = player.location.direction.multiply(0.5).add(Vector(0.0, 1.0, 0.0))
+            player.playSound(Sound.ITEM_TOTEM_USE)
         } // double-jump
     }
 
