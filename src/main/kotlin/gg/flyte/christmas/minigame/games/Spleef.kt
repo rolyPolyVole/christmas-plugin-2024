@@ -133,7 +133,7 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
 
         val value = "$seconds second${if (seconds > 1) "s" else ""}"
         when (remainingPlayers().size) {
-            1 -> { // TODO CHANGE TO 1
+            1 -> {
                 formattedWinners.put(player.uniqueId, value)
                 endGame()
             }

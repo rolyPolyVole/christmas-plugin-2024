@@ -117,7 +117,7 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
 
         super.eliminate(player, reason)
         when (remainingPlayers().size) {
-            1 -> { // TODO CHANGE TO 1
+            1 -> {
                 formattedWinners.put(player.uniqueId, "1st Place!")
                 endGame()
             }

@@ -575,5 +575,4 @@ enum class GameConfig(
     )
     //endregion
 }
-// Potential Colour: f7b2b2
-// TODO<Final> fix all "minPlayers" to be the actual appropriate amount.
+// TODO<Map> once final map is ready, add the spectator boxes.

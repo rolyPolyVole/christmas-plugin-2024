@@ -237,7 +237,7 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
 
         val value = "$roundNumber Round${if (roundNumber > 1) "s" else ""}"
         when (remainingPlayers().size) {
-            0 -> { // TODO CHANGE TO 1
+            1 -> {
                 formattedWinners.put(player.uniqueId, value)
                 endGame()
             }
@@ -258,8 +258,7 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
         ) { it.hideBossBar(if (currentBossBar != null) currentBossBar!! else return@runAction) }
 
         val winnerNPCs = mutableListOf<WorldNPC>()
-//        val winnerPlayer = remainingPlayers().first()
-        val winnerPlayer = Bukkit.getOnlinePlayers().first() // TODO CAHGNE BACK
+        val winnerPlayer = remainingPlayers().first()
         eventController().addPoints(winnerPlayer.uniqueId, 15)
 
         tasks += repeatingTask(10) {

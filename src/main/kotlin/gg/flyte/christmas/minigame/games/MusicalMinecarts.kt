@@ -250,9 +250,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         hasEnded = true
         tasks.forEach { it?.cancel() } // this will cancel all game tasks.
 
-//        val winner = remainingPlayers().first()
-        val winner = Bukkit.getOnlinePlayers().random() // TODO for testing purposes
-        eventController().points.put(winner.uniqueId, eventController().points[winner.uniqueId]!! + 15)
+        val winner = remainingPlayers().first()
         eventController().addPoints(winner.uniqueId, 15)
 
         Util.runAction(
