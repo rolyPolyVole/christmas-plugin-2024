@@ -15,7 +15,6 @@ import org.bukkit.Sound
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import revxrsal.commands.annotation.Command
-import revxrsal.commands.annotation.Subcommand
 import revxrsal.commands.bukkit.annotation.CommandPermission
 import java.util.*
 
@@ -23,7 +22,6 @@ import java.util.*
  * Miscellaneous commands to manage the event.
  */
 @Suppress("unused") // power of lamp!
-@Command("event")
 class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".colourise(), 54)) {
     private val availableGames = GameConfig.entries
     private var selectedIndex = -1
@@ -71,6 +69,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
      *
      * @param sender The player who executed the command.
      */
+    @Command("event")
     @CommandPermission("event.panel")
     fun openEventPanel(sender: Player) {
         menu.setItem(42, setEndGameButton())
@@ -85,7 +84,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
      *
      * @param sender The player who executed the command.
      */
-    @Subcommand("optout")
+    @Command("event optout")
     @CommandPermission("event.optout")
     fun optOut(sender: Player) {
         var remove = eventController().optOut.remove(sender.uniqueId)
@@ -104,7 +103,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
      *
      * @param sender The player who executed the command.
      */
-    @Subcommand("DANGER-load-crash")
+    @Command("event DANGER-load-crash")
     @CommandPermission("event.loadcrash")
     fun loadCrash(sender: CommandSender) {
         eventController().points.clear()
