@@ -80,7 +80,6 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
     }
 
     companion object {
-        private val worldNPCs: MutableSet<WorldNPC> = HashSet()
         private val leaderBoardNPCs = HashMap<Int, WorldNPC>()
         private val leaderboardPositionToLocation = mapOf(
             0 to MapSinglePoint(535.5, 108.3, 503.5, -90, 0), // 2.5
@@ -114,12 +113,10 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
                 .forEachIndexed { index, (uniqueId, points) ->
                     // remove existing leader, if any, and spawn new leader
                     leaderBoardNPCs[index].apply {
-                        worldNPCs.remove(this)
                         ChristmasEventPlugin.instance.worldNPCs.remove(this)
                         leaderBoardNPCs[index]?.despawnForAll()
                     }
 
-                    worldNPCs.remove(leaderBoardNPCs[index])
                     ChristmasEventPlugin.instance.worldNPCs.remove(leaderBoardNPCs[index])
 
                     leaderBoardNPCs[index] = createFromUniqueId("", uniqueId, leaderboardPositionToLocation[index]!!).apply {
@@ -130,7 +127,6 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
                             else -> 1.0
                         }
 
-                        worldNPCs += this
                         ChristmasEventPlugin.instance.worldNPCs += this
                     }
                     leaderBoardNPCs[index]?.spawnForAll()
@@ -154,7 +150,7 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
          */
         fun createFromLive(displayName: String, modelAfter: Player, location: Location): WorldNPC {
             val textureProperties = PacketEvents.getAPI().playerManager.getUser(modelAfter).profile.textureProperties
-            return WorldNPC(displayName, textureProperties, location).also { worldNPCs += it }
+            return WorldNPC(displayName, textureProperties, location)
         }
 
         /**
@@ -167,7 +163,7 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
         fun createFromUniqueId(displayName: String, modelAfter: UUID, location: Location): WorldNPC {
             // fetch texture properties from Mojang using player name
             val textureProperty = MojangAPIUtil.requestPlayerTextureProperties(modelAfter)
-            return WorldNPC(displayName, textureProperty, location).also { worldNPCs += it }
+            return WorldNPC(displayName, textureProperty, location)
         }
     }
 }
