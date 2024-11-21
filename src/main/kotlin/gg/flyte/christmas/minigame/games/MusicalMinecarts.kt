@@ -236,7 +236,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
         var value = "$roundNumber round${if (roundNumber > 1) "s" else ""}"
         when (remainingPlayers().size) {
-            0 -> {
+            1 -> {
                 formattedWinners.put(player.uniqueId, value)
                 endGame()
             }
