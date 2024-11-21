@@ -156,7 +156,6 @@ class ChristmasEventPlugin : JavaPlugin() {
                 it.setItemStack(podiumModel)
                 it.transformation = it.transformation.apply { this.scale.mul(4F) }
             }
-
         }
 
         // player list displays entries by alphabetical order of the team they have entries with
