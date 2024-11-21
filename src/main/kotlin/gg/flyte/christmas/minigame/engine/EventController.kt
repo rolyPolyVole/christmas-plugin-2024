@@ -4,6 +4,8 @@ import com.xxmicloxx.NoteBlockAPI.model.Playlist
 import com.xxmicloxx.NoteBlockAPI.model.SoundCategory
 import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer
 import gg.flyte.christmas.ChristmasEventPlugin
+import gg.flyte.christmas.donation.DonateEvent
+import gg.flyte.christmas.donation.DonationTier
 import gg.flyte.christmas.util.*
 import gg.flyte.christmas.visual.SidebarManager
 import gg.flyte.twilight.extension.playSound
@@ -11,9 +13,13 @@ import gg.flyte.twilight.scheduler.TwilightRunnable
 import gg.flyte.twilight.scheduler.delay
 import gg.flyte.twilight.scheduler.repeatingTask
 import gg.flyte.twilight.time.TimeUnit
+import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
+import org.bukkit.Color
+import org.bukkit.FireworkEffect
 import org.bukkit.Sound
+import org.bukkit.entity.Firework
 import org.bukkit.entity.Player
 import java.time.Duration
 import java.util.*
@@ -35,9 +41,18 @@ class EventController() {
         1 to "<dark_red>➊".style()
     )
     val optOut = mutableSetOf<UUID>()
-    var songPlayer: RadioSongPlayer? = null
     val points = mutableMapOf<UUID, Int>()
+    var songPlayer: RadioSongPlayer? = null
     val sidebarManager = SidebarManager().also { it.dataSupplier = points }
+    val donors = mutableSetOf<UUID>()
+    var totalDonations: Int = 0
+    var donationGoal = 2000
+    var donationBossBar = BossBar.bossBar(
+        "<b><gradient:#7EC1EF:#FA62A3>Donation Goal:</gradient></b> <white><b>$<#7EC1EF>${totalDonations}<grey>/<#FA62A3>${donationGoal}".style(),
+        0F,
+        BossBar.Color.GREEN,
+        BossBar.Overlay.PROGRESS
+    )
 
     /**
      * Sets the current game to the provided game configuration.
@@ -191,5 +206,46 @@ class EventController() {
         points.forEach { (uuid, points) -> ChristmasEventPlugin.instance.config.set("points.$uuid", points) }
 
         ChristmasEventPlugin.instance.saveConfig()
+    }
+
+    fun handleDonation(event: DonateEvent) {
+        if (event.value == null) return // no clue why this would happen, but just in case
+
+        fun updateBossBar() {
+            donationBossBar.name(
+                "<b><gradient:#7EC1EF:#FA62A3>Donation Goal:</gradient></b> <white><b>$<#7EC1EF>${totalDonations}<grey>/<#FA62A3>${donationGoal}".style()
+            )
+            donationBossBar.progress((totalDonations / donationGoal).toFloat())
+        }
+
+        Bukkit.getOnlinePlayers().forEach {
+            // spawn firework
+            ChristmasEventPlugin.instance.serverWorld.spawn(it.location, Firework::class.java) {
+                it.fireworkMeta = it.fireworkMeta.apply {
+                    addEffect(
+                        FireworkEffect.builder()
+                            .with(FireworkEffect.Type.BALL_LARGE)
+                            .withColor(Color.RED, Color.LIME, Color.GREEN)
+                            .withFlicker()
+                            .withTrail()
+                            .build()
+                    )
+                    power = 1
+                }
+            }
+
+            // announce donation
+            val charitableDonor = event.donorName ?: "mysterious donor"
+            val numberValue = event.value
+            val currency = event.currency
+            it.sendMessage("<grey><gradient:#A3ADFF:#00FFF4>DONATION MADE ––> Thank you,</gradient><#FF72A6> $charitableDonor<gradient:#00FFF4:#00FFF4>, <gradient:#00FFF4:#A3ADFF>for donating $numberValue $currency.</gradient>".style())
+        }
+
+        var toDouble = event.value.toDouble()
+
+        totalDonations += toDouble.toInt()
+        updateBossBar()
+
+        currentGame?.handleDonation(DonationTier.getTier(toDouble))
     }
 }

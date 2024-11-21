@@ -13,7 +13,9 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import net.kyori.adventure.title.Title
 import net.kyori.adventure.title.Title.Times
 import org.bukkit.ChatColor
+import org.bukkit.Material
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import java.time.Duration
 
 fun eventController() = ChristmasEventPlugin.instance.eventController
@@ -64,8 +66,25 @@ fun Player.title(title: Component, subtitle: Component, times: Times? = null) = 
 fun titleTimes(fadeIn: Duration, stay: Duration, fadeOut: Duration): Times = Times.times(fadeIn, stay, fadeOut)
 
 fun Player.formatInventory() {
+    /**
+     * Applies a Christmas hat to an ItemStack with a random custom model data.
+     * @return The corresponding modelled ItemStack.
+     */
+    fun applyChristmasHat(): ItemStack {
+        val hatData = if (eventController().donors.contains(this.uniqueId)) {
+            Pair(4, "<yellow>")
+        } else listOf(Pair(1, "<red>"), Pair(2, "<blue>"), Pair(3, "<green>")).random()
+
+        return ItemStack(Material.LEATHER).apply {
+            itemMeta = itemMeta.apply {
+                displayName("<!i>${hatData.second}Christmas Hat".style())
+                setCustomModelData(4)
+            }
+        }
+    }
+
     this.inventory.clear()
-    this.equipment.helmet = Util.applyChristmasHat()
+    this.equipment.helmet = applyChristmasHat()
 }
 
 fun com.github.retrooper.packetevents.protocol.world.Location.bukkit(): org.bukkit.Location {

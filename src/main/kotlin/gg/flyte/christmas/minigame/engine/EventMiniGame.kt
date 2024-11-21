@@ -8,6 +8,7 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEn
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityMetadata
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityRotation
 import gg.flyte.christmas.ChristmasEventPlugin
+import gg.flyte.christmas.donation.DonationTier
 import gg.flyte.christmas.minigame.world.MapSinglePoint
 import gg.flyte.christmas.npc.WorldNPC
 import gg.flyte.christmas.util.*
@@ -173,6 +174,8 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
      *  ```
      */
     abstract fun handleGameEvents()
+
+    open fun handleDonation(tier: DonationTier) {}
 
     /**
      * Handles the provided player reference (directly from [org.bukkit.event.player.PlayerJoinEvent]) when they join **this** game.

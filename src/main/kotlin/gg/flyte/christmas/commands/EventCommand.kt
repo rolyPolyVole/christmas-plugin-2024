@@ -3,6 +3,7 @@ package gg.flyte.christmas.commands
 import dev.shreyasayyengar.menuapi.menu.MenuItem
 import dev.shreyasayyengar.menuapi.menu.StandardMenu
 import gg.flyte.christmas.ChristmasEventPlugin
+import gg.flyte.christmas.donation.DonateEvent
 import gg.flyte.christmas.minigame.engine.GameConfig
 import gg.flyte.christmas.util.colourise
 import gg.flyte.christmas.util.eventController
@@ -112,6 +113,13 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
             eventController().sidebarManager.update()
         }
         sender.sendMessage("<green>Loaded crash data! Your scoreboard should now show the most recent serialised data!".style())
+    }
+
+    @Command("event mock-donation-now <amount>")
+    @CommandPermission("event.mockdonation")
+    fun mockDonation(sender: Player, amount: Double) {
+        var donationEvent = DonateEvent(null, null, null, amount.toString(), "USD", "mockDonationId")
+        Bukkit.getPluginManager().callEvent(donationEvent)
     }
 
     private fun setGameSwitcher(): MenuItem {

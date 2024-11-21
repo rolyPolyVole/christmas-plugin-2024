@@ -19,6 +19,7 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEn
 import dev.shreyasayyengar.menuapi.menu.MenuItem
 import dev.shreyasayyengar.menuapi.menu.StandardMenu
 import gg.flyte.christmas.ChristmasEventPlugin
+import gg.flyte.christmas.donation.DonateEvent
 import gg.flyte.christmas.npc.WorldNPC
 import gg.flyte.christmas.util.*
 import gg.flyte.christmas.visual.CameraSequence
@@ -121,6 +122,8 @@ class HousekeepingEventListener : Listener, PacketListener {
                 ChristmasEventPlugin.instance.worldNPCs.forEach { it.spawnFor(this) }
 
                 applyTag(this)
+
+                showBossBar(eventController().donationBossBar)
             }
 
             val header = text()
@@ -245,6 +248,8 @@ class HousekeepingEventListener : Listener, PacketListener {
         event<CraftItemEvent> { isCancelled = true }
 
         event<PrepareItemCraftEvent> { inventory.result = null }
+
+        event<DonateEvent> { eventController().handleDonation(this) }
     }
 
     override fun onPacketReceive(event: PacketReceiveEvent) {
