@@ -203,7 +203,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
      * The player will internally be marked eliminated if the current game's configuration specifies that players should be eliminated
      * @see [GameConfig.eliminateOnLeave]
      */
-    fun onPlayerQuit(player: Player) = {
+    fun onPlayerQuit(player: Player) {
         if (state == GameState.LIVE) {
             if (gameConfig.eliminateOnLeave) eliminate(player, EliminationReason.EXPIRED_SESSION)
         }
