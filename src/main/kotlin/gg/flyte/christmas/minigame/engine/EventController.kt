@@ -161,9 +161,7 @@ class EventController() {
                 }
             }
 
-            GameState.LIVE -> {
-                currentGame!!.onPlayerQuit(player)
-            }
+            GameState.LIVE -> currentGame!!.onPlayerQuit(player)
 
             else -> return
         }
