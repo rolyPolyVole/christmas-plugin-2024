@@ -458,10 +458,10 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                     if (it == player) {
                         it.sendMessage("<green><b>You've found a ${randomPowerUp.displayName} power-up!".style())
                     } else {
-                        it.sendMessage("<green><b>« ${player.displayName()} has found a {${randomPowerUp.displayName} power-up! »")
+                        it.sendMessage("<green><b>« ${player.name} has found a {${randomPowerUp.displayName} power-up! »")
                     }
                 }
-                Util.runAction(PlayerType.OPTED_OUT) { it.sendMessage("<green><b>« ${player.displayName()} has found a {${randomPowerUp.displayName} power-up! »") }
+                Util.runAction(PlayerType.OPTED_OUT) { it.sendMessage("<green><b>« ${player.name} has found a {${randomPowerUp.displayName} power-up! »") }
 
                 when (randomPowerUp) {
                     PowerUp.ENDER_PEARL -> player.inventory.setItem(0, ItemStack(Material.ENDER_PEARL, 1))

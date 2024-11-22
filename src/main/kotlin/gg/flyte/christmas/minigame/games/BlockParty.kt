@@ -340,7 +340,6 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
             val notification = "<game_colour><b>« A mysterious power-up has spawned on the floor! »".style()
             Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.sendMessage(notification) }
             Util.runAction(PlayerType.PARTICIPANT) {
-                it.sendMessage(notification)
                 it.sendMessage("<grey>Find the beacon on the map to unlock it!".style())
                 it.playSound(Sound.BLOCK_NOTE_BLOCK_PLING)
             }
@@ -436,10 +435,10 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                     if (it == player) {
                         it.sendMessage("<green><b>You've found a ${randomPowerUp.displayName} power-up!".style())
                     } else {
-                        it.sendMessage("<green><b>« ${player.displayName()} has found a {${randomPowerUp.displayName} power-up! »".style())
+                        it.sendMessage("<green><b>« ${player.name} has found a {${randomPowerUp.displayName} power-up! »".style())
                     }
                 }
-                Util.runAction(PlayerType.OPTED_OUT) { it.sendMessage("<green><b>« ${player.displayName()} has found a {${randomPowerUp.displayName} power-up! »".style()) }
+                Util.runAction(PlayerType.OPTED_OUT) { it.sendMessage("<green><b>« ${player.name} has found a {${randomPowerUp.displayName} power-up! »".style()) }
 
                 when (randomPowerUp) {
                     PowerUp.ENDER_PEARL -> player.inventory.setItem(0, ItemStack(Material.ENDER_PEARL, 1))
