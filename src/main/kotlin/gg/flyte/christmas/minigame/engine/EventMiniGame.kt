@@ -64,7 +64,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
      * functionality as the CameraSequence is running.
      */
     open fun startGameOverview() {
-        Bukkit.getOnlinePlayers().forEach {it.hideBossBar(eventController().donationBossBar)}
+        Bukkit.getOnlinePlayers().forEach { it.hideBossBar(eventController().donationBossBar) }
         CameraSlide(gameConfig) {
             // send BEFORE textDisplay has rendered in.
             Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) {
