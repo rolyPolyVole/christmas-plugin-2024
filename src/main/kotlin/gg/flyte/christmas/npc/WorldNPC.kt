@@ -18,6 +18,7 @@ import gg.flyte.christmas.util.sendPacket
 import gg.flyte.christmas.util.style
 import io.github.retrooper.packetevents.util.SpigotReflectionUtil
 import org.bukkit.Bukkit
+import org.bukkit.Color
 import org.bukkit.Location
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Display
@@ -134,7 +135,7 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
                     ChristmasEventPlugin.instance.serverWorld.spawn(leaderboardPositionToNamePlateLocation[index]!!, TextDisplay::class.java) {
                         it.text("${placeDefaultComponent[index]!!} ${Bukkit.getOfflinePlayer(uniqueId).name}\nᴘᴏɪɴᴛs: $points".style())
                         it.transformation = it.transformation.apply { this.scale.mul(1.5F) }
-                        it.isSeeThrough = false
+                        it.backgroundColor = Color.fromARGB(0, 0, 0, 0)
                         it.billboard = Display.Billboard.FIXED
                         it.persistentDataContainer.set(NamespacedKey("christmas", "placeholder"), PersistentDataType.BOOLEAN, true)
                     }
