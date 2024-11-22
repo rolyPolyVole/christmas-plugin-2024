@@ -110,13 +110,21 @@ class HousekeepingEventListener : Listener, PacketListener {
                 player.scoreboard = ChristmasEventPlugin.instance.scoreBoardTab
                 ChristmasEventPlugin.instance.scoreBoardTab.getTeam(if (player.isOp) "a. staff" else "b. player")?.addEntry(player.name)
             }
-
             joinMessage(null)
+
+            if (!ChristmasEventPlugin.instance.canJoin) {
+                player.kick("<red>You cannot join at the moment! Please wait...".style())
+                return@event
+            }
 
             player.apply {
                 async {
-                    RemoteFile("https://github.com/shreyasayyengar/flyte-christmas-resource-pack/releases/latest/download/RP.zip").apply {
-                        setResourcePack(this.url, this.hash, true)
+                    try {
+                        RemoteFile("https://github.com/shreyasayyengar/flyte-christmas-resource-pack/releases/latest/download/RP.zip").apply {
+                            setResourcePack(this.url, this.hash, true)
+                        }
+                    } catch (_: Exception) {
+                        kick("<red>Resource pack FAILED to download. Please try joining again.".style())
                     }
                 }
 
