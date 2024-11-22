@@ -8,6 +8,7 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEn
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityMetadata
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityRelativeMove
 import dev.shreyasayyengar.menuapi.menu.MenuItem
+import gg.flyte.christmas.donation.DonationTier
 import gg.flyte.christmas.minigame.engine.EventMiniGame
 import gg.flyte.christmas.minigame.engine.GameConfig
 import gg.flyte.christmas.minigame.engine.PlayerType
@@ -111,7 +112,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
     private fun newRound() {
         roundNumber++
-        if (secondsForRound > 2) secondsForRound--
+        if (secondsForRound > 1) secondsForRound--
 
         // hard round needs more time to find safe squares first.
         if (roundNumber == 12 && !harder) {
@@ -522,6 +523,14 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
             player.velocity = player.location.direction.multiply(0.5).add(Vector(0.0, 1.0, 0.0))
             player.playSound(Sound.ITEM_TOTEM_USE)
         } // double-jump
+    }
+
+    override fun handleDonation(tier: DonationTier) {
+//        when (tier) {
+//            DonationTier.LOW -> TODO()
+//            DonationTier.MEDIUM -> TODO()
+//            DonationTier.HIGH -> TODO()
+//        }
     }
 
     private enum class PowerUp(
