@@ -28,6 +28,7 @@ import gg.flyte.twilight.extension.RemoteFile
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.scheduler.async
 import gg.flyte.twilight.scheduler.delay
+import gg.flyte.twilight.scheduler.sync
 import io.papermc.paper.chat.ChatRenderer
 import io.papermc.paper.event.player.AsyncChatEvent
 import net.kyori.adventure.text.Component
@@ -126,7 +127,7 @@ class HousekeepingEventListener : Listener, PacketListener {
                             setResourcePack(this.url, this.hash, true)
                         }
                     } catch (_: Exception) {
-                        kick("<red>Resource pack FAILED to download. Please try joining again.".style())
+                        sync { kick("<red>Resource pack FAILED to download. Please try joining again.".style()) }
                     }
                 }
 
