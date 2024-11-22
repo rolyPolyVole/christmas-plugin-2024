@@ -135,8 +135,10 @@ class HousekeepingEventListener : Listener, PacketListener {
                 playSound(Sound.ENTITY_PLAYER_LEVELUP)
                 formatInventory()
 
+                eventController().points.putIfAbsent(uniqueId, 0)
                 eventController().onPlayerJoin(this)
                 eventController().songPlayer?.addPlayer(this)
+
                 ChristmasEventPlugin.instance.worldNPCs.forEach { it.spawnFor(this) }
 
                 applyTag(this)
@@ -163,7 +165,6 @@ class HousekeepingEventListener : Listener, PacketListener {
                 .append("\n".style())
             Bukkit.getOnlinePlayers().forEach { it.sendPlayerListHeaderAndFooter(header, footer) }
 
-            eventController().points.putIfAbsent(player.uniqueId, 0)
             eventController().sidebarManager.update()
 
             WorldNPC.refreshPodium()
