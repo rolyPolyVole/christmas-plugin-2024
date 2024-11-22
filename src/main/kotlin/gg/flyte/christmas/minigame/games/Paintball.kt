@@ -22,7 +22,7 @@ import java.time.Duration
 import java.util.*
 
 class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
-    private var gameTime = 10
+    private var gameTime = 90
     private val scores = mutableMapOf<UUID, Int>()
     private var started = false
     private val paintMaterials = mutableListOf(
