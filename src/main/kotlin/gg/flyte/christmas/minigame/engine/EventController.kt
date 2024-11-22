@@ -260,6 +260,12 @@ class EventController() {
             it.sendMessage("<grey><gradient:#A3ADFF:#00FFF4>DONATION MADE ––> Thank you,</gradient><#FF72A6> $charitableDonor<gradient:#00FFF4:#00FFF4>, <gradient:#00FFF4:#A3ADFF>for donating $numberValue $currency.</gradient>".style())
         }
 
+        async {
+            event.donorName?.let {
+                Bukkit.getOfflinePlayer(it).let { donors.add(it.uniqueId) }
+            }
+        }
+
         currentGame?.handleDonation(DonationTier.getTier(value))
     }
 }
