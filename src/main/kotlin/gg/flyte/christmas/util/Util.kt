@@ -77,7 +77,7 @@ object Util {
         return when (position) {
             0 -> return MapSinglePoint(525.5, 215, 548.5)
             1 -> return MapSinglePoint(517.5, 211, 543.5)
-            2 -> return MapSinglePoint(533.5, 211, 494.5)
+            2 -> return MapSinglePoint(533.5, 211, 557.5)
             else -> {
                 throw IllegalStateException("Leaderboard only supports positions between 0 and 2")
             }
