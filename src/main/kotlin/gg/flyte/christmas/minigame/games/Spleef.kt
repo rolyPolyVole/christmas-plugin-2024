@@ -37,12 +37,8 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
     private var overviewTasks = mutableListOf<TwilightRunnable>()
     private var floorLevelBlocks: List<MapSinglePoint> = listOf(
         Util.fillArena(110, Material.SNOW_BLOCK),
-        Util.fillArena(104, Material.SNOW_BLOCK),
         Util.fillArena(98, Material.SNOW_BLOCK),
-        Util.fillArena(92, Material.SNOW_BLOCK),
         Util.fillArena(86, Material.SNOW_BLOCK),
-        Util.fillArena(80, Material.SNOW_BLOCK),
-        Util.fillArena(74, Material.SNOW_BLOCK)
     ).flatMap { it }
     private var seconds = 0
     private var doubleJumps = mutableMapOf<Player, Int>()
