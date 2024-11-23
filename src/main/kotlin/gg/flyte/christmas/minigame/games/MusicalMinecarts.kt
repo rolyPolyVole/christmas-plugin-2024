@@ -407,7 +407,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                         val passengerPacket = WrapperPlayServerSetPassengers(minecart.entityId, intArrayOf(npc.npc.id))
                         delay(2) { passengerPacket.sendPacket(player) }
 
-                        animationTasks += repeatingTask((2..10).random(), (1..6).random()) {
+                        animationTasks += repeatingTask((2..10).random(), 25) {
                             WrapperPlayServerEntityAnimation(
                                 npc.npc.id,
                                 WrapperPlayServerEntityAnimation.EntityAnimationType.SWING_MAIN_ARM
