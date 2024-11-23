@@ -320,8 +320,6 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
 
                     npcs.add(npc)
                 }
-
-                index++
             } // Spawn NPCs
             formattedWinners.clear()
 
