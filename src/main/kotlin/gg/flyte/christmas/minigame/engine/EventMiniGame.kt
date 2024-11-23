@@ -164,6 +164,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
         eventController().currentGame = null
         eventController().sidebarManager.dataSupplier = eventController().points
         eventController().serialisePoints()
+        eventController().songPlayer?.isPlaying = true
         WorldNPC.refreshPodium()
         showGameResults()
     }
