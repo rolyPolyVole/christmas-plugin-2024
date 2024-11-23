@@ -20,7 +20,6 @@ import dev.shreyasayyengar.menuapi.menu.MenuItem
 import dev.shreyasayyengar.menuapi.menu.StandardMenu
 import gg.flyte.christmas.ChristmasEventPlugin
 import gg.flyte.christmas.donation.DonateEvent
-import gg.flyte.christmas.npc.WorldNPC
 import gg.flyte.christmas.util.*
 import gg.flyte.christmas.visual.CameraSequence
 import gg.flyte.twilight.event.event
@@ -267,6 +266,10 @@ class HousekeepingEventListener : Listener, PacketListener {
         event<PrepareItemCraftEvent> { inventory.result = null }
 
         event<DonateEvent> { eventController().handleDonation(this) }
+
+        event<PlayerTeleportEvent> {
+            if (this.cause == PlayerTeleportEvent.TeleportCause.SPECTATE) isCancelled = true
+        }
     }
 
     override fun onPacketReceive(event: PacketReceiveEvent) {

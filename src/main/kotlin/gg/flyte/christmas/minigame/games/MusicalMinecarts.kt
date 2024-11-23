@@ -242,6 +242,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
             1 -> {
                 formattedWinners.put(player.uniqueId, value)
                 formattedWinners.put(remainingPlayers().first().uniqueId, "$value (1st Place!)")
+                remainingPlayers().first().teleport(gameConfig.spawnPoints.random().randomLocation())
                 endGame()
             }
 
