@@ -22,5 +22,6 @@ donations:
   clientId: ""
   clientSecret: ""
   campaignId: ""
+  totalDonations: 0
 
 points:

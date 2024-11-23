@@ -226,20 +226,13 @@ class EventController() {
      * @see EventMiniGame.handleDonation
      */
     fun handleDonation(event: DonateEvent) {
-        fun updateBossBar() {
-            donationBossBar.name(
-                "<b><gradient:#7EC1EF:#FA62A3>Donation Goal:</gradient></b> <white><b>$<#7EC1EF>${totalDonations}<grey>/<#FA62A3>${donationGoal}".style()
-            )
-            var progress = (totalDonations.toFloat() / donationGoal)
-            donationBossBar.progress(progress)
-        }
 
         if (event.value == null) return // no clue why this would happen, but just in case
         var value = event.value.toDouble()
         if (value < 0) return // no negative donations (don't think this is possible)
 
         totalDonations += value.toInt()
-        updateBossBar()
+        updateDonationBar()
 
         Bukkit.getOnlinePlayers().forEach {
             // spawn firework
@@ -268,8 +261,22 @@ class EventController() {
             event.donorName?.let {
                 Bukkit.getOfflinePlayer(it).let { donors.add(it.uniqueId) }
             }
+
+            ChristmasEventPlugin.instance.config.set("donations.totalDonations", totalDonations)
+            ChristmasEventPlugin.instance.saveConfig()
         }
 
         currentGame?.handleDonation(DonationTier.getTier(value))
     }
+
+    /**
+     * Updates the donation bar with the current total donations and donation goal.
+     */
+    fun updateDonationBar() {
+            donationBossBar.name(
+                "<b><gradient:#7EC1EF:#FA62A3>Donation Goal:</gradient></b> <white><b>$<#7EC1EF>${totalDonations}<grey>/<#FA62A3>${donationGoal}".style()
+            )
+            var progress = (totalDonations.toFloat() / donationGoal)
+            donationBossBar.progress(progress)
+        }
 }

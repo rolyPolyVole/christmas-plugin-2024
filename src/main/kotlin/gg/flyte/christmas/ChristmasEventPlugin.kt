@@ -79,7 +79,7 @@ class ChristmasEventPlugin : JavaPlugin() {
     }
 
     private fun createConfig() {
-        config.options().configuration()
+        config.options().copyDefaults(true)
         saveDefaultConfig()
     }
 
@@ -181,6 +181,9 @@ class ChristmasEventPlugin : JavaPlugin() {
                 setOption(Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS)
             }
         }
+
+        eventController.totalDonations = config.getInt("donations.totalDonations")
+        eventController.updateDonationBar()
 
         lobbySpawn = MapSinglePoint(559.5, 103, 518.5, 135, 0)
 
