@@ -142,8 +142,6 @@ class HousekeepingEventListener : Listener, PacketListener {
                 ChristmasEventPlugin.instance.worldNPCs.forEach { it.spawnFor(this) }
 
                 applyTag(this)
-
-                showBossBar(eventController().donationBossBar)
             }
 
             val header = text()
