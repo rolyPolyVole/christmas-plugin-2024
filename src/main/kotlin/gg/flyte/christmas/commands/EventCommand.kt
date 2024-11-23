@@ -5,11 +5,14 @@ import dev.shreyasayyengar.menuapi.menu.StandardMenu
 import gg.flyte.christmas.ChristmasEventPlugin
 import gg.flyte.christmas.donation.DonateEvent
 import gg.flyte.christmas.minigame.engine.GameConfig
+import gg.flyte.christmas.npc.WorldNPC
 import gg.flyte.christmas.util.colourise
 import gg.flyte.christmas.util.eventController
 import gg.flyte.christmas.util.style
 import gg.flyte.christmas.util.toLegacyString
 import gg.flyte.twilight.extension.playSound
+import gg.flyte.twilight.scheduler.async
+import gg.flyte.twilight.scheduler.sync
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -108,13 +111,17 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
     @Command("event DANGER-load-crash")
     @CommandPermission("event.loadcrash")
     fun loadCrash(sender: CommandSender) {
-        eventController().points.clear()
-        ChristmasEventPlugin.instance.config.getConfigurationSection("points")?.getKeys(false)?.forEach {
-            eventController().points[UUID.fromString(it)] = ChristmasEventPlugin.instance.config.getInt("points.$it")
-            eventController().sidebarManager.update()
-            WorldNPC.refreshPodium()
+        async {
+            eventController().points.clear()
+            ChristmasEventPlugin.instance.config.getConfigurationSection("points")?.getKeys(false)?.forEach {
+                eventController().points[UUID.fromString(it)] = ChristmasEventPlugin.instance.config.getInt("points.$it")
+                sync {
+                    eventController().sidebarManager.update()
+                    WorldNPC.refreshPodium()
+                    sender.sendMessage("<green>Loaded crash data! Your scoreboard should now show the most recent serialised data!".style())
+                }
+            }
         }
-        sender.sendMessage("<green>Loaded crash data! Your scoreboard should now show the most recent serialised data!".style())
     }
 
     @Command("event mock-donation-now <amount>")
