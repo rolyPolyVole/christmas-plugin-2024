@@ -16,6 +16,8 @@ import gg.flyte.christmas.util.eventController
 import gg.flyte.christmas.util.packetObj
 import gg.flyte.christmas.util.sendPacket
 import gg.flyte.christmas.util.style
+import gg.flyte.twilight.scheduler.async
+import gg.flyte.twilight.scheduler.sync
 import io.github.retrooper.packetevents.util.SpigotReflectionUtil
 import org.bukkit.Bukkit
 import org.bukkit.Color
@@ -120,17 +122,22 @@ class WorldNPC private constructor(displayName: String, textureProperties: List<
 
                     ChristmasEventPlugin.instance.worldNPCs.remove(leaderBoardNPCs[index])
 
-                    leaderBoardNPCs[index] = createFromUniqueId("", uniqueId, leaderboardPositionToLocation[index]!!).apply {
-                        this.scale = when (index) {
-                            0 -> 2.5
-                            1 -> 2.0
-                            2 -> 1.5
-                            else -> 1.0
+                    async {
+                        leaderBoardNPCs[index] = createFromUniqueId("", uniqueId, leaderboardPositionToLocation[index]!!).apply {
+                            this.scale = when (index) {
+                                0 -> 2.5
+                                1 -> 2.0
+                                2 -> 1.5
+                                else -> 1.0
+                            }
+
+                            ChristmasEventPlugin.instance.worldNPCs += this
                         }
 
-                        ChristmasEventPlugin.instance.worldNPCs += this
+                        sync {
+                            leaderBoardNPCs[index]?.spawnForAll()
+                        }
                     }
-                    leaderBoardNPCs[index]?.spawnForAll()
 
                     ChristmasEventPlugin.instance.serverWorld.spawn(leaderboardPositionToNamePlateLocation[index]!!, TextDisplay::class.java) {
                         it.text("${placeDefaultComponent[index]!!} ${Bukkit.getOfflinePlayer(uniqueId).name}\nᴘᴏɪɴᴛs: $points".style())
