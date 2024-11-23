@@ -87,6 +87,33 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
                 }
             }
 
+            tasks += repeatingTask(5) {
+                delay((1..15).random()) {
+                    // decay random snow blocks, that are not air
+                    floorLevelBlocks.filter { it.block.type != Material.AIR }.random().let {
+                        when (it.block.type) {
+                            Material.SNOW_BLOCK -> {
+                                it.block.type = Material.SNOW
+                                it.block.blockData as? Snow ?: return@delay
+                                it.block.blockData = (it.block.blockData as Snow).apply { layers = 5 }
+                            }
+
+                            Material.SNOW -> {
+                                var blockData = it.block.blockData as Snow
+                                if (blockData.layers == 2) {
+                                    it.block.type = Material.AIR
+                                } else {
+                                    blockData.layers = blockData.layers - 3
+                                    it.block.blockData = blockData
+                                }
+                            }
+
+                            else -> return@delay
+                        }
+                    }
+                }
+            }
+
             manageActionBars()
         }
     }
