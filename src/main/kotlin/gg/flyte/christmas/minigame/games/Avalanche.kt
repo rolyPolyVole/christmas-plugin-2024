@@ -163,9 +163,16 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
                 gameLogicTask = null
 
                 // spawn da snowballs from da sky
+                var maxPoint = floorRegion.maxPoint
+                var minPoint = floorRegion.minPoint
+                var slightlyExpandedRegion = MapRegion(
+                    MapSinglePoint(minPoint.x.toInt() - 3, minPoint.y, minPoint.z.toInt() - 3),
+                    MapSinglePoint(maxPoint.x.toInt() + 3, maxPoint.y, maxPoint.z.toInt() + 3)
+                )
+
                 repeat(1200) {
                     ChristmasEventPlugin.instance.serverWorld.spawn(
-                        floorRegion.randomLocation().clone().add(0.0, (25..30).random().toDouble(), 0.0),
+                        slightlyExpandedRegion.randomLocation().clone().add(0.0, (25..30).random().toDouble(), 0.0),
                         Snowball::class.java
                     ) {
                         it.velocity = it.velocity.setX(0).setZ(0)
