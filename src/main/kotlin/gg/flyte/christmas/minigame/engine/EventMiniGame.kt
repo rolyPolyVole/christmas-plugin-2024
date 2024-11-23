@@ -257,10 +257,9 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
             val npcs = mutableListOf<WorldNPC>()
             val displays = mutableListOf<TextDisplay>()
             val descendingColour = listOf("a", "c", "9")
-            var index = 0
-            formattedWinners.entries.take(3).forEach {
-                var uniqueId = it.key
-                var value = it.value
+            formattedWinners.entries.take(3).reversed().forEachIndexed { index, keyValuePair ->
+                var uniqueId = keyValuePair.key
+                var value = keyValuePair.value
                 val displayName = "§${descendingColour[index]}${Bukkit.getPlayer(uniqueId)!!.name}"
                 var placeLocation = Util.getNPCSummaryLocation(index)
                 val animationTasks = mutableListOf<TwilightRunnable>()
