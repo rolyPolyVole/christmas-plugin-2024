@@ -132,21 +132,23 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
 
                 addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20 * 4, 1, false, false, false))
 
-                world.spawn(location, ItemDisplay::class.java) {
+                val itemDisplay = world.spawn(location, ItemDisplay::class.java) {
                     it.setItemStack(ItemStack(Material.AIR))
                     it.teleportDuration = 59 // max (minecraft limitation)
+                }
 
-                    delay(1) {
-                        val randomSpecLocation = gameConfig.spectatorSpawnLocations.random()
-                        teleport(randomSpecLocation)
-                        it.addPassenger(player)
-                        player.hidePlayer()
+                addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20 * 4, 1, false, false, false))
 
-                        delay(59) {
-                            it.remove()
-                            player.teleport(randomSpecLocation)
-                            player.showPlayer()
-                        }
+                delay(1) {
+                    val randomSpecLocation = gameConfig.spectatorSpawnLocations.random()
+                    itemDisplay.teleport(randomSpecLocation)
+                    itemDisplay.addPassenger(player)
+                    player.hidePlayer()
+
+                    delay(59) {
+                        itemDisplay.remove()
+                        player.teleport(randomSpecLocation)
+                        player.showPlayer()
                     }
                 }
             } // animate death
