@@ -274,9 +274,9 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                     if (it.passengers.isNotEmpty()) return@forEach
                     it.velocity = it.velocity.add(
                         Vector(
-                            Random.nextDouble(0.5, 2.0),
+                            Random.nextDouble(-2.0, 2.0),
                             0.0,
-                            Random.nextDouble(0.5, 2.0),
+                            Random.nextDouble(-2.0, 2.0),
                         )
                     )
                 }
@@ -405,7 +405,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
                     Bukkit.getOnlinePlayers().forEach { loopedPlayer ->
                         val passengerPacket = WrapperPlayServerSetPassengers(minecart.entityId, intArrayOf(npc.npc.id))
-                        delay(2) { passengerPacket.sendPacket(player) }
+                        delay(10) { passengerPacket.sendPacket(player) }
 
                         animationTasks += repeatingTask((2..10).random(), 25) {
                             WrapperPlayServerEntityAnimation(
