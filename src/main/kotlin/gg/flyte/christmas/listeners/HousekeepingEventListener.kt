@@ -233,7 +233,7 @@ class HousekeepingEventListener : Listener, PacketListener {
 
             val currentGame = eventController().currentGame
             if (currentGame?.spectateEntities?.values?.map { it.uniqueId }?.contains(spectatorTarget.uniqueId) == true) {
-                player.teleport(currentGame.gameConfig.spectatorSpawnLocations.random())
+                delay(1) { player.teleport(currentGame.gameConfig.spectatorSpawnLocations.random()) } // hotfix for disallowing hot-bar spectating.
                 player.gameMode = GameMode.ADVENTURE
             }
         }
