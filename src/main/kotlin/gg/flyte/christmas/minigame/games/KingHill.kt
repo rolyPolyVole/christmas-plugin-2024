@@ -146,8 +146,9 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
             if (!pvpEnabled) {
                 isCancelled = true
                 damager.playSound(Sound.BLOCK_NOTE_BLOCK_BASS)
+                return@event
             }
-
+            isCancelled = false
             damage = 0.0
         }
 
