@@ -62,7 +62,7 @@ class ChristmasEventPlugin : JavaPlugin() {
         handleDonations()
         loadNPCs()
 
-        delay(10, TimeUnit.SECONDS) { canJoin = true }
+        delay(5, TimeUnit.SECONDS) { canJoin = true }
     }
 
     override fun onDisable() {
