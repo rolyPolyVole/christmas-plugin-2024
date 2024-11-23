@@ -273,10 +273,8 @@ class EventController() {
      * Updates the donation bar with the current total donations and donation goal.
      */
     fun updateDonationBar() {
-            donationBossBar.name(
-                "<b><gradient:#7EC1EF:#FA62A3>Donation Goal:</gradient></b> <white><b>$<#7EC1EF>${totalDonations}<grey>/<#FA62A3>${donationGoal}".style()
-            )
-            var progress = (totalDonations.toFloat() / donationGoal)
-            donationBossBar.progress(progress)
-        }
+        donationBossBar.name("<b><gradient:#7EC1EF:#FA62A3>Donation Goal:</gradient></b> <white><b>$<#7EC1EF>${totalDonations}<grey>/<#FA62A3>${donationGoal}".style())
+        var progress = (totalDonations.toFloat() / donationGoal)
+        donationBossBar.progress(progress)
+    }
 }
