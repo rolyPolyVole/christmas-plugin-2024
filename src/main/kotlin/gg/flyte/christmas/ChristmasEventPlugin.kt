@@ -154,6 +154,7 @@ class ChristmasEventPlugin : JavaPlugin() {
             setGameRule(GameRule.DO_FIRE_TICK, false)
             setGameRule(GameRule.SPECTATORS_GENERATE_CHUNKS, true)
             setStorm(false)
+            difficulty = Difficulty.PEACEFUL
             time = 6000
 
             // Create Podium
