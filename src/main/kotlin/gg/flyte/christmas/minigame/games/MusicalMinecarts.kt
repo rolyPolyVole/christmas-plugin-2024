@@ -128,14 +128,14 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
         if (!harder) {
             canEnter = false
-            summonCarts()
+            createCartsForRound()
         } // easy-mode summons carts during new rounds.
         powerUp()
 
         val delayBeforePrepareElimination = (8..12).random()
         tasks += delay(delayBeforePrepareElimination, TimeUnit.SECONDS) {
             if (!isCountdownActive) { // prevent double-prepare due to random condition
-                if (harder) summonCarts() // hard-mode summons carts when music stops.
+                if (harder) createCartsForRound() // hard-mode summons carts when music stops.
                 prepareElimination()
             }
         }
@@ -263,7 +263,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         doWinAnimation(winner)
     }
 
-    private fun summonCarts() {
+    private fun createCartsForRound() {
         val numCarts = if (remainingPlayers().size == 2) 1 else ceil(remainingPlayers().size * 2 / 3.0).toInt() // ceil condition fails at 2 players
         repeat(numCarts) { summonMinecart() }
 
