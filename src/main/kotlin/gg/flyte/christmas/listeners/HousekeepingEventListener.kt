@@ -170,7 +170,7 @@ class HousekeepingEventListener : Listener, PacketListener {
 
         event<PlayerQuitEvent> {
             quitMessage(null)
-            delay(1) { eventController().onPlayerQuit(player) } // getOnlinePlayers does not update until the next tick
+            eventController().onPlayerQuit(player)
         }
 
         event<PlayerMoveEvent> {

@@ -148,16 +148,18 @@ class EventController() {
         when (currentGame?.state) {
 
             GameState.COUNTDOWN -> {
-                if (!enoughPlayers()) {
-                    countdownTask?.cancel()
-                    currentGame!!.state = GameState.WAITING_FOR_PLAYERS
+                delay(1) { // getOnlinePlayers [called through enoughPlayers()] does not update until the next tick
+                    if (!enoughPlayers()) {
+                        countdownTask?.cancel()
+                        currentGame!!.state = GameState.WAITING_FOR_PLAYERS
 
-                    Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) {
-                        it.title(
-                            "<dark_red>⦅x⦆".style(), "<red>Waiting for more players...".style(),
-                            titleTimes(Duration.ZERO, Duration.ofSeconds(5), Duration.ofSeconds(1))
-                        )
-                        it.playSound(Sound.BLOCK_NOTE_BLOCK_BASS)
+                        Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) {
+                            it.title(
+                                "<dark_red>⦅x⦆".style(), "<red>Waiting for more players...".style(),
+                                titleTimes(Duration.ZERO, Duration.ofSeconds(5), Duration.ofSeconds(1))
+                            )
+                            it.playSound(Sound.BLOCK_NOTE_BLOCK_BASS)
+                        }
                     }
                 }
             }
