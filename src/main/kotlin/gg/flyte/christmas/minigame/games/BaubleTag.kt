@@ -118,12 +118,12 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
         super.eliminate(player, reason)
         when (remainingPlayers().size) {
             1 -> {
-                formattedWinners.put(player.uniqueId, "1st Place!")
+                formattedWinners.put(player.uniqueId, "2nd Place!")
+                formattedWinners.put(remainingPlayers().first().uniqueId, "1st Place!")
                 endGame()
             }
 
-            2 -> formattedWinners.put(player.uniqueId, "2nd Place!")
-            3 -> formattedWinners.put(player.uniqueId, "3rd Place!")
+            2 -> formattedWinners.put(player.uniqueId, "3nd Place!")
         }
     }
 

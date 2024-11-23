@@ -238,11 +238,11 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         when (remainingPlayers().size) {
             1 -> {
                 formattedWinners.put(player.uniqueId, value)
+                formattedWinners.put(remainingPlayers().first().uniqueId, "$value (1st Place!)")
                 endGame()
             }
 
             2 -> formattedWinners.put(player.uniqueId, value)
-            3 -> formattedWinners.put(player.uniqueId, value)
         }
     }
 
