@@ -229,7 +229,10 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
     }
 
     override fun eliminate(player: Player, reason: EliminationReason) {
-        Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.sendMessage("<red>${player.name} <grey>has been eliminated!".style()) }
+        Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) {
+            it.sendMessage("<red>${player.name} <grey>has been eliminated!".style())
+            it.playSound(Sound.ENTITY_PLAYER_HURT)
+        }
 
         player.apply {
             currentBossBar?.let { hideBossBar(it) }
@@ -244,7 +247,6 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                 }
 
                 addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20 * 4, 1, false, false, false))
-                playSound(Sound.ENTITY_PLAYER_HURT)
 
                 delay(1) {
                     val randomSpecLocation = gameConfig.spectatorSpawnLocations.random()

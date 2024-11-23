@@ -203,7 +203,10 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
     }
 
     override fun eliminate(player: Player, reason: EliminationReason) {
-        Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.sendMessage("<red>${player.name} <grey>has been eliminated!".style()) }
+        Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) {
+            it.sendMessage("<red>${player.name} <grey>has been eliminated!".style())
+            it.playSound(Sound.ENTITY_PLAYER_HURT)
+        }
 
         if (reason == EliminationReason.ELIMINATED) {
             player.apply {
@@ -216,7 +219,6 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
                 }
 
                 addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20 * 4, 1, false, false, false))
-                playSound(Sound.ENTITY_PLAYER_HURT)
 
                 delay(1) {
                     val randomSpecLocation = gameConfig.spectatorSpawnLocations.random()
@@ -309,7 +311,10 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
             // return@event -> already cancelled by lower priority [HousekeepingEventListener]
 
             entity as? Player ?: return@event
-            (this as? EntityDamageByEntityEvent)?.damager as? Player ?: return@event
+            if ((this as? EntityDamageByEntityEvent)?.damager !is Player) {
+                isCancelled = true
+                return@event
+            }
 
             if (harder) isCancelled = false
             damage = 0.0

@@ -200,7 +200,10 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
     }
 
     override fun eliminate(player: Player, reason: EliminationReason) {
-        Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.sendMessage("<red>${player.name} <grey>has been eliminated!".style()) }
+        Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) {
+            it.sendMessage("<red>${player.name} <grey>has been eliminated!".style())
+            it.playSound(Sound.ENTITY_PLAYER_HURT)
+        }
 
         player.apply {
             currentBossBar?.let { hideBossBar(it) }
