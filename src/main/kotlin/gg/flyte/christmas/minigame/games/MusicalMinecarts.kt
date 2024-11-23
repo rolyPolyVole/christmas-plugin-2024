@@ -269,15 +269,15 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         repeat(numCarts) { summonMinecart() }
 
         Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.playSound(Sound.ENTITY_ITEM_PICKUP) }
-        repeatingTask((0..8).random(), (2..6).random()) {
+        repeatingTask((0..8).random(), (4..8).random()) {
             delay((0..8).random()) {
                 minecarts.forEach {
                     if (it.passengers.isNotEmpty()) return@forEach
                     it.velocity = it.velocity.add(
                         Vector(
-                            Random.nextDouble(-2.0, 2.0),
-                            0.0,
-                            Random.nextDouble(-2.0, 2.0),
+                            Random.nextDouble(-7.5, 7.5),
+                            0.1,
+                            Random.nextDouble(-7.5, 7.5),
                         )
                     )
                 }
