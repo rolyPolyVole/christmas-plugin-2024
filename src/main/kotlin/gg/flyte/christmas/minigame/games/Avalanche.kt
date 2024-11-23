@@ -65,7 +65,7 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
     override fun startGameOverview() {
         super.startGameOverview()
 
-        ChristmasEventPlugin.instance.serverWorld.time = 15000
+        ChristmasEventPlugin.instance.serverWorld.time = 12750
 
         floorRegion.toSingleBlockLocations().forEach { it.block.type = Material.BLUE_ICE }
 
