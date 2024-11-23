@@ -257,6 +257,8 @@ class HousekeepingEventListener : Listener, PacketListener {
 
             entity as? Player ?: return@event // damaged entity
             (this as? EntityDamageByEntityEvent)?.damager as? Snowball ?: return@event // damager
+            if ((damager as Snowball).item.type != Material.SNOWBALL) return@event // not a snowball (could be projectile from other game)
+
             damage = Double.MIN_VALUE
             isCancelled = false
         }
