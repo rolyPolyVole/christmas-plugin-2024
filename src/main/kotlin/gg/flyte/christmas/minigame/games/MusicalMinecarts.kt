@@ -406,13 +406,13 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
                     Bukkit.getOnlinePlayers().forEach { loopedPlayer ->
                         val passengerPacket = WrapperPlayServerSetPassengers(minecart.entityId, intArrayOf(npc.npc.id))
-                        delay(10) { passengerPacket.sendPacket(player) }
+                        delay(1) { passengerPacket.sendPacket(loopedPlayer) }
 
                         animationTasks += repeatingTask((2..10).random(), 25) {
                             WrapperPlayServerEntityAnimation(
                                 npc.npc.id,
                                 WrapperPlayServerEntityAnimation.EntityAnimationType.SWING_MAIN_ARM
-                            ).sendPacket(player)
+                            ).sendPacket(loopedPlayer)
 
                             minecart.world.dropItemNaturally(minecart.location.add(0.0, 1.0, 0.0), ItemStack(Material.MINECART)) {
                                 it.velocity = Vector(Random.nextDouble(-1.0, 1.0), Random.nextDouble(0.0, 0.5), Random.nextDouble(-1.0, 1.0))
