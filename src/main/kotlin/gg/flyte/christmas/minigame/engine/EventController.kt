@@ -124,6 +124,7 @@ class EventController() {
      */
     fun onPlayerJoin(player: Player) {
         if (currentGame == null) {
+            player.showBossBar(eventController().donationBossBar)
             player.teleport(ChristmasEventPlugin.instance.lobbySpawn)
         } else {
             if (currentGame!!.state == GameState.WAITING_FOR_PLAYERS) {
