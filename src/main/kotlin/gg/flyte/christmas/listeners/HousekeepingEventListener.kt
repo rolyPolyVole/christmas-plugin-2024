@@ -164,8 +164,6 @@ class HousekeepingEventListener : Listener, PacketListener {
             Bukkit.getOnlinePlayers().forEach { it.sendPlayerListHeaderAndFooter(header, footer) }
 
             eventController().sidebarManager.update()
-
-            WorldNPC.refreshPodium()
         }
 
         event<PlayerQuitEvent> {
