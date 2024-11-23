@@ -135,11 +135,11 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
         when (remainingPlayers().size) {
             1 -> {
                 formattedWinners.put(player.uniqueId, value)
+                formattedWinners.put(remainingPlayers().first().uniqueId, "$value (1st Place!)")
                 endGame()
             }
 
             2 -> formattedWinners.put(player.uniqueId, value)
-            3 -> formattedWinners.put(player.uniqueId, value)
         }
     }
 
@@ -215,7 +215,7 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
         }
 
         listeners += event<PlayerMoveEvent> {
-            if (player.location.blockY < 42) {
+            if (player.location.blockY < 70) {
                 if (remainingPlayers().contains(player)) eliminate(player, EliminationReason.ELIMINATED)
             }
         }
