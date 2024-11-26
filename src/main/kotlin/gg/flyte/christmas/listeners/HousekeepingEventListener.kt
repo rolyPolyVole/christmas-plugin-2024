@@ -105,13 +105,6 @@ class HousekeepingEventListener : Listener, PacketListener {
             })
         }
 
-        event<PlayerLoginEvent> {
-            if (!ChristmasEventPlugin.instance.canJoin) {
-                kickMessage("<red>You cannot join at the moment! Please wait...".style())
-                result = PlayerLoginEvent.Result.KICK_OTHER
-            }
-        }
-
         event<PlayerJoinEvent>(priority = EventPriority.LOWEST) {
             fun applyTag(player: Player) {
                 player.scoreboard = ChristmasEventPlugin.instance.scoreBoardTab
