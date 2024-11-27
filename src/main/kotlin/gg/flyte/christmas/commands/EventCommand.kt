@@ -131,6 +131,13 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
         Bukkit.getPluginManager().callEvent(donationEvent)
     }
 
+    @Command("event mock-donation-now <amount> <target>")
+    @CommandPermission("event.mockdonation")
+    fun mockDonation(sender: Player, amount: Double, target: Player) {
+        var donationEvent = DonateEvent(target.name, null, null, amount.toString(), "USD", "mockDonationId")
+        Bukkit.getPluginManager().callEvent(donationEvent)
+    }
+
     private fun setGameSwitcher(): MenuItem {
         val menuItem = MenuItem(Material.STRUCTURE_VOID).apply {
             setName("&b&lSelect Game:".colourise())
