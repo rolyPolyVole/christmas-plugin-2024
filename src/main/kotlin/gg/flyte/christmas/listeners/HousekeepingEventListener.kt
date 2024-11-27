@@ -190,13 +190,14 @@ class HousekeepingEventListener : Listener, PacketListener {
         }
 
         event<PlayerResourcePackStatusEvent> {
-            var goodStatus = listOf(
-                PlayerResourcePackStatusEvent.Status.ACCEPTED,
-                PlayerResourcePackStatusEvent.Status.DOWNLOADED,
-                PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED
-            )
-
-            if (!goodStatus.contains(status)) player.kick("<red>You <white><u>must<reset> <red>accept the resource pack to play on this server!".style())
+            when (status) {
+                PlayerResourcePackStatusEvent.Status.DECLINED -> player.kick("<red>You <b>MUST</b> accept the resource pack to play on this server!".style())
+                PlayerResourcePackStatusEvent.Status.FAILED_DOWNLOAD -> player.kick("<red>Resource pack failed to download. Please try joining again.".style())
+                PlayerResourcePackStatusEvent.Status.INVALID_URL -> player.kick("<red>Resource pack failed to download. Please try joining again.".style())
+                PlayerResourcePackStatusEvent.Status.FAILED_RELOAD -> player.kick("<red>Resource pack failed to download. Please try joining again.".style())
+                PlayerResourcePackStatusEvent.Status.DISCARDED -> player.kick("<red>Resource pack failed to download. Please try joining again.".style())
+                else -> {}
+            }
         }
 
         event<PlayerDropItemEvent> { isCancelled = true }
