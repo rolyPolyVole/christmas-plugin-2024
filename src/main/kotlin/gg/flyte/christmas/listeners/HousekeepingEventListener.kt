@@ -119,7 +119,7 @@ class HousekeepingEventListener : Listener, PacketListener {
                             setResourcePack(this.url, this.hash, true)
                         }
                     } catch (_: Exception) {
-                        sync { kick("<red>Resource pack FAILED to download. Please try joining again.".style()) }
+                        sync { kick("<red>Resource pack failed to download. Please try joining again.".style()) }
                     }
                 }
 
