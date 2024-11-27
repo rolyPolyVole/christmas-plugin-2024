@@ -49,7 +49,7 @@ class EventController() {
     var totalDonations = 0
     var donationGoal = 2000
     var donationBossBar = BossBar.bossBar(
-        "<b><gradient:#7EC1EF:#FA62A3>Donation Goal:</gradient></b> <white><b>$<#7EC1EF>${totalDonations}<grey>/<#FA62A3>${donationGoal}".style(),
+        "<colour:#1DF1BC>ᴅᴏɴᴀᴛɪᴏɴ ɢᴏᴀʟ: <white>$<grey>${totalDonations}/${donationGoal}".style(),
         0F,
         BossBar.Color.GREEN,
         BossBar.Overlay.PROGRESS
@@ -273,7 +273,7 @@ class EventController() {
      * Updates the donation bar with the current total donations and donation goal.
      */
     fun updateDonationBar() {
-        donationBossBar.name("<b><gradient:#7EC1EF:#FA62A3>Donation Goal:</gradient></b> <white><b>$<#7EC1EF>${totalDonations}<grey>/<#FA62A3>${donationGoal}".style())
+        donationBossBar.name("<colour:#1DF1BC>ᴅᴏɴᴀᴛɪᴏɴ ɢᴏᴀʟ: <white>$<green>${totalDonations}/${donationGoal}".style())
         var progress = (totalDonations.toFloat() / donationGoal)
         donationBossBar.progress(progress)
     }
