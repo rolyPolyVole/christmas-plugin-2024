@@ -118,9 +118,9 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
                 sync {
                     eventController().sidebarManager.update()
                     WorldNPC.refreshPodium()
-                    sender.sendMessage("<green>Loaded crash data! Your scoreboard should now show the most recent serialised data!".style())
                 }
             }
+            sender.sendMessage("<green>Loaded crash data! Your scoreboard should now show the most recent serialised data!".style())
         }
     }
 
