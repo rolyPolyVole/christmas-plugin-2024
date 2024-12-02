@@ -255,4 +255,4 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
         listeners += event<InventoryClickEvent> { isCancelled = true }
     }
 }
-// TODO<Map> redo overview locations and make all LIGHT blocks one block higher.
+// TODO<Map> make all LIGHT blocks one block higher.
