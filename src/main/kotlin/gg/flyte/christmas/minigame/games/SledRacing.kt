@@ -1,5 +1,6 @@
 package gg.flyte.christmas.minigame.games
 
+import gg.flyte.christmas.donation.DonationTier
 import gg.flyte.christmas.minigame.engine.EventMiniGame
 import gg.flyte.christmas.minigame.engine.GameConfig
 import gg.flyte.christmas.minigame.world.MapRegion
@@ -169,6 +170,14 @@ class SledRacing : EventMiniGame(GameConfig.SLED_RACING) {
 
             // check if the player crossed the finish line
             if (finishLine.contains(currentLocation)) handleFinishLineCross(player)
+        }
+    }
+
+    override fun handleDonation(tier: DonationTier) {
+        when (tier) {
+            DonationTier.LOW -> TODO()
+            DonationTier.MEDIUM -> TODO()
+            DonationTier.HIGH -> TODO()
         }
     }
 }

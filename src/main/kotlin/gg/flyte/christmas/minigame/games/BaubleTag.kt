@@ -1,6 +1,7 @@
 package gg.flyte.christmas.minigame.games
 
 import dev.shreyasayyengar.menuapi.menu.MenuItem
+import gg.flyte.christmas.donation.DonationTier
 import gg.flyte.christmas.minigame.engine.EventMiniGame
 import gg.flyte.christmas.minigame.engine.GameConfig
 import gg.flyte.christmas.minigame.engine.PlayerType
@@ -212,6 +213,14 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
             }
 
             if (taggedPlayers.contains(damager.uniqueId)) tagPlayer(entity as Player, damager)
+        }
+    }
+
+    override fun handleDonation(tier: DonationTier) {
+        when (tier) {
+            DonationTier.LOW -> TODO()
+            DonationTier.MEDIUM -> TODO()
+            DonationTier.HIGH -> TODO()
         }
     }
 }

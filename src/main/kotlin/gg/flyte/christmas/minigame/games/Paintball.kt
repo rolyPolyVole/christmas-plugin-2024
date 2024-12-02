@@ -1,5 +1,6 @@
 package gg.flyte.christmas.minigame.games
 
+import gg.flyte.christmas.donation.DonationTier
 import gg.flyte.christmas.minigame.engine.EventMiniGame
 import gg.flyte.christmas.minigame.engine.GameConfig
 import gg.flyte.christmas.minigame.engine.PlayerType
@@ -169,6 +170,14 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
             shooter.playSound(Sound.BLOCK_NOTE_BLOCK_PLING)
             shooter.sendMessage("<green>You hit <red>${hitPlayer.name} <grey>— <green>+1".style())
             scores[shooter.uniqueId] = scores[shooter.uniqueId]!! + 1
+        }
+    }
+
+    override fun handleDonation(tier: DonationTier) {
+        when (tier) {
+            DonationTier.LOW -> TODO()
+            DonationTier.MEDIUM -> TODO()
+            DonationTier.HIGH -> TODO()
         }
     }
 }
