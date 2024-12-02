@@ -145,8 +145,8 @@ enum class GameConfig(
             MapSinglePoint(218, 77, 292, -21.168488F, 12.065951F),
             MapSinglePoint(223, 73, 307, -24.32486F, 4.2968564F)
         ),
-        listOf(MapSinglePoint(554, 204, 594, -88.70047F, 88.381485F)),
-        listOf(MapSinglePoint(554, 204, 594, -88.70047F, 88.381485F)),
+        listOf(MapSinglePoint(212, 130, 310)),
+        listOf(MapSinglePoint(212, 130, 310)),
     ),
     //endregion
 
@@ -282,7 +282,7 @@ enum class GameConfig(
             MapSinglePoint(842, 125, 652, 139.14163F, 60.207817F),
         ),
         listOf(
-            MapSinglePoint(810.5, 106, 604.5, -32, 32)
+            MapSinglePoint(212, 130, 310)
         ),
         listOf(
             MapSinglePoint(827, 90, 630, 90, 90),
@@ -489,7 +489,7 @@ enum class GameConfig(
             MapSinglePoint(593, 137, -215, -29.556946F, 33.33473F)
         ),
         listOf(
-            MapSinglePoint(621, 200, -234, 0, 90)
+            MapSinglePoint(629, 197, -92, 0, 90)
         ),
         listOf(
             MapSinglePoint(655, 107, -141, 108.178734F, 30.104355F)
@@ -499,6 +499,46 @@ enum class GameConfig(
     //endregion
 
     //region SLED_RACING, #80ffea
+    SLED_RACING(
+        SledRacing::class,
+        "<colour:#80ffea>Sled Racing".style(),
+        "<colour:#80ffea>ꜱʟᴇᴅ ʀᴀᴄɪɴɢ".style(),
+        ItemStack(Material.SNOWBALL),
+        TextColor.fromHexString("#80ffea")!!,
+        " • Follow the icy path to the end of the map with your sled.\n\n" +
+                " • 3 laps must be completed. To reset, sneak out of your sled.\n\n" +
+                " • To win, be the first player to finish all 3 laps!\n\n" +
+                " • \uD83C\uDFB5 Come on, it's lovely weather for a sleigh ride together with you! \uD83C\uDFB6 🛷",
+        1,
+        MapSinglePoint(523, 207, 1842, 127F, 90F),
+        listOf(
+            MapRegion(MapSinglePoint(671, 149, 1811), MapSinglePoint(651, 149, 1791))
+        ),
+        listOf(
+            MapSinglePoint(606, 203, 1612, 16.841675F, 29.505898F),
+            MapSinglePoint(577, 126, 1708, 15.384888F, 8.545502F),
+            MapSinglePoint(549, 125, 1808, 15.384888F, 8.545502F),
+            MapSinglePoint(538, 125, 1849, 15.546753F, 8.62643F),
+            MapSinglePoint(528, 107, 1883, 27.038696F, 9.03107F),
+            MapSinglePoint(512, 110, 1914, 44.115112F, 8.5455F),
+            MapSinglePoint(495, 110, 1944, 91.78198F, 27.320837F),
+            MapSinglePoint(480, 110, 1959, 126.41931F, 27.887333F),
+            MapSinglePoint(452, 104, 1946, 146.73242F, 26.26877F),
+            MapSinglePoint(434, 110, 1918, 131.8418F, 25.37856F),
+            MapSinglePoint(410, 95, 1890, 131.8418F, 25.37856F),
+            MapSinglePoint(383, 73, 1869, 121.15906F, 24.731133F),
+            MapSinglePoint(349, 81, 1847, 122.37305F, 22.384212F),
+            MapSinglePoint(320, 87, 1831, 48.08081F, 27.725473F),
+            MapSinglePoint(280, 108, 1828, 10.934692F, 34.118805F),
+            MapSinglePoint(261, 123, 1818, -37.460327F, 33.30953F),
+            MapSinglePoint(249, 133, 1809, -80.02869F, 26.430634F),
+        ),
+        listOf(),
+        listOf(
+            MapSinglePoint(458, 151, 1876, -116.8, 33.3),
+        ),
+        false
+    ),
     //endregion
 
     //region SPLEEF
