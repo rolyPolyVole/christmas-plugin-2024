@@ -61,7 +61,9 @@ class ChristmasEventPlugin : JavaPlugin() {
     }
 
     override fun onDisable() {
-        serverWorld.entities.forEach { if (it !is Player) it.remove() } // clean up podium, spectate points, misc entities.
+        serverWorld.entities.forEach {
+            if (it !is Player) it.remove() else it.kick("<red>loddl".style()) // TODO edit kick msg
+        } // clean up podium, spectate points, misc entities.
 
         for (npc in worldNPCs) {
             npc.location.getNearbyEntitiesByType(TextDisplay::class.java, 5.0).forEach { it.remove() }
