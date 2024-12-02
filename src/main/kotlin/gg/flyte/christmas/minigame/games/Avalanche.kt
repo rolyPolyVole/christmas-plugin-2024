@@ -217,7 +217,7 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
 
         if (reason == EliminationReason.ELIMINATED) {
             player.apply {
-                currentBossBar?.let { hideBossBar(it)}
+                currentBossBar?.let { hideBossBar(it) }
                 player.world.spawnParticle(Particle.BLOCK, player.location, 100, 0.5, 0.5, 0.5, Bukkit.createBlockData(Material.SNOW_BLOCK))
 
                 val itemDisplay = world.spawn(location, ItemDisplay::class.java) {
