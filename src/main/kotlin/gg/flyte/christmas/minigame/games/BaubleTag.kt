@@ -38,7 +38,7 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
         "e258b0b460dee9e67b59f69808caa5db4665969b4b30af43d0e086a133645318",
         "e040b03876580350dbf81333aea696a6d2f3f7d5156fb0ce25771283df609a9f"
     )
-    private val regroupPoint = MapSinglePoint(205, 70, 317)
+    private val regroupPoint = MapSinglePoint(205.5, 127, 1271.5)
     private val taggedPlayers = mutableListOf<UUID>()
     private var regroup = false
     private var secondsForRound = 60
