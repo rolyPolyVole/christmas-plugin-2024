@@ -80,7 +80,7 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
             }
 
             floorRegion.randomLocation().apply {
-                add(0.0, 4.0, 0.0)
+                add(0.0, 3.0, 0.0)
                 block.type = Material.CUT_COPPER
                 safePoints += block.location
                 block.world.spawnParticle(Particle.FLASH, block.location.toCenterLocation(), 1000)
@@ -146,7 +146,7 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
 
         repeat(safePointsByRound[roundNumber] ?: 1) {
             floorRegion.randomLocation().apply {
-                add(0.0, 4.0, 0.0)
+                add(0.0, 3.0, 0.0)
                 block.type = Material.CUT_COPPER
                 safePoints += block.location
                 block.world.spawnParticle(Particle.FLASH, block.location.toCenterLocation(), 1000)
