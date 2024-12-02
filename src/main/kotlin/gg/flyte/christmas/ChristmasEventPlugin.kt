@@ -94,6 +94,7 @@ class ChristmasEventPlugin : JavaPlugin() {
     }
 
     private fun handleDonations() {
+        if (1 == 1) return // TODO<Final> configure secrets when available.
         RefreshToken(
             config.getString("donations.clientId") ?: throw IllegalArgumentException("clientId cannot be empty"),
             config.getString("donations.clientSecret") ?: throw IllegalArgumentException("clientSecret cannot be empty")
