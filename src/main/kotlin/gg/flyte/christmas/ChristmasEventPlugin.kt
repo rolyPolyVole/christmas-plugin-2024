@@ -130,6 +130,16 @@ class ChristmasEventPlugin : JavaPlugin() {
                 billboard = Display.Billboard.CENTER
             }
         }
+        serverWorld.spawn(MapSinglePoint(544.5, 108, 457.5, 0, 30), TextDisplay::class.java) {
+            it.text("<colour:#d45757>ᴇᴠᴇɴᴛ\nᴄᴏɴᴛʀɪʙᴜᴛᴏʀꜱ".style())
+            it.transformation = it.transformation.apply {
+                this.scale.mul(7F)
+            }
+            it.billboard = Display.Billboard.CENTER
+            it.isDefaultBackground = false
+            it.backgroundColor = Color.fromARGB(255, 255, 207, 207)
+            it.brightness = Display.Brightness(15, 15)
+        }
 
         serverWorld.spawn(MapSinglePoint(535.5, 121, 503.5, -90, 0), TextDisplay::class.java) {
             it.text("<gold>ᴇᴠᴇɴᴛ\nʟᴇᴀᴅᴇʀʙᴏᴀʀᴅ".style())
