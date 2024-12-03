@@ -82,10 +82,6 @@ class SledRacing : EventMiniGame(GameConfig.SLED_RACING) {
         }
     }
 
-    override fun eliminate(player: Player, reason: EliminationReason) {
-        super.eliminate(player, reason)
-    }
-
     override fun endGame() {
         super.endGame()
     }
@@ -156,20 +152,6 @@ class SledRacing : EventMiniGame(GameConfig.SLED_RACING) {
                 player.addPassenger(it)
             }
         }
-//        player.world.spawn(player.location, OakBoat::class.java) {
-//            it.addPassenger(player)
-//            it.setRotation(127F, 0F)
-//
-//            player.world.spawn(player.location, ArmorStand::class.java) {
-//                it.isInvisible = true
-//                it.isInvulnerable = true
-//                it.equipment.helmet = ItemStack(Material.PAPER).apply {
-//                    itemMeta = itemMeta.apply { setCustomModelData(1) }
-//                }
-//
-//                player.addPassenger(it)
-//            }
-//        }
 
         player.playSound(Sound.BLOCK_NOTE_BLOCK_BASS)
     }
