@@ -104,10 +104,7 @@ class SledRacing : EventMiniGame(GameConfig.SLED_RACING) {
         val lapsCompleted = lapsCompleted.getOrDefault(playerUUID, 0) + 1
 
         if (lapsCompleted >= lapsRequired) {
-            Util.runAction(PlayerType.PARTICIPANT) {
-                if (it.uniqueId == playerUUID) return@runAction
-                it.sendMessage("<gold>${player.displayName} <gold>ʜᴀs ᴄᴏᴍᴘʟᴇᴛᴇᴅ ᴛʜᴇ ʀᴀᴄᴇ!".style())
-            }
+            Util.runAction(PlayerType.PARTICIPANT) { it.sendMessage("<grey>${player.displayName} <game_colour>ʜᴀs ᴄᴏᴍᴘʟᴇᴛᴇᴅ ᴛʜᴇ ʀᴀᴄᴇ!".style()) }
 
             player.title(
                 "<game_colour>ᴄᴏɴɢʀᴀᴛᴜʟᴀᴛɪᴏɴs!".style(), "<grey>ʏᴏᴜ ʜᴀᴠᴇ ᴄᴏᴍᴘʟᴇᴛᴇᴅ ᴛʜᴇ ʀᴀᴄᴇ!".style(),
@@ -124,6 +121,7 @@ class SledRacing : EventMiniGame(GameConfig.SLED_RACING) {
                 "<game_colour>ʟᴀᴘ $lapsCompleted/$lapsRequired ᴄᴏᴍᴘʟᴇᴛᴇᴅ!".style(), Component.empty(),
                 titleTimes(Duration.ZERO, Duration.ofSeconds(2), Duration.ofMillis(500))
             )
+            player.playSound(Sound.ENTITY_FIREWORK_ROCKET_LAUNCH)
         }
     }
 
@@ -170,7 +168,7 @@ class SledRacing : EventMiniGame(GameConfig.SLED_RACING) {
             if (vehicle !is Boat) return@event
 
             val player = vehicle.passengers.firstOrNull() as? Player ?: return@event
-            if (!hasStarted || currentCheckPoint.contains(player.uniqueId)) vehicle.velocity = Vector(0, 0, 0)
+            if (!hasStarted || !(currentCheckPoint.contains(player.uniqueId))) vehicle.velocity = Vector(0, 0, 0)
 
             val currentLocation = vehicle.location
 
@@ -196,9 +194,9 @@ class SledRacing : EventMiniGame(GameConfig.SLED_RACING) {
     }
 
     private class CollisionlessBoat : net.minecraft.world.entity.vehicle.Boat(
-        EntityType.DARK_OAK_BOAT,
+        EntityType.OAK_BOAT,
         (ChristmasEventPlugin.instance.serverWorld as CraftWorld).handle.level,
-        { Items.DARK_OAK_BOAT }
+        { Items.OAK_BOAT }
     ) {
         override fun canBeCollidedWith() = false
         override fun canCollideWith(other: Entity) = false
