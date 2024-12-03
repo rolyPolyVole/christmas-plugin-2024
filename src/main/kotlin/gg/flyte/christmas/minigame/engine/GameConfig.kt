@@ -509,7 +509,11 @@ enum class GameConfig(
         SledRacing::class,
         "<colour:#80ffea>Sled Racing".style(),
         "<colour:#80ffea>ꜱʟᴇᴅ ʀᴀᴄɪɴɢ".style(),
-        ItemStack(Material.SNOWBALL),
+        ItemStack(Material.PAPER).apply {
+            itemMeta = itemMeta.apply {
+                setCustomModelData(1)
+            }
+        },
         TextColor.fromHexString("#80ffea")!!,
         " • Follow the icy path to the end of the map with your sled.\n\n" +
                 " • 3 laps must be completed. To reset, sneak out of your sled.\n\n" +
@@ -518,7 +522,7 @@ enum class GameConfig(
         1,
         MapSinglePoint(523, 207, 1842, 127F, 90F),
         listOf(
-            MapRegion(MapSinglePoint(671, 149, 1811), MapSinglePoint(651, 149, 1791))
+            MapRegion(MapSinglePoint(671, 149, 1811, 116.8, 0), MapSinglePoint(651, 149, 1791, 116.8, 0))
         ),
         listOf(
             MapSinglePoint(606, 203, 1612, 16.841675F, 29.505898F),
