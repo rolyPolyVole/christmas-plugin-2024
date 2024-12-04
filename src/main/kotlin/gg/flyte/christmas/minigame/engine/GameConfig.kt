@@ -266,9 +266,7 @@ enum class GameConfig(
             MapSinglePoint(845, 124, 648, 131.03406F, 57.888565F),
             MapSinglePoint(842, 125, 652, 139.14163F, 60.207817F),
         ),
-        listOf(
-            MapSinglePoint(212, 130, 310)
-        ),
+        listOf(MapSinglePoint(827, 120, 630)),
         listOf(
             MapSinglePoint(827, 90, 630, 90, 90),
             MapSinglePoint(847, 93, 664, 150, 25),
@@ -400,7 +398,7 @@ enum class GameConfig(
             MapSinglePoint(218, 77, 292, -21.168488F, 12.065951F),
             MapSinglePoint(223, 73, 307, -24.32486F, 4.2968564F)
         ),
-        listOf(),
+        listOf(MapSinglePoint(157, 127, 312)),
         listOf(),
         false
     ),
@@ -473,12 +471,8 @@ enum class GameConfig(
             MapSinglePoint(586, 131, -210, -34.412903F, 32.282654F),
             MapSinglePoint(593, 137, -215, -29.556946F, 33.33473F)
         ),
-        listOf(
-            MapSinglePoint(629, 197, -92, 0, 90)
-        ),
-        listOf(
-            MapSinglePoint(655, 107, -141, 108.178734F, 30.104355F)
-        ),
+        listOf(MapSinglePoint(565, 183, -208)),
+        listOf(MapSinglePoint(655, 107, -141, 108.178734F, 30.104355F)),
         false
     ),
     //endregion
@@ -522,10 +516,8 @@ enum class GameConfig(
             MapSinglePoint(261, 123, 1818, -37.460327F, 33.30953F),
             MapSinglePoint(249, 133, 1809, -80.02869F, 26.430634F),
         ),
-        listOf(),
-        listOf(
-            MapSinglePoint(458, 151, 1876, -116.8, 33.3),
-        ),
+        listOf(MapSinglePoint(537, 166, 1876)),
+        listOf(MapSinglePoint(458, 151, 1876, -116.8, 33.3)),
         false
     ),
     //endregion
