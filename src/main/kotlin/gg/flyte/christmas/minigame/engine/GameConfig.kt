@@ -504,7 +504,7 @@ enum class GameConfig(
     ),
     //endregion
 
-    //region SLED_RACING, #80ffea
+    //region SLED_RACING
     SLED_RACING(
         SledRacing::class,
         "<colour:#80ffea>Sled Racing".style(),
