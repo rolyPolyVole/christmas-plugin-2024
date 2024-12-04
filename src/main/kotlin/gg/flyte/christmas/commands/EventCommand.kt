@@ -124,6 +124,16 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
         }
     }
 
+    @Command("donate")
+    fun donate(sender: Player) {
+        // TODO send info about donating
+    }
+
+    @Command("leaderboard")
+    fun showLeaderboard(sender: Player) {
+        // TODO show leaderboard
+    }
+
     @Command("event mock-donation-now <amount>")
     @CommandPermission("event.mockdonation")
     fun mockDonation(sender: Player, amount: Double) {
