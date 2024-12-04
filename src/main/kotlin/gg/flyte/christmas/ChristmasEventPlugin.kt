@@ -16,6 +16,7 @@ import gg.flyte.christmas.util.eventController
 import gg.flyte.christmas.util.style
 import gg.flyte.twilight.twilight
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder
+import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.*
 import org.bukkit.entity.Display
@@ -62,7 +63,12 @@ class ChristmasEventPlugin : JavaPlugin() {
 
     override fun onDisable() {
         serverWorld.entities.forEach {
-            if (it !is Player) it.remove() else it.kick("<red>loddl".style()) // TODO edit kick msg
+            val kickMessage = Component.empty()
+                .append("<colour:#ff7070>ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ᴊᴏɪɴɪɴɢ ᴜs!\n".style())
+                .append("<colour:#67c45e>ᴡᴇ ᴡɪsʜ ʏᴏᴜ ᴀ ᴍᴇʀʀʏ ᴄʜʀɪsᴛᴍᴀs\n".style())
+                .append("<gradient:#EE57FF:#E89EB8>ꜰʟʏᴛᴇ".style())
+
+            if (it !is Player) it.remove() else it.kick(kickMessage)
         } // clean up podium, spectate points, misc entities.
 
         for (npc in worldNPCs) {
