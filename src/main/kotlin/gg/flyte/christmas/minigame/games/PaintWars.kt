@@ -264,4 +264,3 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
         }
     }
 }
-// TODO<Map> make all LIGHT blocks one block higher.
