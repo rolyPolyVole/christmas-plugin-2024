@@ -582,4 +582,3 @@ enum class GameConfig(
     )
     //endregion
 }
-// TODO<Map> once final map is ready, add the spectator boxes.
