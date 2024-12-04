@@ -58,7 +58,6 @@ class HousekeepingEventListener : Listener, PacketListener {
         PacketEvents.getAPI().eventManager.registerListener(this, PacketListenerPriority.NORMAL)
 
         event<PaperServerListPingEvent> {
-            // TODO finish sponsors
             val footer = text("       ")
                 .append("<gradient:#fffdb8:#ffffff>ᴄᴀʀʙᴏɴ.ʜᴏꜱᴛ</gradient>".style())
                 .append("<grey> • ".style())
@@ -81,7 +80,7 @@ class HousekeepingEventListener : Listener, PacketListener {
                 "<st><grey>        <reset> ❆ <bold><light_purple>ꜰʟʏᴛᴇ.ɢɢ <red>ᴄʜʀɪsᴛᴍᴀs <green>ᴇᴠᴇɴᴛ <reset><white>❆ <reset><st><grey>         ".style(),
                 "".style(),
                 "            <gold>Join <green><b>now <reset><gold>to play <aqua>x-mas minigames".style(),
-                "              <gold>and support <red>[charity name]".style() // TODO fill charity name and centre
+                "       <gold>and support <red>Best Friends Animal Society".style()
             ).forEach {
                 this.listedPlayers.add(PaperServerListPingEvent.ListedPlayerInfo(it.toLegacyString().colourise(), UUID.randomUUID()))
             }
@@ -160,7 +159,6 @@ class HousekeepingEventListener : Listener, PacketListener {
                 .append("\n".style())
                 .append("<grey>\n(${Bukkit.getOnlinePlayers().size} ᴘʟᴀʏᴇʀꜱ)".style())
 
-            // TODO finish sponsors
             val footer = "<light_purple>\nꜰʟʏᴛᴇ.ɢɢ/ᴅᴏɴᴀᴛᴇ\n\n".style()
                 .append(" <gradient:#ff80e8:#ffffff>ꜰʟʏᴛᴇ.ɢɢ</gradient>".style())
                 .append("<grey> • ".style())
