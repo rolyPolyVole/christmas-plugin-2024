@@ -26,8 +26,6 @@ import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.CompassMeta
 import org.bukkit.inventory.meta.SkullMeta
-import org.bukkit.potion.PotionEffect
-import org.bukkit.potion.PotionEffectType
 import java.util.*
 
 class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
@@ -130,6 +128,7 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
 
     override fun endGame() {
         eventController().addPoints(remainingPlayers().first().uniqueId, 15)
+        Util.runAction(PlayerType.PARTICIPANT) { it.walkSpeed = 0.2F }
         super.endGame()
     }
 
@@ -142,7 +141,7 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
             oldTagger.formatInventory()
 
             oldTagger.clearActivePotionEffects()
-            oldTagger.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 1000000, 2, false, false, false))
+            oldTagger.walkSpeed = 0.35F // use walkSpeed rather than potions to prevent stephen-like FOV changes
 
             newTagger.sendMessage("<red>You have been tagged by <game_colour>${oldTagger.name}!".style())
         } else newTagger.sendMessage("« <red><b>You <game_colour>have started this round being <red>the IT!<reset> »".style())
@@ -154,7 +153,7 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
         newTagger.equipment.helmet = baubleForRound
 
         newTagger.clearActivePotionEffects()
-        newTagger.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 1000000, 3, false, false, false))
+        newTagger.walkSpeed = 0.45F
 
         newTagger.world.spawn(newTagger.location, Firework::class.java) {
             it.fireworkMeta = it.fireworkMeta.apply {

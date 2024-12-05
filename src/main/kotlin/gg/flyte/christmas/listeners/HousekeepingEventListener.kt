@@ -142,6 +142,7 @@ class HousekeepingEventListener : Listener, PacketListener {
                 gameMode = GameMode.ADVENTURE
                 playSound(Sound.ENTITY_PLAYER_LEVELUP)
                 formatInventory()
+                walkSpeed = 0.2F
 
                 eventController().points.putIfAbsent(uniqueId, 0)
                 eventController().onPlayerJoin(this)
