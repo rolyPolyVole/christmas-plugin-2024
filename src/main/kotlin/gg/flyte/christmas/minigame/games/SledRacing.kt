@@ -84,7 +84,7 @@ class SledRacing : EventMiniGame(GameConfig.SLED_RACING) {
             } // autocorrect armor stand rotation to boat rotation
 
             tasks += repeatingTask(20) {
-                val timeLeft = "<aqua>ᴛɪᴍᴇ ʟᴇғᴛ: <red><b>${gameTime}".style()
+                val timeLeft = "<aqua>ᴛɪᴍᴇ ʟᴇꜰᴛ: <red><b>${gameTime}".style()
                 Bukkit.getOnlinePlayers().forEach { eventController().sidebarManager.updateLines(it, listOf(Component.empty(), timeLeft)) }
 
                 gameTime--
