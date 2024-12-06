@@ -333,7 +333,6 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                 it.detonate()
             }
 
-
             val notification = "<game_colour><b>« A mysterious power-up has spawned on the floor! »".style()
             Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.sendMessage(notification) }
             Util.runAction(PlayerType.PARTICIPANT) {
