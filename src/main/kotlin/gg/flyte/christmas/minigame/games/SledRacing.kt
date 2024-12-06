@@ -105,6 +105,8 @@ class SledRacing : EventMiniGame(GameConfig.SLED_RACING) {
                 formattedWinners.putIfAbsent(uuid, "3ʀᴅ ᴘʟᴀᴄᴇ")
             }
         }
+
+        ChristmasEventPlugin.instance.serverWorld.entities.forEach { if (it is ArmorStand || it is Boat) it.remove() }
         super.endGame()
     }
 
