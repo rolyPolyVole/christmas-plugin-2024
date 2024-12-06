@@ -62,6 +62,7 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
         simpleCountdown {
             pvpEnabled = true
             Util.runAction(PlayerType.PARTICIPANT) {
+                preparePlayer(it)
                 it.title(
                     Component.empty(), "<game_colour>PVP Enabled!".style(),
                     titleTimes(Duration.ZERO, Duration.ofSeconds(2), Duration.ofMillis(300))
