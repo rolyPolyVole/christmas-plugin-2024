@@ -13,6 +13,9 @@ import gg.flyte.christmas.util.toLegacyString
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.scheduler.async
 import gg.flyte.twilight.scheduler.sync
+import net.kyori.adventure.inventory.Book
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.event.ClickEvent
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -126,7 +129,22 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
 
     @Command("donate")
     fun donate(sender: Player) {
-        // TODO send info about donating
+        var book = Book.book(
+            "<red>Donating Info".style(), Component.empty(),
+            Component.empty()
+                .append("".style())
+                .append("<black>ᴛʜɪs ᴄʜʀɪsᴛᴍᴀs ᴇᴠᴇɴᴛ ɪs ɪɴ sᴜᴘᴘᴏʀᴛ ᴏꜰ ᴛʜᴇ <colour:#ec8339>ʙᴇsᴛ ꜰʀɪᴇɴᴅs ᴀɴɪᴍᴀʟ sᴏᴄɪᴇᴛʏ, ".style())
+                .append("<black>ᴀ ʟᴇᴀᴅɪɴɢ ᴜ.s. ɴᴀᴛɪᴏɴᴀʟ ᴀɴɪᴍᴀʟ ᴡᴇʟꜰᴀʀᴇ ᴏʀɢᴀɴɪsᴀᴛɪᴏɴ.\n".style())
+                .append("".style())
+                .append("<colour:#ff3d9b>ᴛʜᴇ ʙᴇsᴛ ᴘᴀʀᴛ? <black>ᴇᴠᴇʀʏ ᴅᴏʟʟᴀʀ ʏᴏᴜ ᴘᴜᴛ ꜰᴏᴜʀᴛʜ ᴡɪʟʟ ʙᴇ <b><colour:#ae61f2>ᴛʀɪᴘᴘʟᴇ ᴍᴀᴛᴄʜᴇᴅ<reset><black>!\n".style())
+                .append(
+                    "\n<black><0> ᴛᴏ ᴅᴏɴᴀᴛᴇ ɴᴏᴡ!".style(
+                        "<colour:#ff80e8>ꜰʟʏᴛᴇ.ɢɢ/ᴅᴏɴᴀᴛᴇ".style().clickEvent(ClickEvent.openUrl("https://flyte.gg/donate"))
+                    )
+                )
+        )
+
+        sender.openBook(book)
     }
 
     @Command("leaderboard")
