@@ -567,8 +567,8 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
     override fun handleDonation(tier: DonationTier) {
         when (tier) {
             DonationTier.LOW -> {
-                Util.runAction(PlayerType.OPTED_OUT) { it.sendMessage("<game_colour>Everyone has received <aqua>3 snowballs<game_colour>!".style()) }
-                Util.runAction(PlayerType.PARTICIPANT) { setNextAvailableSlot(it, ItemStack(Material.SNOWBALL, 3)) }
+                Util.runAction(PlayerType.OPTED_OUT) { it.sendMessage("<game_colour>Everyone has received <aqua>6 snowballs<game_colour>!".style()) }
+                Util.runAction(PlayerType.PARTICIPANT) { setNextAvailableSlot(it, ItemStack(Material.SNOWBALL, 6)) }
             }
 
             DonationTier.MEDIUM -> {
