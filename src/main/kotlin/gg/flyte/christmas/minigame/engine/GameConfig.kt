@@ -399,7 +399,7 @@ enum class GameConfig(
             MapSinglePoint(223, 73, 307, -24.32486F, 4.2968564F)
         ),
         listOf(MapSinglePoint(157, 127, 312)),
-        listOf(),
+        listOf(MapSinglePoint(212, 82, 284, 0, 38)),
         false
     ),
     //endregion
