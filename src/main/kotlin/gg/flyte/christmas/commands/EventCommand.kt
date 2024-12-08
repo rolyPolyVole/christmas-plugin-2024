@@ -266,6 +266,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
                 }
 
                 eventController().currentGame!!.endGame()
+                delay(1) { whoClicked.closeInventory() }
                 whoClicked.sendMessage("<red>Game terminated!".style())
                 whoClicked.playSound(Sound.ENTITY_GENERIC_EXPLODE)
                 eventController().sidebarManager.update()
