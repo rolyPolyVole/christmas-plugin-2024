@@ -163,9 +163,8 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
         eliminatedPlayers.clear()
         eventController().currentGame = null
         eventController().sidebarManager.dataSupplier = eventController().points
-        eventController().serialisePoints()
         eventController().songPlayer?.isPlaying = true
-        WorldNPC.refreshPodium()
+        eventController().serialisePoints()
         showGameResults()
     }
 
@@ -365,6 +364,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
                     displays.forEach { it.remove() }
                 }
 
+                WorldNPC.refreshPodium()
                 eventController().sidebarManager.update()
             }
         }
