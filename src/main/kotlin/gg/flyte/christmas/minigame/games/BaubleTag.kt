@@ -217,7 +217,13 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
                 damage = 0.0
             }
 
-            if (taggedPlayers.contains(damager.uniqueId)) tagPlayer(entity as Player, damager)
+            if (taggedPlayers.contains(damager.uniqueId)) {
+                if (taggedPlayers.contains(entity.uniqueId)) {
+                    return@event
+                } else {
+                    tagPlayer(entity as Player, damager)
+                }
+            }
         }
     }
 
