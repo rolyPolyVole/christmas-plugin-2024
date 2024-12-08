@@ -97,7 +97,7 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
         for (entry in timeOnHill) eventController().addPoints(entry.key, entry.value)
 
         val (first) = timeOnHill.entries
-            .sortedByDescending { it.value }
+            .sortedBy { it.value }
             .take(3)
             .also { it.forEach { formattedWinners.put(it.key, it.value.toString() + " second${if (it.value > 1) "s" else ""}") } }
 

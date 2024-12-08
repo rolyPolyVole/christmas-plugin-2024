@@ -120,7 +120,7 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
         @Suppress("DuplicatedCode") // I'm lazy
         for (entry in scores) eventController().addPoints(entry.key, entry.value)
         scores.entries
-            .sortedByDescending { it.value }
+            .sortedBy { it.value }
             .take(3)
             .also { it.forEach { formattedWinners.put(it.key, it.value.toString() + " kill${if (it.value > 1) "s" else ""}") } }
 
