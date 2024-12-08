@@ -167,6 +167,7 @@ class ChristmasEventPlugin : JavaPlugin() {
             it.billboard = Display.Billboard.CENTER
             it.isDefaultBackground = false
             it.backgroundColor = Color.fromRGB(94, 68, 23)
+            it.isSeeThrough = false
         }
 
         // Create Event Contributors Display
@@ -177,6 +178,7 @@ class ChristmasEventPlugin : JavaPlugin() {
             it.isDefaultBackground = false
             it.backgroundColor = Color.fromARGB(255, 255, 207, 207)
             it.brightness = Display.Brightness(15, 15)
+            it.isSeeThrough = false
         }
 
         // Create Donation Info
@@ -202,6 +204,7 @@ class ChristmasEventPlugin : JavaPlugin() {
             it.isDefaultBackground = false
             it.backgroundColor = Color.fromARGB(255, 0, 0, 0)
             it.brightness = Display.Brightness(15, 15)
+            it.isSeeThrough = false
         }
 
         WorldNPC.refreshPodium()
