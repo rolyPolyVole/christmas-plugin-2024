@@ -192,9 +192,9 @@ class ChristmasEventPlugin : JavaPlugin() {
                     .append("<white>ᴏꜰ ᴅᴏɢs ᴀɴᴅ ᴄᴀᴛs ɪɴ ᴀᴍᴇʀɪᴄᴀ's sʜᴇʟᴛᴇʀs ᴅᴜᴇ ᴛᴏ ʜᴏᴍᴇʟᴇssɴᴇss ᴀɴᴅ ᴏᴠᴇʀᴘᴏᴘᴜʟᴀᴛɪᴏɴ. ".style())
                     .append("<white>ᴛʜᴇʏ ᴀʀᴇ ᴀ ɴᴏɴ-ᴘʀᴏꜰɪᴛ ᴏʀɢᴀɴɪsᴀᴛɪᴏɴ ᴛʜᴀᴛ ʀᴜɴs ᴛʜᴇ ʟᴀʀᴇsᴛ ɴᴏ-ᴋɪʟʟ ᴍᴏᴠᴇᴍᴇɴᴛ & ᴀɴɪᴍᴀʟ sᴀɴᴄᴛᴜᴀʀʏ ɪɴ ᴛʜᴇ ᴜ.s.".style())
                     .append("\n\n".style())
-                    .append("<colour:#ff3d9b>ᴛʜᴇ ʙᴇsᴛ ᴘᴀʀᴛ? ᴇᴠᴇʀʏ ᴅᴏʟʟᴀʀ ʏᴏᴜ ᴘᴜᴛ ꜰᴏᴜʀᴛʜ ᴡɪʟʟ ʙᴇ <b><colour:#ec8339>ᴛʀɪᴘᴘʟᴇ ᴍᴀᴛᴄʜᴇᴅ<reset><white>!\n\n".style())
+                    .append("<colour:#ff3d9b>ᴛʜᴇ ʙᴇsᴛ ᴘᴀʀᴛ? ᴇᴠᴇʀʏ ᴅᴏʟʟᴀʀ ʏᴏᴜ ᴘᴜᴛ ꜰᴏᴜʀᴛʜ ᴡɪʟʟ ʙᴇ <b><colour:#ec8339>ᴛʀɪᴘʟᴇ ᴍᴀᴛᴄʜᴇᴅ<reset><white>!\n\n".style())
                     .append("<white>ʜᴇᴀᴅ ᴏᴠᴇʀ ᴛᴏ <gradient:#ff80e8:#ffffff>ꜰʟʏᴛᴇ.ɢɢ/ᴅᴏɴᴀᴛᴇ</gradient> ᴛᴏ ᴅᴏɴᴀᴛᴇ ɴᴏᴡ!\n\n".style())
-                    .append("<white>sᴇᴇ <colour:#ec8339>ʙᴇsᴛꜰʀɪᴇɴᴅs..ᴏʀɢ ꜰᴏʀ ᴍᴏʀᴇ ɪɴꜰᴏ\n\n".style())
+                    .append("<white>sᴇᴇ <colour:#ec8339>ʙᴇsᴛꜰʀɪᴇɴᴅs.ᴏʀɢ ꜰᴏʀ ᴍᴏʀᴇ ɪɴꜰᴏ\n\n".style())
                     .append("<red>ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ᴊᴏɪɴɪɴɢ ᴜs ❤".style())
 
             )
