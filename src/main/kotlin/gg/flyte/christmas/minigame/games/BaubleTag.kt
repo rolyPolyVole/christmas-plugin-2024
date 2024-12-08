@@ -159,7 +159,7 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
         newTagger.equipment.helmet = baubleForRound
 
         newTagger.clearActivePotionEffects()
-        newTagger.walkSpeed = 0.45F
+        newTagger.walkSpeed = 0.40F
 
         newTagger.world.spawn(newTagger.location, Firework::class.java) {
             it.fireworkMeta = it.fireworkMeta.apply {
