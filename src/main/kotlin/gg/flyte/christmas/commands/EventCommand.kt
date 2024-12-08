@@ -271,7 +271,6 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ Event Menu!".col
                 eventController().sidebarManager.update()
                 whoClicked.sendMessage("<red>Game terminated!".style())
                 whoClicked.playSound(Sound.ENTITY_GENERIC_EXPLODE)
-                eventController().sidebarManager.update()
             }
     }
 }
