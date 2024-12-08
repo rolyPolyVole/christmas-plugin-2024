@@ -493,7 +493,7 @@ enum class GameConfig(
                 " • To win, be the first player to finish all 3 laps!\n\n" +
                 " • \uD83C\uDFB5 Come on, it's lovely weather for a sleigh ride together with you! \uD83C\uDFB6 🛷",
         1,
-        MapSinglePoint(523, 207, 1842, 127F, 90F),
+        MapSinglePoint(523, 150, 1842, 127F, 90F),
         listOf(
             MapRegion(MapSinglePoint(671, 149, 1811, 116.8, 0), MapSinglePoint(651, 149, 1791, 116.8, 0))
         ),
