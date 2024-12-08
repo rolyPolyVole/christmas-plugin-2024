@@ -197,7 +197,7 @@ enum class GameConfig(
     KING_OF_THE_HILL(
         KingHill::class,
         "<colour:#f70123>King of the Hill".style(),
-        "<colour:#f70123>ᴋɪɴɢ ᴏғ ᴛʜᴇ ʜɪʟʟ".style(),
+        "<colour:#f70123>ᴋɪɴɢ ᴏꜰ ᴛʜᴇ ʜɪʟʟ".style(),
         ItemStack(Material.STICK),
         TextColor.fromHexString("#f70123")!!,
         " • Be the King of The Hill! Stand in the centre of the map to gain points every second.\n\n" +
