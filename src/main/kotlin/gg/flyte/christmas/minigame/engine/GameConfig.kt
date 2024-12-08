@@ -132,6 +132,8 @@ enum class GameConfig(
         ),
         listOf(MapSinglePoint(147, 200, 1270, -92.046814F, 49.535908F),),
         listOf(MapSinglePoint(128, 146, 1288, -115.052185F, 22.471674F),),
+        listOf(MapSinglePoint(147, 200, 1270, -92.046814F, 49.535908F)),
+        listOf(MapSinglePoint(128, 146, 1288, -115.052185F, 22.471674F)),
     ),
     //endregion
 
