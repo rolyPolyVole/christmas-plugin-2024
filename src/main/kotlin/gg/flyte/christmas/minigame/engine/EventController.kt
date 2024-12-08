@@ -92,7 +92,7 @@ class EventController() {
             when (seconds) {
                 0 -> {
                     currentGame!!.startGameOverview()
-                    currentGame!!.state = GameState.LIVE
+                    currentGame!!.state = GameState.OVERVIEWING
                     cancel()
                 }
 

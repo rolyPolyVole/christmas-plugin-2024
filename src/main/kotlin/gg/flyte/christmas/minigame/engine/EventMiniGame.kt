@@ -105,6 +105,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
 
                 eventController().sidebarManager.update() // enable again after sequence ended.
                 startGame()
+                state = GameState.LIVE
             }
         }
     }
