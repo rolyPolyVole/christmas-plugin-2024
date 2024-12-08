@@ -147,7 +147,6 @@ class EventController() {
         sidebarManager.remove(player)
 
         when (currentGame?.state) {
-
             GameState.COUNTDOWN -> {
                 delay(1) { // getOnlinePlayers [called through enoughPlayers()] does not update until the next tick
                     if (!enoughPlayers()) {
