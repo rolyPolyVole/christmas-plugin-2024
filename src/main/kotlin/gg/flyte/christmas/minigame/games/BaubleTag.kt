@@ -112,6 +112,9 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
             player.world.playSound(player.location, Sound.BLOCK_GLASS_BREAK, 1F, 1F)
             player.world.spawnParticle(Particle.BLOCK, player.eyeLocation, 10000, 0.5, 0.5, 0.5, Bukkit.createBlockData(Material.GLASS))
             player.teleport(gameConfig.spawnPoints.random().randomLocation())
+            player.formatInventory()
+            player.clearActivePotionEffects()
+            player.walkSpeed = 0.2F
         }
 
         super.eliminate(player, reason)
