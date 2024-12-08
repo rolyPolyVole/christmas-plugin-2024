@@ -81,7 +81,7 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
         player.gameMode = GameMode.ADVENTURE
         player.formatInventory()
         player.teleport(gameConfig.spawnPoints.random().randomLocation())
-        player.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 1000000, 2, false, false, false))
+        player.walkSpeed = 0.4F
 
         scores[player.uniqueId] = 0
 
@@ -123,6 +123,8 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
             .sortedBy { it.value }
             .take(3)
             .also { it.forEach { formattedWinners.put(it.key, it.value.toString() + " kill${if (it.value > 1) "s" else ""}") } }
+
+        Util.runAction(PlayerType.PARTICIPANT) { it.walkSpeed = 0.2F }
 
         super.endGame()
     }
