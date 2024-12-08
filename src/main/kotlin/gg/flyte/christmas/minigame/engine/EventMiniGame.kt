@@ -133,8 +133,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
         eliminatedPlayers.add(player.uniqueId)
         player.teleport(gameConfig.spectatorSpawnLocations.random())
         player.clearActivePotionEffects()
-        player.inventory.storageContents = arrayOf()
-        player.inventory.setItemInOffHand(null)
+        player.formatInventory()
 
         if (reason == EliminationReason.EXPIRED_SESSION) {
             player.teleport(gameConfig.spectatorSpawnLocations.random())
