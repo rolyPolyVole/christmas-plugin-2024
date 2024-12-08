@@ -5,7 +5,6 @@ import com.github.retrooper.packetevents.util.MojangAPIUtil
 import dev.shreyasayyengar.menuapi.menu.MenuManager
 import gg.flyte.christmas.commands.EventCommand
 import gg.flyte.christmas.donation.DonationListener
-import gg.flyte.christmas.donation.RefreshToken
 import gg.flyte.christmas.listeners.HousekeepingEventListener
 import gg.flyte.christmas.minigame.engine.EventController
 import gg.flyte.christmas.minigame.engine.GameConfig
@@ -57,7 +56,6 @@ class ChristmasEventPlugin : JavaPlugin() {
         registerCommands()
         registerEvents()
         registerPacketAPI()
-        handleDonations()
         loadNPCs()
     }
 
@@ -93,19 +91,11 @@ class ChristmasEventPlugin : JavaPlugin() {
 
     private fun registerEvents() {
         HousekeepingEventListener()
+        DonationListener()
     }
 
     private fun registerPacketAPI() {
         PacketEvents.getAPI().init()
-    }
-
-    private fun handleDonations() {
-        if (1 == 1) return // TODO<Final> configure secrets when available.
-        RefreshToken(
-            config.getString("donations.clientId") ?: throw IllegalArgumentException("clientId cannot be empty"),
-            config.getString("donations.clientSecret") ?: throw IllegalArgumentException("clientSecret cannot be empty")
-        )
-        DonationListener(config.getString("donations.campaignId") ?: throw IllegalArgumentException("campaignId cannot be empty"))
     }
 
     private fun loadNPCs() {
@@ -225,7 +215,6 @@ class ChristmasEventPlugin : JavaPlugin() {
             }
         }
 
-        eventController.totalDonations = config.getInt("donations.totalDonations")
         eventController.updateDonationBar()
 
         lobbySpawn = MapSinglePoint(559.5, 103, 518.5, 135, 0)
