@@ -17,6 +17,11 @@ enum class GameState {
     COUNTDOWN,
 
     /**
+     * The game is overviewing/previewing the map and instructing players.
+     */
+    OVERVIEWING,
+
+    /**
      * The game is running.
      */
     LIVE,
