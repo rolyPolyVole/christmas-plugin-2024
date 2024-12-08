@@ -136,6 +136,9 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
     }
 
     private fun tagPlayer(newTagger: Player, oldTagger: Player? = null) {
+        if (remainingPlayers().none { it.uniqueId == newTagger.uniqueId }) return
+        if (oldTagger != null && remainingPlayers().none { it.uniqueId == oldTagger.uniqueId }) return
+
         this.taggedPlayers.add(newTagger.uniqueId)
 
         if (oldTagger != null) {
