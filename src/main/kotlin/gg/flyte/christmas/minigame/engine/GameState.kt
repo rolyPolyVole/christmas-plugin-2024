@@ -2,7 +2,7 @@ package gg.flyte.christmas.minigame.engine
 
 enum class GameState {
     /**
-     * The game has been selected, but is not running.
+     * The [GameConfig] (game type) has been selected, but has no requests to start.
      */
     IDLE,
     /**
