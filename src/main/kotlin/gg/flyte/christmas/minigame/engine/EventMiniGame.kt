@@ -209,7 +209,9 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
      * @see [GameConfig.eliminateOnLeave]
      */
     fun onPlayerQuit(player: Player) {
-        if (state == GameState.LIVE) {
+        if (state == GameState.OVERVIEWING) {
+            player.teleport(gameConfig.spectatorSpawnLocations.random()) // left while overviewing, temporarily hold them away from playspace.
+        } else if (state == GameState.LIVE) {
             if (gameConfig.eliminateOnLeave) eliminate(player, EliminationReason.EXPIRED_SESSION)
         }
     }
