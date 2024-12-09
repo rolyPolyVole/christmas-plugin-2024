@@ -121,7 +121,7 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
 
     override fun eliminate(player: Player, reason: EliminationReason) {
         Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.sendMessage("<red>${player.name} <grey>has been eliminated!".style()) }
-
+        doubleJumps.remove(player)
         player.apply {
             allowFlight = false
 
