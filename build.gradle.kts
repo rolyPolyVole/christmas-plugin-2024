@@ -71,6 +71,12 @@ tasks {
 
     runServer {
         minecraftVersion("1.21.1")
+        downloadPlugins {
+            modrinth("7FN5Qhm4", "1.6.3") // NoteBlockAPI
+            modrinth("HYKaKraK", "2.7.0") // packetevents
+        }
+
+        minecraftVersion("1.21.3")
     }
 }
 
