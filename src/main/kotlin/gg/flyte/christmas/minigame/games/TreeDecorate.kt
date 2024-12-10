@@ -66,9 +66,7 @@ class TreeDecorate : EventMiniGame(GameConfig.TREE_DECORATE) {
             it.playSound(Sound.MUSIC_DISC_CHIRP)
         }
 
-        delay(15, TimeUnit.MINUTES) { // TODO
-            booleanCanDesecrate = true
-        }
+        delay(15, TimeUnit.MINUTES) { booleanCanDesecrate = true }
 
         delay(200, TimeUnit.SECONDS) {
             eventController().songPlayer?.isPlaying = true // Santa Tell Me would now be over.
