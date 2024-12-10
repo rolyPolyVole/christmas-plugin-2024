@@ -488,10 +488,10 @@ enum class GameConfig(
             }
         },
         TextColor.fromHexString("#80ffea")!!,
-        " • Follow the icy path to the end of the map with your sled.\n\n" +
-                " • 3 laps must be completed. To reset, sneak out of your sled.\n\n" +
-                " • To win, be the first player to finish all 3 laps!\n\n" +
-                " • \uD83C\uDFB5 Come on, it's lovely weather for a sleigh ride together with you! \uD83C\uDFB6 🛷",
+        " • ꜰᴏʟʟᴏᴡ ᴛʜᴇ ɪᴄʏ ᴘᴀᴛʜ ᴛᴏ ᴛʜᴇ ᴇɴᴅ ᴏꜰ ᴛʜᴇ ᴍᴀᴘ ᴡɪᴛʜ ʏᴏᴜʀ sʟᴇᴅ.\n\n" +
+                " • 3 ʟᴀᴘs ᴍᴜsᴛ ʙᴇ ᴄᴏᴍᴘʟᴇᴛᴇᴅ. ᴛᴏ ʀᴇsᴇᴛ, sɴᴇᴀᴋ ᴏᴜᴛ ᴏꜰ ʏᴏᴜʀ sʟᴇᴅ.\n\n" +
+                " • ᴛᴏ ᴡɪɴ, ʙᴇ ᴛʜᴇ ꜰɪʀsᴛ ᴘʟᴀʏᴇʀ ᴛᴏ ꜰɪɴɪsʜ ᴀʟʟ 3 ʟᴀᴘs!\n\n" +
+                " • \uD83C\uDFB5 ᴄᴏᴍᴇ ᴏɴ, ɪᴛ's ʟᴏᴠᴇʟʏ ᴡᴇᴀᴛʜᴇʀ ꜰᴏʀ ᴀ sʟᴇɪɢʜ ʀɪᴅᴇ ᴛᴏɢᴇᴛʜᴇʀ ᴡɪᴛʜ ʏᴏᴜ! \uD83C\uDFB6 🛷",
         1,
         MapSinglePoint(523, 150, 1842, 127F, 90F),
         listOf(
@@ -648,4 +648,5 @@ enum class GameConfig(
         ),
         false
     )
+    //endregion
 }
