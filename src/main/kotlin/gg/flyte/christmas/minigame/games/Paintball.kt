@@ -115,7 +115,6 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
     }
 
     override fun endGame() {
-        @Suppress("DuplicatedCode") // I'm lazy
         for (entry in scores) eventController().addPoints(entry.key, entry.value)
         scores.entries
             .sortedBy { it.value }
