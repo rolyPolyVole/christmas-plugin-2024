@@ -279,7 +279,6 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
     }
 
     override fun endGame() {
-        tasks.forEach { it?.cancel() } // this will cancel all game tasks.
         tasks.forEach { it?.cancel() }.also { tasks.clear() } // this will cancel all game tasks.
 
         val winner = remainingPlayers().first()
@@ -452,7 +451,8 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                 }
 
                 when (randomPowerUp) {
-                    PowerUp.ENDER_PEARL -> setNextAvailableSlot(player, ItemStack(Material.ENDER_PEARL))
+                    PowerUp.BLINDNESS -> player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20 * 10, 2, false, false, false))
+
                     PowerUp.COLOR_BOMB -> {
                         val x = clickedBlock!!.location.blockX
                         val y = clickedBlock!!.location.blockY
@@ -497,12 +497,14 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                         clickedBlock!!.world.playSound(clickedBlock!!.location, Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 1.0f)
                     }
 
-                    PowerUp.JUMP_BOOST -> player.addPotionEffect(PotionEffect(PotionEffectType.JUMP_BOOST, 20 * 8, 3, false, false, false))
+                    PowerUp.DOUBLE_JUMP -> player.allowFlight = true
+
+                    PowerUp.ENDER_PEARL -> setNextAvailableSlot(player, ItemStack(Material.ENDER_PEARL))
+
                     PowerUp.FISHING_ROD -> setNextAvailableSlot(player, ItemStack(Material.FISHING_ROD))
-                    PowerUp.SLOWNESS -> player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 20 * 10, 2, false, false, false))
-                    PowerUp.BLINDNESS -> player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20 * 10, 2, false, false, false))
-                    PowerUp.RANDOM_TP -> player.teleport(groupedSquares.random().randomLocation().add(0.0, 1.5, 0.0))
-                    PowerUp.PUSH_SELF -> player.velocity = player.location.direction.multiply(2).add(Vector(0.0, 1.5, 0.0))
+
+                    PowerUp.JUMP_BOOST -> player.addPotionEffect(PotionEffect(PotionEffectType.JUMP_BOOST, 20 * 8, 3, false, false, false))
+
                     PowerUp.PUSH_RANDOM -> {
                         val eventPlayer = player // prevent shadowing
                         remainingPlayers().random().apply {
@@ -512,7 +514,11 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                         }
                     }
 
-                    PowerUp.DOUBLE_JUMP -> player.allowFlight = true
+                    PowerUp.PUSH_SELF -> player.velocity = player.location.direction.multiply(2).add(Vector(0.0, 1.5, 0.0))
+
+                    PowerUp.RANDOM_TP -> player.teleport(groupedSquares.random().randomLocation().add(0.0, 1.5, 0.0))
+
+                    PowerUp.SLOWNESS -> player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 20 * 10, 2, false, false, false))
                 }
 
                 return@event // could be holding fireball. don't wanna trigger both

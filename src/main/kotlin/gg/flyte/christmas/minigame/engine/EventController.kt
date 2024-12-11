@@ -143,6 +143,7 @@ class EventController {
                         countdown()
                     }
                 }
+
                 GameState.LIVE -> currentGame!!.onPlayerJoin(player)
                 else -> return
             }
