@@ -98,7 +98,10 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
     override fun startGame() {
         overviewTask.cancel()
         ChristmasEventPlugin.instance.serverWorld.entities.forEach { if (it is Snowball) it.remove() }
-        simpleCountdown { newRound() }
+        simpleCountdown {
+            newRound()
+            donationEventsEnabled = true
+        }
     }
 
     private fun newRound() {
@@ -218,7 +221,7 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
 
         if (reason == EliminationReason.ELIMINATED) {
             player.apply {
-                currentBossBar?.let { hideBossBar(it)}
+                currentBossBar?.let { hideBossBar(it) }
                 player.world.spawnParticle(Particle.BLOCK, player.location, 100, 0.5, 0.5, 0.5, Bukkit.createBlockData(Material.SNOW_BLOCK))
 
                 val itemDisplay = world.spawn(location, ItemDisplay::class.java) {
@@ -259,6 +262,7 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
 
     override fun endGame() {
         tasks.forEach { it?.cancel() }.also { tasks.clear() }
+        donationEventsEnabled = false
         removeSafePoints()
         ChristmasEventPlugin.instance.serverWorld.time = 6000
 

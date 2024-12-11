@@ -94,6 +94,7 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
         eventController().sidebarManager.dataSupplier = scores
         simpleCountdown {
             started = true
+            donationEventsEnabled = true
             Util.runAction(PlayerType.PARTICIPANT) {
                 it.title(
                     "<game_colour>ѕʜᴏᴏᴛ!".style(), Component.empty(),
@@ -115,13 +116,17 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
     }
 
     override fun endGame() {
+        donationEventsEnabled = false
+
         for (entry in scores) eventController().addPoints(entry.key, entry.value)
         scores.entries
             .sortedBy { it.value }
             .take(3)
-            .also { it.forEach { entry ->
-                formattedWinners[entry.key] = entry.value.toString() + " ᴋɪʟʟ${if (entry.value > 1) "ѕ" else ""}"
-            } }
+            .also {
+                it.forEach { entry ->
+                    formattedWinners[entry.key] = entry.value.toString() + " ᴋɪʟʟ${if (entry.value > 1) "ѕ" else ""}"
+                }
+            }
 
         Util.runAction(PlayerType.PARTICIPANT) { it.walkSpeed = 0.2F }
 

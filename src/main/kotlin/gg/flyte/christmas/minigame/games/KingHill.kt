@@ -60,6 +60,8 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
 
     override fun startGame() {
         simpleCountdown {
+            donationEventsEnabled = true
+
             pvpEnabled = true
             Util.runAction(PlayerType.PARTICIPANT) {
                 preparePlayer(it)
@@ -93,15 +95,19 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
     }
 
     override fun endGame() {
+        donationEventsEnabled = false
+
         Util.runAction(PlayerType.PARTICIPANT) { it.teleport(gameConfig.spawnPoints.random().randomLocation()) }
         for (entry in timeOnHill) eventController().addPoints(entry.key, entry.value)
 
         val (first) = timeOnHill.entries
             .sortedBy { it.value }
             .take(3)
-            .also { it.forEach { entry ->
-                formattedWinners[entry.key] = entry.value.toString() + " ѕᴇᴄᴏɴᴅ${if (entry.value > 1) "ѕ" else ""}"
-            } }
+            .also {
+                it.forEach { entry ->
+                    formattedWinners[entry.key] = entry.value.toString() + " ѕᴇᴄᴏɴᴅ${if (entry.value > 1) "ѕ" else ""}"
+                }
+            }
 
         var yaw = 0F
         ChristmasEventPlugin.instance.serverWorld.spawn(MapSinglePoint(827.5, 105, 630.5, 0, 0), ItemDisplay::class.java) {

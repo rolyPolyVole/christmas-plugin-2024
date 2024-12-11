@@ -107,7 +107,10 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
     override fun startGame() {
         overviewTask.cancel()
-        simpleCountdown { newRound() }
+        simpleCountdown {
+            newRound()
+            donationEventsEnabled = true
+        }
     }
 
     private fun newRound() {
@@ -280,6 +283,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
     override fun endGame() {
         tasks.forEach { it?.cancel() }.also { tasks.clear() } // this will cancel all game tasks.
+        donationEventsEnabled = false
 
         val winner = remainingPlayers().first()
         eventController().addPoints(winner.uniqueId, 15)

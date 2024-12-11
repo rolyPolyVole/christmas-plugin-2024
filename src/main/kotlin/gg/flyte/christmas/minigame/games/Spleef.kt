@@ -68,6 +68,8 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
 
     override fun startGame() {
         overviewTasks.forEach { it.cancel() }
+        donationEventsEnabled = true
+
         for (point in floorLevelBlocks) point.block.type = Material.SNOW_BLOCK // reset after game overview
 
         simpleCountdown {
@@ -164,11 +166,14 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
                 formattedWinners[remainingPlayers().first().uniqueId] = "$value (1ѕᴛ ᴘʟᴀᴄᴇ!)"
                 endGame()
             }
+
             2 -> formattedWinners[player.uniqueId] = value
         }
     }
 
     override fun endGame() {
+        donationEventsEnabled = false
+
         for (point in floorLevelBlocks) point.block.type = Material.AIR
         super.endGame()
     }
@@ -235,6 +240,7 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
                             hitBlock!!.blockData = blockData
                         }
                     }
+
                     else -> return@event
                 }
             }

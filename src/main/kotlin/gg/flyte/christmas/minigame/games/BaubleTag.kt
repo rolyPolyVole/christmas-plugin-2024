@@ -6,7 +6,10 @@ import gg.flyte.christmas.minigame.engine.EventMiniGame
 import gg.flyte.christmas.minigame.engine.GameConfig
 import gg.flyte.christmas.minigame.engine.PlayerType
 import gg.flyte.christmas.minigame.world.MapSinglePoint
-import gg.flyte.christmas.util.*
+import gg.flyte.christmas.util.Util
+import gg.flyte.christmas.util.eventController
+import gg.flyte.christmas.util.formatInventory
+import gg.flyte.christmas.util.style
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.scheduler.TwilightRunnable
@@ -52,6 +55,7 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
         simpleCountdown {
             newRound()
             manageActionBars()
+            donationEventsEnabled = true
         }
     }
 
@@ -104,7 +108,8 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
 
     override fun eliminate(player: Player, reason: EliminationReason) {
         Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.sendMessage("<red>${player.name} <grey>ʜᴀѕ ʙᴇᴇɴ ᴇʟɪᴍɪɴᴀᴛᴇᴅ!".style()) }
-
+        player.walkSpeed = 0.2F
+        // TODO test whether this needs to be in if statement
         if (reason == EliminationReason.ELIMINATED) {
             player.world.createExplosion(player.location, 3F, false, false)
             player.world.playSound(player.location, Sound.BLOCK_GLASS_BREAK, 1F, 1F)
@@ -112,7 +117,6 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
             player.teleport(gameConfig.spawnPoints.random().randomLocation())
             player.formatInventory()
             player.clearActivePotionEffects()
-            player.walkSpeed = 0.2F
         }
 
         super.eliminate(player, reason)
@@ -128,8 +132,11 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
     }
 
     override fun endGame() {
+        donationEventsEnabled = false
+
         eventController().addPoints(remainingPlayers().first().uniqueId, 15)
         Util.runAction(PlayerType.PARTICIPANT) { it.walkSpeed = 0.2F }
+
         super.endGame()
     }
 

@@ -93,6 +93,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         simpleCountdown {
             newRound()
             Util.runAction(PlayerType.PARTICIPANT) { it.sendMessage("<game_colour>ʀᴇᴍᴇᴍʙᴇʀ, <b>ᴅᴏ</b> ɴᴏᴛ ᴄʟɪᴄᴋ ᴛʜᴇ ᴍɪɴᴇᴄᴀʀᴛѕ ʙᴇꜰᴏʀᴇ ᴛʜᴇ ᴍᴜѕɪᴄ ʜᴀѕ ѕᴛᴏᴘᴘᴇᴅ... ʏᴏᴜ ᴡɪʟʟ ʙᴇ ѕᴛᴜɴɴᴇᴅ!".style()) }
+            donationEventsEnabled = true
         }
     }
 
@@ -253,6 +254,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
     override fun endGame() {
         hasEnded = true
         tasks.forEach { it?.cancel() }.also { tasks.clear() } // this will cancel all game tasks.
+        donationEventsEnabled = false
 
         val winner = remainingPlayers().first()
         eventController().addPoints(winner.uniqueId, 15)
@@ -484,13 +486,18 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                 }
 
                 when (randomPowerUp) {
-                    PowerUp.ENDER_PEARL -> player.inventory.setItem(0, ItemStack(Material.ENDER_PEARL, 1))
-                    PowerUp.JUMP_BOOST -> player.addPotionEffect(PotionEffect(PotionEffectType.JUMP_BOOST, 20 * 8, 3, false, false, false))
-                    PowerUp.FISHING_ROD -> player.inventory.setItem(0, ItemStack(Material.FISHING_ROD, 1))
-                    PowerUp.SLOWNESS -> player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 20 * 10, 2, false, false, false))
                     PowerUp.BLINDNESS -> player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20 * 10, 2, false, false, false))
-                    PowerUp.RANDOM_TP -> player.teleport(floorBlocks.random())
-                    PowerUp.PUSH_SELF -> player.velocity = player.location.direction.multiply(2).add(Vector(0.0, 1.5, 0.0))
+
+                    PowerUp.DOUBLE_JUMP -> player.allowFlight = true
+
+                    PowerUp.ENDER_PEARL -> player.inventory.setItem(0, ItemStack(Material.ENDER_PEARL, 1))
+
+                    PowerUp.EXTRA_CART -> player.inventory.addItem(ItemStack(Material.MINECART, 1))
+
+                    PowerUp.FISHING_ROD -> player.inventory.setItem(0, ItemStack(Material.FISHING_ROD, 1))
+
+                    PowerUp.JUMP_BOOST -> player.addPotionEffect(PotionEffect(PotionEffectType.JUMP_BOOST, 20 * 8, 3, false, false, false))
+
                     PowerUp.PUSH_RANDOM -> {
                         val eventPlayer = player // prevent shadowing
                         remainingPlayers().random().apply {
@@ -500,9 +507,11 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                         }
                     }
 
-                    PowerUp.DOUBLE_JUMP -> player.allowFlight = true
+                    PowerUp.PUSH_SELF -> player.velocity = player.location.direction.multiply(2).add(Vector(0.0, 1.5, 0.0))
 
-                    PowerUp.EXTRA_CART -> player.inventory.addItem(ItemStack(Material.MINECART, 1))
+                    PowerUp.RANDOM_TP -> player.teleport(floorBlocks.random())
+
+                    PowerUp.SLOWNESS -> player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 20 * 10, 2, false, false, false))
                 }
             }
 

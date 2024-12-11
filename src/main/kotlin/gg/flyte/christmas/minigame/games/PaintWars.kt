@@ -145,6 +145,7 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
 
         simpleCountdown {
             started = true
+            donationEventsEnabled = true
             tasks += repeatingTask(1, TimeUnit.SECONDS) {
                 gameTime--
 
@@ -160,6 +161,7 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
 
     override fun endGame() {
         started = false
+        donationEventsEnabled = false
 
         changedBlocks.forEach { it.type = Material.WHITE_WOOL }
         playerBrushesBiMap.clear()
@@ -169,8 +171,10 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
         scores.entries
             .sortedBy { it.value }
             .take(3)
-            .also { it.forEach {
-                formattedWinners[it.key] = "${it.value} ʙʟᴏᴄᴋ${if (it.value > 1) "ѕ" else ""}" }
+            .also {
+                it.forEach {
+                    formattedWinners[it.key] = "${it.value} ʙʟᴏᴄᴋ${if (it.value > 1) "ѕ" else ""}"
+                }
             }
 
         super.endGame()
