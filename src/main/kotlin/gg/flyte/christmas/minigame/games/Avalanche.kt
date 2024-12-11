@@ -258,7 +258,7 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
     }
 
     override fun endGame() {
-        tasks.forEach { it?.cancel() }
+        tasks.forEach { it?.cancel() }.also { tasks.clear() }
         removeSafePoints()
         ChristmasEventPlugin.instance.serverWorld.time = 6000
 

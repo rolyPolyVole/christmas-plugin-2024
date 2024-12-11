@@ -280,6 +280,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
 
     override fun endGame() {
         tasks.forEach { it?.cancel() } // this will cancel all game tasks.
+        tasks.forEach { it?.cancel() }.also { tasks.clear() } // this will cancel all game tasks.
 
         val winner = remainingPlayers().first()
         eventController().addPoints(winner.uniqueId, 15)
