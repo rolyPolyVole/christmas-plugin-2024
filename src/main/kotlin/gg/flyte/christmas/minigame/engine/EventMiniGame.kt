@@ -41,6 +41,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
     protected val listeners = mutableListOf<TwilightListener>()
     protected val tasks = mutableListOf<TwilightRunnable?>()
     protected val formattedWinners = linkedMapOf<UUID, String>()
+    var donationEventsEnabled = false
     val spectateEntities = mutableMapOf<Int, Entity>()
     var state: GameState = GameState.IDLE
 

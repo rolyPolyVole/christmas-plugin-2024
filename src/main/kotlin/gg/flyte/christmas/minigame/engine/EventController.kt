@@ -270,7 +270,7 @@ class EventController {
             }
         }
 
-        currentGame?.handleDonation(DonationTier.getTier(value))
+        if (currentGame?.donationEventsEnabled == true) currentGame?.handleDonation(DonationTier.getTier(value))
     }
 
     /**
