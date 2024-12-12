@@ -9,10 +9,7 @@ import gg.flyte.christmas.donation.DonationTier
 import gg.flyte.christmas.util.*
 import gg.flyte.christmas.visual.SidebarManager
 import gg.flyte.twilight.extension.playSound
-import gg.flyte.twilight.scheduler.TwilightRunnable
-import gg.flyte.twilight.scheduler.async
-import gg.flyte.twilight.scheduler.delay
-import gg.flyte.twilight.scheduler.repeatingTask
+import gg.flyte.twilight.scheduler.*
 import gg.flyte.twilight.time.TimeUnit
 import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.text.Component
@@ -268,10 +265,9 @@ class EventController {
 
         async {
             event.donorName?.let {
-                Bukkit.getOfflinePlayer(it).let {
-                    donors.add(it.uniqueId)
-                    if (it.isOnline) (it as Player).formatInventory()
-                }
+                var offlinePlayer = Bukkit.getOfflinePlayer(it)
+                donors.add(offlinePlayer.uniqueId)
+                sync { if (offlinePlayer.isOnline) (offlinePlayer as Player).formatInventory() }
             }
         }
 
