@@ -91,7 +91,7 @@ class HousekeepingEventListener : Listener, PacketListener {
             and will instead be randomised. An explicit call to MiniMessage reverts to default text rendering.
             */
             serverListPingText.map { MiniMessage.miniMessage().deserialize(it) }.forEach {
-                this.listedPlayers.add(PaperServerListPingEvent.ListedPlayerInfo(it.toLegacyString(), UUID.randomUUID()))
+                this.listedPlayers.add(PaperServerListPingEvent.ListedPlayerInfo(it.toLegacyString().replace("&", "§"), UUID.randomUUID()))
             }
         }
 
