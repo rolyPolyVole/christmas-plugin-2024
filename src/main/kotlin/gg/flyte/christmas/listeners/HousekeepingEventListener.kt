@@ -257,6 +257,10 @@ class HousekeepingEventListener : Listener, PacketListener {
             }
         }
 
+        event<PlayerTeleportEvent> {
+            if (this.cause == PlayerTeleportEvent.TeleportCause.SPECTATE) isCancelled = true
+        }
+
         event<FoodLevelChangeEvent> { isCancelled = true }
 
         event<InventoryOpenEvent> {
@@ -290,10 +294,6 @@ class HousekeepingEventListener : Listener, PacketListener {
         event<PrepareItemCraftEvent> { inventory.result = null }
 
         event<DonateEvent> { eventController().handleDonation(this) }
-
-        event<PlayerTeleportEvent> {
-            if (this.cause == PlayerTeleportEvent.TeleportCause.SPECTATE) isCancelled = true
-        }
     }
 
     override fun onPacketReceive(event: PacketReceiveEvent) {
