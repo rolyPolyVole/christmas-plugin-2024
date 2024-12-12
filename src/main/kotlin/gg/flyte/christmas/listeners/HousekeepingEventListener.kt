@@ -100,6 +100,7 @@ class HousekeepingEventListener : Listener, PacketListener {
                 val finalRender = text()
 
                 if (player.isOp) finalRender.append("<red><b>ѕᴛᴀꜰꜰ ".style())
+                if (eventController().donors.contains(player.uniqueId)) finalRender.append("<b><gradient:#FFCF00:#FFF56C>ᴅᴏɴᴏʀ </gradient>".style())
 
                 finalRender.append(text(player.name, TextColor.color(209, 209, 209)))
                     .append("<grey> » ".style())
