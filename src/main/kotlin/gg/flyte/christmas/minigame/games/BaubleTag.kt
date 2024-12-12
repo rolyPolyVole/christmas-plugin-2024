@@ -109,16 +109,9 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
     override fun eliminate(player: Player, reason: EliminationReason) {
         Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.sendMessage("<red>${player.name} <grey>ʜᴀѕ ʙᴇᴇɴ ᴇʟɪᴍɪɴᴀᴛᴇᴅ!".style()) }
         player.walkSpeed = 0.2F
-        // TODO test whether this needs to be in if statement
-        if (reason == EliminationReason.ELIMINATED) {
-            player.world.createExplosion(player.location, 3F, false, false)
-            player.world.playSound(player.location, Sound.BLOCK_GLASS_BREAK, 1F, 1F)
-            player.world.spawnParticle(Particle.BLOCK, player.eyeLocation, 10000, 0.5, 0.5, 0.5, Bukkit.createBlockData(Material.GLASS))
-            player.teleport(gameConfig.spawnPoints.random().randomLocation())
-            player.formatInventory()
-            player.clearActivePotionEffects()
-        }
-
+        player.world.createExplosion(player.location, 3F, false, false)
+        player.world.playSound(player.location, Sound.BLOCK_GLASS_BREAK, 1F, 1F)
+        player.world.spawnParticle(Particle.BLOCK, player.eyeLocation, 10000, 0.5, 0.5, 0.5, Bukkit.createBlockData(Material.GLASS))
         super.eliminate(player, reason)
         when (remainingPlayers().size) {
             1 -> {
