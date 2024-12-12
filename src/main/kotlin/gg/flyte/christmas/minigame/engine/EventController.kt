@@ -269,7 +269,10 @@ class EventController {
 
         async {
             event.donorName?.let {
-                Bukkit.getOfflinePlayer(it).let { donors.add(it.uniqueId) }
+                Bukkit.getOfflinePlayer(it).let {
+                    donors.add(it.uniqueId)
+                    if (it.isOnline) (it as Player).formatInventory()
+                }
             }
         }
 
