@@ -124,38 +124,33 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
     override fun eliminate(player: Player, reason: EliminationReason) {
         Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.sendMessage("<red>${player.name} <grey>has been eliminated!".style()) }
         doubleJumps.remove(player)
-        player.apply {
-            allowFlight = false
 
-            @Suppress("DuplicatedCode") // yes ik but im lazy and can't think of any other animations
-            if (reason == EliminationReason.ELIMINATED) {
-                if (gameMode != GameMode.SPECTATOR) {
-                    Util.runAction(PlayerType.PARTICIPANT, PlayerType.PARTICIPANT) { it.playSound(Sound.ENTITY_ITEM_BREAK) }
-                } // don't apply cosmetics if in camera sequence
+        player.allowFlight = false
+        if (player.gameMode != GameMode.SPECTATOR) {
+            Util.runAction(PlayerType.PARTICIPANT, PlayerType.PARTICIPANT) { it.playSound(Sound.ENTITY_ITEM_BREAK) }
+        } // don't apply cosmetics if in camera sequence
 
-                addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20 * 4, 1, false, false, false))
+        @Suppress("DuplicatedCode") // yes ik but im lazy and can't think of any other animations
+        if (reason == EliminationReason.ELIMINATED) {
+            player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20 * 4, 1, false, false, false))
 
-                val itemDisplay = world.spawn(location, ItemDisplay::class.java) {
-                    it.setItemStack(ItemStack(Material.AIR))
-                    it.teleportDuration = 59 // max (minecraft limitation)
+            val itemDisplay = player.world.spawn(player.location, ItemDisplay::class.java) {
+                it.setItemStack(ItemStack(Material.AIR))
+                it.teleportDuration = 59 // max (minecraft limitation)
+            }
+            delay(1) {
+                val randomSpecLocation = gameConfig.spectatorSpawnLocations.random()
+                itemDisplay.teleport(randomSpecLocation)
+                itemDisplay.addPassenger(player)
+                player.hidePlayer()
+
+                delay(59) {
+                    itemDisplay.remove()
+                    player.teleport(randomSpecLocation)
+                    player.showPlayer()
                 }
-
-                addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20 * 4, 1, false, false, false))
-
-                delay(1) {
-                    val randomSpecLocation = gameConfig.spectatorSpawnLocations.random()
-                    itemDisplay.teleport(randomSpecLocation)
-                    itemDisplay.addPassenger(player)
-                    player.hidePlayer()
-
-                    delay(59) {
-                        itemDisplay.remove()
-                        player.teleport(randomSpecLocation)
-                        player.showPlayer()
-                    }
-                }
-            } // animate death
-        }
+            }
+        } // animate death
 
         super.eliminate(player, reason)
 

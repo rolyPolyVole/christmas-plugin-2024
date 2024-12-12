@@ -207,35 +207,32 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
             it.playSound(Sound.ENTITY_PLAYER_HURT)
         }
 
-        player.apply {
-            currentBossBar?.let { hideBossBar(it) }
-            if (allowFlight) allowFlight = false // if had double-jump
+        currentBossBar?.let { player.hideBossBar(it) }
+        if (player.allowFlight) player.allowFlight = false // if had double-jump
+        if (player.gameMode != GameMode.SPECTATOR) {
+            Util.runAction(PlayerType.PARTICIPANT, PlayerType.PARTICIPANT) { it.playSound(Sound.ENTITY_ITEM_BREAK) }
+        } // don't apply cosmetics if in camera sequence
 
-            if (reason == EliminationReason.ELIMINATED) {
-                if (gameMode != GameMode.SPECTATOR) {
-                    Util.runAction(PlayerType.PARTICIPANT, PlayerType.PARTICIPANT) { it.playSound(Sound.ENTITY_ITEM_BREAK) }
-                } // don't apply cosmetics if in camera sequence
+        if (reason == EliminationReason.ELIMINATED) {
+            player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20 * 4, 1, false, false, false))
 
-                addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20 * 4, 1, false, false, false))
+            val itemDisplay = player.world.spawn(player.location, ItemDisplay::class.java) {
+                it.setItemStack(ItemStack(Material.AIR))
+                it.teleportDuration = 59 // max (minecraft limitation)
+            }
+            delay(1) {
+                val randomSpecLocation = gameConfig.spectatorSpawnLocations.random()
+                itemDisplay.teleport(randomSpecLocation)
+                itemDisplay.addPassenger(player)
+                player.hidePlayer()
 
-                val itemDisplay = world.spawn(location, ItemDisplay::class.java) {
-                    it.setItemStack(ItemStack(Material.AIR))
-                    it.teleportDuration = 59 // max (minecraft limitation)
+                delay(59) {
+                    itemDisplay.remove()
+                    player.teleport(randomSpecLocation)
+                    player.showPlayer()
                 }
-                delay(1) {
-                    val randomSpecLocation = gameConfig.spectatorSpawnLocations.random()
-                    itemDisplay.teleport(randomSpecLocation)
-                    itemDisplay.addPassenger(player)
-                    player.hidePlayer()
-
-                    delay(59) {
-                        itemDisplay.remove()
-                        player.teleport(randomSpecLocation)
-                        player.showPlayer()
-                    }
-                }
-            } // animate death
-        }
+            }
+        } // animate death
         super.eliminate(player, reason)
 
         val value = "$roundNumber ʀᴏᴜɴᴅ${if (roundNumber > 1) "ѕ" else ""}"

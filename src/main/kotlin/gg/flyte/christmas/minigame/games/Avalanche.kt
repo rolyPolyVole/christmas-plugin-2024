@@ -219,29 +219,27 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
             it.playSound(Sound.ENTITY_PLAYER_HURT)
         }
 
+        currentBossBar?.let { player.hideBossBar(it) }
+        player.world.spawnParticle(Particle.BLOCK, player.location, 100, 0.5, 0.5, 0.5, Bukkit.createBlockData(Material.SNOW_BLOCK))
+
+        // animate death
         if (reason == EliminationReason.ELIMINATED) {
-            player.apply {
-                currentBossBar?.let { hideBossBar(it) }
-                player.world.spawnParticle(Particle.BLOCK, player.location, 100, 0.5, 0.5, 0.5, Bukkit.createBlockData(Material.SNOW_BLOCK))
+            player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20 * 4, 1, false, false, false))
 
-                val itemDisplay = world.spawn(location, ItemDisplay::class.java) {
-                    it.setItemStack(ItemStack(Material.AIR))
-                    it.teleportDuration = 59 // max (minecraft limitation)
-                }
+            val itemDisplay = player.world.spawn(player.location, ItemDisplay::class.java) {
+                it.setItemStack(ItemStack(Material.AIR))
+                it.teleportDuration = 59 // max (minecraft limitation)
+            }
+            delay(1) {
+                val randomSpecLocation = gameConfig.spectatorSpawnLocations.random()
+                itemDisplay.teleport(randomSpecLocation)
+                itemDisplay.addPassenger(player)
+                player.hidePlayer()
 
-                addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20 * 4, 1, false, false, false))
-
-                delay(1) {
-                    val randomSpecLocation = gameConfig.spectatorSpawnLocations.random()
-                    itemDisplay.teleport(randomSpecLocation)
-                    itemDisplay.addPassenger(player)
-                    player.hidePlayer()
-
-                    delay(59) {
-                        itemDisplay.remove()
-                        player.teleport(randomSpecLocation)
-                        player.showPlayer()
-                    }
+                delay(59) {
+                    itemDisplay.remove()
+                    player.teleport(randomSpecLocation)
+                    player.showPlayer()
                 }
             }
         }
