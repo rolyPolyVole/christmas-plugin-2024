@@ -221,8 +221,10 @@ class EventController {
      */
     fun serialisePoints() {
         async {
-            ChristmasEventPlugin.instance.config.set("points", null)
-            points.forEach { (uuid, points) -> ChristmasEventPlugin.instance.config.set("points.$uuid", points) }
+            ChristmasEventPlugin.instance.config.set("points", 0)
+            delay(5) {
+                points.forEach { (uuid, points) -> ChristmasEventPlugin.instance.config.set("points.$uuid", points) }
+            }
 
             ChristmasEventPlugin.instance.saveConfig()
         }
