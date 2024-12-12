@@ -32,7 +32,7 @@ dependencies {
     implementation("fr.mrmicky:fastboard:2.1.3")
 
     compileOnly("com.github.koca2000:NoteBlockAPI:1.6.2")
-    compileOnly("com.github.retrooper:packetevents-spigot:2.6.0")
+    compileOnly("com.github.retrooper:packetevents-spigot:2.7.0")
 }
 
 tasks {
