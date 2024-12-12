@@ -163,7 +163,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ ᴇᴠᴇɴᴛ �
     @Command("event mock-donation-now <amount> <target>")
     @CommandPermission("event.mockdonation")
     fun mockDonation(sender: Player, amount: Double, target: Player) {
-        var donationEvent = DonateEvent(UUID.randomUUID().toString(), null, null, amount.toString(), System.currentTimeMillis())
+        var donationEvent = DonateEvent(UUID.randomUUID().toString(), target.name, null, amount.toString(), System.currentTimeMillis())
         Bukkit.getPluginManager().callEvent(donationEvent)
     }
 
