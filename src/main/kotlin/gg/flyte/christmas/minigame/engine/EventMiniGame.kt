@@ -266,15 +266,20 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
             // create podium NPCs
             val npcs = mutableListOf<WorldNPC>()
             val displays = mutableListOf<TextDisplay>()
-            val descendingColour = listOf("a", "c", "9")
+            val descendingColour = listOf(
+                "<colour:#ffcb1a>➊ ",
+                "<colour:#d0d0d0>➋ ",
+                "<colour:#a39341>➌ "
+            )
+
             formattedWinners.entries.take(3).reversed().forEachIndexed { index, keyValuePair ->
                 val uniqueId = keyValuePair.key
                 val value = keyValuePair.value
-                val displayName = "§${descendingColour[index]}${Bukkit.getOfflinePlayer(uniqueId).name}".colourise()
+                val displayName = "${descendingColour[index]}${Bukkit.getOfflinePlayer(uniqueId).name}"
                 val placeLocation = Util.getNPCSummaryLocation(index)
                 val animationTasks = mutableListOf<TwilightRunnable>()
 
-                WorldNPC.createFromUniqueId(displayName, uniqueId, placeLocation).also { npc ->
+                WorldNPC.createFromUniqueId(displayName.style(), uniqueId, placeLocation).also { npc ->
                     npc.spawnForAll()
 
                     placeLocation.world.spawn(placeLocation.add(0.0, 2.5, 0.0), TextDisplay::class.java).apply {

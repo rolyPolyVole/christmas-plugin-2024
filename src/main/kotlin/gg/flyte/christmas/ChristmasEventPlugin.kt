@@ -11,7 +11,6 @@ import gg.flyte.christmas.minigame.engine.GameConfig
 import gg.flyte.christmas.minigame.world.MapSinglePoint
 import gg.flyte.christmas.npc.WorldNPC
 import gg.flyte.christmas.util.Util
-import gg.flyte.christmas.util.colourise
 import gg.flyte.christmas.util.eventController
 import gg.flyte.christmas.util.style
 import gg.flyte.twilight.twilight
@@ -101,24 +100,10 @@ class ChristmasEventPlugin : JavaPlugin() {
 
     private fun loadNPCs() {
         for (contributor in Util.getEventContributors()) {
-            val uniqueId = contributor.uniqueId
-            val contribution = contributor.contribution
-            val location = contributor.location
-
-            val randomColour = mapOf(
-                "<dark_red>" to "4",
-                "<red>" to "c",
-                "<gold>" to "6",
-                "<dark_green>" to "2",
-                "<green>" to "a",
-                "<blue>" to "9",
-            ).entries.random()
-
-            val displayName = "§${randomColour.value}${MojangAPIUtil.requestPlayerName(uniqueId)}".colourise()
+            val (uniqueId, contribution, location, colour) = contributor
+            val displayName = "<$colour>${MojangAPIUtil.requestPlayerName(uniqueId)}".style()
 
             val contributorNPC = WorldNPC.createFromUniqueId(displayName, uniqueId, location).also { worldNPCs += it }
-            contributorNPC.npc.prefixName = "${randomColour.key}<obf>W ".style()
-            contributorNPC.npc.suffixName = " ${randomColour.key}<obf>W".style()
             contributorNPC.spawnForAll()
 
             location.world.spawn(location.clone().add(0.0, 2.5, 0.0), TextDisplay::class.java).apply {

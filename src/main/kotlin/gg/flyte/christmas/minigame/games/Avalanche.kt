@@ -279,8 +279,17 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
                     floorRegion.randomLocation().clone().add(0.0, (25..30).random().toDouble(), 0.0),
                     Snowball::class.java
                 ) { snowBall ->
-                    val randomColour: String = listOf("4", "c", "6", "2", "a", "9").random()
-                    val displayName: String = "§$randomColour${winnerPlayer.name}".colourise()
+                    val randomColour = listOf(
+                        "<colour:#fcba03>",
+                        "<colour:#b7ffab>",
+                        "<colour:#0098b3>",
+                        "<colour:#3d3dff>",
+                        "<colour:#ebadff>",
+                        "<colour:#ff3333>",
+                        "<colour:#50e669>",
+                        "<game_colour>"
+                    ).random()
+                    val displayName = "$randomColour${winnerPlayer.name}".style()
 
                     WorldNPC.createFromLive(displayName, winnerPlayer, snowBall.location).also {
                         winnerNPCs.add(it)
