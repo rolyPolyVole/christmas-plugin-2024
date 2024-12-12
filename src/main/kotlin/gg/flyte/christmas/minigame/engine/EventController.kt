@@ -299,6 +299,6 @@ class EventController {
     }
 
     private fun getBossBarMessage(): Component =
-        "<b><gradient:${Colours.LIGHT_PURPLE}:${Colours.MAGENTA}>ᴅᴏɴᴀᴛɪᴏɴ ɢᴏᴀʟ:</gradient></b> <white><b>$<light_purple>${totalDonations}<grey>/<magenta>${donationGoal}".style()
+        "<b><gradient:#A3ADFF:#00FFF4>ᴅᴏɴᴀᴛɪᴏɴ ɢᴏᴀʟ:</gradient></b> <white><b>$<colour:#A3ADFF>${totalDonations}<grey>/<colour:#66CCFB>${donationGoal}".style()
 
 }
