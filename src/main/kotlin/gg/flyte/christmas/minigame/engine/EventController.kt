@@ -13,6 +13,8 @@ import gg.flyte.twilight.scheduler.*
 import gg.flyte.twilight.time.TimeUnit
 import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.event.ClickEvent
+import net.kyori.adventure.text.event.HoverEvent
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
@@ -259,19 +261,32 @@ class EventController {
             }
 
             // announce donation
-            val charitableDonor = event.donorName ?: "mysterious donor"
-            it.sendMessage("<grey><gradient:#A3ADFF:#00FFF4>DONATION MADE ––> Thank you,</gradient><#FF72A6> $charitableDonor<gradient:#00FFF4:#00FFF4>, <gradient:#00FFF4:#A3ADFF>for donating $${event.amount} (matched to $${event.finalAmount}).</gradient>".style())
-        }
+            val charitableDonor = event.donorName ?: "ᴍʏsᴛᴇʀɪᴏᴜs ᴅᴏɴᴏʀ"
+            it.sendMessage(
+                "<grey><gradient:#A3ADFF:#00FFF4>[ᴅᴏɴᴀᴛɪᴏɴ ᴍᴀᴅᴇ] —> ᴛʜᴀɴᴋ ʏᴏᴜ,</gradient><#FF72A6> $charitableDonor<gradient:#00FFF4:#00FFF4>, <gradient:#00FFF4:#A3ADFF>ꜰᴏʀ ᴅᴏɴᴀᴛɪɴɢ $${event.amount} (ᴍᴀᴛᴄʜᴇᴅ ᴛᴏ $${event.finalAmount}).</gradient>".style()
+                    .clickEvent(ClickEvent.openUrl("https://flyte.gg/donate"))
+                    .hoverEvent(HoverEvent.showText("<gradient:#A3ADFF:#00FFF4>[ᴄʟɪᴄᴋ ᴛᴏ ᴅᴏɴᴀᴛᴇ ɴᴏᴡ!]</gradient><#FF72A6>".style()))
+            )
 
-        async {
-            event.donorName?.let {
-                var offlinePlayer = Bukkit.getOfflinePlayer(it)
-                donors.add(offlinePlayer.uniqueId)
-                sync { if (offlinePlayer.isOnline) (offlinePlayer as Player).formatInventory() }
-            }
         }
+        event.donorName?.let { markAsDonor(it) }
 
         if (currentGame?.donationEventsEnabled == true) currentGame?.handleDonation(DonationTier.getTier(value))
+    }
+
+    /**
+     * Cosmetically marks a player as a donor, giving them a special hat in their inventory,
+     * as wekk as adding them to the donor list, which used to render chat messages.
+     *
+     * @param donorName The name of the in-game name to mark as a donor.
+     */
+    fun markAsDonor(donorName: String) {
+        async {
+            Bukkit.getOfflinePlayer(donorName).let {
+                donors.add(it.uniqueId)
+                sync { if (it.isOnline) (it as Player).formatInventory() }
+            }
+        }
     }
 
     /**
