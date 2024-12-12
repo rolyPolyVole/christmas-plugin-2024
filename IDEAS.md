@@ -43,8 +43,6 @@
 
 Extra considerations:
 
-- fix bossbar colours
+- streamline cameraslide
 - also rework avalanche roof designs/ideas.
-- Remove glowstone from forest map.
 - work out scoring ratio (games like paint wars cant add 4000+ points)
-- fix the END button to be in winner overview as well.
