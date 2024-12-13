@@ -146,7 +146,7 @@ class HousekeepingEventListener : Listener, PacketListener {
             player.apply {
                 async {
                     try {
-                        RemoteFile("https://github.com/shreyasayyengar/flyte-christmas-resource-pack/releases/latest/download/RP.zip").apply {
+                        RemoteFile("https://github.com/flytegg/christmas-plugin-2024/releases/latest/download/Resource-Pack.zip").apply {
                             setResourcePack(this.url, this.hash, true)
                         }
                     } catch (_: Exception) {
