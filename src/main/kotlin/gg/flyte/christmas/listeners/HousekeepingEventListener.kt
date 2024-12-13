@@ -108,11 +108,14 @@ class HousekeepingEventListener : Listener, PacketListener {
 
         event<PlayerInteractEvent> {
             val clickedBlock = clickedBlock ?: return@event
-            if (eventController().currentGame?.state != GameState.IDLE && eventController().currentGame != null) return@event
             if (!(clickedBlock.type == Material.SNOW || clickedBlock.type == Material.SNOW_BLOCK)) return@event
-            if (this.item?.type == Material.SNOWBALL) {
-                isCancelled = true
+            if (this.item?.type == Material.SNOWBALL) isCancelled = true
+
+            var canPickup = true
+            if (eventController().currentGame != null) {
+                canPickup = eventController().currentGame!!.state == GameState.IDLE
             }
+
             if (Random().nextInt(5) != 0) return@event
 
             if (player.inventory.firstEmpty() == -1) return@event
