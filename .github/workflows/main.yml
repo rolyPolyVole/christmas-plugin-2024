@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+    paths:
+      - 'resource-pack/**'
 
 jobs:
   build:
