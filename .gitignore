@@ -42,4 +42,8 @@ bin/
 ### Mac OS ###
 .DS_Store
 
-/run
+### Run ###
+run/*
+
+### Kotlin ###
+.kotlin/sessions/kotlin-compiler-*.salive

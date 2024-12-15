@@ -185,7 +185,7 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
         }
     }
 
-    override fun handleDonation(tier: DonationTier) {
+    override fun handleDonation(tier: DonationTier, donorName: String?) {
         when (tier) {
             DonationTier.LOW -> {
                 if (Random.nextBoolean()) {

@@ -31,9 +31,45 @@
 - Donations progress bar somehow.
 - "Chaos" donations -> drop TNT in a spleef game, for example.
 
+## Donation Events:
+
+### Spleef:
+ - Low-tier
+    - A few seconds of unlimited double jump
+    - +1 double jump for everyone
+    - Powerful snowballs for 10 seconds
+- Medium-tier
+    - Spawn a fast-shooting snow golem riding a flying mob (Bee maybe? Invisible maybe?)
+    - Spawn a fast-shooting snow golem on the layer 1 sweats
+- High-tier
+    - Remove the bottom layer with a 5-second warning, can only be used once
+    - Start snowing snowballs from the sky
+
+### Bauble Tag:
+ - Low-tier
+    - Make everyone glow for 10 seconds
+    - Double everyone's speed for 10 seconds
+ - Medium-tier
+    - Randomly swap a tagged player
+    - Teleport everyone to the middle
+ - High-tier
+    - Explode one random player, killing nearby players too. Disabled in the final round.
+    - Explode specifically stephen
+
+### Paintball:
+  - Low-tier
+    - Make everyone glow for 10 seconds
+    - Give everyone nausea for 10 seconds
+  - Medium-tier
+    - Give everyone a sniper
+    - Spawn a snow golem in the middle of the map
+  - High-tier
+    - Placeholder
+    - Placeholder
+
 ## Stream:
 
-- Drumroll while rolling givaway?H
+- Drumroll while rolling giveaway?
 
 # PlayTest Notes:
 
@@ -46,3 +82,6 @@ Extra considerations:
 - streamline cameraslide
 - also rework avalanche roof designs/ideas.
 - work out scoring ratio (games like paint wars cant add 4000+ points)
+
+### Bugs which I don't want to spam on the discord
+- Terminating a game in its camera phase
