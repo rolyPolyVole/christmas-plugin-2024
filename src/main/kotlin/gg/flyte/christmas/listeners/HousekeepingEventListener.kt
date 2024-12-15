@@ -189,6 +189,14 @@ class HousekeepingEventListener : Listener, PacketListener {
 
         event<PlayerQuitEvent> {
             quitMessage(null)
+            val header = text()
+                .append("<colour:#ffa1a1>❆ ".style())
+                .append("<colour:#aae687>ᴄʜʀɪsᴛᴍᴀs ᴄʜᴀʀɪᴛʏ ᴇᴠᴇɴᴛ".style())
+                .append(" <colour:#ffa1a1>❆".style())
+                .append("\n".style())
+                .append("<grey>\n(${Bukkit.getOnlinePlayers().size} ᴘʟᴀʏᴇʀꜱ)".style())
+            Bukkit.getOnlinePlayers().forEach { it.sendPlayerListHeader(header) }
+
             eventController().onPlayerQuit(player)
         }
 
