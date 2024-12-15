@@ -578,14 +578,11 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
             remainingPlayers().forEach { it.sendMessage(message) }
         }
 
-        doUnlimitedDoubleJumps(donorName)
-
-        // TODO uncomment
-//        when ((0..2).random()) {
-//            0 -> doExtraDoubleJumps(donorName)
-//            1 -> doUnlimitedDoubleJumps(donorName)
-//            2 -> doPowerfulSnowballs(donorName)
-//        }
+        when ((0..2).random()) {
+            0 -> doExtraDoubleJumps(donorName)
+            1 -> doUnlimitedDoubleJumps(donorName)
+            2 -> doPowerfulSnowballs(donorName)
+        }
     }
 
     private fun midTierDonation(donorName: String?) {
