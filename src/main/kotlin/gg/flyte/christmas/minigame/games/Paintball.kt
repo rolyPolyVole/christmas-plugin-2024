@@ -17,8 +17,11 @@ import org.bukkit.entity.ThrowableProjectile
 import org.bukkit.event.entity.ProjectileHitEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 import java.time.Duration
 import java.util.*
+import kotlin.random.Random
 
 class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
     private var gameTime = 90
@@ -74,6 +77,9 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
         Material.BLACK_GLAZED_TERRACOTTA,
         Material.WHITE_GLAZED_TERRACOTTA,
     )
+
+    private var glowSeconds = 0
+    private var nauseatedSeconds = 0
 
     override fun preparePlayer(player: Player) {
         player.gameMode = GameMode.ADVENTURE
@@ -181,7 +187,55 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
 
     override fun handleDonation(tier: DonationTier) {
         when (tier) {
-            DonationTier.LOW -> TODO()
+            DonationTier.LOW -> {
+                if (Random.nextBoolean()) {
+                    remainingPlayers().forEach { it.isGlowing = true }
+
+                    if (this.glowSeconds > 0) {
+                        this.glowSeconds += 10 // glowTime alr running, add more time
+                    } else {
+                        this.glowSeconds = 10
+                        tasks += repeatingTask(1, TimeUnit.SECONDS) {
+                            if (glowSeconds == 0) {
+                                remainingPlayers().forEach { it.isGlowing = false }
+                                cancel()
+                            } else {
+                                glowSeconds--
+                            }
+                        }
+                    }
+
+                } else {
+                    remainingPlayers().forEach {
+                        it.addPotionEffect(
+                            PotionEffect(
+                                PotionEffectType.NAUSEA,
+                                PotionEffect.INFINITE_DURATION,
+                                1,
+                                false,
+                                false,
+                                false
+                            )
+                        )
+                    }
+
+                    if (this.nauseatedSeconds > 0) {
+                        this.nauseatedSeconds += 10 // nausea alr running, add more time
+                    } else {
+                        this.nauseatedSeconds = 10
+                        tasks += repeatingTask(1, TimeUnit.SECONDS) {
+                            if (nauseatedSeconds == 0) {
+                                remainingPlayers().forEach { it.clearActivePotionEffects() }
+
+                                cancel()
+                            } else {
+                                nauseatedSeconds--
+                            }
+                        }
+                    }
+                }
+            }
+
             DonationTier.MEDIUM -> TODO()
             DonationTier.HIGH -> TODO()
         }

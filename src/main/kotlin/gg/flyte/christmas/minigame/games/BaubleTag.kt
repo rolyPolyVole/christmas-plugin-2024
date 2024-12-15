@@ -27,6 +27,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.CompassMeta
 import org.bukkit.inventory.meta.SkullMeta
 import java.util.*
+import kotlin.random.Random
 
 class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
     private val baubleTextureURLs = listOf(
@@ -36,19 +37,24 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
         "e258b0b460dee9e67b59f69808caa5db4665969b4b30af43d0e086a133645318",
         "e040b03876580350dbf81333aea696a6d2f3f7d5156fb0ce25771283df609a9f"
     )
+    private lateinit var baubleForRound: ItemStack
     private val regroupPoint = MapSinglePoint(205.5, 127, 1271.5)
     private val taggedPlayers = mutableListOf<UUID>()
     private var regroup = false
     private var secondsForRound = 60
     private var roundNumber = 0
-    private lateinit var baubleForRound: ItemStack
-    private var actionBarTasks = mutableMapOf<UUID, TwilightRunnable>()
+    private var taggerWalkSpeed = 0.4F
+    private var runnerWalkSpeed = 0.3F
+    private var actionBarTasks = mutableMapOf<UUID, TwilightRunnable>() // TODO remove?
+
+    private var glowSeconds = 0
+    private var doubleSpeedSeconds = 0
 
     override fun preparePlayer(player: Player) {
         player.formatInventory()
         player.gameMode = GameMode.ADVENTURE
         player.teleport(gameConfig.spawnPoints.random().randomLocation())
-        player.walkSpeed = 0.30F
+        player.walkSpeed = runnerWalkSpeed
     }
 
     override fun startGame() {
@@ -145,7 +151,7 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
             oldTagger.formatInventory()
 
             oldTagger.clearActivePotionEffects()
-            oldTagger.walkSpeed = 0.30F // use walkSpeed rather than potions to prevent stephen-like FOV changes
+            oldTagger.walkSpeed = runnerWalkSpeed // use walkSpeed rather than potions to prevent stephen-like FOV changes
 
             newTagger.sendMessage("<red>ʏᴏᴜ ʜᴀᴠᴇ ʙᴇᴇɴ ᴛᴀɢɢᴇᴅ ʙʏ <game_colour>${oldTagger.name}!".style())
         } else newTagger.sendMessage("« <red><b>ʏᴏᴜ <game_colour>ʜᴀᴠᴇ ѕᴛᴀʀᴛᴇᴅ ᴛʜɪѕ ʀᴏᴜɴᴅ ʙᴇɪɴɢ <red>ᴛʜᴇ ɪᴛ!<reset> »".style())
@@ -157,7 +163,7 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
         newTagger.equipment.helmet = baubleForRound
 
         newTagger.clearActivePotionEffects()
-        delay(20) { newTagger.walkSpeed = 0.40F }
+        delay(20) { newTagger.walkSpeed = taggerWalkSpeed }
 
         newTagger.world.spawn(newTagger.location, Firework::class.java) {
             it.fireworkMeta = it.fireworkMeta.apply {
@@ -227,9 +233,86 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
 
     override fun handleDonation(tier: DonationTier) {
         when (tier) {
-            DonationTier.LOW -> TODO()
-            DonationTier.MEDIUM -> TODO()
-            DonationTier.HIGH -> TODO()
+            DonationTier.LOW -> {
+                if (Random.nextBoolean()) {
+                    remainingPlayers().forEach { it.isGlowing = true }
+
+                    if (this.glowSeconds > 0) {
+                        this.glowSeconds += 10 // glowTime alr running, add more time
+                    } else {
+                        this.glowSeconds = 10
+                        tasks += repeatingTask(1, TimeUnit.SECONDS) {
+                            if (glowSeconds == 0) {
+                                remainingPlayers().forEach { it.isGlowing = false }
+                                cancel()
+                            } else {
+                                glowSeconds--
+                            }
+                        }
+                    }
+
+
+                } else {
+                    fun forceApplySpeed() {
+                        remainingPlayers().forEach { player ->
+                            player.walkSpeed = if (taggedPlayers.contains(player.uniqueId)) taggerWalkSpeed else runnerWalkSpeed
+                        }
+                    }
+
+                    this.taggerWalkSpeed = 0.6F
+                    this.runnerWalkSpeed = 0.5F
+                    forceApplySpeed()
+
+                    if (this.doubleSpeedSeconds > 0) { // TODO find a way to bossbar this
+                        this.doubleSpeedSeconds += 10 // doubleSpeedTime alr running, add more time
+                    } else {
+                        this.doubleSpeedSeconds = 10
+                        tasks += repeatingTask(1, TimeUnit.SECONDS) {
+                            if (doubleSpeedSeconds == 0) {
+                                forceApplySpeed()
+                                cancel()
+                            } else {
+                                doubleSpeedSeconds--
+                            }
+                        }
+                    }
+                }
+            }
+
+            DonationTier.MEDIUM -> {
+                if (Random.nextBoolean()) {
+                    remainingPlayers().forEach { it.teleport(regroupPoint) }
+                } else {
+                    // randomly swap a tagged player for a runner
+                    val tagged = remainingPlayers().filter { taggedPlayers.contains(it.uniqueId) }
+                    val runner = remainingPlayers().filter { !taggedPlayers.contains(it.uniqueId) }
+
+                    if (tagged.isNotEmpty() && runner.isNotEmpty()) tagPlayer(runner.random(), tagged.random())
+                }
+            }
+
+            DonationTier.HIGH -> {
+                if (remainingPlayers().size == 2) return // don't forcibly explode the last two :(
+
+                if (Random.nextBoolean()) {
+                    val victim = remainingPlayers().random()
+                    var surroundingVictims = victim.location.getNearbyPlayers(3.0, 3.0, 3.0) { it != victim }
+
+                    if (surroundingVictims.size + 1 >= remainingPlayers().size) {
+                        // TODO
+                        // the result of this event should always leave at least two players remaining, modify surroundingVictims to account for this
+                        // the game cannot just end from a dono event
+                    }
+                    surroundingVictims
+                        .forEach { eliminate(it, EliminationReason.ELIMINATED) }
+                        .also { eliminate(victim, EliminationReason.ELIMINATED) }
+                } else {
+                    val stephenUUID = UUID.fromString("69e8f7d5-11f9-4818-a3bb-7f237df32949")
+                    remainingPlayers().find { it.uniqueId == stephenUUID }?.let {
+                        eliminate(Bukkit.getPlayer(stephenUUID)!!, EliminationReason.ELIMINATED)
+                    }
+                }
+            }
         }
     }
 }

@@ -302,3 +302,4 @@ class EventController {
         "<b><gradient:#A3ADFF:#00FFF4>ᴅᴏɴᴀᴛɪᴏɴ ɢᴏᴀʟ:</gradient></b> <white><b>$<colour:#A3ADFF>${totalDonations}<grey>/<colour:#66CCFB>${donationGoal}".style()
 
 }
+// TODO find a way to streamline the message sent to players when a dono event happens.
