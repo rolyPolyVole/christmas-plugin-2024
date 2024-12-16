@@ -66,7 +66,7 @@ class ChristmasEventPlugin : JavaPlugin() {
                 .append("<colour:#67c45e>ᴡᴇ ᴡɪsʜ ʏᴏᴜ ᴀ ᴍᴇʀʀʏ ᴄʜʀɪsᴛᴍᴀs\n".style())
                 .append("<gradient:#EE57FF:#E89EB8>ꜰʟʏᴛᴇ".style())
 
-            if (it !is Player) it.remove() else it.kick(kickMessage)
+            if (it is Player) it.kick(kickMessage) else it.remove()
         } // clean up podium, spectate points, misc entities.
 
         for (npc in worldNPCs) {
