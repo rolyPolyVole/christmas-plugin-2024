@@ -356,7 +356,6 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
 
         listeners += event<ProjectileLaunchEvent> {
             if (entity !is Snowball) return@event
-
             if (powerfulSnowballs()) entity.velocity = entity.velocity.multiply(2)
         }
 
