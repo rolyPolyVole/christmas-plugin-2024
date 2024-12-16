@@ -320,111 +320,6 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
         )
     }
 
-    private fun doSpawnSnowGolem(name: String?, flying: Boolean) {
-        val nmsWorld = (ChristmasEventPlugin.instance.serverWorld as CraftWorld).handle
-
-        val location = gameConfig.spawnPoints.random().randomLocation()
-        if (flying) {
-            location.y += 10
-        }
-
-        CustomSnowGolem(this, nmsWorld, location, flying).spawn().let {
-            val snowmanName =
-                if (name != null) "<aqua>$name's</aqua> sɴᴏᴡ ɢᴏʟᴇᴍ".style()
-                else "<game_colour>${if (flying) "ꜰʟʏɪɴɢ" else "ᴀɴɢʀʏ"} sɴᴏᴡ ɢᴏʟᴇᴍ".style()
-
-            it.customName(snowmanName)
-            it.isCustomNameVisible = true
-            it.getAttribute(Attribute.FOLLOW_RANGE)!!.baseValue = 64.0
-
-            if (flying) {
-                CustomBee(nmsWorld, location).spawn().let { bee ->
-                    bee.isInvisible = true
-                    bee.isSilent = true
-
-                    bee.getAttribute(Attribute.MOVEMENT_SPEED)!!.baseValue = 0.5
-                    bee.getAttribute(Attribute.FLYING_SPEED)!!.baseValue = 0.5
-
-                    bee.addPassenger(it)
-                    bees.add(bee)
-                }
-            }
-
-            snowmen.add(it)
-        }
-
-        val flyingText = if (flying) " ꜰʟʏɪɴɢ" else "ɴ ᴀɴɢʀʏ"
-        val message = "<green>A$flyingText sɴᴏᴡ ɢᴏʟᴇᴍ ʜᴀs ᴊᴏɪɴᴇᴅ ᴛʜᴇ ɢᴀᴍᴇ! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
-        remainingPlayers().forEach { it.sendMessage(message.style()) }
-    }
-
-    private fun doSnowballRain(name: String?) {
-        val world = ChristmasEventPlugin.instance.serverWorld
-
-        floorLevelBlocks.forEach {
-            val location = it.block.location
-            location.y = 150.0 + (0..20).random().toDouble()
-
-            if ((0..9).random() == 0) {
-                world.spawn(location, Snowball::class.java).shooter = null
-            }
-        }
-
-        val message = "<green>A sɴᴏᴡʙᴀʟʟ ʀᴀɪɴ ʜᴀs sᴛᴀʀᴛᴇᴅ! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style()
-        remainingPlayers().forEach {
-            it.playSound(it, Sound.WEATHER_RAIN, 1.0F, 0.5F)
-            it.sendMessage(message)
-        }
-    }
-
-    @OptIn(DelicateCoroutinesApi::class) // TODO keep-an-eye thread-safety.
-    private fun doMeltBottomLayer(name: String?) {
-        bottomLayerMelted = true
-        var countdown = 5
-
-        val meltedText =
-            if (name != null) "<red><b>Tʜᴇ ʙᴏᴛᴛᴏᴍ ʟᴀʏᴇʀ ᴡᴀs ᴍᴇʟᴛᴇᴅ ʙʏ <aqua>$name</aqua>!".style()
-            else "<red><b>Tʜᴇ ʙᴏᴛᴛᴏᴍ ʟᴀʏᴇʀ ʜᴀs ᴍᴇʟᴛᴇᴅ!".style()
-
-        tasks += repeatingTask(20) {
-            if (countdown == 0) {
-                cancel()
-                remainingPlayers().forEach { it.sendMessage(meltedText) }
-            } else {
-                remainingPlayers().forEach {
-                    it.sendMessage("<red><b>Tʜᴇ ʙᴏᴛᴛᴏᴍ ʟᴀʏᴇʀ ᴡɪʟʟ ᴍᴇʟᴛ ɪɴ <aqua>$countdown</aqua> sᴇᴄᴏɴᴅs!".style())
-                }
-                countdown--
-            }
-        }
-
-        // Note: GPT START
-        val blocksToDestroy = mutableListOf<Block>()
-        var sectionSize = 0
-
-        GlobalScope.launch(Dispatchers.IO) {
-            floorLevelBlocks.forEach {
-                if (it.block.y == 86) {
-                    blocksToDestroy.add(it.block)
-                }
-            }
-
-            sectionSize = blocksToDestroy.size / 4
-        }
-
-        var currentIndex = 0
-        for (i in 0 until 4) {
-            tasks += delay(120 + i) {
-                blocksToDestroy.subList(currentIndex, currentIndex + sectionSize).forEach {
-                    it.breakNaturally()
-                    spawnSnowParticles(it)
-                }
-
-                currentIndex += sectionSize
-            }
-        }
-    }
-
     override fun handleGameEvents() {
         listeners += event<BlockBreakEvent> {
             isCancelled = true
@@ -596,6 +491,111 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
         } else {
             doSnowballRain(donorName)
             doSpawnSnowGolem(donorName, true)
+        }
+    }
+
+    private fun doSpawnSnowGolem(name: String?, flying: Boolean) {
+        val nmsWorld = (ChristmasEventPlugin.instance.serverWorld as CraftWorld).handle
+
+        val location = gameConfig.spawnPoints.random().randomLocation()
+        if (flying) {
+            location.y += 10
+        }
+
+        CustomSnowGolem(this, nmsWorld, location, flying).spawn().let {
+            val snowmanName =
+                if (name != null) "<aqua>$name's</aqua> sɴᴏᴡ ɢᴏʟᴇᴍ".style()
+                else "<game_colour>${if (flying) "ꜰʟʏɪɴɢ" else "ᴀɴɢʀʏ"} sɴᴏᴡ ɢᴏʟᴇᴍ".style()
+
+            it.customName(snowmanName)
+            it.isCustomNameVisible = true
+            it.getAttribute(Attribute.FOLLOW_RANGE)!!.baseValue = 64.0
+
+            if (flying) {
+                CustomBee(nmsWorld, location).spawn().let { bee ->
+                    bee.isInvisible = true
+                    bee.isSilent = true
+
+                    bee.getAttribute(Attribute.MOVEMENT_SPEED)!!.baseValue = 0.5
+                    bee.getAttribute(Attribute.FLYING_SPEED)!!.baseValue = 0.5
+
+                    bee.addPassenger(it)
+                    bees.add(bee)
+                }
+            }
+
+            snowmen.add(it)
+        }
+
+        val flyingText = if (flying) " ꜰʟʏɪɴɢ" else "ɴ ᴀɴɢʀʏ"
+        val message = "<green>A$flyingText sɴᴏᴡ ɢᴏʟᴇᴍ ʜᴀs ᴊᴏɪɴᴇᴅ ᴛʜᴇ ɢᴀᴍᴇ! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
+        remainingPlayers().forEach { it.sendMessage(message.style()) }
+    }
+
+    private fun doSnowballRain(name: String?) {
+        val world = ChristmasEventPlugin.instance.serverWorld
+
+        floorLevelBlocks.forEach {
+            val location = it.block.location
+            location.y = 150.0 + (0..20).random().toDouble()
+
+            if ((0..9).random() == 0) {
+                world.spawn(location, Snowball::class.java).shooter = null
+            }
+        }
+
+        val message = "<green>A sɴᴏᴡʙᴀʟʟ ʀᴀɪɴ ʜᴀs sᴛᴀʀᴛᴇᴅ! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style()
+        remainingPlayers().forEach {
+            it.playSound(it, Sound.WEATHER_RAIN, 1.0F, 0.5F)
+            it.sendMessage(message)
+        }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class) // TODO keep-an-eye thread-safety.
+    private fun doMeltBottomLayer(name: String?) {
+        bottomLayerMelted = true
+        var countdown = 5
+
+        val meltedText =
+            if (name != null) "<red><b>Tʜᴇ ʙᴏᴛᴛᴏᴍ ʟᴀʏᴇʀ ᴡᴀs ᴍᴇʟᴛᴇᴅ ʙʏ <aqua>$name</aqua>!".style()
+            else "<red><b>Tʜᴇ ʙᴏᴛᴛᴏᴍ ʟᴀʏᴇʀ ʜᴀs ᴍᴇʟᴛᴇᴅ!".style()
+
+        tasks += repeatingTask(20) {
+            if (countdown == 0) {
+                cancel()
+                remainingPlayers().forEach { it.sendMessage(meltedText) }
+            } else {
+                remainingPlayers().forEach {
+                    it.sendMessage("<red><b>Tʜᴇ ʙᴏᴛᴛᴏᴍ ʟᴀʏᴇʀ ᴡɪʟʟ ᴍᴇʟᴛ ɪɴ <aqua>$countdown</aqua> sᴇᴄᴏɴᴅs!".style())
+                }
+                countdown--
+            }
+        }
+
+        // Note: GPT START
+        val blocksToDestroy = mutableListOf<Block>()
+        var sectionSize = 0
+
+        GlobalScope.launch(Dispatchers.IO) {
+            floorLevelBlocks.forEach {
+                if (it.block.y == 86) {
+                    blocksToDestroy.add(it.block)
+                }
+            }
+
+            sectionSize = blocksToDestroy.size / 4
+        }
+
+        var currentIndex = 0
+        for (i in 0 until 4) {
+            tasks += delay(120 + i) {
+                blocksToDestroy.subList(currentIndex, currentIndex + sectionSize).forEach {
+                    it.breakNaturally()
+                    spawnSnowParticles(it)
+                }
+
+                currentIndex += sectionSize
+            }
         }
     }
 
