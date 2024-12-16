@@ -294,8 +294,7 @@ class EventController {
      */
     fun updateDonationBar() {
         donationBossBar.name(getBossBarMessage())
-        val progress = (totalDonations.toFloat() / donationGoal)
-        donationBossBar.progress(progress)
+        donationBossBar.progress(Math.clamp((totalDonations.toFloat() / donationGoal), 0F, 1F))
     }
 
     private fun getBossBarMessage(): Component =
