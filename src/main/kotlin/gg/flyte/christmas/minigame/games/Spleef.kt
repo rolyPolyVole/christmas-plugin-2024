@@ -258,7 +258,7 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
         // show the correct # of double jumps available.
         tasks += repeatingTask(10) {
             remainingPlayers().forEach {
-                if (unlimitedJumpTickData.first > 0) {
+                if (unlimitedJumps()) {
                     it.sendActionBar("<gold><b>ᴜɴʟɪᴍɪᴛᴇᴅ<reset> <game_colour>ᴅᴏᴜʙʟᴇ ᴊᴜᴍᴘs!".style())
                 } else if (doubleJumps[it.uniqueId]!! > 0) {
                     it.sendActionBar("<green><b>${doubleJumps[it.uniqueId]!!} <reset><game_colour>ᴅᴏᴜʙʟᴇ ᴊᴜᴍᴘs ʟᴇꜰᴛ!".style())
@@ -320,6 +320,10 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
         )
     }
 
+    private fun unlimitedJumps() = unlimitedJumpTickData.first > 0
+
+    private fun powerfulSnowballs() = powerfulSnowballTickData.first > 0
+
     override fun handleGameEvents() {
         listeners += event<BlockBreakEvent> {
             isCancelled = true
@@ -340,7 +344,7 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
             if (player.gameMode != GameMode.SURVIVAL) return@event
             isCancelled = true
 
-            if (unlimitedJumpTickData.first > 0) {
+            if (unlimitedJumps()) {
                 performDoubleJump(player)
             } else if (doubleJumps[player.uniqueId]!! > 0) {
                 performDoubleJump(player)
@@ -353,9 +357,7 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
         listeners += event<ProjectileLaunchEvent> {
             if (entity !is Snowball) return@event
 
-            if (powerfulSnowballTickData.first > 0) {
-                entity.velocity = entity.velocity.multiply(2)
-            }
+            if (powerfulSnowballs()) entity.velocity = entity.velocity.multiply(2)
         }
 
         listeners += event<ProjectileHitEvent> {
@@ -367,7 +369,7 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
             if (entity !is Snowball) return@event
 
             if (floorLevelBlocks.any { it.block == hitBlock }) {
-                if (powerfulSnowballTickData.first > 0) {
+                if (powerfulSnowballs()) {
                     hitBlock!!.type = Material.AIR
                     spawnSnowParticles(hitBlock!!)
                 } else {
@@ -411,7 +413,7 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
                 it.showBossBar(unlimitedJumpBossBar)
             }
 
-            if (unlimitedJumpTickData.first > 0) {
+            if (unlimitedJumps()) {
                 // extend duration if already active
                 unlimitedJumpTickData = unlimitedJumpTickData.let { it.first + (5 * 20) to it.second + (5 * 20) }
             } else {
@@ -444,7 +446,7 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
             remainingPlayers().forEach { it.showBossBar(snowballBossBar) }
 
             // extend duration if already active
-            if (powerfulSnowballTickData.first > 0) {
+            if (powerfulSnowballs()) {
                 powerfulSnowballTickData = powerfulSnowballTickData.let { it.first + 20 * 10 to it.second + 20 * 10 }
             } else {
                 // set initial duration
@@ -627,7 +629,7 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
             val dz = target.z - z
             val targetY = target.y - 1.6 // different from the original method; aim at feet instead of eyes
 
-            val extraY = sqrt(dx * dx + dz * dz) * (if (game.powerfulSnowballTickData.first > 0) 0.1 else 0.2)
+            val extraY = sqrt(dx * dx + dz * dz) * (if (game.powerfulSnowballs()) 0.1 else 0.2)
             val world = level()
 
             if (world is ServerLevel) {
