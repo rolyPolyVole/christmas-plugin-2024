@@ -64,8 +64,10 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
     // ticks left | total ticks
     private var unlimitedJumpTickData: Pair<Int, Int> = 0 to 0
     private var powerfulSnowballTickData: Pair<Int, Int> = 0 to 0
-    private val unlimitedJumpBossBar = BossBar.bossBar("<game_colour><b>ᴜɴʟɪᴍɪᴛᴇᴅ ᴅᴏᴜʙʟᴇ ᴊᴜᴍᴘs!".style(), 1.0F, BossBar.Color.YELLOW, BossBar.Overlay.PROGRESS)
-    private val snowballBar = BossBar.bossBar("<game_colour><b>ᴘᴏᴡᴇʀꜰᴜʟ sɴᴏᴡʙᴀʟʟs".style(), 1.0F, BossBar.Color.WHITE, BossBar.Overlay.PROGRESS)
+
+    // lateinit since <game_colour> is not mapped yet at time of init
+    private lateinit var unlimitedJumpBossBar: BossBar
+    private lateinit var snowballBossBar: BossBar
     private val snowmen = mutableListOf<Snowman>()
     private val bees = mutableListOf<Bee>()
     private var bottomLayerMelted = false
@@ -97,6 +99,10 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
     override fun startGame() {
         overviewTasks.forEach { it.cancel() }
         donationEventsEnabled = true
+
+        unlimitedJumpBossBar =
+            BossBar.bossBar("<game_colour><b>ᴜɴʟɪᴍɪᴛᴇᴅ ᴅᴏᴜʙʟᴇ ᴊᴜᴍᴘs!".style(), 1.0F, BossBar.Color.YELLOW, BossBar.Overlay.PROGRESS)
+        snowballBossBar = BossBar.bossBar("<game_colour><b>ᴘᴏᴡᴇʀꜰᴜʟ sɴᴏᴡʙᴀʟʟs".style(), 1.0F, BossBar.Color.WHITE, BossBar.Overlay.PROGRESS)
 
         for (block in floorLevelBlocks) block.block.type = Material.SNOW_BLOCK // reset after game overview
 
@@ -180,7 +186,7 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
 
         player.allowFlight = false
         player.hideBossBar(unlimitedJumpBossBar)
-        player.hideBossBar(snowballBar)
+        player.hideBossBar(snowballBossBar)
         doubleJumps.remove(player.uniqueId)
 
         if (player.gameMode != GameMode.SPECTATOR) {
@@ -234,7 +240,7 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
         remainingPlayers().forEach {
             it.allowFlight = false
             unlimitedJumpBossBar.removeViewer(it)
-            snowballBar.removeViewer(it)
+            snowballBossBar.removeViewer(it)
         }
 
         snowmen.forEach { it.remove() }
@@ -348,11 +354,8 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
         }
 
         val flyingText = if (flying) " ꜰʟʏɪɴɢ" else "ɴ ᴀɴɢʀʏ"
-        val message =
-            if (name != null) "<green>A$flyingText sɴᴏᴡᴍᴀɴ ʜᴀs ᴊᴏɪɴᴇᴅ ᴛʜᴇ ɢᴀᴍᴇ! (<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ)".style()
-            else "<green>A$flyingText sɴᴏᴡᴍᴀɴ ʜᴀs ᴊᴏɪɴᴇᴅ ᴛʜᴇ ɢᴀᴍᴇ! (ᴅᴏɴᴀᴛɪᴏɴ)".style()
-
-        remainingPlayers().forEach { it.sendMessage(message) }
+        val message = "<green>A$flyingText sɴᴏᴡ ɢᴏʟᴇᴍ ʜᴀs ᴊᴏɪɴᴇᴅ ᴛʜᴇ ɢᴀᴍᴇ! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
+        remainingPlayers().forEach { it.sendMessage(message.style()) }
     }
 
     private fun doSnowballRain(name: String?) {
@@ -367,10 +370,7 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
             }
         }
 
-        val message =
-            if (name != null) "<green>A sɴᴏᴡʙᴀʟʟ ʀᴀɪɴ ʜᴀs sᴛᴀʀᴛᴇᴅ! (<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ)".style()
-            else "<green>A sɴᴏᴡʙᴀʟʟ ʀᴀɪɴ ʜᴀs sᴛᴀʀᴛᴇᴅ! (ᴅᴏɴᴀᴛɪᴏɴ)".style()
-
+        val message = "<green>A sɴᴏᴡʙᴀʟʟ ʀᴀɪɴ ʜᴀs sᴛᴀʀᴛᴇᴅ! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style()
         remainingPlayers().forEach {
             it.playSound(it, Sound.WEATHER_RAIN, 1.0F, 0.5F)
             it.sendMessage(message)
@@ -501,14 +501,12 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
             val increase = (1..2).random()
             val plural = if (increase > 1) "s" else ""
 
-            val message = if (name != null) "<green>+<red>$increase</red> ᴅᴏᴜʙʟᴇ ᴊᴜᴍᴘ$plural! (<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ)".style()
-            else "<green>+<red>$increase</red> ᴅᴏᴜʙʟᴇ ᴊᴜᴍᴘ$plural! (ᴅᴏɴᴀᴛɪᴏɴ)".style()
+            val message = "<green>+<red>$increase</red> ᴅᴏᴜʙʟᴇ ᴊᴜᴍᴘ$plural! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
+            announceDonationEvent(message.style())
 
             remainingPlayers().forEach {
                 doubleJumps[it.uniqueId] = doubleJumps[it.uniqueId]!! + increase
                 it.allowFlight = true
-
-                it.sendMessage(message)
             }
         }
 
@@ -520,10 +518,10 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
 
             if (unlimitedJumpTickData.first > 0) {
                 // extend duration if already active
-                unlimitedJumpTickData = unlimitedJumpTickData.let { it.first + 20 * 5 to it.second + 20 * 5 }
+                unlimitedJumpTickData = unlimitedJumpTickData.let { it.first + (5 * 20) to it.second + (5 * 20) }
             } else {
                 // set initial duration
-                unlimitedJumpTickData = 20 * 5 to 20 * 5
+                unlimitedJumpTickData = 5 * 20 to 5 * 20
 
                 tasks += repeatingTask(1) {
                     val (ticksLeft, totalTicks) = unlimitedJumpTickData
@@ -542,14 +540,13 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
                 }
             }
 
-            val message = if (name != null) "<green>+<red>5</red> sᴇᴄᴏɴᴅs ᴏꜰ ᴜɴʟɪᴍɴɪᴛᴇᴅ ᴅᴏᴜʙʟᴇ ᴊᴜᴍᴘ! (<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ)".style()
-            else "<green>+<red>5</red> sᴇᴄᴏɴᴅs ᴏꜰ ᴜɴʟɪᴍɴɪᴛᴇᴅ ᴅᴏᴜʙʟᴇ ᴊᴜᴍᴘ! (ᴅᴏɴᴀᴛɪᴏɴ)".style()
-
-            remainingPlayers().forEach { it.sendMessage(message) }
+            val message =
+                "<green>+<red>5</red> sᴇᴄᴏɴᴅs ᴏꜰ ᴜɴʟɪᴍɪᴛᴇᴅ ᴅᴏᴜʙʟᴇ ᴊᴜᴍᴘ! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
+            announceDonationEvent(message.style())
         }
 
         fun doPowerfulSnowballs(name: String?) {
-            remainingPlayers().forEach { it.showBossBar(snowballBar) }
+            remainingPlayers().forEach { it.showBossBar(snowballBossBar) }
 
             // extend duration if already active
             if (powerfulSnowballTickData.first > 0) {
@@ -560,10 +557,10 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
 
                 tasks += repeatingTask(1) {
                     val (ticksLeft, totalTicks) = powerfulSnowballTickData
-                    snowballBar.progress(Math.clamp(ticksLeft / totalTicks.toFloat(), 0.0F, 1.0F))
+                    snowballBossBar.progress(Math.clamp(ticksLeft / totalTicks.toFloat(), 0.0F, 1.0F))
 
                     if (ticksLeft == 0) {
-                        remainingPlayers().forEach { it.hideBossBar(snowballBar) }
+                        remainingPlayers().forEach { it.hideBossBar(snowballBossBar) }
                         cancel()
                         powerfulSnowballTickData = 0 to 0
                     } else {
@@ -572,10 +569,9 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
                 }
             }
 
-            val message = if (name != null) "<green>+<red>10</red> sᴇᴄᴏɴᴅs ᴏꜰ ᴘᴏᴡᴇʀꜰᴜʟ sɴᴏᴡʙᴀʟʟs! (<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ)".style()
-            else "<green>+<red>10</red> sᴇᴄᴏɴᴅs ᴏꜰ ᴘᴏᴡᴇʀꜰᴜʟ sɴᴏᴡʙᴀʟʟs! (ᴅᴏɴᴀᴛɪᴏɴ)".style()
-
-            remainingPlayers().forEach { it.sendMessage(message) }
+            val message =
+                "<green>+<red>10</red> sᴇᴄᴏɴᴅs ᴏꜰ ᴘᴏᴡᴇʀꜰᴜʟ sɴᴏᴡʙᴀʟʟs! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
+            announceDonationEvent(message.style())
         }
 
         when ((0..2).random()) {

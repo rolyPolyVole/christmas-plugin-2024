@@ -12,10 +12,10 @@ import gg.flyte.christmas.util.formatInventory
 import gg.flyte.christmas.util.style
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.playSound
-import gg.flyte.twilight.scheduler.TwilightRunnable
 import gg.flyte.twilight.scheduler.delay
 import gg.flyte.twilight.scheduler.repeatingTask
 import gg.flyte.twilight.time.TimeUnit
+import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.text.Component
 import org.bukkit.*
 import org.bukkit.entity.Firework
@@ -45,8 +45,12 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
     private var roundNumber = 0
     private var taggerWalkSpeed = 0.4F
     private var runnerWalkSpeed = 0.3F
-    private var glowSeconds = 0
-    private var doubleSpeedSeconds = 0
+    // ticks left | total ticks
+    private var glowingTickData: Pair<Int, Int> = 0 to 0
+    private var doubleSpeedTickData: Pair<Int, Int> = 0 to 0
+    // lateinit since <game_colour> is not mapped yet at time of init
+    private lateinit var glowingBossBar: BossBar
+    private lateinit var doubleSpeedBossBar: BossBar
 
     override fun preparePlayer(player: Player) {
         player.formatInventory()
@@ -60,6 +64,9 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
             newRound()
             manageActionBars()
             donationEventsEnabled = true
+
+            glowingBossBar = BossBar.bossBar("<game_colour><b>ɢʟᴏᴡɪɴɢ ᴇɴᴀʙʟᴇᴅ".style(), 1.0F, BossBar.Color.WHITE, BossBar.Overlay.PROGRESS)
+            doubleSpeedBossBar = BossBar.bossBar("<game_colour><b>ᴅᴏᴜʙʟᴇ sᴘᴇᴇᴅ".style(), 1.0F, BossBar.Color.BLUE, BossBar.Overlay.PROGRESS)
         }
     }
 
@@ -131,7 +138,13 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
         donationEventsEnabled = false
 
         eventController().addPoints(remainingPlayers().first().uniqueId, 15)
-        Util.runAction(PlayerType.PARTICIPANT) { it.walkSpeed = 0.2F }
+        Util.runAction(PlayerType.PARTICIPANT) {
+            it.walkSpeed = 0.2F
+            it.hideBossBar(glowingBossBar)
+            it.hideBossBar(doubleSpeedBossBar)
+            it.isGlowing = false
+        }
+
 
         super.endGame()
     }
@@ -205,6 +218,10 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
         }
     }
 
+    private fun glowEnabled() = glowingTickData.first > 0
+
+    private fun doubleSpeedEnabled() = doubleSpeedTickData.first > 0
+
     override fun handleGameEvents() {
         listeners += event<EntityDamageEvent>(priority = EventPriority.HIGHEST) {
             // return@event -> already cancelled by lower priority [HousekeepingEventListener]
@@ -232,59 +249,90 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
         when (tier) {
             DonationTier.LOW -> {
                 if (Random.nextBoolean()) {
-                    remainingPlayers().forEach { it.isGlowing = true }
+                    remainingPlayers().forEach {
+                        it.isGlowing = true
+                        it.showBossBar(glowingBossBar)
+                    }
 
-                    if (this.glowSeconds > 0) {
-                        this.glowSeconds += 10 // glowTime alr running, add more time
+                    if (glowEnabled()) {
+                        // extent duration if already active
+                        glowingTickData = glowingTickData.let { it.first + (10 * 20) to it.second + (10 * 20) }
                     } else {
-                        this.glowSeconds = 10
-                        tasks += repeatingTask(1, TimeUnit.SECONDS) {
-                            if (glowSeconds == 0) {
-                                remainingPlayers().forEach { it.isGlowing = false }
+                        // set initial duration
+                        glowingTickData = 10 * 20 to 10 * 20
+
+                        tasks += repeatingTask(1) {
+                            val (ticksLeft, totalTicks) = glowingTickData
+                            glowingBossBar.progress(Math.clamp(ticksLeft / totalTicks.toFloat(), 0.0F, 1.0F))
+
+                            if (ticksLeft == 0) {
+                                remainingPlayers().forEach {
+                                    it.isGlowing = false
+                                    it.hideBossBar(glowingBossBar)
+                                }
                                 cancel()
                             } else {
-                                glowSeconds--
+                                glowingTickData = ticksLeft - 1 to totalTicks
                             }
                         }
                     }
 
-
+                    val message =
+                        "<green>+<red>10</red> <game_colour>sᴇᴄᴏɴᴅs ᴏꜰ ɢʟᴏᴡ ᴀᴘᴘʟɪᴇᴅ! (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
+                    announceDonationEvent(message.style())
                 } else {
                     fun forceApplySpeed() {
-                        remainingPlayers().forEach { player ->
-                            player.walkSpeed = if (taggedPlayers.contains(player.uniqueId)) taggerWalkSpeed else runnerWalkSpeed
-                        }
+                        remainingPlayers().forEach { it.walkSpeed = if (taggedPlayers.contains(it.uniqueId)) taggerWalkSpeed else runnerWalkSpeed }
                     }
 
                     this.taggerWalkSpeed = 0.6F
                     this.runnerWalkSpeed = 0.5F
                     forceApplySpeed()
+                    remainingPlayers().forEach { it.showBossBar(doubleSpeedBossBar) }
 
-                    if (this.doubleSpeedSeconds > 0) { // TODO find a way to bossbar this
-                        this.doubleSpeedSeconds += 10 // doubleSpeedTime alr running, add more time
+                    if (doubleSpeedEnabled()) {
+                        // extent duration if already active
+                        doubleSpeedTickData = doubleSpeedTickData.let { it.first + (10 * 20) to it.second + (10 * 20) }
                     } else {
-                        this.doubleSpeedSeconds = 10
-                        tasks += repeatingTask(1, TimeUnit.SECONDS) {
-                            if (doubleSpeedSeconds == 0) {
+                        // set initial duration
+                        doubleSpeedTickData = 10 * 20 to 10 * 20
+
+                        tasks += repeatingTask(1) {
+                            val (ticksLeft, totalTicks) = doubleSpeedTickData
+                            doubleSpeedBossBar.progress(Math.clamp(ticksLeft / totalTicks.toFloat(), 0.0F, 1.0F))
+
+                            if (ticksLeft == 0) {
                                 forceApplySpeed()
                                 cancel()
                             } else {
-                                doubleSpeedSeconds--
+                                doubleSpeedTickData = ticksLeft - 1 to totalTicks
                             }
                         }
                     }
+
+                    val message =
+                        "<green>+<red>10</red> <game_colour>sᴇᴄᴏɴᴅs ᴏꜰ ᴅᴏᴜʙʟᴇ sᴘᴇᴇᴅ ᴀᴘᴘʟɪᴇᴅ! (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
+                    announceDonationEvent(message.style())
                 }
             }
 
             DonationTier.MEDIUM -> {
                 if (Random.nextBoolean()) {
                     remainingPlayers().forEach { it.teleport(regroupPoint) }
+                    val message =
+                        "<game_colour>ᴘʟᴀʏᴇʀѕ ʜᴀᴠᴇ ʙᴇᴇɴ <red>ʀᴇɢʀᴏᴜᴘᴇᴅ! (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
+                    announceDonationEvent(message.style())
                 } else {
                     // randomly swap a tagged player for a runner
                     val tagged = remainingPlayers().filter { taggedPlayers.contains(it.uniqueId) }
                     val runner = remainingPlayers().filter { !taggedPlayers.contains(it.uniqueId) }
 
-                    if (tagged.isNotEmpty() && runner.isNotEmpty()) tagPlayer(runner.random(), tagged.random())
+                    if (tagged.isNotEmpty() && runner.isNotEmpty()) {
+                        tagPlayer(runner.random(), tagged.random())
+                        val message =
+                            "<game_colour>ᴛᴀɢɢᴇᴅ ᴘʟᴀʏᴇʀ'ѕ ʜᴀᴠᴇ ʙᴇᴇɴ <red>ꜱᴡᴀᴘᴘᴇᴅ! (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
+                        announceDonationEvent(message.style())
+                    }
                 }
             }
 
