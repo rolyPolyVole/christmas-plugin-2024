@@ -253,6 +253,20 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
      */
     fun remainingPlayers(): List<Player> = Util.runAction(PlayerType.PARTICIPANT) {}.filter { !(eliminatedPlayers.contains(it.uniqueId)) }
 
+    fun announceDonationEvent(message: Component) {
+        val formattedMessage = "<gradient:#A3ADFF:#00FFF4>ᴅᴏɴᴀᴛɪᴏɴ ᴇᴠᴇɴᴛ —> <0></gradient>".style(message)
+        Util.runAction(PlayerType.PARTICIPANT) { player ->
+            player.sendMessage(formattedMessage)
+            player.title(
+                "<gradient:#A3ADFF:#00FFF4>ᴅᴏɴᴀᴛɪᴏɴ ᴇᴠᴇɴᴛ</gradient>".style(), Component.empty(),
+                titleTimes(Duration.ZERO, Duration.ofSeconds(2), Duration.ZERO)
+            )
+            repeat(5) { index ->
+                delay(index * 3) { player.playSound(Sound.BLOCK_NOTE_BLOCK_PLING) }
+            }
+        }
+    }
+
     /**
      * Renders a cinematic sequence of the game results with the temporary podium NPCs.
      */
