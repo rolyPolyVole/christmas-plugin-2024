@@ -45,8 +45,6 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
     private var roundNumber = 0
     private var taggerWalkSpeed = 0.4F
     private var runnerWalkSpeed = 0.3F
-    private var actionBarTasks = mutableMapOf<UUID, TwilightRunnable>() // TODO remove?
-
     private var glowSeconds = 0
     private var doubleSpeedSeconds = 0
 
@@ -68,7 +66,6 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
     private fun newRound() {
         taggedPlayers.clear()
         baubleForRound = randomBaubleItem()
-        actionBarTasks.entries.forEach { it.value.cancel() }
 
         val remaining = remainingPlayers()
         val newTaggers =
