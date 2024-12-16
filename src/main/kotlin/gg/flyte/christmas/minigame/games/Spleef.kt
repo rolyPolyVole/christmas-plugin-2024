@@ -661,6 +661,3 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
         }
     }
 }
-
-// TODO make getter for unlimitedDoubleJumps etc. so that repeated calls to the same long variable are not needed
-// TODO potentially put remaining players # in scoreboard?
