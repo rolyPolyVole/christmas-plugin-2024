@@ -178,7 +178,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ ᴇᴠᴇɴᴛ �
 
     private fun setGameSwitcher(): MenuItem {
         val menuItem = MenuItem(Material.STRUCTURE_VOID).apply {
-            setName("&b&lSelect Game:".colourise())
+            setName("&b&lsᴇʟᴇᴄᴛ ɢᴀᴍᴇ:".colourise())
             updateGameSwitcher(this) // initial lore setup
             onClick { whoClicked, itemStack, clickType, inventoryClickEvent ->
                 inventoryClickEvent.isCancelled = true
@@ -199,7 +199,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ ᴇᴠᴇɴᴛ �
                 }
 
                 this.itemStack = availableGames[selectedIndex].menuItem
-                setName("&b&lSelect Game:".colourise())
+                setName("&b&lsᴇʟᴇᴄᴛ ɢᴀᴍᴇ:".colourise())
                 updateGameSwitcher(this)
 
                 menu.setItem(13, this)
