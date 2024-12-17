@@ -285,7 +285,6 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
         }
         Util.runAction(PlayerType.PARTICIPANT) {
             it.getAttribute(Attribute.SCALE)!!.baseValue = 1.0
-            it.passengers.forEach { it.remove() }
             it.formatInventory() // in-case pumpkin placed
         }
 
