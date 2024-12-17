@@ -45,9 +45,11 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
     private var roundNumber = 0
     private var taggerWalkSpeed = 0.4F
     private var runnerWalkSpeed = 0.3F
+
     // ticks left | total ticks
     private var glowingTickData: Pair<Int, Int> = 0 to 0
     private var doubleSpeedTickData: Pair<Int, Int> = 0 to 0
+
     // lateinit since <game_colour> is not mapped yet at time of init
     private lateinit var glowingBossBar: BossBar
     private lateinit var doubleSpeedBossBar: BossBar
@@ -337,25 +339,22 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
             }
 
             DonationTier.HIGH -> {
-                if (remainingPlayers().size == 2) return // don't forcibly explode the last two :(
+                if (remainingPlayers().size <= 2) return // don't forcibly explode the last two :(
 
                 if (Random.nextBoolean()) {
                     val victim = remainingPlayers().random()
-                    var surroundingVictims = victim.location.getNearbyPlayers(3.0, 3.0, 3.0) { it != victim }
 
-                    if (surroundingVictims.size + 1 >= remainingPlayers().size) {
-                        // TODO
-                        // the result of this event should always leave at least two players remaining, modify surroundingVictims to account for this
-                        // the game cannot just end from a dono event
+                    // Ensure at least 2 players remain after the event
+                    val surroundingVictims = victim.location.getNearbyPlayers(3.0, 3.0, 3.0) { it != victim }
+                    surroundingVictims.takeWhile { remainingPlayers().size - surroundingVictims.size - 1 >= 2 } // leave at least 2 players
+
+                    if (surroundingVictims.isNotEmpty()) {
+                        surroundingVictims.forEach { eliminate(it, EliminationReason.ELIMINATED) }
+                        eliminate(victim, EliminationReason.ELIMINATED)
                     }
-                    surroundingVictims
-                        .forEach { eliminate(it, EliminationReason.ELIMINATED) }
-                        .also { eliminate(victim, EliminationReason.ELIMINATED) }
                 } else {
-                    val stephenUUID = UUID.fromString("69e8f7d5-11f9-4818-a3bb-7f237df32949")
-                    remainingPlayers().find { it.uniqueId == stephenUUID }?.let {
-                        eliminate(Bukkit.getPlayer(stephenUUID)!!, EliminationReason.ELIMINATED)
-                    }
+                    val stephen = remainingPlayers().find { it.uniqueId == UUID.fromString("69e8f7d5-11f9-4818-a3bb-7f237df32949") }
+                    if (stephen != null) eliminate(stephen, EliminationReason.ELIMINATED)
                 }
             }
         }
