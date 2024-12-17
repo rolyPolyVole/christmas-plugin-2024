@@ -19,6 +19,7 @@ enum class GameConfig(
     val instructions: String,
     val minPlayers: Int,
     val centrePoint: MapSinglePoint,
+    val cameraSlideParameters: Pair<Int, Double>, // duration, epsilon
     val spawnPoints: List<MapRegion>,
     val overviewLocations: List<MapSinglePoint>,
     val spectatorSpawnLocations: List<MapSinglePoint>,
@@ -36,6 +37,7 @@ enum class GameConfig(
                 " • ɪꜰ ʏᴏᴜ ᴀʀᴇ ʜɪᴛ ʙʏ ᴀ ꜰᴀʟʟɪɴɢ ѕɴᴏᴡʙᴀʟʟ, ʏᴏᴜ ᴡɪʟʟ ʙᴇ ᴇʟɪᴍɪɴᴀᴛᴇᴅ!",
         2,
         MapSinglePoint(616.5, 140.0, 800.5, 0F, 90F),
+        70 to 0.5,
         listOf(
             MapRegion(
                 MapSinglePoint(624, 111, 808),
@@ -91,6 +93,7 @@ enum class GameConfig(
                 " • ᴛᴏ ᴡɪɴ, ѕᴜʀᴠɪᴠᴇ ᴛʜᴇ ᴍᴏѕᴛ ʀᴏᴜɴᴅѕ!",
         2,
         MapSinglePoint(208, 170, 1282, 123, 90),
+        400 to 0.7,
         listOf(
             MapRegion.single(MapSinglePoint(139, 131, 1239, -67.351654F, 24.116606F)),
             MapRegion.single(MapSinglePoint(151, 130, 1236, -47.20056F, 8.821184F)),
@@ -143,6 +146,7 @@ enum class GameConfig(
                 " • ᴀꜰᴛᴇʀ ᴛʜᴇ ᴛɪᴍᴇʀ, ᴛʜᴇ ᴍᴀᴘ ᴡɪʟʟ ᴄʟᴇᴀʀ ᴀʟʟ ʙʟᴏᴄᴋѕ ᴇxᴄᴇᴘᴛ ᴛʜᴇ ᴄʜᴏѕᴇɴ ᴄᴏʟᴏᴜʀ ʙʟᴏᴄᴋѕ. ᴛᴏ ᴡɪɴ, ѕᴜʀᴠɪᴠᴇ ᴛʜᴇ ᴍᴏѕᴛ ʀᴏᴜɴᴅѕ!",
         2,
         MapSinglePoint(616.5, 140.0, 800.5, 0F, 90F),
+        70 to 0.5,
         listOf(
             MapRegion(
                 MapSinglePoint(624, 111, 808),
@@ -200,6 +204,7 @@ enum class GameConfig(
                 " • ᴛʜᴇ ᴘʟᴀʏᴇʀ ѕᴛᴏᴏᴅ ɪɴ ᴛʜᴇ ᴄᴇɴᴛʀᴇ ᴏꜰ ᴛʜᴇ ᴍᴀᴘ ꜰᴏʀ ᴛʜᴇ ʟᴏɴɢᴇѕᴛ ᴛɪᴍᴇ, ᴡɪɴѕ!",
         1,
         MapSinglePoint(827.5, 111, 630.5, -90F, 90F),
+        70 to 0.5,
         listOf(
             MapRegion(
                 MapSinglePoint(826.5, 88, 680.5, 180, 0),
@@ -285,6 +290,7 @@ enum class GameConfig(
                 " • ᴅᴏ <b>ɴᴏᴛ</b> ᴄʟɪᴄᴋ ᴛʜᴇ ᴍɪɴᴇᴄᴀʀᴛѕ ᴜɴᴛɪʟ ᴛʜᴇ ᴍᴜѕɪᴄ ʜᴀѕ ѕᴛᴏᴘᴘᴇᴅ... ᴏʀ ᴇʟѕᴇ ʏᴏᴜ ᴡɪʟʟ ʙᴇ <b>ѕᴛᴜɴɴᴇᴅ!",
         2,
         MapSinglePoint(616.5, 140.0, 800.5, 0F, 90F),
+        70 to 0.5,
         listOf(
             MapRegion(MapSinglePoint(597, 113, 819), MapSinglePoint(635, 113, 781))
         ),
@@ -340,6 +346,7 @@ enum class GameConfig(
                 " • ᴛᴏ ᴡɪɴ, ʜɪᴛ ᴛʜᴇ ᴍᴏѕᴛ ᴘʟᴀʏᴇʀѕ ᴀɴᴅ ɢᴇᴛ ᴛʜᴇ ᴍᴏѕᴛ ᴘᴏɪɴᴛѕ!",
         2,
         MapSinglePoint(181.5, 140.0, 300.5, -135, 90),
+        200 to 0.5,
         listOf(
             MapRegion.single(MapSinglePoint(193, 80, 193, 0, 0)),
             MapRegion.single(MapSinglePoint(207, 82, 221, 0, 0)),
@@ -409,6 +416,7 @@ enum class GameConfig(
                 " • ᴛᴏ ᴡɪɴ, ᴄᴏᴠᴇʀ ᴛʜᴇ ᴍᴏѕᴛ ᴀᴍᴏᴜɴᴛ ᴏꜰ ᴛʜᴇ ᴍᴀᴘ ᴡɪᴛʜ ʏᴏᴜʀ ʙʟᴏᴄᴋ/ᴄᴏʟᴏᴜʀ!",
         1,
         MapSinglePoint(622.5, 98, -150.5, 180, 90),
+        450 to 0.7,
         listOf(
             MapRegion.single(MapSinglePoint(630, 94, -208, 10.461055F, 8.056724F)),
             MapRegion.single(MapSinglePoint(652, 94, -192, 47.526287F, 9.432502F)),
@@ -485,6 +493,7 @@ enum class GameConfig(
                 " • \uD83C\uDFB5 ᴄᴏᴍᴇ ᴏɴ, ɪᴛ's ʟᴏᴠᴇʟʏ ᴡᴇᴀᴛʜᴇʀ ꜰᴏʀ ᴀ sʟᴇɪɢʜ ʀɪᴅᴇ ᴛᴏɢᴇᴛʜᴇʀ ᴡɪᴛʜ ʏᴏᴜ! \uD83C\uDFB6 🛷",
         1,
         MapSinglePoint(523, 150, 1842, 127F, 90F),
+        850 to 0.775,
         listOf(
             MapRegion(MapSinglePoint(671, 149, 1811, 116.8, 0), MapSinglePoint(651, 149, 1791, 116.8, 0))
         ),
@@ -524,6 +533,7 @@ enum class GameConfig(
                 " • ᴛᴏ ᴡɪɴ, ʙᴇ ᴛʜᴇ ʟᴀѕᴛ ᴘʟᴀʏᴇʀ ѕᴛᴀɴᴅɪɴɢ ᴏɴ ᴛʜᴇ ᴍᴀᴘ!",
         2,
         MapSinglePoint(616.5, 140.0, 800.5, 0F, 90F),
+        70 to 0.5,
         listOf(
             MapRegion(MapSinglePoint(597, 113, 819), MapSinglePoint(635, 113, 781))
         ),
@@ -583,6 +593,7 @@ enum class GameConfig(
                 " • ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ᴊᴏɪɴɪɴɢ ᴜs ꜰᴏʀ ᴛʜɪs ᴇᴠᴇɴᴛ",
         1,
         MapSinglePoint(545, 115, 384, 0, -34),
+        70 to 0.5,
         listOf(
             MapRegion.single(MapSinglePoint(586, 209, 442, 89.26306F, 2.8403294F)),
             MapRegion.single(MapSinglePoint(575, 209, 461, 124.62903F, 0.25062752F)),

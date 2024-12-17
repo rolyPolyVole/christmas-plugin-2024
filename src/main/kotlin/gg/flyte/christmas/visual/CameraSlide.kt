@@ -15,8 +15,13 @@ import org.bukkit.scheduler.BukkitRunnable
 /**
  * @see gg.flyte.christmas.visual.CameraSequence
  */
-class CameraSlide(slideTo: MapSinglePoint, onComplete: (() -> Unit)? = null) {
-    constructor(gameConfig: GameConfig, onComplete: (() -> Unit)?) : this(gameConfig.centrePoint, onComplete)
+class CameraSlide(slideTo: MapSinglePoint, slidingDuration: Int, slidingEpsilon: Double, onComplete: (() -> Unit)? = null) {
+    constructor(gameConfig: GameConfig, onComplete: (() -> Unit)?) : this(
+        gameConfig.centrePoint,
+        gameConfig.cameraSlideParameters.first,
+        gameConfig.cameraSlideParameters.second,
+        onComplete
+    )
 
     init {
         var hasCompleted = false // don't run onComplete for every online player
@@ -32,7 +37,7 @@ class CameraSlide(slideTo: MapSinglePoint, onComplete: (() -> Unit)? = null) {
                     loopedPlayer.spectatorTarget = it
 
                     // Call `onComplete` only once
-                    SlideCameraTask(it, slideTo) {
+                    SlideCameraTask(it, slideTo, slidingDuration, slidingEpsilon) {
                         if (!hasCompleted) {
                             onComplete?.invoke()
                             hasCompleted = true // Mark as called to prevent further executions
@@ -62,7 +67,9 @@ class CameraSlide(slideTo: MapSinglePoint, onComplete: (() -> Unit)? = null) {
     class SlideCameraTask(
         private val itemDisplay: ItemDisplay,
         private val location: Location,
-        private val onComplete: (() -> Unit)? = null
+        private val slidingDuration: Int,
+        private val slidingEpsilon: Double,
+        private val onComplete: (() -> Unit)? = null,
     ) : BukkitRunnable() {
         private val destination = location
         private val highPoint = 200.0
@@ -70,7 +77,6 @@ class CameraSlide(slideTo: MapSinglePoint, onComplete: (() -> Unit)? = null) {
         private var epsilon = 0.5
         private var progress = 0.0
         private var stage = 0
-        private var hasComputedDuration = false
 
         /**
          * Executes the display movement logic based on the current stage of the display sequence.
@@ -96,13 +102,8 @@ class CameraSlide(slideTo: MapSinglePoint, onComplete: (() -> Unit)? = null) {
                 }
 
                 1 -> {
-                    if (!hasComputedDuration) {
-                        duration = (itemDisplay.location.distance(destination) * (0.5)).toInt().also {
-                            hasComputedDuration = true
-                            if (it > 250) epsilon = 0.75
-                        }
-                    }
-
+                    duration = slidingDuration
+                    epsilon = slidingEpsilon
                     updateCamera(
                         deltaX = destX - curX,
                         deltaZ = destZ - curZ
@@ -111,7 +112,7 @@ class CameraSlide(slideTo: MapSinglePoint, onComplete: (() -> Unit)? = null) {
 
                 2 -> {
                     duration = 70
-                    epsilon = 0.5
+                    epsilon = 0.2
                     updateCamera(
                         deltaY = destY - curY,
                     )
