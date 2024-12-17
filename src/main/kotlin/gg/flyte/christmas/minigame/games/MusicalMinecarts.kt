@@ -256,10 +256,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
         val winner = remainingPlayers().first()
         eventController().addPoints(winner.uniqueId, 15)
 
-        Util.runAction(
-            PlayerType.PARTICIPANT,
-            PlayerType.OPTED_OUT
-        ) { it.hideBossBar(if (currentBossBar != null) currentBossBar!! else return@runAction) }
+        Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { viewer -> currentBossBar?.let { viewer.hideBossBar(it) } }
         doWinAnimation(winner)
     }
 
