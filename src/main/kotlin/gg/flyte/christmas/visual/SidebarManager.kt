@@ -73,7 +73,7 @@ class SidebarManager {
     /**
      * Returns a string representing the current game line for the sidebar.
      */
-    private fun currentGameLine() = "<aqua>ɢᴀᴍᴇ: <0>".style(eventController().currentGame?.gameConfig?.smallDisplayName ?: "<grey>ɴᴏɴᴇ".style())
+    private fun currentGameLine() = "<aqua>ɢᴀᴍᴇ: <0>".style(eventController().currentGame?.gameConfig?.displayName ?: "<grey>ɴᴏɴᴇ".style())
 
     /**
      * Returns a component representing the player at the provided position.
