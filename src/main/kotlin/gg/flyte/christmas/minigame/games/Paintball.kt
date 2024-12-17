@@ -9,6 +9,7 @@ import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.scheduler.repeatingTask
 import gg.flyte.twilight.time.TimeUnit
+import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.text.Component
 import org.bukkit.*
 import org.bukkit.entity.Player
@@ -78,8 +79,13 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
         Material.WHITE_GLAZED_TERRACOTTA,
     )
 
-    private var glowSeconds = 0
-    private var nauseatedSeconds = 0
+    // ticks left | total ticks
+    private var glowingTickData: Pair<Int, Int> = 0 to 0
+    private var nauseatedTickData: Pair<Int, Int> = 0 to 0
+
+    // lateinit since <game_colour> is not mapped yet at time of init
+    private lateinit var glowingBossBar: BossBar
+    private lateinit var nauseatedBossBar: BossBar
 
     override fun preparePlayer(player: Player) {
         player.gameMode = GameMode.ADVENTURE
@@ -144,6 +150,10 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
         Bukkit.getOnlinePlayers().forEach { eventController().sidebarManager.updateLines(it, listOf(Component.empty(), timeLeft)) }
     }
 
+    private fun glowEnabled() = glowingTickData.first > 0
+
+    private fun nauseaEnabled() = nauseatedTickData.first > 0
+
     override fun handleGameEvents() {
         listeners += event<PlayerInteractEvent> {
             if (!started) return@event
@@ -189,18 +199,26 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
         when (tier) {
             DonationTier.LOW -> {
                 if (Random.nextBoolean()) {
-                    remainingPlayers().forEach { it.isGlowing = true }
+                    remainingPlayers().forEach {
+                        it.isGlowing = true
+                        it.showBossBar(glowingBossBar)
+                    }
 
-                    if (this.glowSeconds > 0) {
-                        this.glowSeconds += 10 // glowTime alr running, add more time
+                    if (glowEnabled()) {
+                        // extend duration if already active
+                        glowingTickData = glowingTickData.let { it.first + (10 * 20) to it.second + (10 * 20) }
                     } else {
-                        this.glowSeconds = 10
+                        // set initial duration
+                        glowingTickData = 10 * 20 to 10 * 20
                         tasks += repeatingTask(1, TimeUnit.SECONDS) {
-                            if (glowSeconds == 0) {
+                            val (ticksLeft, totalTicks) = glowingTickData
+                            glowingBossBar.progress(Math.clamp(ticksLeft / totalTicks.toFloat(), 0.0F, 1.0F))
+
+                            if (ticksLeft == 0) {
                                 remainingPlayers().forEach { it.isGlowing = false }
                                 cancel()
                             } else {
-                                glowSeconds--
+                                glowingTickData = ticksLeft - 1 to totalTicks
                             }
                         }
                     }
@@ -217,19 +235,24 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
                                 false
                             )
                         )
+                        it.showBossBar(nauseatedBossBar)
                     }
 
-                    if (this.nauseatedSeconds > 0) {
-                        this.nauseatedSeconds += 10 // nausea alr running, add more time
+                    if (nauseaEnabled()) {
+                        // extend duration if already active
+                        nauseatedTickData = nauseatedTickData.let { it.first + (10 * 20) to it.second + (10 * 20) }
                     } else {
-                        this.nauseatedSeconds = 10
+                        // set initial duration
+                        nauseatedTickData = 10 * 20 to 10 * 20
                         tasks += repeatingTask(1, TimeUnit.SECONDS) {
-                            if (nauseatedSeconds == 0) {
-                                remainingPlayers().forEach { it.clearActivePotionEffects() }
+                            val (ticksLeft, totalTicks) = nauseatedTickData
+                            nauseatedBossBar.progress(Math.clamp(ticksLeft / totalTicks.toFloat(), 0.0F, 1.0F))
 
+                            if (ticksLeft == 0) {
+                                remainingPlayers().forEach { it.clearActivePotionEffects() }
                                 cancel()
                             } else {
-                                nauseatedSeconds--
+                                nauseatedTickData = ticksLeft - 1 to totalTicks
                             }
                         }
                     }
