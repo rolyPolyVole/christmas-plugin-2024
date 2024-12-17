@@ -22,6 +22,8 @@ import gg.flyte.twilight.scheduler.repeatingTask
 import gg.flyte.twilight.time.TimeUnit
 import net.kyori.adventure.bossbar.BossBar
 import org.bukkit.*
+import org.bukkit.attribute.Attribute
+import org.bukkit.entity.BlockDisplay
 import org.bukkit.entity.ItemDisplay
 import org.bukkit.entity.Player
 import org.bukkit.entity.Snowball
@@ -33,6 +35,7 @@ import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
+import org.bukkit.util.Vector
 import java.time.Duration
 import kotlin.math.ceil
 import kotlin.random.Random
@@ -42,6 +45,7 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
     private lateinit var overviewTask: TwilightRunnable
 
     private val floorRegion = MapRegion(MapSinglePoint(600, 110, 784), MapSinglePoint(632, 110, 816))
+    private var started = false
     private var roundNumber = 0
     private var secondsForRound = 9
     private var currentBossBar: BossBar? = null
@@ -62,10 +66,13 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
         10 to 1
     )
     private val safePoints = mutableListOf<Location>()
+    private val phantomSafePoints = mutableListOf<BlockDisplay>()
+    private var whirlwindTickData: Pair<Int, Int> = 0 to 0
+    private var whirlwindTask: TwilightRunnable? = null
+    private lateinit var whirlwindBossBar: BossBar
 
     override fun startGameOverview() {
         super.startGameOverview()
-
         ChristmasEventPlugin.instance.serverWorld.time = 12750
 
         floorRegion.toSingleBlockLocations().forEach { it.block.type = Material.BLUE_ICE }
@@ -93,6 +100,7 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
         player.formatInventory()
         player.gameMode = GameMode.ADVENTURE
         player.teleport(gameConfig.spawnPoints.random().randomLocation())
+        player.getAttribute(Attribute.SCALE)?.baseValue = 0.85
     }
 
     override fun startGame() {
@@ -100,7 +108,9 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
         ChristmasEventPlugin.instance.serverWorld.entities.forEach { if (it is Snowball) it.remove() }
         simpleCountdown {
             newRound()
+            started = true
             donationEventsEnabled = true
+            whirlwindBossBar = BossBar.bossBar("<game_colour><b>ᴡɪɴᴛᴇʀ ᴡʜɪʀʟᴡɪɴᴅ!".style(), 1.0F, BossBar.Color.GREEN, BossBar.Overlay.PROGRESS)
         }
     }
 
@@ -173,6 +183,7 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
                     MapSinglePoint(minPoint.x.toInt() - 3, minPoint.y, minPoint.z.toInt() - 3),
                     MapSinglePoint(maxPoint.x.toInt() + 3, maxPoint.y, maxPoint.z.toInt() + 3)
                 )
+                phantomSafePoints.forEach { it.remove() } // remove phantom safe points lol
 
                 repeat(1200) {
                     ChristmasEventPlugin.instance.serverWorld.spawn(
@@ -214,6 +225,7 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
     }
 
     override fun eliminate(player: Player, reason: EliminationReason) {
+        if (!started) return
         Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) {
             it.sendMessage("<red>${player.name} <grey>ʜᴀѕ ʙᴇᴇɴ ᴇʟɪᴍɪɴᴀᴛᴇᴅ!".style())
             it.playSound(Sound.ENTITY_PLAYER_HURT)
@@ -221,6 +233,8 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
 
         currentBossBar?.let { player.hideBossBar(it) }
         player.world.spawnParticle(Particle.BLOCK, player.location, 100, 0.5, 0.5, 0.5, Bukkit.createBlockData(Material.SNOW_BLOCK))
+        player.hideBossBar(whirlwindBossBar)
+        player.getAttribute(Attribute.SCALE)?.baseValue = 1.0
 
         // animate death
         if (reason == EliminationReason.ELIMINATED) {
@@ -261,13 +275,19 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
     override fun endGame() {
         tasks.forEach { it?.cancel() }.also { tasks.clear() }
         donationEventsEnabled = false
+        started = false
         removeSafePoints()
         ChristmasEventPlugin.instance.serverWorld.time = 6000
 
-        Util.runAction(
-            PlayerType.PARTICIPANT,
-            PlayerType.OPTED_OUT
-        ) { it.hideBossBar(if (currentBossBar != null) currentBossBar!! else return@runAction) }
+        Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { viewer ->
+            currentBossBar?.let { viewer.hideBossBar(it) }
+            viewer.hideBossBar(whirlwindBossBar)
+        }
+        Util.runAction(PlayerType.PARTICIPANT) {
+            it.getAttribute(Attribute.SCALE)!!.baseValue = 1.0
+            it.passengers.forEach { it.remove() }
+            it.formatInventory() // in-case pumpkin placed
+        }
 
         val winnerNPCs = mutableListOf<WorldNPC>()
         val winnerPlayer = remainingPlayers().first()
@@ -324,7 +344,10 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
             it.block.type = Material.AIR
             it.world.spawnParticle(Particle.BLOCK, it.toCenterLocation(), 200, 0.5, 0.5, 0.5, Bukkit.createBlockData(Material.WAXED_CUT_COPPER))
         }.also { safePoints.clear() }
+        phantomSafePoints.forEach { it.remove() }.also { phantomSafePoints.clear() }
     }
+
+    private fun whirlwindActive() = whirlwindTickData.first > 0
 
     override fun handleGameEvents() {
         listeners += event<EntityDamageEvent>(priority = EventPriority.HIGHEST) {
@@ -342,8 +365,17 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
 
         listeners += event<ProjectileHitEvent> {
             if (hitEntity !is Player) return@event
-            if (remainingPlayers().contains(hitEntity as Player) && Random.nextBoolean()) { // 50% chance of elimination
-                eliminate(hitEntity as Player, EliminationReason.ELIMINATED)
+
+            if (remainingPlayers().contains(hitEntity as Player)) {
+                var player = hitEntity as Player
+                if (player.equipment.helmet.type == Material.DIAMOND_HELMET) {
+                    player.formatInventory()
+                    player.sendMessage("<game_colour>ʏᴏᴜʀ <game_colour>ʜᴀʀᴅ-ʜᴀᴛ <grey>ᴘʀᴏᴛᴇᴄᴛᴇᴅ ʏᴏᴜ!".style())
+                    player.playSound(Sound.ITEM_TOTEM_USE)
+                    return@event
+                }
+
+                eliminate(player, EliminationReason.ELIMINATED)
             }
         }
 
@@ -356,9 +388,120 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
 
     override fun handleDonation(tier: DonationTier, donorName: String?) {
         when (tier) {
-            DonationTier.LOW -> TODO()
-            DonationTier.MEDIUM -> TODO()
-            DonationTier.HIGH -> TODO()
+            DonationTier.LOW -> {
+                remainingPlayers().random().apply {
+                    equipment.helmet = ItemStack(Material.DIAMOND_HELMET).apply {
+                        itemMeta = itemMeta.apply {
+                            displayName("<game_colour>ʜᴀʀᴅ-ʜᴀᴛ".style())
+                            lore(
+                                listOf(
+                                    "<grey>ᴛʜɪѕ ʜᴀᴛ ᴡɪʟʟ ᴘʀᴏᴛᴇᴄᴛ ʏᴏᴜ ᴡɪᴛʜ".style(),
+                                    "<grey>ɪᴛ'ѕ ᴅɪᴀᴍᴏɴᴅʏ ᴘᴏᴡᴇʀ! ɴᴏ ɴᴇᴇᴅ".style(),
+                                    "<grey>ᴛᴏ sᴛᴀɴᴅ ᴜɴᴅᴇʀ ᴀ sᴀꜰᴇ-ᴘᴏɪɴᴛ".style()
+                                )
+                            )
+                        }
+                    }
+
+                    delay(20) {
+                        title(
+                            "<game_colour>ʜᴀʀᴅ-ʜᴀᴛ ᴇqᴜɪᴘᴘᴇᴅ!".style(), "<grey>ʏᴏᴜ ᴅᴏ ɴᴏᴛ ɴᴇᴇᴅ ᴄᴏᴠᴇʀ ᴛʜɪs ʀᴏᴜɴᴅ!".style(),
+                            titleTimes(Duration.ZERO, Duration.ofSeconds(4), Duration.ZERO)
+                        )
+                    }
+                    sendMessage("<game_colour>ʏᴏᴜ ʜᴀᴠᴇ ʙᴇᴇɴ ɢɪᴠᴇɴ ᴀ <game_colour>ʜᴀʀᴅ-ʜᴀᴛ".style())
+                }
+
+                val message =
+                    "<game_colour>sᴏᴍᴇᴏɴᴇ ʜᴀs ʙᴇᴇɴ ɢɪᴠᴇɴ ᴀ ᴘʀᴏᴛᴇᴄᴛɪᴠᴇ ʜᴇʟᴍᴇᴛ (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
+                announceDonationEvent(message.style())
+            }
+
+            DonationTier.MEDIUM -> {
+                if (Random.nextBoolean()) {
+                    ChristmasEventPlugin.instance.serverWorld.spawn(
+                        floorRegion.randomLocation().clone().toBlockLocation().add(0.0, 3.0, 0.0),
+                        BlockDisplay::class.java
+                    ) {
+                        it.block = Bukkit.createBlockData(Material.CUT_COPPER)
+                        phantomSafePoints.add(it)
+                    }
+
+                    val message =
+                        "<game_colour>ᴀ ᴘʜᴀɴᴛᴏᴍ sᴀꜰᴇ-ᴘᴏɪɴᴛ ʜᴀs ʙᴇᴇɴ ᴘʟᴀᴄᴇᴅ... ʙᴇ ᴄᴀʀᴇꜰᴜʟ﹗ (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
+                    announceDonationEvent(message.style())
+                } else {
+                    if (whirlwindTask == null) {
+                        whirlwindTask = repeatingTask(25) {
+                            remainingPlayers().forEach {
+                                it.velocity = Vector(
+                                    Random.nextDouble(-1.0, 1.0),
+                                    Random.nextDouble(-0.3, 0.5),
+                                    Random.nextDouble(-1.0, 1.0)
+                                )
+                                it.playSound(Sound.ENTITY_BREEZE_IDLE_AIR)
+                            }
+                        }.also { tasks += it }
+                    }
+
+                    remainingPlayers().forEach { it.showBossBar(whirlwindBossBar) }
+
+                    if (whirlwindActive()) {
+                        // extend duration if already active
+                        whirlwindTickData = whirlwindTickData.let { it.first + (5 * 20) to it.second + (5 * 20) }
+                    } else {
+                        // set initial duration
+                        whirlwindTickData = 5 * 20 to 5 * 20
+
+                        tasks += repeatingTask(1) {
+                            val (ticksLeft, totalTicks) = whirlwindTickData
+                            whirlwindBossBar.progress(Math.clamp(ticksLeft / totalTicks.toFloat(), 0.0F, 1.0F))
+
+                            if (ticksLeft == 0) {
+                                whirlwindTask?.cancel()
+                                whirlwindTask = null
+                                this.cancel()
+                                whirlwindTickData = 0 to 0
+                                remainingPlayers().forEach {
+                                    it.sendMessage("<game_colour>ᴡɪɴᴛᴇʀ ᴡʜɪʀʟᴡɪɴᴅ ʜᴀѕ ᴇɴᴅᴇᴅ!".style())
+                                    it.hideBossBar(whirlwindBossBar)
+                                }
+                            } else {
+                                whirlwindTickData = ticksLeft - 1 to totalTicks
+                            }
+                        }
+                    }
+
+                    val message =
+                        "<game_colour>ᴛʜᴇ ᴡɪɴᴛᴇʀ ᴡʜɪʀʟᴡɪɴᴅ ɪs ᴜᴘᴏɴ ᴜs... ᴅᴏɴ'ᴛ ɢᴇᴛ ʙʟᴏᴡɴ ᴀᴡᴀʏ! (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
+                    announceDonationEvent(message.style())
+                }
+            }
+
+            DonationTier.HIGH -> {
+                if (!harder) {
+                    val message =
+                        "<game_colour>ʜᴀʀᴅ-ᴍᴏᴅᴇ ʜᴀѕ ʙᴇᴇɴ ᴀᴄᴛɪᴠᴀᴛᴇᴅ <b>ᴇᴀʀʟʏ! (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
+                    announceDonationEvent(message.style())
+
+                    delay(50) {
+                        harder = true
+                        Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { it.playSound(Sound.ENTITY_ENDER_DRAGON_GROWL) }
+                        Util.runAction(PlayerType.PARTICIPANT) {
+                            it.title(
+                                "<game_colour>ʜᴀʀᴅ ᴍᴏᴅᴇ!".style(), "<bold><red>ᴘᴠᴘ <game_colour>ɪѕ ɴᴏᴡ ᴇɴᴀʙʟᴇᴅ!".style(),
+                                titleTimes(Duration.ofMillis(300), Duration.ofSeconds(3), Duration.ofMillis(300))
+                            )
+                        }
+                        Util.runAction(PlayerType.OPTED_OUT) { it.sendMessage("<game_colour>ᴛʜᴇ ɢᴀᴍᴇ ɪѕ ɢᴇᴛᴛɪɴɢ ʜᴀʀᴅᴇʀ!".style()) }
+                    }
+                } else {
+                    remainingPlayers().forEach { it.equipment.helmet = ItemStack(Material.CARVED_PUMPKIN) }
+                    val message =
+                        "<game_colour>ʏᴏᴜʀ ᴠɪsɪʙɪʟɪᴛʏ ʜᴀs ʙᴇᴇɴ ʀᴇᴅᴜᴄᴇᴅ! (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
+                    announceDonationEvent(message.style())
+                }
+            }
         }
     }
 }
