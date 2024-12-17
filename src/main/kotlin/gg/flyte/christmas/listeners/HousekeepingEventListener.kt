@@ -62,11 +62,10 @@ class HousekeepingEventListener : Listener, PacketListener {
         PacketEvents.getAPI().eventManager.registerListener(this, PacketListenerPriority.NORMAL)
 
         event<PaperServerListPingEvent> {
-            val footer = text("       ")
+            val footer = text("                ")
                 .append("<gradient:${Colours.PURPLE.asHexString()}:${Colours.MAGENTA.asHexString()}>ᴄᴀʀʙᴏɴ.ʜᴏꜱᴛ".style())
                 .append("<grey> • ".style())
                 .append("<gradient:#FF1285:#FA0000>ᴊᴇᴛʙʀ</gradient><gradient:#FA0000:#FF6921>ᴀɪɴs</gradient>".style())
-                .append("<grey> • ".style())
 
             val motd = Component.empty()
                 .append("<b><obf><white>        ||||||  ".style())
@@ -81,10 +80,9 @@ class HousekeepingEventListener : Listener, PacketListener {
             this.listedPlayers.clear()
             val serverListPingText = listOf(
                 "<st><grey>        <reset> ❆ <bold><light_purple>ꜰʟʏᴛᴇ.ɢɢ <red>ᴄʜʀɪsᴛᴍᴀs ᴇᴠᴇɴᴛ <reset><white>❆ <reset><st><grey>         ",
-                "  <bold><light_purple>ꜰʟʏᴛᴇ.ɢɢ <grey>• <yellow>ᴄᴀʀʙᴏɴ.ʜᴏꜱᴛ <grey>• <blue>ʙᴜɪʟᴛʙʏʙɪᴛ.ᴄᴏᴍ",
                 "",
-                "            <gold>ᴊᴏɪɴ <green><b>ɴᴏᴡ <reset><gold>ᴛᴏ ᴘʟᴀʏ <aqua>x-ᴍᴀѕ ᴍɪɴɪɢᴀᴍᴇѕ",
-                "       <gold>ᴀɴᴅ ѕᴜᴘᴘᴏʀᴛ <red>ʙᴇѕᴛ ꜰʀɪᴇɴᴅѕ ᴀɴɪᴍᴀʟ ѕᴏᴄɪᴇᴛʏ"
+                "          <gold>ᴊᴏɪɴ <green><b>ɴᴏᴡ <reset><gold>ᴛᴏ ᴘʟᴀʏ <aqua>x-ᴍᴀѕ ᴍɪɴɪɢᴀᴍᴇѕ",
+                "     <gold>ᴀɴᴅ ѕᴜᴘᴘᴏʀᴛ <red>ʙᴇѕᴛ ꜰʀɪᴇɴᴅѕ ᴀɴɪᴍᴀʟ ѕᴏᴄɪᴇᴛʏ"
             )
 
             /* Note:
