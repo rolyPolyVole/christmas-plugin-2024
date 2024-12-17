@@ -130,6 +130,7 @@ class ChristmasEventPlugin : JavaPlugin() {
             difficulty = Difficulty.PEACEFUL
             time = 6000
         }
+        lobbySpawn = MapSinglePoint(559.5, 103, 518.5, 135, 0)
 
         // Create Podium Model
         serverWorld.spawn(MapSinglePoint(535.5, 105.0, 503.5), ItemDisplay::class.java) {
@@ -204,8 +205,6 @@ class ChristmasEventPlugin : JavaPlugin() {
         }
 
         eventController.updateDonationBar()
-
-        lobbySpawn = MapSinglePoint(559.5, 103, 518.5, 135, 0)
 
         GameConfig.entries.forEach { it.gameClass.primaryConstructor } // preload/cache classes for reflection
         eventController().startPlaylist()
