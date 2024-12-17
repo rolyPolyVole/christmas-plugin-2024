@@ -13,9 +13,14 @@ import gg.flyte.christmas.npc.WorldNPC
 import gg.flyte.christmas.util.Util
 import gg.flyte.christmas.util.eventController
 import gg.flyte.christmas.util.style
+import gg.flyte.twilight.extension.playSound
+import gg.flyte.twilight.scheduler.repeatingTask
+import gg.flyte.twilight.time.TimeUnit
 import gg.flyte.twilight.twilight
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.event.ClickEvent
+import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.*
 import org.bukkit.entity.Display
@@ -205,5 +210,28 @@ class ChristmasEventPlugin : JavaPlugin() {
         GameConfig.entries.forEach { it.gameClass.primaryConstructor } // preload/cache classes for reflection
         eventController().startPlaylist()
 
+        repeatingTask(5, TimeUnit.MINUTES) {
+            val message = listOf(
+                "<#edd900>ꜰᴇᴇʟɪɴɢ ɢᴇɴᴇʀᴏᴜs? <gradient:#A3ADFF:#00FFF4>ᴅᴏɴᴀᴛɪᴏɴs ᴄᴀɴ ᴄʜᴀɴɢᴇ ᴛʜᴇ ɢᴀᴍᴇ - ᴀɴᴅ ɪᴛ's ꜰᴏʀ ᴀ ɢʀᴇᴀᴛ ᴄᴀᴜsᴇ!",
+                "<#edd900>ᴄᴀɴ'ᴛ ᴘʟᴀʏ ᴀɴʏᴍᴏʀᴇ? <gradient:#A3ADFF:#00FFF4>ʏᴏᴜ ᴄᴀɴ sᴛɪʟʟ ᴘʟᴀʏ ᴀ ᴘᴀʀᴛ – ᴅᴏɴᴀᴛᴇ ɴᴏᴡ!",
+                "<#edd900>ᴇᴠᴇʀʏ ᴅᴏɴᴀᴛɪᴏɴ ɪs ᴛʀɪᴘʟᴇ ᴍᴀᴛᴄʜᴇᴅ! <gradient:#A3ADFF:#00FFF4>sᴏ $10 ᴍᴇᴀɴs $40 ꜰᴏʀ ᴀ ɢʀᴇᴀᴛ ᴄᴀᴜsᴇ.",
+                "<#edd900>ᴡᴀɴᴛ ʀᴇᴠᴇɴɢᴇ? <gradient:#A3ADFF:#00FFF4>ᴀ ᴅᴏɴᴀᴛɪᴏɴ ᴍɪɢʜᴛ ᴊᴜsᴛ sʜᴀᴋᴇ ᴛʜɪɴɢs ᴜᴘ ꜰᴏʀ ᴛʜᴏsᴇ sᴛɪʟʟ ᴀʟɪᴠᴇ!",
+                "<#edd900>ᴍᴀᴋᴇ ᴀ ᴅᴏɴᴀᴛɪᴏɴ. <gradient:#A3ADFF:#00FFF4>ᴍᴀᴋᴇ sᴏᴍᴇ ᴍᴀʏʜᴇᴍ. ᴍᴀᴋᴇ ᴀ ᴅɪꜰꜰᴇʀᴇɴᴄᴇ!",
+                "<#edd900>ᴇᴠᴇʀʏ ᴅᴏʟʟᴀʀ ɢᴏᴇs ᴛᴏ ᴀ ɢᴏᴏᴅ ᴄᴀᴜsᴇ... <gradient:#A3ADFF:#00FFF4>ᴀɴᴅ ᴍᴀʏʙᴇ ᴄᴀᴜsᴇs sᴏᴍᴇ ᴛʀᴏᴜʙʟᴇ ɪɴ-ɢᴀᴍᴇ ᴛᴏᴏ.",
+                "<#edd900>ʙᴇ ᴀ ɢᴀᴍᴇ-ᴄʜᴀɴɢᴇʀ. ʟɪᴛᴇʀᴀʟʟʏ. <gradient:#A3ADFF:#00FFF4>ᴅᴏɴᴀᴛɪᴏɴs ᴅᴏ ᴇᴘɪᴄ ɪɴ-ɢᴀᴍᴇ sᴛᴜꜰꜰ!",
+                "<#edd900>ɪꜰ ʏᴏᴜ ᴄᴀɴ'ᴛ ᴡɪɴ ᴛʜᴇ ɢᴀᴍᴇ, ᴍᴀᴋᴇ sᴜʀᴇ ᴏᴛʜᴇʀs ᴄᴀɴ'ᴛ ᴇɪᴛʜᴇʀ! <gradient:#A3ADFF:#00FFF4>ᴅᴏɴᴀᴛᴇ ɴᴏᴡ ᴛᴏ ᴄʀᴇᴀᴛᴇ ᴄʜᴀᴏs.",
+                "<#edd900>ᴡᴀɴᴛ ᴛᴏ ᴇʟɪᴍɪɴᴀᴛᴇ sᴛᴇᴘʜᴇɴ ʀɪɢʜᴛ ɴᴏᴡ? <gradient:#A3ADFF:#00FFF4>ᴅᴏɴᴀᴛᴇ.",
+                "<colour:#ec8339>sᴜᴘᴘᴏʀᴛ ʙᴇsᴛ ꜰʀɪᴇɴᴅs ᴀɴɪᴍᴀʟ sᴏᴄɪᴇᴛʏ. <gradient:#A3ADFF:#00FFF4>ᴅᴏɴᴀᴛᴇ ɴᴏᴡ!",
+            ).random()
+
+            val stylised = ("$message [ᴄʟɪᴄᴋ]").style()
+                .clickEvent(ClickEvent.openUrl("https://flyte.gg/donate"))
+                .hoverEvent(HoverEvent.showText("<gradient:#A3ADFF:#00FFF4>[ᴄʟɪᴄᴋ ᴛᴏ ᴅᴏɴᴀᴛᴇ ɴᴏᴡ!]</gradient><#FF72A6>".style()))
+
+            Bukkit.getOnlinePlayers().forEach {
+                it.sendMessage(stylised)
+                it.playSound(Sound.BLOCK_NOTE_BLOCK_PLING)
+            }
+        }
     }
 }
