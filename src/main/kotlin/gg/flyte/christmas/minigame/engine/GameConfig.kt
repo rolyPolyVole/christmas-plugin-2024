@@ -14,7 +14,6 @@ import kotlin.reflect.KClass
 enum class GameConfig(
     val gameClass: KClass<out EventMiniGame>,
     val displayName: Component,
-    val smallDisplayName: Component,
     val menuItem: ItemStack,
     val colour: TextColor,
     val instructions: String,
@@ -29,7 +28,6 @@ enum class GameConfig(
     //region AVALANCHE
     AVALANCHE(
         Avalanche::class,
-        "<colour:#33ff8b>Avalanche".style(),
         "<colour:#33ff8b>ᴀᴠᴀʟᴀɴᴄʜᴇ".style(),
         ItemStack(Material.SNOWBALL),
         TextColor.fromHexString("#33ff8b")!!,
@@ -84,7 +82,6 @@ enum class GameConfig(
     //region BAUBLE_TAG
     BAUBLE_TAG(
         BaubleTag::class,
-        "<colour:#aed3d8>Bauble Tag".style(),
         "<colour:#aed3d8>ʙᴀᴜʙʟᴇ ᴛᴀɢ".style(),
         MenuItem(Material.PLAYER_HEAD).setSkullTexture("1e3ad039e903e30f90daa68cebfc5cee72b5ed84d6044382409c67f374d1732b").itemStack,
         TextColor.fromHexString("#aed3d8")!!,
@@ -138,7 +135,6 @@ enum class GameConfig(
     //region BLOCK_PARTY
     BLOCK_PARTY(
         BlockParty::class,
-        "<colour:#e05c6f>Block Party".style(),
         "<colour:#e05c6f>ʙʟᴏᴄᴋ ᴘᴀʀᴛʏ".style(),
         ItemStack(Material.MAGENTA_GLAZED_TERRACOTTA),
         TextColor.fromHexString("#e05c6f")!!,
@@ -196,7 +192,6 @@ enum class GameConfig(
     //region KING_OF_THE_HILL
     KING_OF_THE_HILL(
         KingHill::class,
-        "<colour:#f70123>King of the Hill".style(),
         "<colour:#f70123>ᴋɪɴɢ ᴏꜰ ᴛʜᴇ ʜɪʟʟ".style(),
         ItemStack(Material.STICK),
         TextColor.fromHexString("#f70123")!!,
@@ -281,7 +276,6 @@ enum class GameConfig(
     //region MUSICAL_MINECARTS
     MUSICAL_MINECARTS(
         MusicalMinecarts::class,
-        "<colour:#a1a4ff>Musical Minecarts".style(),
         "<colour:#a1a4ff>ᴍᴜꜱɪᴄᴀʟ ᴍɪɴᴇᴄᴀʀᴛꜱ".style(),
         ItemStack(Material.MINECART),
         TextColor.fromHexString("#a1a4ff")!!,
@@ -338,7 +332,6 @@ enum class GameConfig(
     //region PAINTBALL
     PAINTBALL(
         Paintball::class,
-        "<colour:#89bdf5>Paintball".style(),
         "<colour:#89bdf5>ᴘᴀɪɴᴛʙᴀʟʟ".style(),
         ItemStack(Material.HEART_OF_THE_SEA),
         TextColor.fromHexString("#89bdf5")!!,
@@ -408,7 +401,6 @@ enum class GameConfig(
     PAINT_WARS(
         PaintWars::
         class,
-        "<colour:#75e01d>Paint Wars".style(),
         "<colour:#75e01d>ᴘᴀɪɴᴛ ᴡᴀʀꜱ".style(),
         ItemStack(Material.BRUSH),
         TextColor.fromHexString("#75e01d")!!,
@@ -480,7 +472,6 @@ enum class GameConfig(
     //region SLED_RACING
     SLED_RACING(
         SledRacing::class,
-        "<colour:#80ffea>Sled Racing".style(),
         "<colour:#80ffea>ꜱʟᴇᴅ ʀᴀᴄɪɴɢ".style(),
         ItemStack(Material.PAPER).apply {
             itemMeta = itemMeta.apply {
@@ -525,7 +516,6 @@ enum class GameConfig(
     //region SPLEEF
     SPLEEF(
         Spleef::class,
-        "<colour:#ffc642>Spleef".style(),
         "<colour:#ffc642>ꜱᴘʟᴇᴇꜰ".style(),
         ItemStack(Material.DIAMOND_SHOVEL),
         TextColor.fromHexString("#ffc642")!!,
@@ -585,7 +575,6 @@ enum class GameConfig(
     //region TREE_DECORATE
     TREE_DECORATE(
         TreeDecorate::class,
-        "<colour:#c293db>ᴅᴇᴄᴏʀᴀᴛᴇ ᴛʜᴇ ᴛʀᴇᴇ".style(),
         "<colour:#c293db>ᴅᴇᴄᴏʀᴀᴛᴇ ᴛʜᴇ ᴛʀᴇᴇ".style(),
         ItemStack(Material.OAK_LEAVES),
         TextColor.fromHexString("#c293db")!!,

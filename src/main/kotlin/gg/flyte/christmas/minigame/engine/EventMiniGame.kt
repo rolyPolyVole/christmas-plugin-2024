@@ -79,9 +79,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
             }
 
             val displayComponent = Component.empty()
-                .append("<st>\n   ".style())
-                .append("> ".style())
-                .append("<b><0>".style(gameConfig.displayName))
+                .append("<b><0>:".style(gameConfig.displayName))
                 .append("\n\n".style())
                 .append(gameConfig.instructions.style())
                 .append("\n".style())
