@@ -285,10 +285,7 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         val winner = remainingPlayers().first()
         eventController().addPoints(winner.uniqueId, 15)
 
-        Util.runAction(
-            PlayerType.PARTICIPANT,
-            PlayerType.OPTED_OUT
-        ) { it.hideBossBar(if (currentBossBar != null) currentBossBar!! else return@runAction) }
+        Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { viewer -> currentBossBar?.let { viewer.hideBossBar(it) } }
         doWinAnimation(winner)
     }
 
@@ -579,17 +576,17 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
     override fun handleDonation(tier: DonationTier, donorName: String?) {
         when (tier) {
             DonationTier.LOW -> {
-                Util.runAction(PlayerType.OPTED_OUT) { it.sendMessage("<game_colour>Everyone has received <red>6 snowballs<game_colour>!".style()) }
+                announceDonationEvent("<game_colour>ᴇᴠᴇʀʏᴏɴᴇ ʜᴀs ʀᴇᴄᴇɪᴠᴇᴅ <red>6 sɴᴏᴡʙᴀʟʟs<game_colour>!".style())
                 Util.runAction(PlayerType.PARTICIPANT) { setNextAvailableSlot(it, ItemStack(Material.SNOWBALL, 6)) }
             }
 
             DonationTier.MEDIUM -> {
-                Util.runAction(PlayerType.OPTED_OUT) { it.sendMessage("<game_colour>Everyone has received a <red>fireball<game_colour>!".style()) }
+                announceDonationEvent("<game_colour>ᴇᴠᴇʀʏᴏɴᴇ ʜᴀѕ ʀᴇᴄᴇɪᴠᴇᴅ <red>1 ꜰɪʀᴇʙᴀʟʟ<game_colour>!".style())
                 Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { setNextAvailableSlot(it, ItemStack(Material.FIRE_CHARGE)) }
             }
 
             DonationTier.HIGH -> {
-                Util.runAction(PlayerType.OPTED_OUT) { it.sendMessage("<game_colour>Everyone has received a <red>short-fuse TNT<game_colour>!".style()) }
+                announceDonationEvent("<game_colour>ᴇᴠᴇʀʏᴏɴᴇ ʜᴀѕ ʀᴇᴄᴇɪᴠᴇᴅ <red>1 ꜱʜᴏʀᴛ-ꜰᴜѕᴇ ᴛɴᴛ<game_colour>!".style())
                 Util.runAction(PlayerType.PARTICIPANT) { setNextAvailableSlot(it, ItemStack(Material.TNT)) }
             }
         }
