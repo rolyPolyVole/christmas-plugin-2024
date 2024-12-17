@@ -284,7 +284,13 @@ class EventController {
         async {
             Bukkit.getOfflinePlayer(donorName).let {
                 donors.add(it.uniqueId)
-                sync { if (it.isOnline) (it as Player).formatInventory() }
+                sync {
+                    if (it.isOnline) {
+                        if (currentGame?.state != GameState.LIVE) {
+                            (it as Player).formatInventory()
+                        }
+                    }
+                }
             }
         }
     }
