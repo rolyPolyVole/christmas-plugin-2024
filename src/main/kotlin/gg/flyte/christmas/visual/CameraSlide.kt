@@ -15,7 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable
 /**
  * @see gg.flyte.christmas.visual.CameraSequence
  */
-class CameraSlide(slideTo: MapSinglePoint, slidingDuration: Int, slidingEpsilon: Double, onComplete: (() -> Unit)? = null) {
+class CameraSlide(slideTo: MapSinglePoint, slidingDuration: Int = 70, slidingEpsilon: Double = 0.5, onComplete: (() -> Unit)? = null) {
     constructor(gameConfig: GameConfig, onComplete: (() -> Unit)?) : this(
         gameConfig.centrePoint,
         gameConfig.cameraSlideParameters.first,
