@@ -109,32 +109,35 @@ class HousekeepingEventListener : Listener, PacketListener {
 
         event<PlayerInteractEvent> {
             val clickedBlock = clickedBlock ?: return@event
-            if (!(clickedBlock.type == Material.SNOW || clickedBlock.type == Material.SNOW_BLOCK)) return@event
-            if (this.item?.type == Material.SNOWBALL) isCancelled = true
 
-            var canPickup = true
-            if (eventController().currentGame != null) {
-                canPickup = eventController().currentGame!!.state == GameState.IDLE
+            if (clickedBlock.type == Material.SNOW || clickedBlock.type == Material.SNOW_BLOCK) {
+                if (this.item?.type == Material.SNOWBALL) isCancelled = true
+
+                if (eventController().currentGame != null) {
+                    if (eventController().currentGame!!.state != GameState.IDLE) return@event
+                }
+
+                if (Random().nextInt(5) != 0) return@event
+
+                if (player.inventory.firstEmpty() == -1) return@event
+                player.inventory.addItem(ItemStack(Material.SNOWBALL, 1).apply {
+                    itemMeta = itemMeta.apply { setMaxStackSize(99) }
+                })
+                player.playSound(clickedBlock.location, Sound.BLOCK_SNOW_BREAK, 1f, 1.5f)
+                player.playSound(clickedBlock.location, Sound.BLOCK_SNOW_STEP, 0.5f, 2f)
+
+                clickedBlock.location.world.spawnParticle(
+                    Particle.SNOWFLAKE,
+                    clickedBlock.location.clone().add(0.5, 0.5, 0.5),
+                    30,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.1
+                )
             }
 
-            if (Random().nextInt(5) != 0) return@event
-
-            if (player.inventory.firstEmpty() == -1) return@event
-            player.inventory.addItem(ItemStack(Material.SNOWBALL, 1).apply {
-                itemMeta = itemMeta.apply { setMaxStackSize(99) }
-            })
-
-            player.playSound(clickedBlock.location, Sound.BLOCK_SNOW_BREAK, 1f, 1.5f)
-            player.playSound(clickedBlock.location, Sound.BLOCK_SNOW_STEP, 0.5f, 2f)
-            clickedBlock.location.world.spawnParticle(
-                Particle.SNOWFLAKE,
-                clickedBlock.location.clone().add(0.5, 0.5, 0.5),
-                30,
-                0.2,
-                0.2,
-                0.2,
-                0.1
-            )
+            if (clickedBlock.type == Material.BARREL) isCancelled = true
         }
 
         event<PlayerJoinEvent>(priority = EventPriority.LOWEST) {
@@ -272,10 +275,6 @@ class HousekeepingEventListener : Listener, PacketListener {
         }
 
         event<FoodLevelChangeEvent> { isCancelled = true }
-
-        event<InventoryOpenEvent> {
-            if (inventory.type == InventoryType.BARREL) isCancelled = true
-        }
 
         event<InventoryClickEvent> {
             if (clickedInventory !is PlayerInventory) return@event
