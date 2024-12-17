@@ -291,9 +291,12 @@ class HousekeepingEventListener : Listener, PacketListener {
         event<EntityDamageEvent>(priority = EventPriority.LOWEST) {
             isCancelled = true
 
-            entity as? Player ?: return@event // damaged entity
-            (this as? EntityDamageByEntityEvent)?.damager as? Snowball ?: return@event // damager
-            if ((damager as Snowball).item.type != Material.SNOWBALL) return@event // not a snowball (could be projectile from other game)
+            if (entity !is Player) return@event // damaged entity is a player
+
+            val damageEvent = this as? EntityDamageByEntityEvent ?: return@event
+            val damager = damageEvent.damager as? Snowball ?: return@event // if damager is snowball
+
+            if (damager.item.type != Material.SNOWBALL) return@event // snowball is of default item (painball changes the itemstack)
 
             damage = Double.MIN_VALUE
             isCancelled = false
