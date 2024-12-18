@@ -93,7 +93,7 @@ class DonationListener {
                 val donorName = donation.get("name")?.asString
                 val comment = donation.get("comment")?.asString
                 val amount = donation.get("amount").asString
-                val finalAmount = donation.get("finalAmount").asString
+                val finalAmount = String.format("%.2f", donation.get("finalAmount").asDouble)
                 val timestamp = donation.get("timestamp").asLong
 
                 sync {
