@@ -100,7 +100,19 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
                             .append("<game_colour>\n-------------------------------------------------\n".style())
                     )
                 }
-                Util.runAction(PlayerType.OPTED_OUT) { it.teleport(gameConfig.spectatorSpawnLocations.random()) }
+                Util.runAction(PlayerType.OPTED_OUT) {
+                    it.teleport(gameConfig.spectatorSpawnLocations.random())
+                    it.gameMode = GameMode.ADVENTURE
+                    it.formatInventory()
+                    ItemStack(Material.RECOVERY_COMPASS).apply {
+                        itemMeta = itemMeta.apply {
+                            displayName("<!i><white>ѕᴘᴇᴄᴛᴀᴛᴇ".style())
+                            editMeta {
+                                lore(listOf("<grey>ᴄʟɪᴄᴋ ᴛᴏ ѕᴘᴇᴄᴛᴀᴛᴇ!".style()))
+                            }
+                        }
+                    }.also { item -> it.inventory.setItem(8, item) }
+                }
 
                 eventController().sidebarManager.update() // enable again after sequence ended.
                 startGame()
