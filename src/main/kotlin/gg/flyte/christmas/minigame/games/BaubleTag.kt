@@ -127,7 +127,7 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
         super.eliminate(player, reason)
         when (remainingPlayers().size) {
             1 -> {
-                formattedWinners[player.uniqueId] = "2ѕᴛ ᴘʟᴀᴄᴇ!"
+                formattedWinners[player.uniqueId] = "2ɴᴅ ᴘʟᴀᴄᴇ!"
                 formattedWinners[remainingPlayers().first().uniqueId] = "1ѕᴛ ᴘʟᴀᴄᴇ!"
                 endGame()
             }
