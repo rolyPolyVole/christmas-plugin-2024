@@ -60,6 +60,9 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
     ).flatten()
     private var gameTime = 0
     private var doubleJumps = mutableMapOf<UUID, Int>()
+    private val snowmen = mutableListOf<Snowman>()
+    private val bees = mutableListOf<Bee>()
+    private var bottomLayerMelted = false
 
     // ticks left | total ticks
     private var unlimitedJumpTickData: Pair<Int, Int> = 0 to 0
