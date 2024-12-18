@@ -68,10 +68,21 @@ class TreeDecorate : EventMiniGame(GameConfig.TREE_DECORATE) {
             it.playSound(Sound.MUSIC_DISC_CHIRP)
         }
 
-        delay(15, TimeUnit.MINUTES) { booleanCanDesecrate = true }
+        delay(15, TimeUnit.MINUTES) { allowDesecration() }
 
         delay(200, TimeUnit.SECONDS) {
             eventController().songPlayer?.isPlaying = true // Santa Tell Me would now be over.
+        }
+    }
+
+    private fun allowDesecration() {
+        booleanCanDesecrate = true
+        Util.runAction(PlayerType.PARTICIPANT) {
+            it.title(
+                "<game_colour>ꜰᴜʟʟ ᴄʀᴇᴀᴛɪᴠᴇ ɪɴᴠᴇɴᴛᴏʀʏ!".style(), "<grey>ɪs ɴᴏᴡ ᴜɴʟᴏᴄᴋᴇᴅ".style(),
+                titleTimes(Duration.ZERO, Duration.ofSeconds(3), Duration.ofSeconds(1))
+            )
+            it.playSound(Sound.ENTITY_EVOKER_FANGS_ATTACK)
         }
     }
 
@@ -133,6 +144,10 @@ class TreeDecorate : EventMiniGame(GameConfig.TREE_DECORATE) {
     }
 
     override fun handleDonation(tier: DonationTier, donorName: String?) {
-        TODO("Not yet implemented")
+        when (tier) {
+            DonationTier.LOW -> {}
+            DonationTier.MEDIUM -> {}
+            DonationTier.HIGH -> allowDesecration()
+        }
     }
 }
