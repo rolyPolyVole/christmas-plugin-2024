@@ -97,9 +97,7 @@ class DonationListener {
                 val timestamp = donation.get("timestamp").asLong
 
                 sync {
-                    Bukkit.getPluginManager().callEvent(
-                        DonateEvent(donationId, donorName, comment, amount, finalAmount, timestamp)
-                    )
+                    Bukkit.getPluginManager().callEvent(DonateEvent(donationId, donorName, comment, amount, finalAmount, timestamp))
                 }
             }
         }
