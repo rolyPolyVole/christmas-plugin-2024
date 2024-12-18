@@ -456,11 +456,11 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
                     if (it == player) {
                         it.sendMessage("<green><b>ʏᴏᴜ'ᴠᴇ ꜰᴏᴜɴᴅ ᴀ ${randomPowerUp.displayName} ᴘᴏᴡᴇʀ-ᴜᴘ!".style())
                     } else {
-                        it.sendMessage("<green><b>« ${player.name} ʜᴀѕ ꜰᴏᴜɴᴅ ᴀ {${randomPowerUp.displayName} ᴘᴏᴡᴇʀ-ᴜᴘ! »".style())
+                        it.sendMessage("<green><b>« ${player.name} ʜᴀѕ ꜰᴏᴜɴᴅ ᴀ ${randomPowerUp.displayName} ᴘᴏᴡᴇʀ-ᴜᴘ! »".style())
                     }
                 }
                 Util.runAction(PlayerType.OPTED_OUT) {
-                    it.sendMessage("<green><b>« ${player.name} ʜᴀѕ ꜰᴏᴜɴᴅ ᴀ {${randomPowerUp.displayName} ᴘᴏᴡᴇʀ-ᴜᴘ! »".style())
+                    it.sendMessage("<green><b>« ${player.name} ʜᴀѕ ꜰᴏᴜɴᴅ ᴀ ${randomPowerUp.displayName} ᴘᴏᴡᴇʀ-ᴜᴘ! »".style())
                 }
 
                 when (randomPowerUp) {
