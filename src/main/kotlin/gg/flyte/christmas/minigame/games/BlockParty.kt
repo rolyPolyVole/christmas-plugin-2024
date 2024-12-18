@@ -271,6 +271,12 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
             1 -> {
                 formattedWinners[player.uniqueId] = value
                 formattedWinners[remainingPlayers().first().uniqueId] = "$value (1ѕᴛ ᴘʟᴀᴄᴇ!)"
+
+                // formattedWinners currently have keys in order of elimination, reverse it to get actual winners.
+                LinkedHashMap(formattedWinners.toList().asReversed().toMap()).apply {
+                    formattedWinners.clear()
+                    formattedWinners.putAll(this)
+                }
                 endGame()
             }
 

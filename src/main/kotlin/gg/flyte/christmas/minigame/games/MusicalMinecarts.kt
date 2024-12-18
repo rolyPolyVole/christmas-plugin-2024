@@ -241,6 +241,12 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                 formattedWinners[player.uniqueId] = value
                 formattedWinners[remainingPlayers().first().uniqueId] = "$value (1ѕᴛ ᴘʟᴀᴄᴇ!)"
                 remainingPlayers().first().teleport(gameConfig.spawnPoints.random().randomLocation())
+
+                // formattedWinners currently have keys in order of elimination, reverse it to get actual winners.
+                LinkedHashMap(formattedWinners.toList().asReversed().toMap()).apply {
+                    formattedWinners.clear()
+                    formattedWinners.putAll(this)
+                }
                 endGame()
             }
 

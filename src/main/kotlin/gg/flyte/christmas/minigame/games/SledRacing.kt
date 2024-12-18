@@ -234,3 +234,4 @@ class SledRacing : EventMiniGame(GameConfig.SLED_RACING) {
         override fun isColliding(pos: BlockPos, state: BlockState) = false
     }
 }
+// TODO add points in this

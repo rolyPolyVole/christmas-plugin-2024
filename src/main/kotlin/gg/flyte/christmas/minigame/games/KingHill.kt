@@ -101,7 +101,7 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
         for (entry in timeOnHill) eventController().addPoints(entry.key, entry.value)
 
         val (first) = timeOnHill.entries
-            .sortedBy { it.value }
+            .sortedByDescending { it.value }
             .take(3)
             .also {
                 it.forEach { entry ->

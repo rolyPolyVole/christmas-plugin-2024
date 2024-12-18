@@ -132,7 +132,7 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
 
         for (entry in scores) eventController().addPoints(entry.key, entry.value)
         scores.entries
-            .sortedBy { it.value }
+            .sortedByDescending { it.value }
             .take(3)
             .also {
                 it.forEach { entry ->

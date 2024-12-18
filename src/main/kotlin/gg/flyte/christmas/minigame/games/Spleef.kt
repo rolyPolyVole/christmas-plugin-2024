@@ -68,9 +68,6 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
     // lateinit since <game_colour> is not mapped yet at time of init
     private lateinit var unlimitedJumpBossBar: BossBar
     private lateinit var snowballBossBar: BossBar
-    private val snowmen = mutableListOf<Snowman>()
-    private val bees = mutableListOf<Bee>()
-    private var bottomLayerMelted = false
 
     override fun startGameOverview() {
         super.startGameOverview()
@@ -661,3 +658,4 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
         }
     }
 }
+// TODO add scoring in this properly (rn just +1 for surviving 30 seconds)

@@ -129,6 +129,12 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
             1 -> {
                 formattedWinners[player.uniqueId] = "2ɴᴅ ᴘʟᴀᴄᴇ!"
                 formattedWinners[remainingPlayers().first().uniqueId] = "1ѕᴛ ᴘʟᴀᴄᴇ!"
+
+                // formattedWinners currently have keys in order of elimination, reverse it to get actual winners.
+                LinkedHashMap(formattedWinners.toList().asReversed().toMap()).apply {
+                    formattedWinners.clear()
+                    formattedWinners.putAll(this)
+                }
                 endGame()
             }
 

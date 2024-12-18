@@ -285,7 +285,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
                 "<colour:#a39341>➌ "
             )
 
-            formattedWinners.entries.take(3).reversed().forEachIndexed { index, keyValuePair ->
+            formattedWinners.entries.take(3).forEachIndexed { index, keyValuePair ->
                 val uniqueId = keyValuePair.key
                 val value = keyValuePair.value
                 val displayName = "${descendingColour[index]}${Bukkit.getOfflinePlayer(uniqueId).name}"
