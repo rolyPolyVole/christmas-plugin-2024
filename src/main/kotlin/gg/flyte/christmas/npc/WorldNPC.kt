@@ -126,8 +126,6 @@ class WorldNPC private constructor(displayName: Component, textureProperties: Li
                 .sortedByDescending { it.value }
                 .take(3)
                 .forEachIndexed { index, (uniqueId, points) ->
-                    ChristmasEventPlugin.instance.worldNPCs.remove(leaderBoardNPCs[index])
-
                     async {
                         leaderBoardNPCs[index] = createFromUniqueId(Component.empty(), uniqueId, leaderboardPositionToLocation[index]!!).apply {
                             this.scale = when (index) {
