@@ -489,11 +489,11 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                     if (it == player) {
                         it.sendMessage("<green><b>ʏᴏᴜ'ᴠᴇ ꜰᴏᴜɴᴅ ᴀ ${randomPowerUp.displayName} ᴘᴏᴡᴇʀ-ᴜᴘ!".style())
                     } else {
-                        it.sendMessage("<green><b>« ${player.name} ʜᴀѕ ꜰᴏᴜɴᴅ ᴀ {${randomPowerUp.displayName} ᴘᴏᴡᴇʀ-ᴜᴘ! »")
+                        it.sendMessage("<green><b>« ${player.name} ʜᴀѕ ꜰᴏᴜɴᴅ ᴀ ${randomPowerUp.displayName} ᴘᴏᴡᴇʀ-ᴜᴘ! »")
                     }
                 }
                 Util.runAction(PlayerType.OPTED_OUT) {
-                    it.sendMessage("<green><b>« ${player.name} ʜᴀѕ ꜰᴏᴜɴᴅ ᴀ {${randomPowerUp.displayName} ᴘᴏᴡᴇʀ-ᴜᴘ! »")
+                    it.sendMessage("<green><b>« ${player.name} ʜᴀѕ ꜰᴏᴜɴᴅ ᴀ ${randomPowerUp.displayName} ᴘᴏᴡᴇʀ-ᴜᴘ! »")
                 }
 
                 when (randomPowerUp) {
