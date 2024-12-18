@@ -430,15 +430,17 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
                         val passengerPacket = WrapperPlayServerSetPassengers(minecart.entityId, intArrayOf(npc.npc.id))
                         delay(1) { passengerPacket.sendPacket(loopedPlayer) }
 
-                        animationTasks += repeatingTask(50) {
-                            WrapperPlayServerEntityAnimation(
-                                npc.npc.id,
-                                WrapperPlayServerEntityAnimation.EntityAnimationType.SWING_MAIN_ARM
-                            ).sendPacket(loopedPlayer)
+                        animationTasks += repeatingTask(30) {
+                            delay((0..15).random()) {
+                                WrapperPlayServerEntityAnimation(
+                                    npc.npc.id,
+                                    WrapperPlayServerEntityAnimation.EntityAnimationType.SWING_MAIN_ARM
+                                ).sendPacket(loopedPlayer)
 
-                            minecart.world.dropItemNaturally(minecart.location.add(0.0, 1.0, 0.0), ItemStack(Material.MINECART)) {
-                                it.velocity = Vector(Random.nextDouble(-1.0, 1.0), Random.nextDouble(0.0, 0.5), Random.nextDouble(-1.0, 1.0))
-                                droppedItems.add(it)
+                                minecart.world.dropItemNaturally(minecart.location.add(0.0, 1.0, 0.0), ItemStack(Material.MINECART)) {
+                                    it.velocity = Vector(Random.nextDouble(-1.0, 1.0), Random.nextDouble(0.0, 0.5), Random.nextDouble(-1.0, 1.0))
+                                    droppedItems.add(it)
+                                }
                             }
                         } // NPC swing
 
