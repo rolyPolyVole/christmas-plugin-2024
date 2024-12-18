@@ -35,7 +35,6 @@ import java.util.*
  */
 class WorldNPC private constructor(displayName: Component, textureProperties: List<TextureProperty?>?, val location: Location) {
     private var id: Int = SpigotReflectionUtil.generateEntityId()
-
     val npc: NPC
     var scale = 0.5
 
