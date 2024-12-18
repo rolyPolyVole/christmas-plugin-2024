@@ -120,7 +120,7 @@ class WorldNPC private constructor(displayName: Component, textureProperties: Li
             leaderBoardNPCs.forEach { (_, npc) ->
                 ChristmasEventPlugin.instance.worldNPCs.remove(npc)
                 npc.despawnForAll()
-            }
+            }.also { leaderBoardNPCs.clear() }
 
             eventController().points.entries
                 .sortedByDescending { it.value }
