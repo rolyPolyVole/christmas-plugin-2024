@@ -45,6 +45,15 @@ class DonationListener {
                     submitDataToEventFactory(data.getAsJsonArray("donations"))
                 } catch (e: Exception) {
                     ChristmasEventPlugin.instance.logger.severe("Failed to fetch donations: ${e.message}")
+                    Bukkit.getOnlinePlayers().forEach {
+                        if (it.isOp) {
+                            it.sendMessage("<red>——————————————————————————————————")
+                            it.sendMessage("<red>Plugin failed to fetch donations:")
+                            it.sendMessage("<#FF7474>${e.message}")
+                            it.sendMessage("<red>If this persists over the next <b><white>5</b></white> seconds, please repair.")
+                            it.sendMessage("<red>——————————————————————————————————")
+                        }
+                    }
                 }
                 delay(5_000) // 5 secs
             }
