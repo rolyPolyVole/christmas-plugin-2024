@@ -67,8 +67,12 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
     )
     private val safePoints = mutableListOf<Location>()
     private val phantomSafePoints = mutableListOf<BlockDisplay>()
+
+    // ticks left | total ticks
     private var whirlwindTickData: Pair<Int, Int> = 0 to 0
     private var whirlwindTask: TwilightRunnable? = null
+
+    // lateinit since <game_colour> is not mapped yet at time of init
     private lateinit var whirlwindBossBar: BossBar
 
     override fun startGameOverview() {
