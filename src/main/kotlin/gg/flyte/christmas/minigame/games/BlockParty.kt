@@ -110,6 +110,14 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
         simpleCountdown {
             newRound()
             donationEventsEnabled = true
+
+            tasks += repeatingTask(40) {
+                remainingPlayers().forEach {
+                    if (it.allowFlight) {
+                        it.sendActionBar("<game_colour>ʏᴏᴜ ʜᴀᴠᴇ ᴅᴏᴜʙʟᴇ ᴊᴜᴍᴘs ᴀᴠᴀɪʟᴀʙʟᴇ!".style())
+                    }
+                }
+            }
         }
     }
 

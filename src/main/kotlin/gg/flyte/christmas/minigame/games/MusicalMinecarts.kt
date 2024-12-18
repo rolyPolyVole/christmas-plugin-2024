@@ -94,6 +94,14 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
             newRound()
             Util.runAction(PlayerType.PARTICIPANT) { it.sendMessage("<game_colour>ʀᴇᴍᴇᴍʙᴇʀ, <b>ᴅᴏ</b> ɴᴏᴛ ᴄʟɪᴄᴋ ᴛʜᴇ ᴍɪɴᴇᴄᴀʀᴛѕ ʙᴇꜰᴏʀᴇ ᴛʜᴇ ᴍᴜѕɪᴄ ʜᴀѕ ѕᴛᴏᴘᴘᴇᴅ... ʏᴏᴜ ᴡɪʟʟ ʙᴇ ѕᴛᴜɴɴᴇᴅ!".style()) }
             donationEventsEnabled = true
+
+            tasks += repeatingTask(40) {
+                remainingPlayers().forEach {
+                    if (it.allowFlight) {
+                        it.sendActionBar("<game_colour>ʏᴏᴜ ʜᴀᴠᴇ ᴅᴏᴜʙʟᴇ ᴊᴜᴍᴘs ᴀᴠᴀɪʟᴀʙʟᴇ!".style())
+                    }
+                }
+            }
         }
     }
 
