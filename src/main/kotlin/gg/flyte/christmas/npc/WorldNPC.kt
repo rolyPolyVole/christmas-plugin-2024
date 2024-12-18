@@ -91,9 +91,9 @@ class WorldNPC private constructor(displayName: Component, textureProperties: Li
     companion object {
         private val leaderBoardNPCs = HashMap<Int, WorldNPC>()
         private val leaderboardPositionToLocation = mapOf(
-            0 to MapSinglePoint(535.5, 108.3, 503.5, -90, 0), // 2.5
-            1 to MapSinglePoint(535.5, 106.55, 507.5, -90, 0), // 2.0
-            2 to MapSinglePoint(535.5, 105, 499.5, -90, 0) // 1.5
+            0 to MapSinglePoint(535.5, 108.3, 503.5, -90, 0),
+            1 to MapSinglePoint(535.5, 106.55, 507.5, -90, 0),
+            2 to MapSinglePoint(535.5, 105, 499.5, -90, 0)
         )
         private val leaderboardPositionToNamePlateLocation = mapOf(
             0 to MapSinglePoint(537.3, 107.48, 503.55, -90, 0),
