@@ -73,7 +73,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
             // send BEFORE textDisplay has rendered in.
             Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) {
                 it.title(
-                    gameConfig.displayName, "<game_colour>Instructions:".style(),
+                    gameConfig.displayName, "<game_colour>ɪɴsᴛʀᴜᴄᴛɪᴏɴs:".style(),
                     titleTimes(Duration.ofMillis(1250), Duration.ofMillis(3500), Duration.ofMillis(750))
                 )
             }
@@ -95,7 +95,7 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
 
                     preparePlayer(it)
                     it.sendMessage(
-                        "<game_colour>\n------------------[INSTRUCTIONS]------------------\n".style()
+                        "<game_colour>\n------------------[ɪɴsᴛʀᴜᴄᴛɪᴏɴs]------------------\n".style()
                             .append("<white>${gameConfig.instructions}".style())
                             .append("<game_colour>\n-------------------------------------------------\n".style())
                     )
