@@ -287,7 +287,11 @@ abstract class EventMiniGame(val gameConfig: GameConfig) {
             eventController().sidebarManager.remove(it) // hide for now
         }
 
-        CameraSlide(MapSinglePoint(527, 202, 562, 20.373718F, 7.030075F)) {
+        CameraSlide(
+            MapSinglePoint(527, 202, 562, 20.373718F, 7.030075F),
+            gameConfig.cameraSlideParameters.first,
+            gameConfig.cameraSlideParameters.second
+        ) {
             // create podium NPCs
             val npcs = mutableListOf<WorldNPC>()
             val displays = mutableListOf<TextDisplay>()
