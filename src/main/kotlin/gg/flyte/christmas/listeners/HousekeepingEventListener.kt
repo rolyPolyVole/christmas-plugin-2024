@@ -343,7 +343,7 @@ class HousekeepingEventListener : Listener, PacketListener {
         for (i in 0 until options) {
 
             val menuItem = MenuItem(Material.PLAYER_HEAD)
-                .setName("ѕᴘᴇᴄᴛᴀᴛᴇ ᴘᴏɪɴᴛ $i")
+                .setName("ѕᴘᴇᴄᴛᴀᴛᴇ ᴘᴏɪɴᴛ ${i + 1}")
                 .setSkullTexture("66f88107041ff1ad84b0a4ae97298bd3d6b59d0402cbc679bd2f77356d454bc4")
                 .onClick { whoClicked, _, _, _ ->
                     val requestedCameraEntity = eventController().currentGame!!.spectateEntities[i]
