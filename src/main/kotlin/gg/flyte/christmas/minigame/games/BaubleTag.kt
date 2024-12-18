@@ -153,7 +153,6 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
             it.isGlowing = false
         }
 
-
         super.endGame()
     }
 
