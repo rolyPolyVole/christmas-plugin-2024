@@ -66,7 +66,6 @@ class WorldNPC private constructor(displayName: Component, textureProperties: Li
         )
         val property = WrapperPlayServerUpdateAttributes.Property(Attributes.GENERIC_SCALE, scale, listOf(modifier))
         WrapperPlayServerUpdateAttributes(id, listOf(property)).sendPacket(player)
-
     }
 
     /**
