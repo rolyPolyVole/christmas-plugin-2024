@@ -210,13 +210,14 @@ class HousekeepingEventListener : Listener, PacketListener {
             val npcLocations = worldNPCs.map { it.npc.location.bukkit() }
 
             // hide player if near any NPC (they obstruct view)
-            if (npcLocations.any { it.distance(playerLocation) < 3 }) player.isVisibleByDefault =
-                false else if (!player.isVisibleByDefault) player.isVisibleByDefault = true
+            if (npcLocations.any { it.distanceSquared(playerLocation) < 9 }) {
+                player.isVisibleByDefault = false
+            } else if (!player.isVisibleByDefault) player.isVisibleByDefault = true
 
             // make NPCs look at player if within range
             worldNPCs.forEach { npc ->
                 val npcLocation = npc.npc.location.bukkit()
-                if (npcLocation.distance(playerLocation) <= 25) {
+                if (npcLocation.distanceSquared(playerLocation) <= 900) {
                     val location = player.location.apply {
 
                         // since the NPCs are scaled, the look vector is not exact at eye level; this corrects it
