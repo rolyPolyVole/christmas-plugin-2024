@@ -406,8 +406,7 @@ enum class GameConfig(
 
     //region PAINT_WARS
     PAINT_WARS(
-        PaintWars::
-        class,
+        PaintWars::class,
         "<colour:#75e01d>ᴘᴀɪɴᴛ ᴡᴀʀꜱ".style(),
         ItemStack(Material.BRUSH),
         TextColor.fromHexString("#75e01d")!!,
