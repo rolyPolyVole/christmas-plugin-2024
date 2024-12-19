@@ -106,7 +106,7 @@ class ChristmasEventPlugin : JavaPlugin() {
     private fun loadNPCs() {
         for (contributor in Util.getEventContributors()) {
             val (uniqueId, contribution, location, colour) = contributor
-            val displayName = "<$colour>${MojangAPIUtil.requestPlayerName(uniqueId)}".style()
+            val displayName = "$colour${MojangAPIUtil.requestPlayerName(uniqueId)}".style()
 
             val contributorNPC = WorldNPC.createFromUniqueId(displayName, uniqueId, location).also { worldNPCs += it }
             contributorNPC.spawnForAll()
