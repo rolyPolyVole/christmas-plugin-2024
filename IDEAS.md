@@ -77,30 +77,9 @@
 - Terminating a game in its camera phase
 
 ### PLAYTEST BUGS:
-- Spectators can hit eachother in avalanche 
 - Spectate point on bauble tag is not mapped properly (after being eliminated)
-- bauble tag message about players being regrouped continues in red.
-- game summary shows 2st in bauble tag for second place.
-- random self-boost has a bracket block party 
-  - random opening bracket '{' in block party powerup.
 - chat validation error
-- visual indication of double jump in block party.
-- double NPCs at lobby podium.
-- YOU null in new dataSupplier scoreboards.
-- donation nudge: "so $10 means etc... ()" <- check that 'so' is in small text 
-- non-eliminating games seem to have broken leaderboards:
-  - KOTH leaderboard summary is broken
-  - paintball leaderboard not working 
-  - paintwars leaderboard is broken
-  - sled racing leaderboard is broken
-- spleef non opped players cant break blocks.
-- 'Instructions:' in startGameOverview is not in small text
-- musical minecarts too much y velocity and they float way too high 
-- minimessage for minecrats not formatting properly
-- reduce the minecart item win animation (halve it)
-- for API donations, truncate the finalAmount to two decimal places.
-- $10 translated into $10.001010 smt
-- Donation events in paintball are not announced properly
+
 - Streamline game overviews to be the same durationg
   - paintwars overview a bit too long
   - BaubleTag too short
@@ -111,3 +90,10 @@
 Lag related:
 - lag spike with donation events when submitted.
 - see issues of server lagging
+
+Things to absolutely check for next 'playtest'
+- Avalanche spectators should no longer be able to attack each other
+- visual indication of double jump in block party.
+- spleef non opped players cant break blocks.
+- Real donations are rounding properly.
+- try and get team to desecrate the tree in tree decorating to patch any oversights
