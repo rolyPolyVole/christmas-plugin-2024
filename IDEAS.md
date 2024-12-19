@@ -15,26 +15,20 @@
 
 - Illuminate blocks with red/green glow to show clear path
 - disable two players in one boat
-- Fix interacting bug with boats to respawn at spawn point. (have them sneak out)
-
-### Tree Decorating:
-
-- Disable fucking explosives and lava.
-    - disable spawning any type of entity
-    - disable firework rockets
-    - disable TNT minecarts
-- Autogive players decorations so that their first thought is not to desecrate the tree!
 
 ## Donations:
 
 - Christmas tree that grows with each donation
-- Donations progress bar somehow.
-- "Chaos" donations -> drop TNT in a spleef game, for example.
+
+## Stream:
+
+- Drumroll while rolling giveaway?
 
 ## Donation Events:
 
 ### Spleef:
- - Low-tier
+
+- Low-tier
     - A few seconds of unlimited double jump
     - +1 double jump for everyone
     - Powerful snowballs for 10 seconds
@@ -46,52 +40,50 @@
     - Start snowing snowballs from the sky
 
 ### Bauble Tag:
- - Low-tier
+
+- Low-tier
     - Make everyone glow for 10 seconds
     - Double everyone's speed for 10 seconds
- - Medium-tier
+- Medium-tier
     - Randomly swap a tagged player
     - Teleport everyone to the middle
- - High-tier
+- High-tier
     - Explode one random player, killing nearby players too. Disabled in the final round.
     - Explode specifically stephen
 
 ### Paintball:
-  - Low-tier
+
+- Low-tier
     - Make everyone glow for 10 seconds
     - Give everyone nausea for 10 seconds
-  - Medium-tier
+- Medium-tier
     - Give everyone a sniper
     - Spawn a snow golem in the middle of the map
-  - High-tier
+- High-tier
     - Placeholder
     - Placeholder
-
-## Stream:
-
-- Drumroll while rolling giveaway?
 
 # PlayTest Notes:
 
-### Bugs which I don't want to spam on the discord
-- Terminating a game in its camera phase
-
 ### PLAYTEST BUGS:
+
 - Spectate point on bauble tag is not mapped properly (after being eliminated)
 - chat validation error
-
 - Streamline game overviews to be the same durationg
-  - paintwars overview a bit too long
-  - BaubleTag too short
+    - paintwars overview a bit too long
+    - BaubleTag too short
+
 - sled racing broken, can leave boats
-  - add two passengers to sled racing?
+    - add two passengers to sled racing?
 - sled racing only do one lap
 
 Lag related:
+
 - lag spike with donation events when submitted.
 - see issues of server lagging
 
 Things to absolutely check for next 'playtest'
+
 - Avalanche spectators should no longer be able to attack each other
 - visual indication of double jump in block party.
 - spleef non opped players cant break blocks.
