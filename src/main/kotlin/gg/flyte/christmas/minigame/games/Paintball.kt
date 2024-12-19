@@ -218,7 +218,7 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
                     } else {
                         // set initial duration
                         glowingTickData = 10 * 20 to 10 * 20
-                        tasks += repeatingTask(1, TimeUnit.SECONDS) {
+                        tasks += repeatingTask(1) {
                             val (ticksLeft, totalTicks) = glowingTickData
                             glowingBossBar.progress(Math.clamp(ticksLeft / totalTicks.toFloat(), 0.0F, 1.0F))
 
@@ -252,7 +252,7 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
                     } else {
                         // set initial duration
                         nauseatedTickData = 10 * 20 to 10 * 20
-                        tasks += repeatingTask(1, TimeUnit.SECONDS) {
+                        tasks += repeatingTask(1) {
                             val (ticksLeft, totalTicks) = nauseatedTickData
                             nauseatedBossBar.progress(Math.clamp(ticksLeft / totalTicks.toFloat(), 0.0F, 1.0F))
 
