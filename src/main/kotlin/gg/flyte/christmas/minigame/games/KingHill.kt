@@ -164,7 +164,6 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
         }
     }
 
-
     override fun endGame() {
         donationEventsEnabled = false
 
@@ -238,8 +237,6 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
     }
 
     private fun delayedKnockback() = delayedKnockbackTickData.first > 0
-
-    private fun thrownAround() = thrownAroundTickData.first > 0 // unused?
 
     override fun handleGameEvents() {
         listeners += event<EntityDamageEvent>(priority = EventPriority.HIGHEST) {
