@@ -223,7 +223,10 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
                             glowingBossBar.progress(Math.clamp(ticksLeft / totalTicks.toFloat(), 0.0F, 1.0F))
 
                             if (ticksLeft == 0) {
-                                remainingPlayers().forEach { it.isGlowing = false }
+                                remainingPlayers().forEach {
+                                    it.isGlowing = false
+                                    it.hideBossBar(glowingBossBar)
+                                }
                                 cancel()
                             } else {
                                 glowingTickData = ticksLeft - 1 to totalTicks
@@ -257,7 +260,10 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
                             nauseatedBossBar.progress(Math.clamp(ticksLeft / totalTicks.toFloat(), 0.0F, 1.0F))
 
                             if (ticksLeft == 0) {
-                                remainingPlayers().forEach { it.clearActivePotionEffects() }
+                                remainingPlayers().forEach {
+                                    it.clearActivePotionEffects()
+                                    it.hideBossBar(nauseatedBossBar)
+                                }
                                 cancel()
                             } else {
                                 nauseatedTickData = ticksLeft - 1 to totalTicks
