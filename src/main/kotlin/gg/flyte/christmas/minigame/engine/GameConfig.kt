@@ -346,7 +346,7 @@ enum class GameConfig(
                 " • ᴛᴏ ᴡɪɴ, ʜɪᴛ ᴛʜᴇ ᴍᴏѕᴛ ᴘʟᴀʏᴇʀѕ ᴀɴᴅ ɢᴇᴛ ᴛʜᴇ ᴍᴏѕᴛ ᴘᴏɪɴᴛѕ!",
         2,
         MapSinglePoint(181.5, 140.0, 300.5, -135, 90),
-        200 to 0.5,
+        200 to 0.6,
         listOf(
             MapRegion.single(MapSinglePoint(193, 80, 193, 0, 0)),
             MapRegion.single(MapSinglePoint(207, 82, 221, 0, 0)),
