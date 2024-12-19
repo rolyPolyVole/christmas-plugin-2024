@@ -131,7 +131,7 @@ enum class GameConfig(
             MapSinglePoint(181, 128, 1252, -133.11133F, 8.586087F),
         ),
         listOf(MapSinglePoint(147, 200, 1270, -92.046814F, 49.535908F)),
-        listOf(MapSinglePoint(128, 146, 1288, -115.052185F, 22.471674F)),
+        listOf(MapSinglePoint(176, 142, 1235, -13.384574F, 23.072657F)), // TODO not working?!
     ),
     //endregion
 
