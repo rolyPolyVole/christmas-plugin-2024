@@ -173,6 +173,6 @@ class WorldNPC private constructor(displayName: Component, textureProperties: Li
             // fetch texture properties from Mojang using player name
             val textureProperty = MojangAPIUtil.requestPlayerTextureProperties(modelAfter)
             return WorldNPC(displayName, textureProperty, location)
-        }
+        } // TODO document here that this is an expensive function
     }
 }
