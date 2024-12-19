@@ -234,6 +234,8 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
                         }
                     }
 
+                    announceDonationEvent("<game_colour>ᴀʟʟ ᴘʟᴀʏᴇʀs ᴀʀᴇ ɴᴏᴡ ɢʟᴏᴡɪɴɢ (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style())
+
                 } else {
                     remainingPlayers().forEach {
                         it.addPotionEffect(
@@ -270,6 +272,8 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
                             }
                         }
                     }
+
+                    announceDonationEvent("<game_colour>ᴀʟʟ ᴘʟᴀʏᴇʀs ᴀʀᴇ ɴᴀᴜsᴇᴀᴛᴇᴅ (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style())
                 }
             }
 
