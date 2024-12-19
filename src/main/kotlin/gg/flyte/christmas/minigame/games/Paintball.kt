@@ -143,7 +143,12 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
                 }
             }
 
-        Util.runAction(PlayerType.PARTICIPANT) { it.walkSpeed = 0.2F }
+        Util.runAction(PlayerType.PARTICIPANT) {
+            it.walkSpeed = 0.2F
+            it.isGlowing = false
+            it.hideBossBar(glowingBossBar)
+            it.hideBossBar(nauseatedBossBar)
+        }
 
         super.endGame()
     }
