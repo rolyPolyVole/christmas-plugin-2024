@@ -107,6 +107,9 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
         simpleCountdown {
             started = true
             donationEventsEnabled = true
+            glowingBossBar = BossBar.bossBar("<game_colour><b>ɢʟᴏᴡɪɴɢ ᴇɴᴀʙʟᴇᴅ".style(), 1.0F, BossBar.Color.WHITE, BossBar.Overlay.PROGRESS)
+            nauseatedBossBar = BossBar.bossBar("<game_colour><b>ʏᴏᴜ ꜰᴇᴇʟ sɪᴄᴋ...".style(), 1.0F, BossBar.Color.GREEN, BossBar.Overlay.PROGRESS)
+
             Util.runAction(PlayerType.PARTICIPANT) {
                 it.title(
                     "<game_colour>ѕʜᴏᴏᴛ!".style(), Component.empty(),
