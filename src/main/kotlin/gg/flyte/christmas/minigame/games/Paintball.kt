@@ -157,6 +157,7 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
             it.hideBossBar(glowingBossBar)
             it.hideBossBar(nauseatedBossBar)
             it.hideBossBar(rapidFireBossBar)
+            it.clearActivePotionEffects()
         }
 
         super.endGame()
