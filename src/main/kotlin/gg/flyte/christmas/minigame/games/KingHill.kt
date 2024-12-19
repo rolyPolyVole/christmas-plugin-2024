@@ -165,6 +165,7 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
     }
 
     override fun endGame() {
+        tasks.forEach { it?.cancel() } // this will cancel all game tasks.
         donationEventsEnabled = false
 
         Util.runAction(PlayerType.PARTICIPANT) { it.teleport(gameConfig.spawnPoints.random().randomLocation()) }

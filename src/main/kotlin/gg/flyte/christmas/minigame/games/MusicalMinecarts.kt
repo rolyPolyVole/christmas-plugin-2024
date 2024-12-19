@@ -279,7 +279,7 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
     override fun endGame() {
         hasEnded = true
-        tasks.forEach { it?.cancel() }.also { tasks.clear() } // this will cancel all game tasks.
+        tasks.forEach { it?.cancel() } // this will cancel all game tasks.
         donationEventsEnabled = false
 
         val winner = remainingPlayers().first()

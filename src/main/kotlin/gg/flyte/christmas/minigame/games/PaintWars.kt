@@ -160,6 +160,7 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
     }
 
     override fun endGame() {
+        tasks.forEach { it?.cancel() } // this will cancel all game tasks.
         started = false
         donationEventsEnabled = false
 

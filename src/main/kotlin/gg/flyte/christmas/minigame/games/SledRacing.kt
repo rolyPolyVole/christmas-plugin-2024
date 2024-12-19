@@ -97,6 +97,7 @@ class SledRacing : EventMiniGame(GameConfig.SLED_RACING) {
     }
 
     override fun endGame() {
+        tasks.forEach { it?.cancel() } // this will cancel all game tasks.
         donationEventsEnabled = false
 
         scores.entries.sortedBy { it.value }.take(3).forEachIndexed { index, (uuid, _) ->

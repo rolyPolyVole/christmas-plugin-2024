@@ -283,7 +283,7 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
     }
 
     override fun endGame() {
-        tasks.forEach { it?.cancel() }.also { tasks.clear() }
+        tasks.forEach { it?.cancel() } // this will cancel all game tasks.
         donationEventsEnabled = false
         started = false
         removeSafePoints()

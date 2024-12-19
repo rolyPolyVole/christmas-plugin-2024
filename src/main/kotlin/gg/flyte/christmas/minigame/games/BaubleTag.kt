@@ -143,6 +143,7 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
     }
 
     override fun endGame() {
+        tasks.forEach { it?.cancel() } // this will cancel all game tasks.
         donationEventsEnabled = false
 
         eventController().addPoints(remainingPlayers().first().uniqueId, 15)

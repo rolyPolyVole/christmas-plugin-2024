@@ -138,6 +138,7 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
     }
 
     override fun endGame() {
+        tasks.forEach { it?.cancel() } // this will cancel all game tasks.
         donationEventsEnabled = false
 
         for (entry in scores) eventController().addPoints(entry.key, entry.value)

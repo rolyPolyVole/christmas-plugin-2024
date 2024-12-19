@@ -232,8 +232,9 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
     }
 
     override fun endGame() {
-        //undo what was done in startGame()
-        ChristmasEventPlugin.instance.serverWorld.setGameRule(GameRule.MOB_GRIEFING, true)
+        tasks.forEach { it?.cancel() } // this will cancel all game tasks.
+
+        ChristmasEventPlugin.instance.serverWorld.setGameRule(GameRule.MOB_GRIEFING, true) // undo startGame() params
 
         for (point in floorLevelBlocks) point.block.type = Material.AIR
 
