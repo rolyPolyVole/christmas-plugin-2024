@@ -5,6 +5,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import gg.flyte.christmas.ChristmasEventPlugin
+import gg.flyte.christmas.util.style
 import gg.flyte.twilight.scheduler.sync
 import kotlinx.coroutines.*
 import kotlinx.io.IOException
@@ -47,11 +48,10 @@ class DonationListener {
                     ChristmasEventPlugin.instance.logger.severe("Failed to fetch donations: ${e.message}")
                     Bukkit.getOnlinePlayers().forEach {
                         if (it.isOp) {
-                            it.sendMessage("<red>——————————————————————————————————")
-                            it.sendMessage("<red>Plugin failed to fetch donations:")
-                            it.sendMessage("<#FF7474>${e.message}")
-                            it.sendMessage("<red>If this persists over the next <b><white>5</b></white> seconds, please repair.")
-                            it.sendMessage("<red>——————————————————————————————————")
+                            it.sendMessage("<red>——————————————————————————————————".style())
+                            it.sendMessage("<red>Plugin failed to fetch donations: <#FF7474>${e.message}".style())
+                            it.sendMessage("<red>If this persists over the next <b><white>5</white></b> minutes, please repair.".style())
+                            it.sendMessage("<red>——————————————————————————————————".style())
                         }
                     }
                 }
