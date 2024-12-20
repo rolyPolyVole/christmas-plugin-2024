@@ -254,6 +254,22 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
         snowmen.forEach { it.remove() }
         bees.forEach { it.remove() }
 
+        // reset game state
+        overviewTasks.clear()
+        floorLevelBlocks = listOf(
+            Util.fillArena(110, Material.SNOW_BLOCK),
+            Util.fillArena(98, Material.SNOW_BLOCK),
+            Util.fillArena(86, Material.SNOW_BLOCK)
+        ).flatten()
+        gameTime = 0
+        doubleJumps.clear()
+        snowmen.clear()
+        bees.clear()
+        bottomLayerMelted = false
+        unlimitedJumpTickData = 0 to 0
+        powerfulSnowballTickData = 0 to 0
+        donationEventsEnabled = false
+
         super.endGame()
     }
 
