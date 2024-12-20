@@ -180,7 +180,7 @@ class ChristmasEventPlugin : JavaPlugin() {
                     .append("<gray> ᴛʜᴇ ᴜ.s.\n".style())
                     .append("\n".style())
                     .append("<colour:#ff3d9b> ᴇᴠᴇʀʏ ᴅᴏʟʟᴀʀ ʏᴏᴜ ᴘᴜᴛ ꜰᴏʀᴛʜ ᴛᴏ ᴛʜɪs ɢʀᴇᴀᴛ\n".style())
-                    .append("<colour:#ff3d9b> ᴄᴀᴜsᴇ ᴡɪʟʟ ʙᴇ <b><gold>ᴛʀɪᴘʟᴇ ᴍᴀᴛᴄʜᴇᴅ</gold></b>!\n\n".style())
+                    .append("<colour:#ff3d9b> ᴄᴀᴜsᴇ ᴡɪʟʟ ʙᴇ <b><colour:#ae61f2>ᴛʀɪᴘʟᴇ ᴍᴀᴛᴄʜᴇᴅ</colour></b>!\n\n".style())
                     .append("<gray> ʜᴇᴀᴅ ᴏᴠᴇʀ ᴛᴏ <gradient:#ff80e8:#ffffff>ꜰʟʏᴛᴇ.ɢɢ/ᴅᴏɴᴀᴛᴇ</gradient> ᴛᴏ ᴅᴏɴᴀᴛᴇ ɴᴏᴡ!\n\n".style())
                     .append("<gray>          ʟᴇᴀʀɴ ᴍᴏʀᴇ @ <colour:#ec8339>ʙᴇsᴛꜰʀɪᴇɴᴅs.ᴏʀɢ\n".style())
                     .append("<red>           ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ᴊᴏɪɴɪɴɢ ᴜs ❤".style())
