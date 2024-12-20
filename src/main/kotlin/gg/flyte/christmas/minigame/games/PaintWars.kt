@@ -4,16 +4,21 @@ import com.google.common.collect.HashBiMap
 import gg.flyte.christmas.donation.DonationTier
 import gg.flyte.christmas.minigame.engine.EventMiniGame
 import gg.flyte.christmas.minigame.engine.GameConfig
+import gg.flyte.christmas.minigame.engine.PlayerType
+import gg.flyte.christmas.util.Util
 import gg.flyte.christmas.util.eventController
 import gg.flyte.christmas.util.formatInventory
 import gg.flyte.christmas.util.style
 import gg.flyte.twilight.event.event
+import gg.flyte.twilight.extension.playSound
 import gg.flyte.twilight.scheduler.repeatingTask
 import gg.flyte.twilight.time.TimeUnit
+import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.text.Component
 import org.bukkit.*
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
+import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.entity.Snowball
 import org.bukkit.event.entity.ProjectileHitEvent
@@ -21,6 +26,7 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.event.inventory.InventoryType
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import java.util.*
 import kotlin.random.Random
@@ -114,6 +120,13 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
     private val scores = mutableMapOf<UUID, Int>()
     private var started = false
     private var materialIndex = 0
+    private var splashRadius = 1
+
+    // ticks left | total ticks
+    private var rapidFireTickData: Pair<Int, Int> = 0 to 0
+
+    // lateinit since <game_colour> is not mapped yet at time of init
+    private lateinit var rapidFireBossBar: BossBar
 
     override fun preparePlayer(player: Player) {
         player.gameMode = GameMode.ADVENTURE
@@ -146,6 +159,8 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
         simpleCountdown {
             started = true
             donationEventsEnabled = true
+            rapidFireBossBar = BossBar.bossBar("<game_colour><b>ʀᴀᴘɪᴅ ꜰɪʀᴇ".style(), 1.0F, BossBar.Color.RED, BossBar.Overlay.PROGRESS)
+
             tasks += repeatingTask(1, TimeUnit.SECONDS) {
                 gameTime--
 
@@ -177,6 +192,10 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
                     formattedWinners[it.key] = "${it.value} ʙʟᴏᴄᴋ${if (it.value > 1) "ѕ" else ""}"
                 }
             }
+
+        Util.runAction(PlayerType.PARTICIPANT) {
+            it.hideBossBar(rapidFireBossBar)
+        }
 
         super.endGame()
     }
@@ -216,6 +235,8 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
         }
     }
 
+    private fun rapidFireEnabled() = rapidFireTickData.first > 0
+
     override fun handleGameEvents() {
         listeners += event<PlayerInteractEvent> {
             if (!started) return@event
@@ -224,7 +245,20 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
             if (item!!.type != Material.BRUSH) return@event
             if (!(action.name.lowercase().contains("right"))) return@event
 
-            player.launchProjectile(Snowball::class.java).apply { item = ItemStack(playerBrushesBiMap[player.uniqueId]!!) }
+            if (rapidFireEnabled()) {
+                var times = 0 // must reach 4
+                repeatingTask(1) {
+                    if (times == 4) {
+                        cancel()
+                        return@repeatingTask
+                    }
+                    player.launchProjectile(Snowball::class.java).apply { item = ItemStack(playerBrushesBiMap[player.uniqueId]!!) }
+                    times++
+                }
+            } else {
+                // singly shoot
+                player.launchProjectile(Snowball::class.java).apply { item = ItemStack(playerBrushesBiMap[player.uniqueId]!!) }
+            }
         }
 
         listeners += event<InventoryOpenEvent> { if (inventory.type == InventoryType.SHULKER_BOX) isCancelled = true }
@@ -240,9 +274,9 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
             tryUpdateBlock(hitBlock!!, entity.shooter as Player, false)
 
             val hitBlockLocation = hitBlock!!.location
-            for (x in -1..1) {
-                for (y in -1..1) {
-                    for (z in -1..1) {
+            for (x in -splashRadius..splashRadius) {
+                for (y in -splashRadius..splashRadius) {
+                    for (z in -splashRadius..splashRadius) {
                         tryUpdateBlock(
                             hitBlock!!.world.getBlockAt(
                                 Location(
@@ -265,9 +299,57 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
 
     override fun handleDonation(tier: DonationTier, donorName: String?) {
         when (tier) {
-            DonationTier.LOW -> TODO()
-            DonationTier.MEDIUM -> TODO()
-            DonationTier.HIGH -> TODO()
+            DonationTier.LOW -> {
+                remainingPlayers().forEach {
+                    // find the brush in the player's inventory
+                    val brush = it.inventory.contents.firstOrNull { item -> item?.type == Material.BRUSH }
+                    brush?.addUnsafeEnchantment(Enchantment.UNBREAKING, 1)
+                    brush?.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE)
+
+                    it.showBossBar(rapidFireBossBar)
+                }
+
+                if (rapidFireEnabled()) {
+                    // extend duration if already active
+                    rapidFireTickData = rapidFireTickData.let { it.first + (20 * 20) to it.second + (20 * 20) }
+                } else {
+                    // set initial duration
+                    rapidFireTickData = 20 * 20 to 20 * 20
+                    tasks += repeatingTask(1) {
+                        val (ticksLeft, totalTicks) = rapidFireTickData
+                        rapidFireBossBar.progress(Math.clamp(ticksLeft / totalTicks.toFloat(), 0.0F, 1.0F))
+
+                        if (ticksLeft == 0) {
+                            cancel()
+                            remainingPlayers().forEach {
+                                val goldenHoe = it.inventory.contents.firstOrNull { item -> item?.type == Material.BRUSH }
+                                goldenHoe?.removeEnchantment(Enchantment.UNBREAKING)
+                                it.hideBossBar(rapidFireBossBar)
+                            }
+                        } else {
+                            rapidFireTickData = ticksLeft - 1 to totalTicks
+                        }
+                    }
+                }
+
+                announceDonationEvent("<game_colour>ʀᴀᴘɪᴅ ꜰɪʀᴇ ɪs ᴏɴ! (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style())
+            }
+
+            DonationTier.MEDIUM -> {
+                splashRadius++
+                announceDonationEvent("<game_colour>ꜱᴘʟᴀꜱʜ ʀᴀᴅɪᴜꜱ ʜᴀꜱ ʙᴇᴇɴ ɪɴᴄʀᴇᴀꜱᴇᴅ! (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style())
+            }
+
+            DonationTier.HIGH -> {
+                changedBlocks.forEach { it.type = Material.WHITE_WOOL }.also { changedBlocks.clear() }
+                scores.clear()
+                remainingPlayers().forEach {
+                    scores[it.uniqueId] = 0
+                    it.playSound(Sound.ENTITY_WITHER_DEATH)
+                }
+
+                announceDonationEvent("<game_colour>ᴄʟᴇᴀʀᴇᴅ ᴀʟʟ ᴘᴀɪɴᴛ ᴀɴᴅ ꜱᴄᴏʀᴇꜱ! (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style())
+            }
         }
     }
 }
