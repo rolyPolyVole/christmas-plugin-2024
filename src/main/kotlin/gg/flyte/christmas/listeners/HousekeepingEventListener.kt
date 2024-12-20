@@ -212,7 +212,7 @@ class HousekeepingEventListener : Listener, PacketListener {
             // hide player if near any NPC (they obstruct view)
             if (npcLocations.any { it.distanceSquared(playerLocation) < 9 }) {
                 // don't make contributors invisible
-                player.isVisibleByDefault = worldNPCs.any { it.npc.profile.uuid == player.uniqueId }
+                player.isVisibleByDefault = Util.getEventContributors().any { it.uniqueId == player.uniqueId }
             } else if (!player.isVisibleByDefault) player.isVisibleByDefault = true
 
             // make NPCs look at player if within range
