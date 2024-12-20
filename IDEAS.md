@@ -100,9 +100,9 @@ Lag related:
 - see issues of server lagging
 
 Things to absolutely check for next 'playtest'
-
 - Avalanche spectators should no longer be able to attack each other
 - visual indication of double jump in block party.
 - spleef non opped players cant break blocks.
 - Real donations are rounding properly.
 - try and get team to desecrate the tree in tree decorating to patch any oversights
+- game overview podium is correctly populated
