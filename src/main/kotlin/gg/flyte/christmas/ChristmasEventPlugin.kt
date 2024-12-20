@@ -175,7 +175,7 @@ class ChristmasEventPlugin : JavaPlugin() {
                     .append("<gray> ᴀɴᴅ ᴅᴏɢs ɪɴ ᴀᴍᴇʀɪᴄᴀ's sʜᴇʟᴛᴇʀs <dark_gray>(ᴅᴜᴇ ᴛᴏ\n".style())
                     .append("<dark_gray> ʜᴏᴍᴇʟᴇssɴᴇss ᴀɴᴅ ᴏᴠᴇʀᴘᴏᴘᴜʟᴀᴛɪᴏɴ)</dark_gray><gray>.\n".style())
                     .append("\n".style())
-                    .append("<gray> ᴛʜᴇʏ ᴀʀᴇ ᴀ ɴᴏɴ-ᴘʀᴏꜰɪᴛ ᴛʜᴀᴛ ʀᴜɴs ᴛʜᴇ ʟᴀʀɢᴇsᴛ\n".style())
+                    .append("<gray> ᴛʜᴇʏ ᴀʀᴇ ᴀ ɴᴏɴ-ᴘʀᴏꜰɪᴛ ᴛʜᴀᴛ ʀᴜɴs ᴛʜᴇ ʟᴀʀɢᴇsᴛ \n".style())
                     .append("<gray> ɴᴏ-ᴋɪʟʟ ᴍᴏᴠᴇᴍᴇɴᴛ & ᴀɴɪᴍᴀʟ sᴀɴᴄᴛᴜᴀʀʏ ɪɴ\n".style())
                     .append("<gray> ᴛʜᴇ ᴜ.s.\n".style())
                     .append("\n".style())
@@ -185,7 +185,7 @@ class ChristmasEventPlugin : JavaPlugin() {
                     .append("<gray>          ʟᴇᴀʀɴ ᴍᴏʀᴇ @ <colour:#ec8339>ʙᴇsᴛꜰʀɪᴇɴᴅs.ᴏʀɢ\n".style())
                     .append("<red>           ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ᴊᴏɪɴɪɴɢ ᴜs ❤".style())
             )
-            it.lineWidth = 255
+            it.lineWidth = 500 //doesn't matter if it's too big, I'm manually adding line breaks
             it.alignment = TextDisplay.TextAlignment.LEFT
             it.transformation = it.transformation.apply { this.scale.mul(2F) }
             it.billboard = Display.Billboard.FIXED
