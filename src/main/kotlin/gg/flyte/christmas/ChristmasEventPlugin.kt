@@ -235,5 +235,3 @@ class ChristmasEventPlugin : JavaPlugin() {
         }
     }
 }
-
-// TODo KOTH still gives points after game is done
