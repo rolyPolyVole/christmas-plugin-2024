@@ -571,12 +571,7 @@ enum class GameConfig(
         listOf(
             MapSinglePoint(635.5, 118, 800.5, 90, 35),
             MapSinglePoint(635.5, 107, 800.5, 90, 35),
-            MapSinglePoint(635.5, 100, 800.5, 90, 35),
             MapSinglePoint(635.5, 94, 800.5, 90, 35),
-            MapSinglePoint(635.5, 89, 800.5, 90, 35),
-            MapSinglePoint(635.5, 83, 800.5, 90, 35),
-            MapSinglePoint(635.5, 77, 800.5, 90, 35),
-            MapSinglePoint(635.5, 77, 800.5, 90, 35),
         ),
     ),
     //endregion
@@ -649,4 +644,3 @@ enum class GameConfig(
     )
     //endregion
 }
-// TODO fix spleef specatte points
