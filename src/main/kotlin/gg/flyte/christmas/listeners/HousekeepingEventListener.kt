@@ -172,12 +172,15 @@ class HousekeepingEventListener : Listener, PacketListener {
                 applyTag(this)
             }
 
+            val totalPlayers = Bukkit.getOnlinePlayers().size
+            val plural = if (totalPlayers == 1) "" else "ѕ"
+
             val header = text()
                 .append("<colour:#ffa1a1>❆ ".style())
                 .append("<colour:#aae687>ᴄʜʀɪsᴛᴍᴀs ᴄʜᴀʀɪᴛʏ ᴇᴠᴇɴᴛ".style())
                 .append(" <colour:#ffa1a1>❆".style())
                 .append("\n".style())
-                .append("<grey>\n(${Bukkit.getOnlinePlayers().size} ᴘʟᴀʏᴇʀꜱ)".style())
+                .append("<grey>\n($totalPlayers ᴘʟᴀʏᴇʀ$plural)".style())
 
             val footer = "<light_purple>\nꜰʟʏᴛᴇ.ɢɢ/ᴅᴏɴᴀᴛᴇ\n\n".style()
                 .append(" <gradient:${Colours.LIGHT_PURPLE.asHexString()}:${Colours.PINK.asHexString()}>ꜰʟʏᴛᴇ.ɢɢ".style())
