@@ -40,6 +40,7 @@ import org.bukkit.craftbukkit.CraftWorld
 import org.bukkit.entity.*
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.entity.CreatureSpawnEvent
+import org.bukkit.event.entity.ItemSpawnEvent
 import org.bukkit.event.entity.ProjectileHitEvent
 import org.bukkit.event.entity.ProjectileLaunchEvent
 import org.bukkit.event.player.PlayerToggleFlightEvent
@@ -381,6 +382,12 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
             if (entity.shooter == null) {
                 isCancelled = true // make snowball rain destroy multiple blocks
                 entity.location.y -= 1
+            }
+        }
+
+        listeners += event<ItemSpawnEvent> {
+            if (entity.itemStack.type == Material.SNOWBALL) {
+                isCancelled = true
             }
         }
     }
