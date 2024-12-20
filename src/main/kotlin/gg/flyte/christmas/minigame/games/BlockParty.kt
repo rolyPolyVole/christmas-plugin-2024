@@ -588,18 +588,18 @@ class BlockParty() : EventMiniGame(GameConfig.BLOCK_PARTY) {
     override fun handleDonation(tier: DonationTier, donorName: String?) {
         when (tier) {
             DonationTier.LOW -> {
-                announceDonationEvent("<game_colour>ᴇᴠᴇʀʏᴏɴᴇ ʜᴀs ʀᴇᴄᴇɪᴠᴇᴅ <red>6 sɴᴏᴡʙᴀʟʟs<game_colour>!".style())
                 Util.runAction(PlayerType.PARTICIPANT) { setNextAvailableSlot(it, ItemStack(Material.SNOWBALL, 6)) }
+                announceDonationEvent("<game_colour>ᴇᴠᴇʀʏᴏɴᴇ ʜᴀs ʀᴇᴄᴇɪᴠᴇᴅ <red>6 sɴᴏᴡʙᴀʟʟs<game_colour>!".style())
             }
 
             DonationTier.MEDIUM -> {
-                announceDonationEvent("<game_colour>ᴇᴠᴇʀʏᴏɴᴇ ʜᴀѕ ʀᴇᴄᴇɪᴠᴇᴅ <red>1 ꜰɪʀᴇʙᴀʟʟ<game_colour>!".style())
                 Util.runAction(PlayerType.PARTICIPANT, PlayerType.OPTED_OUT) { setNextAvailableSlot(it, ItemStack(Material.FIRE_CHARGE)) }
+                announceDonationEvent("<game_colour>ᴇᴠᴇʀʏᴏɴᴇ ʜᴀѕ ʀᴇᴄᴇɪᴠᴇᴅ <red>1 ꜰɪʀᴇʙᴀʟʟ<game_colour>!".style())
             }
 
             DonationTier.HIGH -> {
-                announceDonationEvent("<game_colour>ᴇᴠᴇʀʏᴏɴᴇ ʜᴀѕ ʀᴇᴄᴇɪᴠᴇᴅ <red>1 ꜱʜᴏʀᴛ-ꜰᴜѕᴇ ᴛɴᴛ<game_colour>!".style())
                 Util.runAction(PlayerType.PARTICIPANT) { setNextAvailableSlot(it, ItemStack(Material.TNT)) }
+                announceDonationEvent("<game_colour>ᴇᴠᴇʀʏᴏɴᴇ ʜᴀѕ ʀᴇᴄᴇɪᴠᴇᴅ <red>1 ꜱʜᴏʀᴛ-ꜰᴜѕᴇ ᴛɴᴛ<game_colour>!".style())
             }
         }
     }

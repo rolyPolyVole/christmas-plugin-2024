@@ -422,10 +422,7 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
                     }
                     sendMessage("<game_colour>ʏᴏᴜ ʜᴀᴠᴇ ʙᴇᴇɴ ɢɪᴠᴇɴ ᴀ <game_colour>ʜᴀʀᴅ-ʜᴀᴛ".style())
                 }
-
-                val message =
-                    "<game_colour>sᴏᴍᴇᴏɴᴇ ʜᴀs ʙᴇᴇɴ ɢɪᴠᴇɴ ᴀ ᴘʀᴏᴛᴇᴄᴛɪᴠᴇ ʜᴇʟᴍᴇᴛ (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
-                announceDonationEvent(message.style())
+                announceDonationEvent("<game_colour>sᴏᴍᴇᴏɴᴇ ʜᴀs ʙᴇᴇɴ ɢɪᴠᴇɴ ᴀ ᴘʀᴏᴛᴇᴄᴛɪᴠᴇ ʜᴇʟᴍᴇᴛ (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style())
             }
 
             DonationTier.MEDIUM -> {
@@ -438,9 +435,7 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
                         phantomSafePoints.add(it)
                     }
 
-                    val message =
-                        "<game_colour>ᴀ ᴘʜᴀɴᴛᴏᴍ sᴀꜰᴇ-ᴘᴏɪɴᴛ ʜᴀs ʙᴇᴇɴ ᴘʟᴀᴄᴇᴅ... ʙᴇ ᴄᴀʀᴇꜰᴜʟ﹗ (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
-                    announceDonationEvent(message.style())
+                    announceDonationEvent("<game_colour>ᴀ ᴘʜᴀɴᴛᴏᴍ sᴀꜰᴇ-ᴘᴏɪɴᴛ ʜᴀs ʙᴇᴇɴ ᴘʟᴀᴄᴇᴅ... ʙᴇ ᴄᴀʀᴇꜰᴜʟ﹗ (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style())
                 } else {
                     if (whirlwindTask == null) {
                         whirlwindTask = repeatingTask(25) {
@@ -483,17 +478,13 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
                         }
                     }
 
-                    val message =
-                        "<game_colour>ᴛʜᴇ ᴡɪɴᴛᴇʀ ᴡʜɪʀʟᴡɪɴᴅ ɪs ᴜᴘᴏɴ ᴜs... ᴅᴏɴ'ᴛ ɢᴇᴛ ʙʟᴏᴡɴ ᴀᴡᴀʏ! (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
-                    announceDonationEvent(message.style())
+                    announceDonationEvent("<game_colour>ᴛʜᴇ ᴡɪɴᴛᴇʀ ᴡʜɪʀʟᴡɪɴᴅ ɪs ᴜᴘᴏɴ ᴜs... ᴅᴏɴ'ᴛ ɢᴇᴛ ʙʟᴏᴡɴ ᴀᴡᴀʏ! (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style())
                 }
             }
 
             DonationTier.HIGH -> {
                 if (!harder) {
-                    val message =
-                        "<game_colour>ʜᴀʀᴅ-ᴍᴏᴅᴇ ʜᴀѕ ʙᴇᴇɴ ᴀᴄᴛɪᴠᴀᴛᴇᴅ <b>ᴇᴀʀʟʏ! (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
-                    announceDonationEvent(message.style())
+                    announceDonationEvent("<game_colour>ʜᴀʀᴅ-ᴍᴏᴅᴇ ʜᴀѕ ʙᴇᴇɴ ᴀᴄᴛɪᴠᴀᴛᴇᴅ <b>ᴇᴀʀʟʏ! (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style())
 
                     delay(50) {
                         harder = true
@@ -508,9 +499,7 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
                     }
                 } else {
                     remainingPlayers().forEach { it.equipment.helmet = ItemStack(Material.CARVED_PUMPKIN) }
-                    val message =
-                        "<game_colour>ʏᴏᴜʀ ᴠɪsɪʙɪʟɪᴛʏ ʜᴀs ʙᴇᴇɴ ʀᴇᴅᴜᴄᴇᴅ! (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
-                    announceDonationEvent(message.style())
+                    announceDonationEvent("<game_colour>ʏᴏᴜʀ ᴠɪsɪʙɪʟɪᴛʏ ʜᴀs ʙᴇᴇɴ ʀᴇᴅᴜᴄᴇᴅ! (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style())
                 }
             }
         }

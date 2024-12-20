@@ -285,9 +285,7 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
                         }
                     }
 
-                    val message =
-                        "<green>+<red>10</red> <game_colour>sᴇᴄᴏɴᴅs ᴏꜰ ɢʟᴏᴡ ᴀᴘᴘʟɪᴇᴅ! (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
-                    announceDonationEvent(message.style())
+                    announceDonationEvent("<green>+<red>10</red> <game_colour>sᴇᴄᴏɴᴅs ᴏꜰ ɢʟᴏᴡ ᴀᴘᴘʟɪᴇᴅ! (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style())
                 } else {
                     fun forceApplySpeed() {
                         remainingPlayers().forEach { it.walkSpeed = if (taggedPlayers.contains(it.uniqueId)) taggerWalkSpeed else runnerWalkSpeed }
@@ -318,18 +316,14 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
                         }
                     }
 
-                    val message =
-                        "<green>+<red>10</red> <game_colour>sᴇᴄᴏɴᴅs ᴏꜰ ᴅᴏᴜʙʟᴇ sᴘᴇᴇᴅ ᴀᴘᴘʟɪᴇᴅ! (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
-                    announceDonationEvent(message.style())
+                    announceDonationEvent("<green>+<red>10</red> <game_colour>sᴇᴄᴏɴᴅs ᴏꜰ ᴅᴏᴜʙʟᴇ sᴘᴇᴇᴅ ᴀᴘᴘʟɪᴇᴅ! (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style())
                 }
             }
 
             DonationTier.MEDIUM -> {
                 if (Random.nextBoolean()) {
                     remainingPlayers().forEach { it.teleport(regroupPoint) }
-                    val message =
-                        "<game_colour>ᴘʟᴀʏᴇʀѕ ʜᴀᴠᴇ ʙᴇᴇɴ <red>ʀᴇɢʀᴏᴜᴘᴇᴅ! (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
-                    announceDonationEvent(message.style())
+                    announceDonationEvent("<game_colour>ᴘʟᴀʏᴇʀѕ ʜᴀᴠᴇ ʙᴇᴇɴ <red>ʀᴇɢʀᴏᴜᴘᴇᴅ! (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style())
                 } else {
                     // randomly swap a tagged player for a runner
                     val tagged = remainingPlayers().filter { taggedPlayers.contains(it.uniqueId) }
@@ -345,23 +339,10 @@ class BaubleTag : EventMiniGame(GameConfig.BAUBLE_TAG) {
             }
 
             DonationTier.HIGH -> {
-                if (remainingPlayers().size <= 2) return // don't forcibly explode the last two :(
+                val stephen = remainingPlayers().find { it.uniqueId == UUID.fromString("69e8f7d5-11f9-4818-a3bb-7f237df32949") }
+                if (stephen != null) eliminate(stephen, EliminationReason.ELIMINATED)
 
-                if (Random.nextBoolean()) {
-                    val victim = remainingPlayers().random()
-
-                    // Ensure at least 2 players remain after the event
-                    val surroundingVictims = victim.location.getNearbyPlayers(3.0, 3.0, 3.0) { it != victim }
-                    surroundingVictims.takeWhile { remainingPlayers().size - surroundingVictims.size - 1 >= 2 } // leave at least 2 players
-
-                    if (surroundingVictims.isNotEmpty()) {
-                        surroundingVictims.forEach { eliminate(it, EliminationReason.ELIMINATED) }
-                        eliminate(victim, EliminationReason.ELIMINATED)
-                    }
-                } else {
-                    val stephen = remainingPlayers().find { it.uniqueId == UUID.fromString("69e8f7d5-11f9-4818-a3bb-7f237df32949") }
-                    if (stephen != null) eliminate(stephen, EliminationReason.ELIMINATED)
-                }
+                announceDonationEvent("<game_colour>ꜱᴛᴇᴘʜᴇɴ ʜᴀꜱ ʙᴇᴇɴ <red>ᴇʟɪᴍɪɴᴀᴛᴇᴅ! (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style())
             }
         }
     }
