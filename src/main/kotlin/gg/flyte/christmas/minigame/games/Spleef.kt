@@ -262,7 +262,8 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
                 if (unlimitedJumps()) {
                     it.sendActionBar("<gold><b>ᴜɴʟɪᴍɪᴛᴇᴅ<reset> <game_colour>ᴅᴏᴜʙʟᴇ ᴊᴜᴍᴘs!".style())
                 } else if (doubleJumps[it.uniqueId]!! > 0) {
-                    it.sendActionBar("<green><b>${doubleJumps[it.uniqueId]!!} <reset><game_colour>ᴅᴏᴜʙʟᴇ ᴊᴜᴍᴘs ʟᴇꜰᴛ!".style())
+                    val plural = if (doubleJumps[it.uniqueId]!! > 1) "s" else ""
+                    it.sendActionBar("<green><b>${doubleJumps[it.uniqueId]!!} <reset><game_colour>ᴅᴏᴜʙʟᴇ ᴊᴜᴍᴘ$plural ʟᴇꜰᴛ!".style())
                 } else {
                     it.sendActionBar("<red><b>0 <reset><game_colour>ᴅᴏᴜʙʟᴇ ᴊᴜᴍᴘs ʟᴇꜰᴛ!".style())
                 }

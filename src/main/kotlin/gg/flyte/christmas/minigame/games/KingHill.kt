@@ -224,7 +224,8 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
                 val doubleJumpsCount = doubleJumps.computeIfAbsent(it.uniqueId) { 0 }
 
                 if (doubleJumpsCount > 0) {
-                    it.sendActionBar("<green><b>${doubleJumps[it.uniqueId]!!} <reset><game_colour>ᴅᴏᴜʙʟᴇ ᴊᴜᴍᴘs ʟᴇꜰᴛ!".style())
+                    val plural = if (doubleJumps[it.uniqueId]!! > 1) "s" else ""
+                    it.sendActionBar("<green><b>${doubleJumps[it.uniqueId]!!} <reset><game_colour>ᴅᴏᴜʙʟᴇ ᴊᴜᴍᴘ$plural ʟᴇꜰᴛ!".style())
                 } else {
                     it.sendActionBar("<red><b>0 <reset><game_colour>ᴅᴏᴜʙʟᴇ ᴊᴜᴍᴘs ʟᴇꜰᴛ!".style())
                 }
