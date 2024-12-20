@@ -166,23 +166,31 @@ class ChristmasEventPlugin : JavaPlugin() {
         serverWorld.spawn(MapSinglePoint(555, 105, 502, 43, 25), TextDisplay::class.java) {
             it.text(
                 Component.empty()
-                    .append("<white>sᴜᴘᴘᴏʀᴛ <colour:#ec8339>ʙᴇsᴛ ꜰʀɪᴇɴᴅs ᴀɴɪᴍᴀʟ sᴏᴄɪᴇᴛʏ\n".style())
+                    .append("<gray>    <b>ᴀʙᴏᴜᴛ <colour:#ec8339>ʙᴇsᴛ ꜰʀɪᴇɴᴅs ᴀɴɪᴍᴀʟ sᴏᴄɪᴇᴛʏ</b>\n".style())
                     .append("\n".style())
-                    .append("<white>ᴛʜɪs ᴄʜʀɪsᴛᴍᴀs ᴄʜᴀʀɪᴛʏ ᴇᴠᴇɴᴛ ɪs ɪɴ sᴜᴘᴘᴏʀᴛ ᴏꜰ ᴛʜᴇ <colour:#ec8339>ʙᴇsᴛ ꜰʀɪᴇɴᴅs ᴀɴɪᴍᴀʟ sᴏᴄɪᴇᴛʏ ".style())
-                    .append("<white>ᴡʜɪᴄʜ ɪs ᴀ ʟᴇᴀᴅɪɴɢ ɴᴀᴛɪᴏɴᴀʟ ᴀɴɪᴍᴀʟ ᴡᴇʟꜰᴀʀᴇ ᴏʀɢᴀɴɪsᴀᴛɪᴏɴ ᴅᴇᴅɪᴄᴀᴛᴇᴅ ᴛᴏ ᴇɴᴅɪɴɢ ᴛʜᴇ ᴋɪʟʟɪɴɢ ".style())
-                    .append("<white>ᴏꜰ ᴅᴏɢs ᴀɴᴅ ᴄᴀᴛs ɪɴ ᴀᴍᴇʀɪᴄᴀ's sʜᴇʟᴛᴇʀs ᴅᴜᴇ ᴛᴏ ʜᴏᴍᴇʟᴇssɴᴇss ᴀɴᴅ ᴏᴠᴇʀᴘᴏᴘᴜʟᴀᴛɪᴏɴ. ".style())
-                    .append("<white>ᴛʜᴇʏ ᴀʀᴇ ᴀ ɴᴏɴ-ᴘʀᴏꜰɪᴛ ᴏʀɢᴀɴɪsᴀᴛɪᴏɴ ᴛʜᴀᴛ ʀᴜɴs ᴛʜᴇ ʟᴀʀᴇsᴛ ɴᴏ-ᴋɪʟʟ ᴍᴏᴠᴇᴍᴇɴᴛ & ᴀɴɪᴍᴀʟ sᴀɴᴄᴛᴜᴀʀʏ ɪɴ ᴛʜᴇ ᴜ.s.".style())
-                    .append("\n\n".style())
-                    .append("<colour:#ff3d9b>ᴛʜᴇ ʙᴇsᴛ ᴘᴀʀᴛ? ᴇᴠᴇʀʏ ᴅᴏʟʟᴀʀ ʏᴏᴜ ᴘᴜᴛ ꜰᴏᴜʀᴛʜ ᴡɪʟʟ ʙᴇ <b><colour:#ec8339>ᴛʀɪᴘʟᴇ ᴍᴀᴛᴄʜᴇᴅ<reset><white>!\n\n".style())
-                    .append("<white>ʜᴇᴀᴅ ᴏᴠᴇʀ ᴛᴏ <gradient:#ff80e8:#ffffff>ꜰʟʏᴛᴇ.ɢɢ/ᴅᴏɴᴀᴛᴇ</gradient> ᴛᴏ ᴅᴏɴᴀᴛᴇ ɴᴏᴡ!\n\n".style())
-                    .append("<white>ʟᴇᴀʀɴ ᴍᴏʀᴇ @ <colour:#ec8339>ʙᴇsᴛꜰʀɪᴇɴᴅs.ᴏʀɢ\n\n".style())
-                    .append("<red>ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ᴊᴏɪɴɪɴɢ ᴜs ❤".style())
+                    .append("<gray> ᴛʜɪs ᴄʜʀɪsᴛᴍᴀs ᴄʜᴀʀɪᴛʏ ᴇᴠᴇɴᴛ sᴜᴘᴘᴏʀᴛs\n".style())
+                    .append("<gray> ᴛʜᴇ <colour:#ec8339>ʙᴇsᴛ ꜰʀɪᴇɴᴅs ᴀɴɪᴍᴀʟ sᴏᴄɪᴇᴛʏ</colour>, ᴀ ʟᴇᴀᴅɪɴɢ\n".style())
+                    .append("<gray> ɴᴀᴛɪᴏɴᴀʟ ᴀɴɪᴍᴀʟ ᴡᴇʟꜰᴀʀᴇ ᴏʀɢᴀɴɪsᴀᴛɪᴏɴ\n".style())
+                    .append("<gray> ᴅᴇᴅɪᴄᴀᴛᴇᴅ ᴛᴏ ᴇɴᴅɪɴɢ ᴛʜᴇ ᴋɪʟʟɪɴɢ ᴏꜰ ᴄᴀᴛs\n".style())
+                    .append("<gray> ᴀɴᴅ ᴅᴏɢs ɪɴ ᴀᴍᴇʀɪᴄᴀ's sʜᴇʟᴛᴇʀs <dark_gray>(ᴅᴜᴇ ᴛᴏ\n".style())
+                    .append("<dark_gray> ʜᴏᴍᴇʟᴇssɴᴇss ᴀɴᴅ ᴏᴠᴇʀᴘᴏᴘᴜʟᴀᴛɪᴏɴ)</dark_gray><gray>.\n".style())
+                    .append("\n".style())
+                    .append("<gray> ᴛʜᴇʏ ᴀʀᴇ ᴀ ɴᴏɴ-ᴘʀᴏꜰɪᴛ ᴛʜᴀᴛ ʀᴜɴs ᴛʜᴇ ʟᴀʀɢᴇsᴛ\n".style())
+                    .append("<gray> ɴᴏ-ᴋɪʟʟ ᴍᴏᴠᴇᴍᴇɴᴛ & ᴀɴɪᴍᴀʟ sᴀɴᴄᴛᴜᴀʀʏ ɪɴ\n".style())
+                    .append("<gray> ᴛʜᴇ ᴜ.s.\n".style())
+                    .append("\n".style())
+                    .append("<colour:#ff3d9b> ᴇᴠᴇʀʏ ᴅᴏʟʟᴀʀ ʏᴏᴜ ᴘᴜᴛ ꜰᴏʀᴛʜ ᴛᴏ ᴛʜɪs ɢʀᴇᴀᴛ\n".style())
+                    .append("<colour:#ff3d9b> ᴄᴀᴜsᴇ ᴡɪʟʟ ʙᴇ <b><gold>ᴛʀɪᴘʟᴇ ᴍᴀᴛᴄʜᴇᴅ</gold></b>!\n\n".style())
+                    .append("<gray> ʜᴇᴀᴅ ᴏᴠᴇʀ ᴛᴏ <gradient:#ff80e8:#ffffff>ꜰʟʏᴛᴇ.ɢɢ/ᴅᴏɴᴀᴛᴇ</gradient> ᴛᴏ ᴅᴏɴᴀᴛᴇ ɴᴏᴡ!\n\n".style())
+                    .append("<gray>          ʟᴇᴀʀɴ ᴍᴏʀᴇ @ <colour:#ec8339>ʙᴇsᴛꜰʀɪᴇɴᴅs.ᴏʀɢ\n".style())
+                    .append("<red>           ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ᴊᴏɪɴɪɴɢ ᴜs ❤".style())
             )
-            it.lineWidth = 250
+            it.lineWidth = 255
+            it.alignment = TextDisplay.TextAlignment.LEFT
             it.transformation = it.transformation.apply { this.scale.mul(2F) }
             it.billboard = Display.Billboard.FIXED
             it.isDefaultBackground = false
-            it.backgroundColor = Color.fromARGB(255, 100, 100, 100)
+            it.backgroundColor = Color.fromARGB(255, 40, 40, 40)
             it.brightness = Display.Brightness(15, 15)
             it.isSeeThrough = false
         }
