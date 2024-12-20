@@ -25,6 +25,8 @@ import org.bukkit.craftbukkit.CraftWorld
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Boat
 import org.bukkit.entity.Player
+import org.bukkit.entity.boat.OakBoat
+import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.event.player.PlayerToggleSneakEvent
 import org.bukkit.event.vehicle.VehicleMoveEvent
 import org.bukkit.inventory.ItemStack
@@ -207,6 +209,10 @@ class SledRacing : EventMiniGame(GameConfig.SLED_RACING) {
 
             // check if the player crossed the finish line
             if (finishLine.contains(currentLocation)) handleFinishLineCross(player)
+        }
+
+        event<PlayerInteractEntityEvent> {
+            if (rightClicked is OakBoat) isCancelled = true
         }
     }
 
