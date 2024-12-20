@@ -219,7 +219,7 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
 
         super.eliminate(player, reason)
 
-        val value = "$gameTime ѕᴇᴄᴏɴᴅ${if (gameTime > 1) "ѕ" else ""}"
+        val value = "$gameTime ѕᴇᴄᴏɴᴅ${if (gameTime == 1) "" else "s"}"
         when (remainingPlayers().size) {
             1 -> {
                 formattedWinners[player.uniqueId] = value

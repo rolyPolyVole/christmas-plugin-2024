@@ -174,7 +174,7 @@ class PaintWars : EventMiniGame(GameConfig.PAINT_WARS) {
             .take(3)
             .also {
                 it.forEach {
-                    formattedWinners[it.key] = "${it.value} ʙʟᴏᴄᴋ${if (it.value > 1) "ѕ" else ""}"
+                    formattedWinners[it.key] = "${it.value} ʙʟᴏᴄᴋ${if (it.value == 1) "" else "s"}"
                 }
             }
 

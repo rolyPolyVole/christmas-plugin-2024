@@ -176,7 +176,7 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
             .take(3)
             .also {
                 it.forEach { entry ->
-                    formattedWinners[entry.key] = entry.value.toString() + " ѕᴇᴄᴏɴᴅ${if (entry.value > 1) "ѕ" else ""}"
+                    formattedWinners[entry.key] = entry.value.toString() + " ѕᴇᴄᴏɴᴅ${if (entry.value == 1) "" else "s"}"
                 }
             }
 

@@ -147,7 +147,7 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
             .take(3)
             .also {
                 it.forEach { entry ->
-                    formattedWinners[entry.key] = entry.value.toString() + " ᴋɪʟʟ${if (entry.value > 1) "ѕ" else ""}"
+                    formattedWinners[entry.key] = entry.value.toString() + " ᴋɪʟʟ${if (entry.value == 1) "" else "s"}"
                 }
             }
 

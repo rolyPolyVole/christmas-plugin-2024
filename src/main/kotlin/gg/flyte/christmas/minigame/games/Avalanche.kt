@@ -264,7 +264,7 @@ class Avalanche : EventMiniGame(GameConfig.AVALANCHE) {
 
         super.eliminate(player, reason)
 
-        val value = "$roundNumber ʀᴏᴜɴᴅ${if (roundNumber > 1) "ѕ" else ""}"
+        val value = "$roundNumber ʀᴏᴜɴᴅ${if (roundNumber == 1) "" else "s"}"
         when (remainingPlayers().size) {
             1 -> {
                 formattedWinners[player.uniqueId] = value
