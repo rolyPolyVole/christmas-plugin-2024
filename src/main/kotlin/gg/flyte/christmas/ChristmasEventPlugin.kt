@@ -10,6 +10,7 @@ import gg.flyte.christmas.minigame.engine.EventController
 import gg.flyte.christmas.minigame.engine.GameConfig
 import gg.flyte.christmas.minigame.world.MapSinglePoint
 import gg.flyte.christmas.npc.WorldNPC
+import gg.flyte.christmas.util.Colours
 import gg.flyte.christmas.util.Util
 import gg.flyte.christmas.util.eventController
 import gg.flyte.christmas.util.style
@@ -67,9 +68,8 @@ class ChristmasEventPlugin : JavaPlugin() {
     override fun onDisable() {
         serverWorld.entities.forEach {
             val kickMessage = Component.empty()
-                .append("<colour:#ff7070>ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ᴊᴏɪɴɪɴɢ ᴜs!\n".style())
-                .append("<colour:#67c45e>ᴡᴇ ᴡɪsʜ ʏᴏᴜ ᴀ ᴍᴇʀʀʏ ᴄʜʀɪsᴛᴍᴀs\n".style())
-                .append("<gradient:#EE57FF:#E89EB8>ꜰʟʏᴛᴇ".style())
+                .append("<colour:#FF3737>ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ᴊᴏɪɴɪɴɢ ᴜs!\n".style())
+                .append("<colour:#D6EBFF>❆ <gradient:${Colours.LIGHT_PURPLE.asHexString()}:${Colours.PINK.asHexString()}>ꜰʟʏᴛᴇ</gradient> <gradient:#A5FF7E:#FF1212>ᴡɪsʜᴇs ʏᴏᴜ ᴀ ᴠᴇʀʏ ᴍᴇʀʀʏ ᴄʜʀɪsᴛᴍᴀs!</gradient> <colour:#D6EBFF>❆".style())
 
             if (it is Player) it.kick(kickMessage) else it.remove()
         } // clean up podium, spectate points, misc entities.
@@ -237,4 +237,3 @@ class ChristmasEventPlugin : JavaPlugin() {
 }
 
 // TODo KOTH still gives points after game is done
-// TODO change kick message
