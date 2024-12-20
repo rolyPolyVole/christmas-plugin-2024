@@ -10,7 +10,6 @@ import gg.flyte.christmas.minigame.world.MapSinglePoint
 import gg.flyte.christmas.util.*
 import gg.flyte.twilight.event.event
 import gg.flyte.twilight.extension.playSound
-import gg.flyte.twilight.scheduler.delay
 import gg.flyte.twilight.scheduler.repeatingTask
 import net.kyori.adventure.text.Component
 import net.minecraft.core.BlockPos
@@ -160,28 +159,20 @@ class SledRacing : EventMiniGame(GameConfig.SLED_RACING) {
 
         player.vehicle?.remove()
         player.passengers.forEach { it.remove() }
-        player.teleport(lastCheckPointLocation)
-
-        CollisionlessBoat().apply {
-            (player.world as CraftWorld).handle.addFreshEntity(this)
-            val asBukkit = bukkitEntity
-            asBukkit.teleport(lastCheckPointLocation)
-            delay(2) {
-                asBukkit.addPassenger(player)
-                delay(2) { player.setRotation(asBukkit.yaw, 0F) }
-            } // delayed due to Bukkit API atrociousness
-
-            player.world.spawn(player.location, ArmorStand::class.java) {
-                it.isInvisible = true
-                it.isInvulnerable = true
-                it.equipment.helmet = ItemStack(Material.PAPER).apply {
-                    itemMeta = itemMeta.apply { setCustomModelData(1) }
-                }
-                player.addPassenger(it)
-            }
-        }
-
+        player.teleport(lastCheckPointLocation.clone())
         player.playSound(Sound.BLOCK_NOTE_BLOCK_BASS)
+
+        val boat = CollisionlessBoat().getBukkitEntity()
+        boat.spawnAt(lastCheckPointLocation)
+        boat.addPassenger(player)
+        player.world.spawn(player.location, ArmorStand::class.java) { sledModelStand ->
+            sledModelStand.isInvisible = true
+            sledModelStand.isInvulnerable = true
+            sledModelStand.equipment.helmet = ItemStack(Material.PAPER).apply {
+                itemMeta = itemMeta.apply { setCustomModelData(1) }
+            }
+            player.addPassenger(sledModelStand)
+        }
     }
 
     override fun handleGameEvents() {
