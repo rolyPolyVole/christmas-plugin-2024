@@ -2,7 +2,6 @@
 
 ## General:
 
-- Add a sled slide in the lobby + carousel for static entertainment while giveaways/game selection is happening.
 - eliminated players get titles/nudges to donate while they wait (clickable links)
     - On-Screen Banner ads using bossbars, resource packs and displays.
 - Staff Utils Menu:
@@ -13,7 +12,6 @@
 
 ### Sled Racing:
 
-- Illuminate blocks with red/green glow to show clear path
 - disable two players in one boat
 
 ## Donations:
@@ -64,25 +62,20 @@
     - Placeholder
 
 ### King of the Hill:
-  - Low-tier
+
+- Low-tier
     - Add 3-5 double jumps
     - 5 seconds of slow falling
     - King's blindness
     - 5 seconds of jump boost
-  - Medium-tier
+- Medium-tier
     - 5 seconds of stacked kb
     - 8 seconds of invisibility
-  - High-tier
+- High-tier
     - Swap locations of everyone
-    - Inversed knockback for 8 seconds  
+    - Inversed knockback for 8 seconds
 
-## Stream:
-
-- Drumroll while rolling giveaway?
-
-# PlayTest Notes:
-
-### PLAYTEST BUGS:
+## PlayTest Notes:
 
 - Spectate point on bauble tag is not mapped properly (after being eliminated)
 - chat validation error
@@ -90,16 +83,9 @@
     - paintwars overview a bit too long
     - BaubleTag too short
 
-- sled racing broken, can leave boats
-    - add two passengers to sled racing?
 - sled racing only do one lap
 
-Lag related:
-
-- lag spike with donation events when submitted.
-- see issues of server lagging
-
-Things to absolutely check for next 'playtest'
+Things to absolutely check for next 'playtest':
 - Avalanche spectators should no longer be able to attack each other
 - visual indication of double jump in block party.
 - spleef non opped players cant break blocks.
