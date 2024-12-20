@@ -463,8 +463,10 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
         var timeLeftSeconds = 5
 
         tasks += repeatingTask(0, 1, TimeUnit.SECONDS) {
+            val plural = if (timeLeftSeconds == 1) "" else "s"
             val message =
-                "<green>sʜᴜꜰꜰʟɪɴɢ ᴘᴏsɪᴛɪᴏɴs ɪɴ <red>$timeLeftSeconds</red> sᴇᴄᴏɴᴅs! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
+                "<green>sʜᴜꜰꜰʟɪɴɢ ᴘᴏsɪᴛɪᴏɴs ɪɴ <red>$timeLeftSeconds</red> sᴇᴄᴏɴᴅ$plural! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
+
             remainingPlayers().forEach {
                 it.sendMessage(message.style())
                 it.playSound(it, Sound.BLOCK_NOTE_BLOCK_PLING, 1.0F, if (timeLeftSeconds == 0) 2.0F else 1.0F)

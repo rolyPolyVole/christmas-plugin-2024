@@ -568,8 +568,9 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
                 cancel()
                 remainingPlayers().forEach { it.sendMessage(meltedText) }
             } else {
+                val plural = if (countdown == 1) "" else "s"
                 remainingPlayers().forEach {
-                    it.sendMessage("<red><b>Tʜᴇ ʙᴏᴛᴛᴏᴍ ʟᴀʏᴇʀ ᴡɪʟʟ ᴍᴇʟᴛ ɪɴ <aqua>$countdown</aqua> sᴇᴄᴏɴᴅs!".style())
+                    it.sendMessage("<red><b>Tʜᴇ ʙᴏᴛᴛᴏᴍ ʟᴀʏᴇʀ ᴡɪʟʟ ᴍᴇʟᴛ ɪɴ <aqua>$countdown</aqua> sᴇᴄᴏɴᴅ$plural!".style())
                 }
                 countdown--
             }
