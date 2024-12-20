@@ -210,13 +210,7 @@ class SledRacing : EventMiniGame(GameConfig.SLED_RACING) {
         }
     }
 
-    override fun handleDonation(tier: DonationTier, donorName: String?) {
-        when (tier) {
-            DonationTier.LOW -> TODO()
-            DonationTier.MEDIUM -> TODO()
-            DonationTier.HIGH -> TODO()
-        }
-    }
+    override fun handleDonation(tier: DonationTier, donorName: String?) {} // ignored.
 
     private class CollisionlessBoat : net.minecraft.world.entity.vehicle.Boat(
         EntityType.OAK_BOAT,
