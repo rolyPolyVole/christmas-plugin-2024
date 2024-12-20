@@ -126,6 +126,7 @@ class ChristmasEventPlugin : JavaPlugin() {
             setGameRule(GameRule.DO_WEATHER_CYCLE, false)
             setGameRule(GameRule.DO_FIRE_TICK, false)
             setGameRule(GameRule.SPECTATORS_GENERATE_CHUNKS, true)
+            setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false)
             setStorm(false)
             difficulty = Difficulty.PEACEFUL
             time = 6000
