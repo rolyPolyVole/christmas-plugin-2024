@@ -159,8 +159,8 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
 
             tasks += repeatingTask(5) {
                 delay((1..15).random()) {
-                    floorLevelBlocks.any { it.block.type != Material.AIR }.let {
-                        wearDownSnowBlock(floorLevelBlocks.filter { it.block.type != Material.AIR }.random().block)
+                    floorLevelBlocks.filter { it.block.type != Material.AIR }.randomOrNull()?.block?.let { block ->
+                        wearDownSnowBlock(block)
                     }
                 }
             } // gradual snow block wear down
