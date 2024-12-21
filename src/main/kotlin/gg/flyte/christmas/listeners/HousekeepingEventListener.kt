@@ -196,12 +196,15 @@ class HousekeepingEventListener : Listener, PacketListener {
 
         event<PlayerQuitEvent> {
             quitMessage(null)
+            val totalPlayers = Bukkit.getOnlinePlayers().size
+            val plural = if (totalPlayers == 1) "" else "ѕ"
+
             val header = text()
                 .append("<colour:#ffa1a1>❆ ".style())
                 .append("<colour:#aae687>ᴄʜʀɪsᴛᴍᴀs ᴄʜᴀʀɪᴛʏ ᴇᴠᴇɴᴛ".style())
                 .append(" <colour:#ffa1a1>❆".style())
                 .append("\n".style())
-                .append("<grey>\n(${Bukkit.getOnlinePlayers().size} ᴘʟᴀʏᴇʀꜱ)".style())
+                .append("<grey>\n($totalPlayers ᴘʟᴀʏᴇʀ$plural)".style())
             Bukkit.getOnlinePlayers().forEach { it.sendPlayerListHeader(header) }
 
             eventController().onPlayerQuit(player)
