@@ -8,6 +8,7 @@ enforce-secure-profile=false
 pvp=true
 rate-limit=-1
 simulation-distance=30
+spawn-protection=0
 view-distance=30
 ```
 
@@ -31,7 +32,6 @@ settings:
 ### `paper-global.yml`:
 
 ```yaml
-chunk-loading-advanced:
 chunk-loading-basic:
   player-max-chunk-generate-rate: -1.0
   player-max-chunk-load-rate: -1.0

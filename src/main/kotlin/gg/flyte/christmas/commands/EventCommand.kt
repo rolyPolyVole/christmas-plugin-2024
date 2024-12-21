@@ -126,7 +126,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ ᴇᴠᴇɴᴛ �
                 sender.sendMessage("<green>ʟᴏᴀᴅᴇᴅ ᴄʀᴀѕʜ ᴅᴀᴛᴀ! ʏᴏᴜʀ ѕᴄᴏʀᴇʙᴏᴀʀᴅ ѕʜᴏᴜʟᴅ ɴᴏᴡ ѕʜᴏᴡ ᴛʜᴇ ᴍᴏѕᴛ ʀᴇᴄᴇɴᴛ ѕᴇʀɪᴀʟɪѕᴇᴅ ᴅᴀᴛᴀ!".style())
             }
         }
-    }
+    } // TODO also save donor info
 
     @Command("donate")
     fun donate(sender: Player) {
@@ -137,12 +137,14 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ ᴇᴠᴇɴᴛ �
                 .append("<black>ᴛʜɪs ᴄʜʀɪsᴛᴍᴀs ᴇᴠᴇɴᴛ sᴜᴘᴘᴏʀᴛs ᴛʜᴇ <colour:#ec8339>ʙᴇsᴛ ꜰʀɪᴇɴᴅs ᴀɴɪᴍᴀʟ sᴏᴄɪᴇᴛʏ</colour>, ".style())
                 .append("<black>ᴀ ʟᴇᴀᴅɪɴɢ ᴜ.s. ɴᴀᴛɪᴏɴᴀʟ ᴀɴɪᴍᴀʟ ᴡᴇʟꜰᴀʀᴇ ᴏʀɢᴀɴɪsᴀᴛɪᴏɴ\n".style())
                 .append("\n".style())
-                .append("<colour:#ff3d9b>ᴛʜᴇ ʙᴇsᴛ ᴘᴀʀᴛ? <black>ᴇᴠᴇʀʏ ᴅᴏʟʟᴀʀ ʏᴏᴜ ᴘᴜᴛ ꜰᴏʀᴛʜ ᴡɪʟʟ ʙᴇ <b><colour:#ae61f2>ᴛʀɪᴘʟᴇ ᴍᴀᴛᴄʜᴇᴅ<reset><black>!\n".style())
+                .append("<colour:#ff3d9b>ᴛʜᴇ ʙᴇsᴛ ᴘᴀʀᴛ? <black>ᴇᴠᴇʀʏ ᴅᴏʟʟᴀʀ ʏᴏᴜ ᴘᴜᴛ ꜰᴏᴜʀᴛʜ ᴡɪʟʟ ʙᴇ <b><colour:#ae61f2>ᴛʀɪᴘʟᴇ ᴍᴀᴛᴄʜᴇᴅ<reset><black>!\n".style())
                 .append(
                     "\n<black><0> ᴛᴏ ᴅᴏɴᴀᴛᴇ ɴᴏᴡ!".style(
                         "<colour:#ff80e8>ꜰʟʏᴛᴇ.ɢɢ/ᴅᴏɴᴀᴛᴇ".style().clickEvent(ClickEvent.openUrl("https://flyte.gg/donate"))
                     )
                 )
+
+            // TODO send book based on current game for dono events.
         )
 
         sender.openBook(book)

@@ -303,8 +303,8 @@ class Paintball : EventMiniGame(GameConfig.PAINTBALL) {
             }
 
             DonationTier.MEDIUM -> {
-                announceDonationEvent("<game_colour>ᴀʟʟ ᴘʟᴀʏᴇʀs ʜᴀᴠᴇ ʙᴇᴇɴ ʀᴇɢʀᴏᴜᴘᴇᴅ (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style())
                 remainingPlayers().forEach { it.teleport(MapSinglePoint(207, 70, 315, 180, 0)) }
+                announceDonationEvent("<game_colour>ᴀʟʟ ᴘʟᴀʏᴇʀs ʜᴀᴠᴇ ʙᴇᴇɴ ʀᴇɢʀᴏᴜᴘᴇᴅ (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style())
             }
 
             DonationTier.HIGH -> {

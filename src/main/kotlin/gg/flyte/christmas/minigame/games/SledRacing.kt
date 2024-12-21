@@ -25,6 +25,8 @@ import org.bukkit.craftbukkit.CraftWorld
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Boat
 import org.bukkit.entity.Player
+import org.bukkit.entity.boat.OakBoat
+import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.event.player.PlayerToggleSneakEvent
 import org.bukkit.event.vehicle.VehicleMoveEvent
 import org.bukkit.inventory.ItemStack
@@ -82,6 +84,10 @@ class SledRacing : EventMiniGame(GameConfig.SLED_RACING) {
                     }
                 }
             } // autocorrect armor stand rotation to boat rotation
+
+            tasks += repeatingTask(40) {
+                Util.runAction(PlayerType.PARTICIPANT) { it.sendActionBar("<game_colour>ᴘʀᴇss <#6b6b6b><b><key:key.sneak></b></#6b6b6b> ᴛᴏ ʀᴇsᴇᴛ ᴛᴏ ʏᴏᴜʀ ᴄʜᴇᴄᴋᴘᴏɪɴᴛ".style()) }
+            }
 
             tasks += repeatingTask(20) {
                 val timeLeft = "<aqua>ᴛɪᴍᴇ ʟᴇꜰᴛ: <red><b>${gameTime}".style()
@@ -204,15 +210,13 @@ class SledRacing : EventMiniGame(GameConfig.SLED_RACING) {
             // check if the player crossed the finish line
             if (finishLine.contains(currentLocation)) handleFinishLineCross(player)
         }
-    }
 
-    override fun handleDonation(tier: DonationTier, donorName: String?) {
-        when (tier) {
-            DonationTier.LOW -> TODO()
-            DonationTier.MEDIUM -> TODO()
-            DonationTier.HIGH -> TODO()
+        event<PlayerInteractEntityEvent> {
+            if (rightClicked is OakBoat) isCancelled = true
         }
     }
+
+    override fun handleDonation(tier: DonationTier, donorName: String?) {} // ignored.
 
     private class CollisionlessBoat : net.minecraft.world.entity.vehicle.Boat(
         EntityType.OAK_BOAT,

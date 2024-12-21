@@ -562,9 +562,19 @@ class MusicalMinecarts : EventMiniGame(GameConfig.MUSICAL_MINECARTS) {
 
     override fun handleDonation(tier: DonationTier, donorName: String?) {
         when (tier) {
-            DonationTier.LOW -> TODO()
-            DonationTier.MEDIUM -> TODO()
-            DonationTier.HIGH -> TODO()
+            DonationTier.LOW -> {
+
+            }
+            DonationTier.MEDIUM -> {
+
+            }
+
+            DonationTier.HIGH -> {
+                val stephen = remainingPlayers().find { it.uniqueId == UUID.fromString("69e8f7d5-11f9-4818-a3bb-7f237df32949") }
+                if (stephen != null) eliminate(stephen, EliminationReason.ELIMINATED)
+
+                announceDonationEvent("<game_colour>ꜱᴛᴇᴘʜᴇɴ ʜᴀꜱ ʙᴇᴇɴ <red>ᴇʟɪᴍɪɴᴀᴛᴇᴅ! (${if (donorName != null) "<aqua>$donorName's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style())
+            }
         }
     }
 

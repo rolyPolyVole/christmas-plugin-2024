@@ -399,13 +399,12 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
             val increase = (1..2).random()
             val plural = if (increase > 1) "s" else ""
 
-            val message = "<green>+<red>$increase</red> ᴅᴏᴜʙʟᴇ ᴊᴜᴍᴘ$plural! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
-            announceDonationEvent(message.style())
-
             remainingPlayers().forEach {
                 doubleJumps[it.uniqueId] = doubleJumps[it.uniqueId]!! + increase
                 it.allowFlight = true
             }
+
+            announceDonationEvent("<green>+<red>$increase</red> ᴅᴏᴜʙʟᴇ ᴊᴜᴍᴘ$plural! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style())
         }
 
         fun doUnlimitedDoubleJumps(name: String?) {
@@ -485,15 +484,12 @@ class Spleef : EventMiniGame(GameConfig.SPLEEF) {
     }
 
     private fun highTierDonation(donorName: String?) {
-        var random = Random.nextBoolean()
-
-        if (bottomLayerMelted) random = false
-
-        if (random) {
-            doMeltBottomLayer(donorName)
-        } else {
+        if (Random.nextBoolean()) {
             doSnowballRain(donorName)
             doSpawnSnowGolem(donorName, true)
+        } else {
+            if (!bottomLayerMelted) doMeltBottomLayer(donorName)
+            else highTierDonation(donorName)
         }
     }
 
