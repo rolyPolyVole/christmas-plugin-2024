@@ -185,7 +185,7 @@ class ChristmasEventPlugin : JavaPlugin() {
                     .append("<gray>          ʟᴇᴀʀɴ ᴍᴏʀᴇ @ <colour:#ec8339>ʙᴇsᴛꜰʀɪᴇɴᴅs.ᴏʀɢ\n".style())
                     .append("<red>           ᴛʜᴀɴᴋ ʏᴏᴜ ꜰᴏʀ ᴊᴏɪɴɪɴɢ ᴜs ❤".style())
             )
-            it.lineWidth = 500 //doesn't matter if it's too big, I'm manually adding line breaks
+            it.lineWidth = 500 // doesn't matter if it's too big, I'm manually adding line breaks
             it.alignment = TextDisplay.TextAlignment.LEFT
             it.transformation = it.transformation.apply { this.scale.mul(2F) }
             it.billboard = Display.Billboard.FIXED
