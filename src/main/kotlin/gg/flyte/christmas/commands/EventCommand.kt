@@ -126,7 +126,7 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ ᴇᴠᴇɴᴛ �
                 sender.sendMessage("<green>ʟᴏᴀᴅᴇᴅ ᴄʀᴀѕʜ ᴅᴀᴛᴀ! ʏᴏᴜʀ ѕᴄᴏʀᴇʙᴏᴀʀᴅ ѕʜᴏᴜʟᴅ ɴᴏᴡ ѕʜᴏᴡ ᴛʜᴇ ᴍᴏѕᴛ ʀᴇᴄᴇɴᴛ ѕᴇʀɪᴀʟɪѕᴇᴅ ᴅᴀᴛᴀ!".style())
             }
         }
-    }
+    } // TODO also save donor info
 
     @Command("donate")
     fun donate(sender: Player) {
@@ -143,6 +143,8 @@ class EventCommand(val menu: StandardMenu = StandardMenu("&c☃ ᴇᴠᴇɴᴛ �
                         "<colour:#ff80e8>ꜰʟʏᴛᴇ.ɢɢ/ᴅᴏɴᴀᴛᴇ".style().clickEvent(ClickEvent.openUrl("https://flyte.gg/donate"))
                     )
                 )
+
+            // TODO send book based on current game for dono events.
         )
 
         sender.openBook(book)
