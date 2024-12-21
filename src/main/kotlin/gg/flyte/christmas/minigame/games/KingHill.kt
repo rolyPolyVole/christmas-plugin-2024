@@ -327,19 +327,17 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
                 it.allowFlight = true
             }
 
-            val message = "<green>+<red>$amount</red> ᴅᴏᴜʙʟᴇ ᴊᴜᴍᴘs! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
-            announceDonationEvent(message.style())
+            announceDonationEvent("<green>+<red>$amount</red> ᴅᴏᴜʙʟᴇ ᴊᴜᴍᴘs! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style())
         }
 
         fun doApplySlowFalling(name: String?) {
-            val message = "<green>+<red>5</red> sᴇᴄᴏɴᴅs ᴏꜰ sʟᴏᴡ ꜰᴀʟʟɪɴɢ! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
-            announceDonationEvent(message.style())
-
             remainingPlayers().forEach {
                 val duration = it.getPotionEffect(PotionEffectType.SLOW_FALLING)?.duration ?: 0
 
                 it.addPotionEffect(PotionEffect(PotionEffectType.SLOW_FALLING, duration + (5 * 20), 0))
             }
+
+            announceDonationEvent("<green>+<red>5</red> sᴇᴄᴏɴᴅs ᴏꜰ sʟᴏᴡ ꜰᴀʟʟɪɴɢ! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style())
         }
 
         fun doApplyKingsBlindness(name: String?) {
@@ -358,19 +356,17 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
 
             king.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, duration + (5 * 20), 0))
 
-            val message = "<green>+<red>5</red> sᴇᴄᴏɴᴅs ᴏꜰ ᴋɪɴɢ's ʙʟɪɴᴅɴᴇss! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
-            announceDonationEvent(message.style())
+            announceDonationEvent("<green>+<red>5</red> sᴇᴄᴏɴᴅs ᴏꜰ ᴋɪɴɢ's ʙʟɪɴᴅɴᴇss! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style())
         }
 
         fun doApplyJumpBoost(name: String?) {
-            val message = "<green>+<red>5</red> sᴇᴄᴏɴᴅs ᴏꜰ ᴊᴜᴍᴘ ʙᴏᴏsᴛ! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
-            announceDonationEvent(message.style())
-
             remainingPlayers().forEach {
                 val duration = it.getPotionEffect(PotionEffectType.JUMP_BOOST)?.duration ?: 0
 
                 it.addPotionEffect(PotionEffect(PotionEffectType.JUMP_BOOST, duration + 5 * 20, 1))
             }
+
+            announceDonationEvent("<green>+<red>5</red> sᴇᴄᴏɴᴅs ᴏꜰ ᴊᴜᴍᴘ ʙᴏᴏsᴛ! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style())
         }
 
         val random = (0..3).random()
@@ -437,21 +433,18 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
                 }
             }
 
-            val message =
-                "<green>+<red>5</red> sᴇᴄᴏɴᴅs ᴏꜰ ᴅᴇʟᴀʏᴇᴅ ᴋɴᴏᴄᴋʙᴀᴄᴋ! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
-            announceDonationEvent(message.style())
+            announceDonationEvent("<green>+<red>5</red> sᴇᴄᴏɴᴅs ᴏꜰ ᴅᴇʟᴀʏᴇᴅ ᴋɴᴏᴄᴋʙᴀᴄᴋ! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style())
         }
 
         fun doApplyInvisibility(name: String?) {
-            val message = "<green>+<red>8</red> sᴇᴄᴏɴᴅs ᴏꜰ ɪɴᴠɪsɪʙɪʟɪᴛʏ! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
-            announceDonationEvent(message.style())
-
             remainingPlayers()
                 .filter { !hillRegion.contains(it.location) }
                 .forEach {
                     val duration = it.getPotionEffect(PotionEffectType.INVISIBILITY)?.duration ?: 0
                     it.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY, duration + 8 * 20, 0))
                 }
+
+            announceDonationEvent("<green>+<red>8</red> sᴇᴄᴏɴᴅs ᴏꜰ ɪɴᴠɪsɪʙɪʟɪᴛʏ! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style())
         }
 
         if (Random.nextBoolean()) doDelayedKnockback(name)
@@ -462,10 +455,8 @@ class KingHill : EventMiniGame(GameConfig.KING_OF_THE_HILL) {
         var timeLeftSeconds = 5
 
         tasks += repeatingTask(0, 1, TimeUnit.SECONDS) {
-            val message =
-                "<green>sʜᴜꜰꜰʟɪɴɢ ᴘᴏsɪᴛɪᴏɴs ɪɴ <red>$timeLeftSeconds</red> sᴇᴄᴏɴᴅs! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})"
             remainingPlayers().forEach {
-                it.sendMessage(message.style())
+                it.sendMessage("<green>sʜᴜꜰꜰʟɪɴɢ ᴘᴏsɪᴛɪᴏɴs ɪɴ <red>$timeLeftSeconds</red> sᴇᴄᴏɴᴅs! (${if (name != null) "<aqua>$name's</aqua> ᴅᴏɴᴀᴛɪᴏɴ" else "ᴅᴏɴᴀᴛɪᴏɴ"})".style())
                 it.playSound(it, Sound.BLOCK_NOTE_BLOCK_PLING, 1.0F, if (timeLeftSeconds == 0) 2.0F else 1.0F)
             }
 
